@@ -30,4 +30,33 @@ final class DoctrineProtocolRepository extends ServiceEntityRepository implement
     {
         return $this->find($id);
     }
+
+    public function isEnabled(string $reference): bool
+    {
+        /*$count = $this
+            ->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->innerJoin('p.status', 's')
+            ->andWhere('p.reference = :reference')
+            ->setParameter('reference', $reference)
+            ->andWhere('s.reference = :status')
+            ->setParameter('status', PluginStatus::STATUS_ENABLED)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;*/
+        return true;
+    }
+
+    public function getByReference(string $reference): ?Protocol
+    {
+        return $this
+            ->createQueryBuilder('p')
+            ->andWhere('p.reference = :reference')
+            ->setParameter('reference', $reference)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

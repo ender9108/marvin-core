@@ -80,7 +80,8 @@
             "EnderLab\\LockableBundle\\": "libs/enderlab/lockable-bundle/src",
             "EnderLab\\TimestampableBundle\\": "libs/enderlab/timestampable-bundle/src",
             "EnderLab\\ToolsBundle\\": "libs/enderlab/tools-bundle/src",
-            "EnderLab\\DddCqrsMakerBundle\\": "libs/enderlab/ddd-cqrs-maker-bundle/src"
+            "EnderLab\\DddCqrsMakerBundle\\": "libs/enderlab/ddd-cqrs-maker-bundle/src",
+            "EnderLab\\Zigbee2mqttBundle\\": "libs/enderlab/ddd-cqrs-maker-bundle/src"
         }
     },
     "autoload-dev": {

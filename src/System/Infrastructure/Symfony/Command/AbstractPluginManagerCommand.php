@@ -2,6 +2,9 @@
 
 namespace App\System\Infrastructure\Symfony\Command;
 
+use App\Domotic\Domain\Model\Protocol;
+use App\Domotic\Domain\Model\ProtocolStatus;
+use App\Domotic\Domain\Repository\ProtocolRepositoryInterface;
 use App\System\Application\Command\InstallDockerRequest;
 use App\System\Domain\Model\Plugin;
 use App\System\Domain\Model\PluginStatus;
@@ -35,22 +38,26 @@ abstract class AbstractPluginManagerCommand extends Command
     private const array METHODS_AVAILABLES_BY_TYPE = [
         self::TYPE_INSTALL => [
             'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerPlugin',
+            'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerProtocol',
             'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerContainer',
             'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerSupervisor',
         ],
         self::TYPE_UNINSTALL => [
             'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::unregisterPlugin',
+            'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerProtocol',
             'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::unregisterContainer',
             'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::unregisterSupervisor',
         ],
         self::TYPE_UPDATE => [
             'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerPlugin',
+            'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerProtocol',
             'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerContainer',
             'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerSupervisor',
         ],
     ];
 
     protected ?Plugin $plugin = null;
+
     protected ?SymfonyStyle $io = null;
     private array $actions = [
         'record_plugin' => false,
@@ -65,21 +72,26 @@ abstract class AbstractPluginManagerCommand extends Command
     ];
 
     private FileSystem $fileSystem;
+
     private array $rollbackActions = [
         'directories' => [],
         'files' => [],
         'compose_services' => []
     ];
+
     protected ?string $reference = null;
     private bool $force = false;
     private bool $isSecureMode = false;
     private ?string $type = null;
     private bool $dryRun = false;
 
+    private ?string $pluginVersion = null;
+
     public function __construct(
         protected readonly EntityManagerInterface $em,
         protected readonly ParameterBagInterface $parameters,
         private readonly PluginRepositoryInterface $pluginRepository,
+        private readonly ProtocolRepositoryInterface $protocolRepository,
         private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly MessageBusInterface $bus
     ) {
@@ -100,7 +112,6 @@ abstract class AbstractPluginManagerCommand extends Command
      */
     protected function startInstall(
         Callable $callback,
-        string $pluginReference,
         InputInterface $input,
         OutputInterface $output
     ): void
@@ -108,7 +119,7 @@ abstract class AbstractPluginManagerCommand extends Command
         $this->type = self::TYPE_INSTALL;
         $this->dryRun = $input->getOption('dry-run');
 
-        $this->secureAction($callback, $pluginReference, $input, $output);
+        $this->secureAction($callback, $input, $output);
     }
 
     /**
@@ -117,7 +128,6 @@ abstract class AbstractPluginManagerCommand extends Command
      */
     protected function startUninstall(
         Callable $callback,
-        string $pluginReference,
         InputInterface $input,
         OutputInterface $output
     ): void
@@ -125,7 +135,7 @@ abstract class AbstractPluginManagerCommand extends Command
         $this->type = self::TYPE_UNINSTALL;
         $this->dryRun = $input->getOption('dry-run');
 
-        $this->secureAction($callback, $pluginReference, $input, $output);
+        $this->secureAction($callback, $input, $output);
     }
 
     /**
@@ -134,7 +144,6 @@ abstract class AbstractPluginManagerCommand extends Command
      */
     protected function startUpdate(
         Callable $callback,
-        string $pluginReference,
         InputInterface $input,
         OutputInterface $output
     ): void
@@ -142,14 +151,16 @@ abstract class AbstractPluginManagerCommand extends Command
         $this->type = self::TYPE_UPDATE;
         $this->dryRun = $input->getOption('dry-run');
 
-        $this->secureAction($callback, $pluginReference, $input, $output);
+        $this->secureAction($callback, $input, $output);
     }
 
     /**
      * @throws Exception
+     * @todo [LOW] Manage requirements version
      */
-    protected function checkPluginRequirement(array $requirements): void
+    protected function checkPluginRequirement(): void
     {
+        $requirements = $this->getPluginRequirements();
         $errors = [];
 
         foreach ($requirements as $requirementReference) {
@@ -172,37 +183,76 @@ abstract class AbstractPluginManagerCommand extends Command
      */
     protected function registerPlugin(
         string $label,
-        array $definition = [],
-        ?string $version = null,
+        bool $enabled = true,
         ?string $description = null,
     ): void {
         $this->checkIsSecureMode();
         $this->checkTypeMode(__METHOD__);
 
-        $plugin = $this->pluginRepository->getByReference($this->reference);
+        $reference = $this->getPluginReference();
+        $version = $this->getPluginVersion();
+        $plugin = $this->pluginRepository->getByReference($reference);
 
         if ($plugin instanceof Plugin && false === $this->force) {
-            throw new Exception('The plugin "'.$this->reference.'" already exists');
+            throw new Exception('The plugin "'.$reference.'" already exists');
         }
 
         if ($plugin instanceof Plugin && true === $this->force) {
-            $this->pluginRepository->remove($this->pluginRepository->getByReference($this->reference));
+            $this->pluginRepository->remove($plugin);
             unset($plugin);
         }
 
         $pluginStatus = $this
             ->em
             ->getRepository(PluginStatus::class)
-            ->findOneBy(['reference' => PluginStatus::STATUS_ENABLED])
+            ->findOneBy(['reference' => $enabled ? PluginStatus::STATUS_ENABLED : PluginStatus::STATUS_DISABLED])
         ;
 
         $this->plugin = new Plugin();
         $this->plugin
             ->setLabel($label)
-            ->setReference($this->reference)
+            ->setReference($reference)
             ->setVersion($version)
             ->setDescription($description)
             ->setStatus($pluginStatus)
+        ;
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function registerProtocol(
+        string $label,
+        string $reference,
+        bool $enabled = true,
+        ?string $description = null,
+    ): void {
+        $this->checkIsSecureMode();
+        $this->checkTypeMode(__METHOD__);
+
+        $protocol = $this->protocolRepository->getByReference($reference);
+
+        if ($protocol instanceof Protocol && false === $this->force) {
+            throw new Exception('The protocol "'.$reference.'" already exists');
+        }
+
+        if ($protocol instanceof Protocol && true === $this->force) {
+            $this->protocolRepository->remove($protocol);
+            unset($plugin);
+        }
+
+        $protocolStatus = $this
+            ->em
+            ->getRepository(ProtocolStatus::class)
+            ->findOneBy(['reference' => $enabled ? ProtocolStatus::STATUS_ENABLED : ProtocolStatus::STATUS_DISABLED])
+        ;
+
+        $protocol = new Protocol();
+        $protocol
+            ->setLabel($label)
+            ->setReference($reference)
+            ->setDescription($description)
+            ->setStatus($protocolStatus)
         ;
     }
 
@@ -288,15 +338,22 @@ abstract class AbstractPluginManagerCommand extends Command
         }
     }
 
-    protected function getBundleVersion(string $composerPath): ?string
+    protected function getPluginVersion(): ?string
     {
+        if (null !== $this->pluginVersion) {
+            return $this->pluginVersion;
+        }
+
+        $composerPath = $this->getPluginRootPath().'/composer.json';
+
         if (false === is_file($composerPath)) {
             throw new InvalidArgumentException('Composer file "'.$composerPath.'" not found.');
         }
 
         $content = Yaml::parseFile($composerPath);
+        $this->pluginVersion = $content['version'];
 
-        return $content['version'] ?? null;
+        return $this->pluginVersion;
     }
 
     protected function createUser(
@@ -394,14 +451,11 @@ abstract class AbstractPluginManagerCommand extends Command
      */
     private function secureAction(
         Callable $callback,
-        string $pluginReference,
         InputInterface $input,
         OutputInterface $output
-    ): void
-    {
+    ): void {
         $this->isSecureMode = true;
         $this->force = (bool) $input->getOption('force');
-        $this->reference = $pluginReference;
 
         try {
             $this->em->getConnection()->beginTransaction();
@@ -542,4 +596,19 @@ abstract class AbstractPluginManagerCommand extends Command
         $mainComposeContent['services'][$service] = $config;
         file_put_contents($mainComposeFile, Yaml::dump($mainComposeContent));
     }
+
+    /**
+     * @return string plugin root path
+     */
+    abstract protected function getPluginRootPath(): string;
+
+    /**
+     * @return string plugin reference
+     */
+    abstract protected function getPluginReference(): string;
+
+    /**
+     * @return array plugin requirements
+     */
+    abstract protected function getPluginRequirements(): array;
 }

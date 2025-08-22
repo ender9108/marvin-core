@@ -14,5 +14,6 @@ interface PluginRepositoryInterface extends RepositoryInterface
     public function byId(int $id): ?Plugin;
 
     public function isEnabled(string $reference): bool;
+
     public function getByReference(string $reference): ?Plugin;
 }
