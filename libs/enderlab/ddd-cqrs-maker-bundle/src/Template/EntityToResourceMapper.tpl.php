@@ -12,10 +12,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
 #[AsMapper(from: <?= $model_class_name ?>::class, to: <?= $model_class_name ?>Resource::class)]
-readonly class <?= $model_class_name ?>To<?= $model_class_name ?>ResourceMapper extends AbstractMapper implements MapperInterface
+class <?= $model_class_name ?>To<?= $model_class_name ?>ResourceMapper extends AbstractMapper implements MapperInterface
 {
 public function __construct(
-private MicroMapperInterface $microMapper,
+private readonly MicroMapperInterface $microMapper,
 TranslatorInterface $translator,
 CacheInterface $cache,
 ) {

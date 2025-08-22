@@ -12,10 +12,10 @@ use Symfonycasts\MicroMapper\MapperInterface;
 use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 #[AsMapper(from: Protocol::class, to: ProtocolResource::class)]
-readonly class ProtocolToProtocolResourceMapper extends AbstractMapper implements MapperInterface
+class ProtocolToProtocolResourceMapper extends AbstractMapper implements MapperInterface
 {
     public function __construct(
-        private MicroMapperInterface $microMapper,
+        private readonly MicroMapperInterface $microMapper,
         TranslatorInterface $translator,
         CacheInterface $cache,
     ) {
