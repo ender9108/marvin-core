@@ -1,0 +1,141 @@
+{
+    "type": "project",
+    "name": "enderlab/marvin-core",
+    "license": "proprietary",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=8.3",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "ext-swoole": "*",
+        "ext-amqp": "*",
+        "api-platform/doctrine-orm": "*",
+        "api-platform/json-api": "^4.0",
+        "api-platform/json-hal": "^4.0",
+        "api-platform/jsonld": "^4.0",
+        "api-platform/symfony": "^3 || ^4",
+        "doctrine/dbal": "^3",
+        "doctrine/doctrine-bundle": "^2.13",
+        "doctrine/doctrine-migrations-bundle": "^3.3",
+        "doctrine/orm": "^3.3",
+        "lexik/jwt-authentication-bundle": "^3.1",
+        "nelmio/cors-bundle": "^2.5",
+        "phpdocumentor/reflection-docblock": "^5.6",
+        "phpstan/phpdoc-parser": "^2.0",
+        "runtime/frankenphp-symfony": "^0.2.0",
+        "simps/mqtt": "^1.4",
+        "symfony/amqp-messenger": "7.3.*",
+        "symfony/asset": "7.3.*",
+        "symfony/asset-mapper": "7.3.*",
+        "symfony/console": "7.3.*",
+        "symfony/doctrine-messenger": "7.3.*",
+        "symfony/dotenv": "7.3.*",
+        "symfony/expression-language": "7.3.*",
+        "symfony/flex": "^2",
+        "symfony/framework-bundle": "7.3.*",
+        "symfony/http-client": "7.3.*",
+        "symfony/intl": "7.3.*",
+        "symfony/lock":  "7.3.*",
+        "symfony/mailer": "7.3.*",
+        "symfony/mime": "7.3.*",
+        "symfony/monolog-bundle": "^3.0",
+        "symfony/notifier": "7.3.*",
+        "symfony/process": "7.3.*",
+        "symfony/property-access": "7.3.*",
+        "symfony/property-info": "7.3.*",
+        "symfony/runtime": "7.3.*",
+        "symfony/scheduler": "7.3.*",
+        "symfony/security-bundle": "7.3.*",
+        "symfony/serializer": "7.3.*",
+        "symfony/string": "7.3.*",
+        "symfony/translation": "7.3.*",
+        "symfony/twig-bundle": "7.3.*",
+        "symfony/uid": "7.3.*",
+        "symfony/validator": "7.3.*",
+        "symfony/web-link": "7.3.*",
+        "symfony/yaml": "7.3.*",
+        "symfonycasts/micro-mapper": "^0.2.1",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^2.12|^3.0",
+        "webmozart/assert": "^1.11"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/",
+            "EnderLab\\DddCqrsBundle\\": "libs/enderlab/ddd-cqrs-bundle/src",
+            "EnderLab\\DddCqrsApiPlatformBundle\\": "libs/enderlab/ddd-cqrs-api-platform-bundle/src",
+            "EnderLab\\MarvinManagerBundle\\": "libs/enderlab/marvin-manager-bundle/src",
+            "EnderLab\\MarvinPluginMqttBundle\\": "libs/enderlab/marvin-plugin-mqtt-bundle/src",
+            "EnderLab\\MarvinPluginZigbee2mqttBundle\\": "libs/enderlab/marvin-plugin-zigbee2mqtt-bundle/src",
+            "EnderLab\\BlameableBundle\\": "libs/enderlab/blameable-bundle/src",
+            "EnderLab\\LoggerBundle\\": "libs/enderlab/logger-bundle/src",
+            "EnderLab\\LockableBundle\\": "libs/enderlab/lockable-bundle/src",
+            "EnderLab\\TimestampableBundle\\": "libs/enderlab/timestampable-bundle/src",
+            "EnderLab\\ToolsBundle\\": "libs/enderlab/tools-bundle/src",
+            "EnderLab\\DddCqrsMakerBundle\\": "libs/enderlab/ddd-cqrs-maker-bundle/src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "replace": {
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php72": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*",
+        "symfony/polyfill-php80": "*",
+        "symfony/polyfill-php81": "*",
+        "symfony/polyfill-php82": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "importmap:install": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "7.3.*",
+            "docker": true
+        }
+    },
+    "require-dev": {
+        "deptrac/deptrac": "^3.0",
+        "doctrine/doctrine-fixtures-bundle": "^3.7",
+        "phpunit/phpunit": "^9.5",
+        "rector/rector": "^1.2",
+        "symfony/browser-kit": "7.3.*",
+        "symfony/css-selector": "7.3.*",
+        "symfony/debug-bundle": "7.3.*",
+        "symfony/maker-bundle": "^1.0",
+        "symfony/phpunit-bridge": "^7.3",
+        "symfony/stopwatch": "7.3.*",
+        "symfony/web-profiler-bundle": "7.3.*",
+        "zenstruck/browser": "^1.9",
+        "zenstruck/foundry": "^2.2"
+    },
+    "repositories": []
+}

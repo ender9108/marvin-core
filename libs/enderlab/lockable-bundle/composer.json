@@ -1,0 +1,20 @@
+{
+    "name": "enderlab/lockable-bundle",
+    "description": "",
+    "type": "symfony-bundle",
+    "licence": "MIT",
+    "version": "1.0.0",
+    "require": {
+        "symfony/lock": "7.2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "EnderLab\\LockableBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EnderLab\\LockableBundle\\Tests\\": "tests/"
+        }
+    }
+}

@@ -1,0 +1,17 @@
+parameters:
+    manager_cache_timeout: 3600
+
+services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    EnderLab\MarvinManagerBundle\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+
+when@dev:
+    parameters:
+        manager_cache_timeout: 1

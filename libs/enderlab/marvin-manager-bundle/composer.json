@@ -1,0 +1,26 @@
+{
+    "name": "enderlab/marvin-manager-bundle",
+    "description": "",
+    "type": "symfony-bundle",
+    "licence": "MIT",
+    "version": "1.0.4",
+    "require": {
+        "enderlab/tools-bundle": "1.0.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "EnderLab\\MarvinManagerBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EnderLab\\MarvinManagerBundle\\Tests\\": "tests/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/ender9108/tools-bundle.git"
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "name": "enderlab/timestampable-bundle",
+    "description": "",
+    "type": "symfony-bundle",
+    "licence": "MIT",
+    "version": "1.0.1",
+    "autoload": {
+        "psr-4": {
+            "EnderLab\\TimestampableBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EnderLab\\TimestampableBundle\\Tests\\": "tests/"
+        }
+    }
+}

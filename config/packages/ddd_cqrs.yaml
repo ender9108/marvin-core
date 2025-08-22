@@ -1,0 +1,4 @@
+ddd_cqrs:
+    exchange_name: 'domain.event.exchange'
+    queue_name_prefix: 'domain.event.'
+    routing_key_pattern: '$.*.*.*'
