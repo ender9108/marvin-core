@@ -12,18 +12,18 @@ flowchart TB
   mqtt[(Broker MQTT)]
 
   %% Workers ingest (device -> core)
-  wZigbee[Worker Zigbee<br/>(Symfony)]
-  wMatter[Worker Matter<br/>(Node.js)]
-  wZwave[Worker Z-Wave<br/>(Symfony/Node.js)]
+  wZigbee[Worker Zigbee (Symfony)]
+  wMatter[Worker Matter (Node.js)]
+  wZwave[Worker Z-Wave (Symfony/Node.js)]
 
   %% Core
-  core[Marvin Core<br/>(Symfony)]
+  core[Marvin Core (Symfony)]
 
   %% Exchanges & queues
   subgraph RabbitMQ
     evQ[(Queue domotic.events)]
-    cmdEx{Exchange domotic.commands<br/>(headers)}
-    domoticDLX{Exchange domotic.dlx<br/>(fanout)}
+    cmdEx{Exchange domotic.commands (headers)}
+    domoticDLX{Exchange domotic.dlx (fanout)}
 
     zigQ[(Queue zigbee.commands)]
     matQ[(Queue matter.commands)]
@@ -53,7 +53,7 @@ flowchart TB
   evQ --> core
 
   %% Core send command -> exchange headers
-  core -->|DomoticCommand<br/>(protocol header)| cmdEx
+  core -->|DomoticCommand (protocol header)| cmdEx
 
   %% Exchange headers routing
   cmdEx -->|protocol=zigbee| zigQ
