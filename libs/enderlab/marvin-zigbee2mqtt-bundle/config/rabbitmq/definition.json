@@ -1,0 +1,38 @@
+{
+  "queues": [
+    {
+      "name": "zwave.commands",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "domotic.dlx"
+      }
+    },
+    {
+      "name": "zwave.commands.dlq",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "domotic.commands",
+      "vhost": "/",
+      "destination": "zigbee.commands",
+      "destination_type": "queue",
+      "routing_key": "",
+      "arguments": { "protocol": "zigbee", "x-match": "all" }
+    },
+    {
+      "source": "domotic.dlx",
+      "vhost": "/",
+      "destination": "zigbee.commands.dlq",
+      "destination_type": "queue",
+      "routing_key": "",
+      "arguments": {}
+    }
+  ]
+}
