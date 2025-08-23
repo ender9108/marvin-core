@@ -23,9 +23,15 @@ flowchart TB
   subgraph RabbitMQ
     evQ[(Queue domotic.events)]
     cmdEx{Exchange domotic.commands\n(headers)}
+    domoticDLX{Exchange domotic.dlx\n(fanout)}
+
     zigQ[(Queue zigbee.commands)]
     matQ[(Queue matter.commands)]
     zwaQ[(Queue zwave.commands)]
+
+    zigDLQ[(Queue zigbee.commands.dlq)]
+    matDLQ[(Queue matter.commands.dlq)]
+    zwaDLQ[(Queue zwave.commands.dlq)]
   end
 
   %% Device -> MQTT
@@ -63,4 +69,13 @@ flowchart TB
   wZigbee -->|zigbee2mqtt/<device>/set| mqtt
   wMatter -->|matter2mqtt/<device>/set| mqtt
   wZwave  -->|zwave2mqtt/<device>/set| mqtt
+
+  %% Dead Letter routing
+  zigQ -.x-dead-letter-exchange.-> domoticDLX
+  matQ -.x-dead-letter-exchange.-> domoticDLX
+  zwaQ -.x-dead-letter-exchange.-> domoticDLX
+
+  domoticDLX --> zigDLQ
+  domoticDLX --> matDLQ
+  domoticDLX --> zwaDLQ
 ```
