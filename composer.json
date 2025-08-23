@@ -73,15 +73,13 @@
             "EnderLab\\DddCqrsBundle\\": "libs/enderlab/ddd-cqrs-bundle/src",
             "EnderLab\\DddCqrsApiPlatformBundle\\": "libs/enderlab/ddd-cqrs-api-platform-bundle/src",
             "EnderLab\\MarvinManagerBundle\\": "libs/enderlab/marvin-manager-bundle/src",
-            "EnderLab\\MarvinPluginMqttBundle\\": "libs/enderlab/marvin-plugin-mqtt-bundle/src",
-            "EnderLab\\MarvinPluginZigbee2mqttBundle\\": "libs/enderlab/marvin-plugin-zigbee2mqtt-bundle/src",
             "EnderLab\\BlameableBundle\\": "libs/enderlab/blameable-bundle/src",
             "EnderLab\\LoggerBundle\\": "libs/enderlab/logger-bundle/src",
             "EnderLab\\LockableBundle\\": "libs/enderlab/lockable-bundle/src",
             "EnderLab\\TimestampableBundle\\": "libs/enderlab/timestampable-bundle/src",
             "EnderLab\\ToolsBundle\\": "libs/enderlab/tools-bundle/src",
             "EnderLab\\DddCqrsMakerBundle\\": "libs/enderlab/ddd-cqrs-maker-bundle/src",
-            "EnderLab\\Zigbee2mqttBundle\\": "libs/enderlab/ddd-cqrs-maker-bundle/src"
+            "EnderLab\\Zigbee2mqttBundle\\": "libs/enderlab/marvin-zigbee2mqtt-bundle/src"
         }
     },
     "autoload-dev": {

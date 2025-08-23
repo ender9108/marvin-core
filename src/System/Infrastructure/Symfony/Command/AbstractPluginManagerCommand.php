@@ -39,20 +39,20 @@ abstract class AbstractPluginManagerCommand extends Command
         self::TYPE_INSTALL => [
             'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerPlugin',
             'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerProtocol',
-            'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerContainer',
-            'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerSupervisor',
+            'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerDocker',
+            'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerSupervisorWorker',
         ],
         self::TYPE_UNINSTALL => [
             'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::unregisterPlugin',
             'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerProtocol',
-            'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::unregisterContainer',
-            'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::unregisterSupervisor',
+            'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::unregisterDocker',
+            'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::unregisterSupervisorWorker',
         ],
         self::TYPE_UPDATE => [
             'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerPlugin',
             'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerProtocol',
-            'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerContainer',
-            'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerSupervisor',
+            'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerDocker',
+            'App\\System\\Infrastructure\\Symfony\\Command\\AbstractPluginManagerCommand::registerSupervisorWorker',
         ],
     ];
 
@@ -208,14 +208,15 @@ abstract class AbstractPluginManagerCommand extends Command
             ->findOneBy(['reference' => $enabled ? PluginStatus::STATUS_ENABLED : PluginStatus::STATUS_DISABLED])
         ;
 
-        $this->plugin = new Plugin();
-        $this->plugin
+        $plugin = new Plugin();
+        $plugin
             ->setLabel($label)
             ->setReference($reference)
             ->setVersion($version)
             ->setDescription($description)
             ->setStatus($pluginStatus)
         ;
+        $this->em->persist($plugin);
     }
 
     /**
@@ -254,13 +255,14 @@ abstract class AbstractPluginManagerCommand extends Command
             ->setDescription($description)
             ->setStatus($protocolStatus)
         ;
+        $this->em->persist($protocol);
     }
 
     /**
      * @throws IOExceptionInterface
      * @throws Exception
      */
-    protected function registerContainer(
+    protected function registerDocker(
         string $composeFilePath,
         array $configFiles,
         array $customCommands
@@ -274,7 +276,7 @@ abstract class AbstractPluginManagerCommand extends Command
             }
 
             $dockerPath = $this->parameters->get('docker_path');
-            $dockerPluginBasePath = $dockerPath.'/'.$this->plugin->getReference();
+            $dockerPluginBasePath = $dockerPath.'/'.$this->getPluginReference();
             $dockerPluginConfigPath = $dockerPluginBasePath.'/config';
             $dockerPluginVolumePath = $dockerPluginBasePath.'/volume';
             $this->actions['docker']['directories'] = [
@@ -324,7 +326,7 @@ abstract class AbstractPluginManagerCommand extends Command
     /**
      * @throws IOExceptionInterface
      */
-    protected function registerSupervisor(string $configDirectoryPath): void
+    protected function registerSupervisorWorker(string $configDirectoryPath): void
     {
         try {
             $dockerPath = $this->parameters->get('docker_path').'/supervisor/config/conf.d';
@@ -435,7 +437,6 @@ abstract class AbstractPluginManagerCommand extends Command
 
     private function copyFiles(array $files): void
     {
-        dump($files);
         foreach ($files as $from => $to) {
             $this->fileSystem->copy(
                 $from,
@@ -496,11 +497,6 @@ abstract class AbstractPluginManagerCommand extends Command
 
         foreach ($this->actions as $action => $value) {
             switch ($action) {
-                case 'record_plugin':
-                    if (true === $value && null !== $this->plugin) {
-                        $this->em->persist($this->plugin);
-                    }
-                    break;
                 case 'docker':
                     if (!empty($value['directories'])) {
                         $this->createDockerDirectory($value['directories']);
@@ -530,6 +526,8 @@ abstract class AbstractPluginManagerCommand extends Command
                     break;
             }
         }
+
+        $this->em->flush();
 
         foreach ($messages as $message) {
             $this->bus->dispatch($message);

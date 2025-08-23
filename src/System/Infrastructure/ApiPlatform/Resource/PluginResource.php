@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use App\System\Domain\Model\Plugin;
 use EnderLab\DddCqrsApiPlatformBundle\ApiResourceInterface;
 use EnderLab\DddCqrsApiPlatformBundle\Mapper\Attribute\AsTranslatableApiProperty;
@@ -21,6 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Get(),
+        new Patch(security: 'is_granted("ROLE_ADMIN")'),
     ],
     routePrefix: 'system',
     normalizationContext: ['skip_null_values' => false,],
@@ -36,15 +38,14 @@ final class PluginResource implements ApiResourceInterface
     #[ApiProperty(readable: true, writable: false, identifier: true)]
     public ?string $id = null;
 
-    #[Assert\NotBlank]
-    #[Assert\Length(min: 5, max: 128)]
     #[AsTranslatableApiProperty]
+    #[ApiProperty(readable: true, writable: false)]
     public ?string $label = null;
 
+    #[Assert\Length(max: 5000)]
     public ?string $description = null;
 
-    #[Assert\NotBlank]
-    #[Assert\Length(min: 5, max: 64)]
+    #[ApiProperty(readable: true, writable: false)]
     public ?string $reference = null;
 
     #[Assert\NotBlank]

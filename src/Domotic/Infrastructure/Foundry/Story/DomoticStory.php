@@ -4,6 +4,7 @@ namespace App\Domotic\Infrastructure\Foundry\Story;
 
 use App\Domotic\Infrastructure\Foundry\Factory\CapabilityActionFactory;
 use App\Domotic\Infrastructure\Foundry\Factory\CapabilityFactory;
+use App\Domotic\Infrastructure\Foundry\Factory\ProtocolStatusFactory;
 use App\Domotic\Infrastructure\Foundry\Factory\ZoneFactory;
 use Zenstruck\Foundry\Story;
 
@@ -14,6 +15,7 @@ class DomoticStory extends Story
         $this->buildZone();
         $this->buildCapabilities();
         $this->buildCapabilityActions();
+        $this->buildProtocolStatuses();
     }
 
     private function buildZone(): void
@@ -34,6 +36,13 @@ class DomoticStory extends Story
     {
         foreach (CapabilityActionFactory::getDatas() as $data) {
             CapabilityActionFactory::createOne($data);
+        }
+    }
+
+    private function buildProtocolStatuses(): void
+    {
+        foreach (ProtocolStatusFactory::getDatas() as $data) {
+            ProtocolStatusFactory::createOne($data);
         }
     }
 }

@@ -47,6 +47,10 @@ domotic:
         button_double: Double click
         button_long: Appuyer longuement
         button_release: Relacher le bouton
+    protocol:
+        status:
+            enabled: Activé
+            disabled: Désactivé
 system:
     plugin:
         system: Système

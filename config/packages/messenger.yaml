@@ -2,5 +2,25 @@ framework:
     messenger:
         failure_transport: failed
         transports:
+            domotic.events:
+                dsn: '%env(MESSENGER_AMQP_DSN)%/domotic.events'
+                options:
+                    queues:
+                        - domotic.events
+                retry_strategy:
+                    max_retries: 5
+                    delay: 1000
+                    multiplier: 2
+            domotic.commands:
+                dsn: '%env(MESSENGER_AMQP_DSN)%'
+                options:
+                    exchange:
+                        name: domotic.commands
+                        type: headers
+                retry_strategy:
+                    max_retries: 3
+                    delay: 500
             failed: 'doctrine://default?queue_name=failed'
         routing:
+            App\Domotic\Application\Command\DomoticEvent: domotic.events
+            App\Domotic\Application\Command\DomoticCommand: domotic.commands

@@ -1,12 +1,12 @@
 {
-    "name": "enderlab/marvin-plugin-zigbee2mqtt-bundle",
+    "name": "enderlab/marvin-zigbee2mqtt-bundle",
     "description": "",
     "type": "symfony-bundle",
     "licence": "MIT",
     "version": "1.0.2",
     "require": {
         "ext-swoole": "*",
-        "enderlab/ddd-bundle": "1.0.*"
+        "enderlab/ddd-cqrs-bundle": "1.0.*"
     },
     "scripts": {
         "post-package-install": [
@@ -28,11 +28,5 @@
         "psr-4": {
             "EnderLab\\Zigbee2mqttBundle\\Tests\\": "tests/"
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/ender9108/ddd-bundle.git"
-        }
-    ]
+    }
 }

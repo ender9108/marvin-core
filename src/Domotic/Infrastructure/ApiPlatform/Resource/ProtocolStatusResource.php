@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Domotic\Domain\Model\ProtocolStatus;
 use EnderLab\DddCqrsApiPlatformBundle\ApiResourceInterface;
+use EnderLab\DddCqrsApiPlatformBundle\Mapper\Attribute\AsTranslatableApiProperty;
 use EnderLab\DddCqrsApiPlatformBundle\State\Processor\ApiToEntityStateProcessor;
 use EnderLab\DddCqrsApiPlatformBundle\State\Provider\EntityToApiStateProvider;
 use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\Trait\ResourceBlameableTrait;
@@ -34,6 +35,7 @@ final class ProtocolStatusResource implements ApiResourceInterface
     #[ApiProperty(readable: true, writable: false, identifier: true)]
     public ?int $id = null;
 
+    #[AsTranslatableApiProperty]
     public ?string $label = null;
 
     public ?string $reference = null;

@@ -1,7 +1,6 @@
 parameters:
     plugin_reference: 'zigbee2mqtt'
     plugin_requirements:
-        - mqtt
     mqtt_host: '%env(MQTT_HOST)%'
     mqtt_port: '%env(MQTT_PORT)%'
     mqtt_user: '%env(MQTT_USER)%'

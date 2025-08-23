@@ -25,4 +25,5 @@ return [
     EnderLab\DddCqrsMakerBundle\DddCqrsMakerBundle::class => ['dev' => true],
     EnderLab\TimestampableBundle\TimestampableBundle::class => ['all' => true],
     EnderLab\ToolsBundle\ToolsBundle::class => ['all' => true],
+    EnderLab\Zigbee2mqttBundle\Zigbee2mqttBundle::class => ['all' => true],
 ];

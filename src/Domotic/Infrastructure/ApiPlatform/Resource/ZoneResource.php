@@ -7,8 +7,9 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Put;
 use App\Domotic\Domain\Model\Zone;
-use DateTimeInterface;
 use EnderLab\DddCqrsApiPlatformBundle\ApiResourceInterface;
 use EnderLab\DddCqrsApiPlatformBundle\State\Processor\ApiToEntityStateProcessor;
 use EnderLab\DddCqrsApiPlatformBundle\State\Provider\EntityToApiStateProvider;
@@ -21,6 +22,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Get(),
+        new Put(),
+        new Patch(),
     ],
     routePrefix: 'domotic',
     normalizationContext: ['skip_null_values' => false],
@@ -40,5 +43,6 @@ final class ZoneResource implements ApiResourceInterface
     #[Assert\Length(min: 5, max: 255)]
     public ?string $label = null;
 
+    #[Assert\GreaterThanOrEqual(0)]
     public float $area = 0;
 }

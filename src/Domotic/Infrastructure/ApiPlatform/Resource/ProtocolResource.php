@@ -7,18 +7,21 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use App\Domotic\Domain\Model\Protocol;
 use EnderLab\DddCqrsApiPlatformBundle\ApiResourceInterface;
 use EnderLab\DddCqrsApiPlatformBundle\State\Processor\ApiToEntityStateProcessor;
 use EnderLab\DddCqrsApiPlatformBundle\State\Provider\EntityToApiStateProvider;
 use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\Trait\ResourceBlameableTrait;
 use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\Trait\ResourceTimestampableTrait;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 #[ApiResource(
     shortName: 'protocol',
     operations: [
         new GetCollection(),
         new Get(),
+        new Patch(security: 'is_granted("ROLE_ADMIN")'),
     ],
     routePrefix: 'domotic',
     normalizationContext: ['skip_null_values' => false],
@@ -34,7 +37,12 @@ final class ProtocolResource implements ApiResourceInterface
     #[ApiProperty(readable: true, writable: false, identifier: true)]
     public ?int $id = null;
 
+    #[ApiProperty(readable: true, writable: false)]
     public ?string $label = null;
 
+    #[ApiProperty(readable: true, writable: false)]
     public ?string $reference = null;
+
+    #[NotNull]
+    public ?ProtocolStatusResource $status = null;
 }
