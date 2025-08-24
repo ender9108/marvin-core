@@ -3,7 +3,7 @@ framework:
         failure_transport: failed
         transports:
             domotic.events:
-                dsn: '%env(MESSENGER_AMQP_DSN)%/domotic.events'
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%/domotic.events'
                 options:
                     queues:
                         - domotic.events
@@ -12,7 +12,7 @@ framework:
                     delay: 1000
                     multiplier: 2
             domotic.commands:
-                dsn: '%env(MESSENGER_AMQP_DSN)%'
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
                     exchange:
                         name: domotic.commands
