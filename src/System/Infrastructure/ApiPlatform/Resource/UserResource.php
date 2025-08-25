@@ -14,13 +14,15 @@ use ApiPlatform\Metadata\Put;
 use App\System\Domain\Model\User;
 use App\System\Infrastructure\ApiPlatform\State\Provider\MeProvider;
 use DateTimeInterface;
+use EnderLab\BlameableBundle\Trait\ApiPlatform\ResourceBlameableTrait;
 use EnderLab\DddCqrsApiPlatformBundle\ApiResourceInterface;
 use EnderLab\DddCqrsApiPlatformBundle\State\Processor\ApiToEntityStateProcessor;
 use EnderLab\DddCqrsApiPlatformBundle\State\Provider\EntityToApiStateProvider;
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\Trait\ResourceBlameableTrait;
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\Trait\ResourceTimestampableTrait;
+use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
+use Symfony\Component\JsonStreamer\Attribute\JsonStreamable;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[JsonStreamable]
 #[ApiResource(
     shortName: 'user',
     operations: [

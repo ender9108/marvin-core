@@ -7,13 +7,13 @@ use ApiPlatform\State\ProviderInterface;
 use App\System\Domain\Repository\UserRepositoryInterface;
 use Exception;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfonycasts\MicroMapper\MicroMapperInterface;
+use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
 final readonly class MeProvider implements ProviderInterface
 {
     public function __construct(
         private Security $security,
-        private MicroMapperInterface $microMapper,
+        private ObjectMapperInterface $objectMapper,
         private UserRepositoryInterface $userRepository,
     ) {
     }
@@ -30,6 +30,6 @@ final readonly class MeProvider implements ProviderInterface
         $resourceClass = $operation->getClass();
         $user = $this->userRepository->findOneBy(['id' => $this->security->getUser()->getId()]);
 
-        return $this->microMapper->map($user, $resourceClass);
+        return $this->objectMapper->map($user, $resourceClass);
     }
 }

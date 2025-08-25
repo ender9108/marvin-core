@@ -18,6 +18,7 @@ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 class DddCqrsBundle extends AbstractBundle
 {
     public const string DEFAULT_EXCHANGE_NAME = 'domain.event.exchange';
+    public const string DEFAULT_QUEUE_PREFIX = 'domain.event.';
 
     public function configure(DefinitionConfigurator $definition): void
     {
@@ -29,13 +30,8 @@ class DddCqrsBundle extends AbstractBundle
                     ->end()
                 ->end()
                 ->children()
-                    ->stringNode('queue_name_prefix')
-                    ->defaultValue('domain.event.')
-                    ->end()
-                ->end()
-                    ->children()
-                    ->stringNode('routing_key_pattern')
-                    ->defaultValue('$.*.*.*')
+                    ->stringNode('queue_prefix')
+                    ->defaultValue(self::DEFAULT_QUEUE_PREFIX)
                     ->end()
                 ->end()
             ->end()
@@ -53,8 +49,7 @@ class DddCqrsBundle extends AbstractBundle
         $container->import('../config/services.yaml');
 
         $builder->setParameter('ddd_cqrs.exchange_name', $config['exchange_name']);
-        $builder->setParameter('ddd_cqrs.queue_name_prefix', $config['queue_name_prefix']);
-        $builder->setParameter('ddd_cqrs.routing_key_pattern', $config['routing_key_pattern']);
+        $builder->setParameter('ddd_cqrs.queue_prefix', $config['queue_prefix']);
 
         $builder->registerAttributeForAutoconfiguration(AsCommandHandler::class, static function (
             ChildDefinition $definition,

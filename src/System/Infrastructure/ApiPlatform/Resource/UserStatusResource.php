@@ -8,13 +8,14 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\System\Domain\Model\UserStatus;
+use EnderLab\BlameableBundle\Trait\ApiPlatform\ResourceBlameableTrait;
 use EnderLab\DddCqrsApiPlatformBundle\ApiResourceInterface;
-use EnderLab\DddCqrsApiPlatformBundle\Mapper\Attribute\AsTranslatableApiProperty;
 use EnderLab\DddCqrsApiPlatformBundle\State\Provider\EntityToApiStateProvider;
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\Trait\ResourceBlameableTrait;
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\Trait\ResourceTimestampableTrait;
+use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
+use Symfony\Component\JsonStreamer\Attribute\JsonStreamable;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[JsonStreamable]
 #[ApiResource(
     shortName: 'user_status',
     operations: [
@@ -36,7 +37,6 @@ class UserStatusResource implements ApiResourceInterface
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 5, max: 128)]
-    #[AsTranslatableApiProperty]
     public ?string $label = null;
 
     #[Assert\NotBlank]

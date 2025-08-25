@@ -715,64 +715,6 @@ class MakerService
         if ($generate) {
             $this->generator->writeChanges();
         }
-
-        $this->makeMapper(
-            $domainName,
-            $modelName,
-            $isTimestampable,
-            $isBlameable,
-            $fields
-        );
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function makeMapper(
-        string $domainName,
-        string $modelName,
-        bool $isTimestampable,
-        bool $isBlameable,
-        array $fields = [],
-        bool $generate = true,
-    ): void {
-        $commandClassNameDetails = $this->generator->createClassNameDetails(
-            $modelName . 'ResourceTo' . $modelName . 'Mapper',
-            $domainName . '\\Infrastructure\\ApiPlatform\\Mapper\\'.$modelName
-        );
-
-        $this->generator->generateClass(
-            $commandClassNameDetails->getFullName(),
-            self::TEMPLATE_DIR . '/ResourceToEntityMapper.tpl.php',
-            [
-                'domain' => $domainName,
-                'model_class_name' => $modelName,
-                'is_timestampable' => $isTimestampable,
-                'is_blameable' => $isBlameable,
-                'fields' => $fields,
-            ]
-        );
-
-        $commandClassNameDetails = $this->generator->createClassNameDetails(
-            $modelName . 'To' . $modelName . 'ResourceMapper',
-            $domainName . '\\Infrastructure\\ApiPlatform\\Mapper\\'.$modelName
-        );
-
-        $this->generator->generateClass(
-            $commandClassNameDetails->getFullName(),
-            self::TEMPLATE_DIR . '/EntityToResourceMapper.tpl.php',
-            [
-                'domain' => $domainName,
-                'model_class_name' => $modelName,
-                'is_timestampable' => $isTimestampable,
-                'is_blameable' => $isBlameable,
-                'fields' => $fields,
-            ]
-        );
-
-        if ($generate) {
-            $this->generator->writeChanges();
-        }
     }
 
     private function getPathOfClass(string $class): string

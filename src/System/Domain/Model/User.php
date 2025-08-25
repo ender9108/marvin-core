@@ -50,7 +50,7 @@ class User extends AggregateRoot implements TimestampableInterface, BlameableInt
         $this->recordThat(new UserCreated($this->id));
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

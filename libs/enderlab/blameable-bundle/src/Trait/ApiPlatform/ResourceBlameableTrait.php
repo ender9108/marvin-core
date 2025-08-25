@@ -1,21 +1,19 @@
 <?php
 
-namespace EnderLab\BlameableBundle\Trait;
+namespace EnderLab\BlameableBundle\Trait\ApiPlatform;
 
 use ApiPlatform\Metadata\ApiProperty;
-use Symfony\Component\Serializer\Attribute\Groups;
 
-trait ApiBlameableTrait
+trait ResourceBlameableTrait
 {
     #[ApiProperty(
         readable: true,
         writable: false,
         openapiContext: [
             'type' => 'string',
-            'example' => '/api/customer/users/1'
+            'example' => '/api/system/users/95348868-b38f-4155-a93e-d89117d28269'
         ]
     )]
-    #[Groups('blameable:read')]
     public ?string $createdBy = null;
 
     #[ApiProperty(
@@ -23,9 +21,8 @@ trait ApiBlameableTrait
         writable: false,
         openapiContext: [
             'type' => 'string',
-            'example' => '/api/customer/users/1'
+            'example' => '/api/system/users/95348868-b38f-4155-a93e-d89117d28269'
         ]
     )]
-    #[Groups('blameable:read')]
     public ?string $updatedBy = null;
 }

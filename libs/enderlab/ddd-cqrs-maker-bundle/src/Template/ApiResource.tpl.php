@@ -12,10 +12,10 @@ use EnderLab\DddCqrsApiPlatformBundle\State\Processor\ApiToEntityStateProcessor;
 use EnderLab\DddCqrsApiPlatformBundle\State\Provider\EntityToApiStateProvider;
 use App\<?= $domain ?>\Domain\Model\<?= $model_class_name ?>;
 <?php if ($is_timestampable): ?>
-    use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\Trait\ResourceTimestampableTrait;
+use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
 <?php endif ?>
 <?php if ($is_blameable): ?>
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\Trait\ResourceBlameableTrait;
+use EnderLab\BlameableBundle\Trait\ApiPlatform\ResourceBlameableTrait;
 <?php endif ?>
 
 #[ApiResource(

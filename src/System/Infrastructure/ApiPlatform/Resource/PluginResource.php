@@ -9,14 +9,15 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use App\System\Domain\Model\Plugin;
+use EnderLab\BlameableBundle\Trait\ApiPlatform\ResourceBlameableTrait;
 use EnderLab\DddCqrsApiPlatformBundle\ApiResourceInterface;
-use EnderLab\DddCqrsApiPlatformBundle\Mapper\Attribute\AsTranslatableApiProperty;
 use EnderLab\DddCqrsApiPlatformBundle\State\Processor\ApiToEntityStateProcessor;
 use EnderLab\DddCqrsApiPlatformBundle\State\Provider\EntityToApiStateProvider;
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\Trait\ResourceBlameableTrait;
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\Trait\ResourceTimestampableTrait;
+use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
+use Symfony\Component\JsonStreamer\Attribute\JsonStreamable;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[JsonStreamable]
 #[ApiResource(
     shortName: 'plugin',
     operations: [
@@ -38,7 +39,6 @@ final class PluginResource implements ApiResourceInterface
     #[ApiProperty(readable: true, writable: false, identifier: true)]
     public ?string $id = null;
 
-    #[AsTranslatableApiProperty]
     #[ApiProperty(readable: true, writable: false)]
     public ?string $label = null;
 
