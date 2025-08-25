@@ -11,5 +11,5 @@ interface DeviceRepositoryInterface extends RepositoryInterface
 
     public function remove(Device $device): void;
 
-    public function byId(string|int $id): ?Device;
+    public function byId(string $id): ?Device;
 }

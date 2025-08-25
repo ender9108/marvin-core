@@ -11,5 +11,5 @@ interface ProtocolStatusRepositoryInterface extends RepositoryInterface
 
     public function remove(ProtocolStatus $protocolStatus): void;
 
-    public function byId(string|int $id): ?ProtocolStatus;
+    public function byId(string $id): ?ProtocolStatus;
 }

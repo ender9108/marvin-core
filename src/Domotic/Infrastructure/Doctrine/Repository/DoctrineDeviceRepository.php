@@ -26,7 +26,7 @@ final class DoctrineDeviceRepository extends ServiceEntityRepository implements 
         $this->getEntityManager()->remove($device);
     }
 
-    public function byId(string|int $id): ?Device
+    public function byId(string $id): ?Device
     {
         return $this->find($id);
     }

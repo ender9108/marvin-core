@@ -11,7 +11,7 @@ interface ProtocolRepositoryInterface extends RepositoryInterface
 
     public function remove(Protocol $protocol): void;
 
-    public function byId(string|int $id): ?Protocol;
+    public function byId(string $id): ?Protocol;
 
     public function isEnabled(string $reference): bool;
 

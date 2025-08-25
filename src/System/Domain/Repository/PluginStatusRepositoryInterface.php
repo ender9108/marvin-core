@@ -11,6 +11,6 @@ interface PluginStatusRepositoryInterface extends RepositoryInterface
 
     public function remove(PluginStatus $pluginStatus): void;
 
-    public function byId(int $id): ?PluginStatus;
+    public function byId(string $id): ?PluginStatus;
     public function byReference(string $reference): ?PluginStatus;
 }

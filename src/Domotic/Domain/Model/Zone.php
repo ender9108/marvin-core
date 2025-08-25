@@ -9,6 +9,7 @@ use EnderLab\BlameableBundle\Interface\BlameableInterface;
 use EnderLab\BlameableBundle\Trait\BlameableTrait;
 use EnderLab\TimestampableBundle\Interface\TimestampableInterface;
 use EnderLab\TimestampableBundle\Trait\TimestampableTrait;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -18,9 +19,10 @@ class Zone implements TimestampableInterface, BlameableInterface
     use TimestampableTrait;
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer', options: ['unsigned' => true])]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid')]
+    #[Orm\GeneratedValue(strategy: 'CUSTOM')]
+    #[Orm\CustomIdGenerator(class: UuidGenerator::class)]
+    private ?string $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotNull()]
@@ -34,7 +36,7 @@ class Zone implements TimestampableInterface, BlameableInterface
     #[ORM\JoinColumn(nullable: true)]
     private ?Zone $parentZone = null;
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

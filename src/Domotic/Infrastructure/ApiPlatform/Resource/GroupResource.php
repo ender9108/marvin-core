@@ -32,7 +32,7 @@ final class GroupResource implements ApiResourceInterface
     use ResourceTimestampableTrait;
 
     #[ApiProperty(readable: true, writable: false, identifier: true)]
-    public ?int $id = null;
+    public ?string $id = null;
 
     public ?string $name = null;
 

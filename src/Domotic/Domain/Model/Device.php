@@ -10,6 +10,8 @@ use EnderLab\BlameableBundle\Trait\BlameableTrait;
 use EnderLab\DddCqrsBundle\Domain\Aggregate\AggregateRoot;
 use EnderLab\TimestampableBundle\Interface\TimestampableInterface;
 use EnderLab\TimestampableBundle\Trait\TimestampableTrait;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
+use Symfony\Component\Uid\UuidV4;
 
 #[ORM\Entity]
 class Device extends AggregateRoot implements TimestampableInterface, BlameableInterface
@@ -18,7 +20,7 @@ class Device extends AggregateRoot implements TimestampableInterface, BlameableI
     use TimestampableTrait;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'string', unique: true)]
+    #[ORM\Column(type: 'uuid')]
     private ?string $id = null;
 
     #[ORM\Column(length: 255)]
@@ -35,7 +37,7 @@ class Device extends AggregateRoot implements TimestampableInterface, BlameableI
 
     public function __construct()
     {
-        parent::__construct();
+        $this->id = (string) new UuidV4();
         $this->capabilities = new ArrayCollection();
     }
 

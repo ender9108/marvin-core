@@ -11,5 +11,5 @@ interface <?= $class_name; ?> extends RepositoryInterface
 
     public function remove(<?= $model_class_name; ?> $<?= $var_model_class_name; ?>): void;
 
-    public function byId(string|int $id): ?<?= $model_class_name; ?>;
+    public function byId(string $id): ?<?= $model_class_name; ?>;
 }

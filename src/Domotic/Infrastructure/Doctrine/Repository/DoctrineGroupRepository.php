@@ -26,7 +26,7 @@ final class DoctrineGroupRepository extends ServiceEntityRepository implements G
         $this->getEntityManager()->remove($group);
     }
 
-    public function byId(string|int $id): ?Group
+    public function byId(string $id): ?Group
     {
         return $this->find($id);
     }
