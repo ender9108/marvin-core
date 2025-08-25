@@ -26,7 +26,7 @@ final class DoctrineUserRepository extends ServiceEntityRepository implements Us
         $this->getEntityManager()->remove($user);
     }
 
-    public function getById(int $id): ?User
+    public function getById(string $id): ?User
     {
         return $this->find($id);
     }

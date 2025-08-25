@@ -11,5 +11,5 @@ interface GroupRepositoryInterface extends RepositoryInterface
 
     public function remove(Group $group): void;
 
-    public function byId(string|int $id): ?Group;
+    public function byId(string $id): ?Group;
 }

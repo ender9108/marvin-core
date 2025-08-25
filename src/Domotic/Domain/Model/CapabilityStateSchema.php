@@ -10,6 +10,7 @@ use EnderLab\BlameableBundle\Trait\BlameableTrait;
 use EnderLab\DddCqrsBundle\Domain\Aggregate\AggregateRoot;
 use EnderLab\TimestampableBundle\Interface\TimestampableInterface;
 use EnderLab\TimestampableBundle\Trait\TimestampableTrait;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -19,9 +20,10 @@ class CapabilityStateSchema extends AggregateRoot implements TimestampableInterf
     use TimestampableTrait;
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer', options: ['unsigned' => true])]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid')]
+    #[Orm\GeneratedValue(strategy: 'CUSTOM')]
+    #[Orm\CustomIdGenerator(class: UuidGenerator::class)]
+    private ?string $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotNull()]
@@ -41,11 +43,10 @@ class CapabilityStateSchema extends AggregateRoot implements TimestampableInterf
 
     public function __construct()
     {
-        parent::__construct();
         $this->capabilityActions = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

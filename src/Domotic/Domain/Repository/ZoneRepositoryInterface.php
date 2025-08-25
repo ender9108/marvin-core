@@ -11,5 +11,5 @@ interface ZoneRepositoryInterface extends RepositoryInterface
 
     public function remove(Zone $zone): void;
 
-    public function byId(int $id): ?Zone;
+    public function byId(string $id): ?Zone;
 }

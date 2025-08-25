@@ -26,7 +26,7 @@ final class DoctrineProtocolRepository extends ServiceEntityRepository implement
         $this->getEntityManager()->remove($protocol);
     }
 
-    public function byId(string|int $id): ?Protocol
+    public function byId(string $id): ?Protocol
     {
         return $this->find($id);
     }

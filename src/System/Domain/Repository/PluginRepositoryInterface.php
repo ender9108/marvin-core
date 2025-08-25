@@ -11,7 +11,7 @@ interface PluginRepositoryInterface extends RepositoryInterface
 
     public function remove(Plugin $plugin): void;
 
-    public function byId(int $id): ?Plugin;
+    public function byId(string $id): ?Plugin;
 
     public function isEnabled(string $reference): bool;
 

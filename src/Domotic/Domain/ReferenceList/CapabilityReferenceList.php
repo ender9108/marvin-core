@@ -2,8 +2,6 @@
 
 namespace App\Domotic\Domain\ReferenceList;
 
-use EnderLab\ToolsBundle\Service\ListTrait;
-
 enum CapabilityReferenceList: string
 {
     // Basic controls

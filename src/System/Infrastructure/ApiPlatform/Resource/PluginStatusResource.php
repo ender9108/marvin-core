@@ -33,7 +33,7 @@ final class PluginStatusResource implements ApiResourceInterface
     use ResourceBlameableTrait;
 
     #[ApiProperty(readable: true, writable: false, identifier: true)]
-    public ?int $id = null;
+    public ?string $id = null;
 
     #[AsTranslatableApiProperty]
     public ?string $label = null;

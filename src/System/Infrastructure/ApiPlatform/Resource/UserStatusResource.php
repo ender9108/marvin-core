@@ -32,7 +32,7 @@ class UserStatusResource implements ApiResourceInterface
     use ResourceBlameableTrait;
 
     #[ApiProperty(readable: true, writable: false, identifier: true)]
-    public ?int $id = null;
+    public ?string $id = null;
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 5, max: 128)]

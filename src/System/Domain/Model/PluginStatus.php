@@ -8,6 +8,7 @@ use EnderLab\BlameableBundle\Trait\BlameableTrait;
 use EnderLab\DddCqrsApiPlatformBundle\Mapper\Attribute\AsTranslatableApiProperty;
 use EnderLab\TimestampableBundle\Interface\TimestampableInterface;
 use EnderLab\TimestampableBundle\Trait\TimestampableTrait;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
 #[ORM\Entity]
 #[ORM\Cache(usage: 'READ_ONLY', region: 'read_only')]
@@ -20,9 +21,10 @@ class PluginStatus implements TimestampableInterface, BlameableInterface
     public const string STATUS_DISABLED = 'disabled';
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'smallint', options: ['unsigned' => true])]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid')]
+    #[Orm\GeneratedValue(strategy: 'CUSTOM')]
+    #[Orm\CustomIdGenerator(class: UuidGenerator::class)]
+    private ?string $id = null;
 
     #[ORM\Column(length: 128)]
     #[AsTranslatableApiProperty]
@@ -31,7 +33,7 @@ class PluginStatus implements TimestampableInterface, BlameableInterface
     #[ORM\Column(type: 'string', length: 64, unique: true, nullable: true)]
     private ?string $reference = null;
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

@@ -8,6 +8,7 @@ use EnderLab\TimestampableBundle\Interface\TimestampableInterface;
 use EnderLab\TimestampableBundle\Trait\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use EnderLab\ToolsBundle\Service\ListTrait;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
 #[ORM\Entity]
 #[ORM\Table]
@@ -23,9 +24,10 @@ class UserType implements TimestampableInterface, BlameableInterface
     public const string TYPE_SYSTEM = 'system';
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'smallint', options: ['unsigned' => true])]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid')]
+    #[Orm\GeneratedValue(strategy: 'CUSTOM')]
+    #[Orm\CustomIdGenerator(class: UuidGenerator::class)]
+    private ?string $id = null;
 
     #[ORM\Column(length: 128)]
     private ?string $label = null;
@@ -33,7 +35,7 @@ class UserType implements TimestampableInterface, BlameableInterface
     #[ORM\Column(type: 'string', length: 64, unique: true, nullable: true)]
     private ?string $reference = null;
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

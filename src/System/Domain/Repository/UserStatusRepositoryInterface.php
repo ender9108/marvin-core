@@ -11,7 +11,7 @@ interface UserStatusRepositoryInterface extends RepositoryInterface
 
     public function remove(UserStatus $userStatus): void;
 
-    public function getById(int $id): ?UserStatus;
+    public function getById(string $id): ?UserStatus;
 
     public function getByReference(string $reference): ?UserStatus;
 }

@@ -11,7 +11,7 @@ interface UserTypeRepositoryInterface extends RepositoryInterface
 
     public function remove(UserType $userType): void;
 
-    public function getById(int $id): ?UserType;
+    public function getById(string $id): ?UserType;
 
     public function getByReference(string $reference): ?UserType;
 }

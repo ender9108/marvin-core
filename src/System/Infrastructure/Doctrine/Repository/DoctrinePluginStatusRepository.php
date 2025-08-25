@@ -26,7 +26,7 @@ final class DoctrinePluginStatusRepository extends ServiceEntityRepository imple
         $this->getEntityManager()->remove($pluginStatus);
     }
 
-    public function byId(int $id): ?PluginStatus
+    public function byId(string $id): ?PluginStatus
     {
         return $this->find($id);
     }

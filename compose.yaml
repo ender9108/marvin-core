@@ -4,30 +4,33 @@ services:
             dockerfile: docker/frankenphp/Dockerfile
         restart: unless-stopped
         container_name: '${APP_NAME}-php'
-        user: "${UID}:${GID}"
         environment:
             SERVER_NAME: '${SERVER_NAME:-localhost}, php:80'
             MERCURE_PUBLISHER_JWT_KEY: '${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}'
             MERCURE_SUBSCRIBER_JWT_KEY: '${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}'
-            DATABASE_URL: 'postgres://${DB_USER:-marvin}:${DB_USER:-!ChangeMe!}@database:5432/${DB_NAME:-marvin}'
+            DATABASE_URL: 'postgres://${DB_USER:-test}:${DB_PASSWORD:-test}@database:5432/${DB_NAME:-test}'
             MERCURE_URL: '${CADDY_MERCURE_URL:-http://php/.well-known/mercure}'
             MERCURE_PUBLIC_URL: '${CADDY_MERCURE_PUBLIC_URL:-https://${SERVER_NAME:-localhost}/.well-known/mercure}'
             MERCURE_JWT_SECRET: '${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}'
             SYMFONY_VERSION: '${SYMFONY_VERSION:-}'
             STABILITY: '${STABILITY:-stable}'
+            UNIX_USER: '${UNIX_USER-www-data}'
+            UNIX_GROUP: '${UNIX_GROUP-www-data}'
+            UNIX_UID: '${UNIX_UID-33}'
+            UNIX_GID: '${UNIX_GID-33}'
         volumes:
-            - '../enderlab:/enderlab'
+            #- '../enderlab:/enderlab'
             - './:/app'
             - './docker/frankenphp/volume/caddy/data:/data:rw'
             - './docker/frankenphp/volume/caddy/config:/config:rw'
         ports:
-            - target: 80
+            - target: 8000
               published: '${HTTP_PORT:-8000}'
               protocol: tcp
-            - target: 443
+            - target: 4443
               published: '${HTTPS_PORT:-4443}'
               protocol: tcp
-            - target: 443
+            - target: 4443
               published: '${HTTP3_PORT:-4443}'
               protocol: udp
         depends_on:
@@ -40,9 +43,13 @@ services:
         build:
             dockerfile: ./docker/worker/Dockerfile
         container_name: '${APP_NAME}-worker'
-        user: "${UID}:${GID}"
         ports:
             - '9001:9001'
+        environment:
+            UNIX_USER: '${UNIX_USER-www-data}'
+            UNIX_GROUP: '${UNIX_GROUP-www-data}'
+            UNIX_UID: '${UNIX_UID-33}'
+            UNIX_GID: '${UNIX_GID-33}'
         volumes:
             #- ../enderlab:/enderlab
             - ./:/app
@@ -60,9 +67,9 @@ services:
         image: postgres:${DB_VERSION-16}-alpine
         container_name: '${APP_NAME}-database'
         environment:
-            POSTGRES_DB: ${DB_NAME-test}
-            POSTGRES_USER: ${DB_USER-test}
-            POSTGRES_PASSWORD: ${DB_PASSWORD-test}
+            POSTGRES_DB: ${DB_NAME:-test}
+            POSTGRES_USER: ${DB_USER:-test}
+            POSTGRES_PASSWORD: ${DB_PASSWORD:-test}
         ports:
             - '5432:5432'
         volumes:
@@ -98,7 +105,6 @@ services:
     mqtt_broker:
         image: eclipse-mosquitto:2
         container_name: '${APP_NAME}-mqtt-broker'
-        user: "${UID}:${GID}"
         restart: unless-stopped
         volumes:
             - ./docker/mqtt_broker/config:/mosquitto/config

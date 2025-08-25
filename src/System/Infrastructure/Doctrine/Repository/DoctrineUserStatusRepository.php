@@ -26,7 +26,7 @@ final class DoctrineUserStatusRepository extends ServiceEntityRepository impleme
         $this->getEntityManager()->remove($userStatus);
     }
 
-    public function getById(int $id): ?UserStatus
+    public function getById(string $id): ?UserStatus
     {
         return $this->find($id);
     }

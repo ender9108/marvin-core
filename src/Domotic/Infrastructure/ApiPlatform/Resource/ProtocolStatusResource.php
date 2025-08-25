@@ -33,7 +33,7 @@ final class ProtocolStatusResource implements ApiResourceInterface
     use ResourceTimestampableTrait;
 
     #[ApiProperty(readable: true, writable: false, identifier: true)]
-    public ?int $id = null;
+    public ?string $id = null;
 
     #[AsTranslatableApiProperty]
     public ?string $label = null;

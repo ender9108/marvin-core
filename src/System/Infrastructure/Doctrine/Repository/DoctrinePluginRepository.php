@@ -27,7 +27,7 @@ final class DoctrinePluginRepository extends ServiceEntityRepository implements 
         $this->getEntityManager()->remove($plugin);
     }
 
-    public function byId(int $id): ?Plugin
+    public function byId(string $id): ?Plugin
     {
         return $this->find($id);
     }

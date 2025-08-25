@@ -8,6 +8,8 @@ use EnderLab\BlameableBundle\Trait\BlameableTrait;
 use EnderLab\DddCqrsBundle\Domain\Aggregate\AggregateRoot;
 use EnderLab\TimestampableBundle\Interface\TimestampableInterface;
 use EnderLab\TimestampableBundle\Trait\TimestampableTrait;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
+use Symfony\Component\Uid\UuidV4;
 
 #[ORM\Entity]
 class Plugin extends AggregateRoot implements TimestampableInterface, BlameableInterface
@@ -16,9 +18,8 @@ class Plugin extends AggregateRoot implements TimestampableInterface, BlameableI
     use TimestampableTrait;
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'smallint', options: ['unsigned' => true])]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid')]
+    private ?string $id = null;
 
     #[ORM\Column(length: 128)]
     private ?string $label = null;
@@ -36,7 +37,11 @@ class Plugin extends AggregateRoot implements TimestampableInterface, BlameableI
     #[ORM\JoinColumn(nullable: false)]
     private ?PluginStatus $status = null;
 
-    public function getId(): ?int
+    public function __construct() {
+        $this->id = (string) new UuidV4();
+    }
+
+    public function getId(): ?string
     {
         return $this->id;
     }

@@ -26,7 +26,7 @@ final class DoctrineZoneRepository extends ServiceEntityRepository implements Zo
         $this->getEntityManager()->remove($zone);
     }
 
-    public function byId(int $id): ?Zone
+    public function byId(string $id): ?Zone
     {
         return $this->find($id);
     }
