@@ -51,9 +51,9 @@ COPY --link docker/frankenphp/config/conf.d/10-app.ini $PHP_INI_DIR/app.conf.d/
 COPY --link --chmod=755 docker/frankenphp/config/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 COPY --link docker/frankenphp/config/Caddyfile /etc/caddy/Caddyfile
 
-RUN id -u ${UNIX_USER} &>/dev/null || adduser --uid ${UNIX_UID} ${UNIX_USER} --gid ${UNIX_GID};
-RUN setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/frankenphp;
-RUN chown -R ${UNIX_USER}:${UNIX_GROUP} /data/caddy && chown -R ${UNIX_USER}:${UNIX_GROUP} /config/caddy;
+# RUN id -u ${UNIX_USER} &>/dev/null || adduser --uid ${UNIX_UID} ${UNIX_USER} --gid ${UNIX_GID};
+# RUN setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/frankenphp;
+# RUN chown -R ${UNIX_USER}:${UNIX_GROUP} /data/caddy && chown -R ${UNIX_USER}:${UNIX_GROUP} /config/caddy;
 
 RUN git config --global --add safe.directory /app
 
