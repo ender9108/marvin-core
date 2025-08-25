@@ -1,5 +1,109 @@
 services:
-    php: { build: { dockerfile: docker/frankenphp/Dockerfile }, restart: unless-stopped, container_name: '${APP_NAME}-php', environment: { SERVER_NAME: '${SERVER_NAME:-localhost}, php:80', MERCURE_PUBLISHER_JWT_KEY: '${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}', MERCURE_SUBSCRIBER_JWT_KEY: '${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}', DATABASE_URL: 'mysql://${MARIADB_USER:-marvin}:${MARIADB_PASSWORD:-PasswordChangeMe!}@database:3306/${MARIADB_DB:-marvin}?serverVersion=${MARIADB_VERSION:-11.4.5-MariaDB}&charset=${MARIADB_CHARSET:-utf8mb4}', MERCURE_URL: '${CADDY_MERCURE_URL:-http://php/.well-known/mercure}', MERCURE_PUBLIC_URL: '${CADDY_MERCURE_PUBLIC_URL:-https://${SERVER_NAME:-localhost}/.well-known/mercure}', MERCURE_JWT_SECRET: '${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}', SYMFONY_VERSION: '${SYMFONY_VERSION:-}', STABILITY: '${STABILITY:-stable}', UNIX_USER: '${UNIX_USER-www-data}', UNIX_GROUP: '${UNIX_GROUP-www-data}', UNIX_UID: '${UNIX_UID-33}', UNIX_GID: '${UNIX_GID-33}' }, volumes: ['../enderlab:/enderlab', './:/app', './docker/frankenphp/volume/caddy/data:/data:rw', './docker/frankenphp/volume/caddy/config:/config:rw'], ports: [{ target: 80, published: '${HTTP_PORT:-8000}', protocol: tcp }, { target: 443, published: '${HTTPS_PORT:-4443}', protocol: tcp }, { target: 443, published: '${HTTP3_PORT:-4443}', protocol: udp }], depends_on: [database, rabbitmq] }
-    database: { image: 'mariadb:lts-jammy', container_name: '${APP_NAME}-database', environment: { MARIADB_ROOT_PASSWORD: '${MARIADB_ROOT_PASSWORD:-RootPasswordChangeMe!}', MARIADB_DATABASE: '${MARIADB_DB:-marvin}', MARIADB_USER: '${MARIADB_USER:-marvin}', MARIADB_PASSWORD: '${MARIADB_PASSWORD:-PasswordChangeMe!}', UNIX_USER: '${UNIX_USER-www-data}', UNIX_GROUP: '${UNIX_GROUP-www-data}', UNIX_UID: '${UNIX_UID-33}', UNIX_GID: '${UNIX_GID-33}' }, healthcheck: { test: [CMD, echo, '${MARIADB_PASSWORD:-PasswordChangeMe!}', '|', mariadb-admin, ping, '-h', localhost, '-u', '${MARIADB_USER:-marvin}', '-p'], timeout: 5s, retries: 5, start_period: 60s }, ports: ['6033:3306'], volumes: ['./docker/database/volume/data:/var/lib/mysql:rw'] }
-    rabbitmq: { build: { dockerfile: docker/rabbitmq/Dockerfile }, container_name: '${APP_NAME}-rabbitmq', environment: { RABBITMQ_USER: '${RABBITMQ_USER:-marvin}', RABBITMQ_PASSWORD: '${RABBITMQ_PASSWORD:-PasswordChangeMe!}', RABBITMQ_MQTT_USER: '${RABBITMQ_MQTT_USER:-marvin}', RABBITMQ_MQTT_PASSWORD: '${RABBITMQ_MQTT_PASSWORD:-PasswordChangeMe!}' }, ports: ['15672:15672', '5672:5672'], volumes: ['./docker/rabbitmq/config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:rw', './docker/rabbitmq/config/definitions.json:/etc/rabbitmq/definitions.json:rw', './docker/rabbitmq/volume/data:/var/lib/rabbitmq/mnesia:rw'] }
-    worker: { build: { dockerfile: ./docker/worker/Dockerfile }, container_name: '${APP_NAME}-worker', environment: { UNIX_USER: '${UNIX_USER-www-data}', UNIX_GROUP: '${UNIX_GROUP-www-data}', UNIX_UID: '${UNIX_UID-33}', UNIX_GID: '${UNIX_GID-33}' }, ports: ['9001:9001'], volumes: ['../enderlab:/enderlab', './:/app', './docker/worker/config/supervisord.conf:/etc/supervisor/supervisord.conf:rw', './docker/worker/config/conf.d:/etc/supervisor/conf.d:rw'], depends_on: [php, database, rabbitmq] }
+    php:
+        build:
+            dockerfile: docker/frankenphp/Dockerfile
+        restart: unless-stopped
+        container_name: '${APP_NAME}-php'
+        user: "${UID}:${GID}"
+        environment:
+            SERVER_NAME: '${SERVER_NAME:-localhost}, php:80'
+            MERCURE_PUBLISHER_JWT_KEY: '${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}'
+            MERCURE_SUBSCRIBER_JWT_KEY: '${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}'
+            DATABASE_URL: 'postgres://${DB_USER:-marvin}:${DB_USER:-!ChangeMe!}@database:5432/${DB_NAME:-marvin}'
+            MERCURE_URL: '${CADDY_MERCURE_URL:-http://php/.well-known/mercure}'
+            MERCURE_PUBLIC_URL: '${CADDY_MERCURE_PUBLIC_URL:-https://${SERVER_NAME:-localhost}/.well-known/mercure}'
+            MERCURE_JWT_SECRET: '${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}'
+            SYMFONY_VERSION: '${SYMFONY_VERSION:-}'
+            STABILITY: '${STABILITY:-stable}'
+        volumes:
+            - '../enderlab:/enderlab'
+            - './:/app'
+            - './docker/frankenphp/volume/caddy/data:/data:rw'
+            - './docker/frankenphp/volume/caddy/config:/config:rw'
+        ports:
+            - target: 80
+              published: '${HTTP_PORT:-8000}'
+              protocol: tcp
+            - target: 443
+              published: '${HTTPS_PORT:-4443}'
+              protocol: tcp
+            - target: 443
+              published: '${HTTP3_PORT:-4443}'
+              protocol: udp
+        depends_on:
+            database:
+                condition: service_healthy
+            rabbitmq:
+                condition: service_healthy
+
+    worker:
+        build:
+            dockerfile: ./docker/worker/Dockerfile
+        container_name: '${APP_NAME}-worker'
+        user: "${UID}:${GID}"
+        ports:
+            - '9001:9001'
+        volumes:
+            #- ../enderlab:/enderlab
+            - ./:/app
+            - ./docker/worker/config/supervisord.conf:/etc/supervisor/supervisord.conf
+            - ./docker/worker/config/conf.d:/etc/supervisor/conf.d
+        depends_on:
+            database:
+                condition: service_healthy
+            rabbitmq:
+                condition: service_healthy
+            mqtt_broker:
+                condition: service_started
+
+    database:
+        image: postgres:${DB_VERSION-16}-alpine
+        container_name: '${APP_NAME}-database'
+        environment:
+            POSTGRES_DB: ${DB_NAME-test}
+            POSTGRES_USER: ${DB_USER-test}
+            POSTGRES_PASSWORD: ${DB_PASSWORD-test}
+        ports:
+            - '5432:5432'
+        volumes:
+            - ./docker/database/volume/data:/var/lib/postgresql/data
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready -U ${DB_USER}" ]
+            interval: 10s
+            timeout: 5s
+            retries: 10
+    
+    rabbitmq:
+        build:
+            dockerfile: docker/rabbitmq/Dockerfile
+        container_name: '${APP_NAME}-rabbitmq'
+        environment:
+            RABBITMQ_USER: '${RABBITMQ_USER:-marvin}'
+            RABBITMQ_PASSWORD: '${RABBITMQ_PASSWORD:-PasswordChangeMe!}'
+            RABBITMQ_MQTT_USER: '${RABBITMQ_MQTT_USER:-marvin}'
+            RABBITMQ_MQTT_PASSWORD: '${RABBITMQ_MQTT_PASSWORD:-PasswordChangeMe!}'
+        ports:
+            - '15672:15672'
+            - '5672:5672'
+        volumes:
+            - ./docker/rabbitmq/config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+            - ./docker/rabbitmq/config/definitions.json:/etc/rabbitmq/definitions.json
+            - ./docker/rabbitmq/volume/data:/var/lib/rabbitmq/mnesia
+        healthcheck:
+            test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
+            interval: 10s
+            timeout: 5s
+            retries: 10
+
+    mqtt_broker:
+        image: eclipse-mosquitto:2
+        container_name: '${APP_NAME}-mqtt-broker'
+        user: "${UID}:${GID}"
+        restart: unless-stopped
+        volumes:
+            - ./docker/mqtt_broker/config:/mosquitto/config
+            - ./docker/mqtt_broker/data:/mosquitto/data
+            - ./docker/mqtt_broker/log:/mosquitto/log
+        ports:
+            - "1883:1883"
+            - "9002:9001"

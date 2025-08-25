@@ -1,6 +1,5 @@
 FROM php:8.4.5RC1-cli-bookworm
 
-RUN id -u ${UNIX_USER} &>/dev/null || adduser --uid ${UNIX_UID} ${UNIX_USER} --gid ${UNIX_GID}
 RUN apt update && apt install -y curl supervisor
 
 # Install PHP extensions
