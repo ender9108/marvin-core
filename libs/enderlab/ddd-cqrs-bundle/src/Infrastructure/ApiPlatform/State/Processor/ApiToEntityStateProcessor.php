@@ -1,6 +1,6 @@
 <?php
 
-namespace EnderLab\DddCqrsApiPlatformBundle\State\Processor;
+namespace EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\State\Processor;
 
 use ApiPlatform\Doctrine\Common\State\PersistProcessor;
 use ApiPlatform\Doctrine\Common\State\RemoveProcessor;
@@ -34,7 +34,7 @@ readonly class ApiToEntityStateProcessor implements ProcessorInterface
 
         if ($operation instanceof Put) {
             $data->id = $context['previous_data']->id;
-            $context['previous_data'] = $this->microMapper->map($context['previous_data'], $entityClass);
+            $context['previous_data'] = $this->objectMapper->map($context['previous_data'], $entityClass);
         }
 
         //$entity = $this->microMapper->map($data, $entityClass);
