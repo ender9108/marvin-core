@@ -18,7 +18,6 @@ return [
     ApiPlatform\Symfony\Bundle\ApiPlatformBundle::class => ['all' => true],
     EnderLab\BlameableBundle\BlameableBundle::class => ['all' => true],
     EnderLab\DddCqrsBundle\DddCqrsBundle::class => ['all' => true],
-    EnderLab\DddCqrsApiPlatformBundle\DddCqrsApiPlatformBundle::class => ['all' => true],
     EnderLab\MarvinManagerBundle\MarvinManagerBundle::class => ['all' => true],
     EnderLab\LockableBundle\LockableBundle::class => ['all' => true],
     EnderLab\DddCqrsMakerBundle\DddCqrsMakerBundle::class => ['dev' => true],

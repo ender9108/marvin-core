@@ -1,6 +1,6 @@
 <?php
 
-namespace EnderLab\DddCqrsApiPlatformBundle\State\Provider;
+namespace DddCqrsBundle\Infrastructure\ApiPlatform\State\Provider;
 
 use ApiPlatform\Doctrine\Orm\Paginator;
 use ApiPlatform\Doctrine\Orm\State\CollectionProvider;
