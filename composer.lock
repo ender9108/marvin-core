@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "871d449e38b566328d2d28c0bb07456f",
+    "content-hash": "046dffe485bf6006d4da970a2fb1d631",
     "packages": [
         {
             "name": "api-platform/doctrine-common",
@@ -2983,6 +2983,64 @@
             "time": "2024-06-24T21:25:28+00:00"
         },
         {
+            "name": "nikic/php-parser",
+            "version": "v5.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nikic/PHP-Parser.git",
+                "reference": "f103601b29efebd7ff4a1ca7b3eeea9e3336a2a2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/f103601b29efebd7ff4a1ca7b3eeea9e3336a2a2",
+                "reference": "f103601b29efebd7ff4a1ca7b3eeea9e3336a2a2",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-json": "*",
+                "ext-tokenizer": "*",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "ircmaxell/php-yacc": "^0.0.7",
+                "phpunit/phpunit": "^9.0"
+            },
+            "bin": [
+                "bin/php-parse"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PhpParser\\": "lib/PhpParser"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nikita Popov"
+                }
+            ],
+            "description": "A PHP parser written in PHP",
+            "keywords": [
+                "parser",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/nikic/PHP-Parser/issues",
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.6.1"
+            },
+            "time": "2025-08-13T20:13:15+00:00"
+        },
+        {
             "name": "phpdocumentor/reflection-common",
             "version": "2.2.0",
             "source": {
@@ -5778,6 +5836,86 @@
             "time": "2025-07-10T08:47:49+00:00"
         },
         {
+            "name": "symfony/json-streamer",
+            "version": "v7.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/json-streamer.git",
+                "reference": "e8c4527a61081ed88ec58f2806aa83131f4a2d6b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/json-streamer/zipball/e8c4527a61081ed88ec58f2806aa83131f4a2d6b",
+                "reference": "e8c4527a61081ed88ec58f2806aa83131f4a2d6b",
+                "shasum": ""
+            },
+            "require": {
+                "nikic/php-parser": "^5.3",
+                "php": ">=8.2",
+                "psr/container": "^1.1|^2.0",
+                "psr/log": "^1|^2|^3",
+                "symfony/filesystem": "^7.2",
+                "symfony/type-info": "^7.2",
+                "symfony/var-exporter": "^7.2"
+            },
+            "require-dev": {
+                "phpstan/phpdoc-parser": "^1.0",
+                "symfony/dependency-injection": "^7.2",
+                "symfony/http-kernel": "^7.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\JsonStreamer\\": ""
+                },
+                "exclude-from-classmap": [
+                    "Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mathias Arlaud",
+                    "email": "mathias.arlaud@gmail.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides powerful methods to read/write data structures from/into JSON streams.",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "json",
+                "stream"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/json-streamer/tree/v7.3.2"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-07-10T08:47:49+00:00"
+        },
+        {
             "name": "symfony/lock",
             "version": "v7.3.2",
             "source": {
@@ -6360,6 +6498,79 @@
                 }
             ],
             "time": "2025-05-01T12:12:53+00:00"
+        },
+        {
+            "name": "symfony/object-mapper",
+            "version": "v7.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/object-mapper.git",
+                "reference": "782ee28ec5b1d3f6dbcf93a6b60288df68d774eb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/object-mapper/zipball/782ee28ec5b1d3f6dbcf93a6b60288df68d774eb",
+                "reference": "782ee28ec5b1d3f6dbcf93a6b60288df68d774eb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "psr/container": "^2.0"
+            },
+            "conflict": {
+                "symfony/property-access": "<7.2"
+            },
+            "require-dev": {
+                "symfony/property-access": "^7.2",
+                "symfony/var-exporter": "^7.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\ObjectMapper\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides a way to map an object to another object",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/object-mapper/tree/v7.3.2"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-07-25T06:21:40+00:00"
         },
         {
             "name": "symfony/password-hasher",
@@ -9160,56 +9371,6 @@
             "time": "2025-07-10T08:47:49+00:00"
         },
         {
-            "name": "symfonycasts/micro-mapper",
-            "version": "v0.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/SymfonyCasts/micro-mapper.git",
-                "reference": "8a5f53221babfc010fa8f2e11f149be277aa28cf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/SymfonyCasts/micro-mapper/zipball/8a5f53221babfc010fa8f2e11f149be277aa28cf",
-                "reference": "8a5f53221babfc010fa8f2e11f149be277aa28cf",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "^1.10.39",
-                "phpunit/phpunit": "^9.6",
-                "symfony/filesystem": "^6.3|^7.0",
-                "symfony/framework-bundle": "^6.3|^7.0",
-                "symfony/phpunit-bridge": "^6.3.9|^7.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfonycasts\\MicroMapper\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ryan Weaver",
-                    "homepage": "https://symfonycasts.com"
-                }
-            ],
-            "description": "A tiny, underwhelming data mapper to map one object to another!",
-            "keywords": [
-                "data-mapper"
-            ],
-            "support": {
-                "issues": "https://github.com/SymfonyCasts/micro-mapper/issues",
-                "source": "https://github.com/SymfonyCasts/micro-mapper/tree/v0.2.1"
-            },
-            "time": "2024-10-22T16:58:40+00:00"
-        },
-        {
             "name": "twig/extra-bundle",
             "version": "v3.21.0",
             "source": {
@@ -9951,64 +10112,6 @@
                 }
             ],
             "time": "2025-08-01T08:46:24+00:00"
-        },
-        {
-            "name": "nikic/php-parser",
-            "version": "v5.6.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "f103601b29efebd7ff4a1ca7b3eeea9e3336a2a2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/f103601b29efebd7ff4a1ca7b3eeea9e3336a2a2",
-                "reference": "f103601b29efebd7ff4a1ca7b3eeea9e3336a2a2",
-                "shasum": ""
-            },
-            "require": {
-                "ext-ctype": "*",
-                "ext-json": "*",
-                "ext-tokenizer": "*",
-                "php": ">=7.4"
-            },
-            "require-dev": {
-                "ircmaxell/php-yacc": "^0.0.7",
-                "phpunit/phpunit": "^9.0"
-            },
-            "bin": [
-                "bin/php-parse"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "PhpParser\\": "lib/PhpParser"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Nikita Popov"
-                }
-            ],
-            "description": "A PHP parser written in PHP",
-            "keywords": [
-                "parser",
-                "php"
-            ],
-            "support": {
-                "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v5.6.1"
-            },
-            "time": "2025-08-13T20:13:15+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -12578,10 +12681,10 @@
     "prefer-lowest": false,
     "platform": {
         "php": ">=8.3",
+        "ext-amqp": "*",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "ext-swoole": "*",
-        "ext-amqp": "*"
+        "ext-swoole": "*"
     },
     "platform-dev": {},
     "plugin-api-version": "2.6.0"

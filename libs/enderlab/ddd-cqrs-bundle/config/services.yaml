@@ -5,7 +5,3 @@ services:
     
     EnderLab\DddCqrsBundle\:
         resource: '../src/'
-        
-    #EnderLab\DddCqrsBundle\Domain\Event\DomainEventCollector:
-    #    public: true
-    #    shared: true

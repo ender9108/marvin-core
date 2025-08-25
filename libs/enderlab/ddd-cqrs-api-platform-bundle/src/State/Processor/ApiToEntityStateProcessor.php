@@ -11,7 +11,7 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\State\ProcessorInterface;
 use EnderLab\DddCqrsApiPlatformBundle\ApiResourceInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfonycasts\MicroMapper\MicroMapperInterface;
+use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
 readonly class ApiToEntityStateProcessor implements ProcessorInterface
 {
@@ -20,11 +20,11 @@ readonly class ApiToEntityStateProcessor implements ProcessorInterface
         private ProcessorInterface $persistProcessor,
         #[Autowire(service: RemoveProcessor::class)]
         private ProcessorInterface $removeProcessor,
-        private MicroMapperInterface $microMapper,
+        private ObjectMapperInterface $objectMapper,
     ) {
     }
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ?ApiResourceInterface
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ?object
     {
         $stateOptions = $operation->getStateOptions();
         assert($stateOptions instanceof Options);
@@ -37,7 +37,8 @@ readonly class ApiToEntityStateProcessor implements ProcessorInterface
             $context['previous_data'] = $this->microMapper->map($context['previous_data'], $entityClass);
         }
 
-        $entity = $this->microMapper->map($data, $entityClass);
+        //$entity = $this->microMapper->map($data, $entityClass);
+        $entity = $this->objectMapper->map($data, $entityClass);
 
         if ($operation instanceof DeleteOperationInterface) {
             $this->removeProcessor->process($entity, $operation, $uriVariables, $context);
@@ -46,6 +47,7 @@ readonly class ApiToEntityStateProcessor implements ProcessorInterface
 
         $this->persistProcessor->process($entity, $operation, $uriVariables, $context);
 
-        return $this->microMapper->map($entity, get_class($data));
+        //return $this->microMapper->map($entity, get_class($data));
+        return $this->objectMapper->map($entity, get_class($data));
     }
 }

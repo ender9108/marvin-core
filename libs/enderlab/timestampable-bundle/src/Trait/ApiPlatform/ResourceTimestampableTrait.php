@@ -1,6 +1,6 @@
 <?php
 
-namespace EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\Trait;
+namespace EnderLab\TimestampableBundle\Trait\ApiPlatform;
 
 use ApiPlatform\Metadata\ApiProperty;
 use DateTimeInterface;

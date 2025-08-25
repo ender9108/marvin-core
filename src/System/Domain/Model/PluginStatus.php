@@ -5,7 +5,6 @@ namespace App\System\Domain\Model;
 use Doctrine\ORM\Mapping as ORM;
 use EnderLab\BlameableBundle\Interface\BlameableInterface;
 use EnderLab\BlameableBundle\Trait\BlameableTrait;
-use EnderLab\DddCqrsApiPlatformBundle\Mapper\Attribute\AsTranslatableApiProperty;
 use EnderLab\TimestampableBundle\Interface\TimestampableInterface;
 use EnderLab\TimestampableBundle\Trait\TimestampableTrait;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
@@ -27,7 +26,6 @@ class PluginStatus implements TimestampableInterface, BlameableInterface
     private ?string $id = null;
 
     #[ORM\Column(length: 128)]
-    #[AsTranslatableApiProperty]
     private ?string $label = null;
 
     #[ORM\Column(type: 'string', length: 64, unique: true, nullable: true)]

@@ -14,23 +14,20 @@ services:
             MERCURE_JWT_SECRET: '${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}'
             SYMFONY_VERSION: '${SYMFONY_VERSION:-}'
             STABILITY: '${STABILITY:-stable}'
-            UNIX_USER: '${UNIX_USER-www-data}'
-            UNIX_GROUP: '${UNIX_GROUP-www-data}'
-            UNIX_UID: '${UNIX_UID-33}'
-            UNIX_GID: '${UNIX_GID-33}'
+            UNIX_UID: '${UID-1000}'
+            UNIX_GID: '${GID-1000}'
         volumes:
-            #- '../enderlab:/enderlab'
             - './:/app'
             - './docker/frankenphp/volume/caddy/data:/data:rw'
             - './docker/frankenphp/volume/caddy/config:/config:rw'
         ports:
-            - target: 8000
+            - target: 80
               published: '${HTTP_PORT:-8000}'
               protocol: tcp
-            - target: 4443
+            - target: 443
               published: '${HTTPS_PORT:-4443}'
               protocol: tcp
-            - target: 4443
+            - target: 443
               published: '${HTTP3_PORT:-4443}'
               protocol: udp
         depends_on:
@@ -46,10 +43,8 @@ services:
         ports:
             - '9001:9001'
         environment:
-            UNIX_USER: '${UNIX_USER-www-data}'
-            UNIX_GROUP: '${UNIX_GROUP-www-data}'
-            UNIX_UID: '${UNIX_UID-33}'
-            UNIX_GID: '${UNIX_GID-33}'
+            UNIX_UID: '${UNIX_UID-1000}'
+            UNIX_GID: '${UNIX_GID-1000}'
         volumes:
             #- ../enderlab:/enderlab
             - ./:/app
@@ -108,8 +103,8 @@ services:
         restart: unless-stopped
         volumes:
             - ./docker/mqtt_broker/config:/mosquitto/config
-            - ./docker/mqtt_broker/data:/mosquitto/data
-            - ./docker/mqtt_broker/log:/mosquitto/log
+            - ./docker/mqtt_broker/volume/data:/mosquitto/data
+            - ./docker/mqtt_broker/volume/log:/mosquitto/log
         ports:
             - "1883:1883"
             - "9002:9001"

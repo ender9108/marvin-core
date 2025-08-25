@@ -8,12 +8,13 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\System\Domain\Model\UserType;
+use EnderLab\BlameableBundle\Trait\ApiPlatform\ResourceBlameableTrait;
 use EnderLab\DddCqrsApiPlatformBundle\ApiResourceInterface;
-use EnderLab\DddCqrsApiPlatformBundle\Mapper\Attribute\AsTranslatableApiProperty;
 use EnderLab\DddCqrsApiPlatformBundle\State\Provider\EntityToApiStateProvider;
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\Trait\ResourceBlameableTrait;
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\Trait\ResourceTimestampableTrait;
+use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
+use Symfony\Component\JsonStreamer\Attribute\JsonStreamable;
 
+#[JsonStreamable]
 #[ApiResource(
     shortName: 'user_type',
     operations: [
@@ -33,7 +34,6 @@ class UserTypeResource implements ApiResourceInterface
     #[ApiProperty(readable: true, writable: false, identifier: true)]
     public ?string $id = null;
 
-    #[AsTranslatableApiProperty]
     public ?string $label = null;
 
     public ?string $reference = null;

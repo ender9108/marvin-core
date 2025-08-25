@@ -10,13 +10,15 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Put;
 use App\Domotic\Domain\Model\Zone;
+use EnderLab\BlameableBundle\Trait\ApiPlatform\ResourceBlameableTrait;
 use EnderLab\DddCqrsApiPlatformBundle\ApiResourceInterface;
 use EnderLab\DddCqrsApiPlatformBundle\State\Processor\ApiToEntityStateProcessor;
 use EnderLab\DddCqrsApiPlatformBundle\State\Provider\EntityToApiStateProvider;
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\Trait\ResourceBlameableTrait;
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\Trait\ResourceTimestampableTrait;
+use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
+use Symfony\Component\JsonStreamer\Attribute\JsonStreamable;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[JsonStreamable]
 #[ApiResource(
     shortName: 'zone',
     operations: [

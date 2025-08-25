@@ -35,7 +35,9 @@ class DomainEventMessengerCompilerPass implements CompilerPassInterface
                     $eventTypes = AsDomainEvent::EVENTS;
                 }
 
-                $queueName = strtr(implode('.', $parts), ['$.' => 'domain.event.']);
+                $queueName = strtr(implode('.', $parts), [
+                    '$.' => $container->getParameter('ddd_cqrs.queue_prefix')
+                ]);
 
                 if (!isset($queuesConfig[$queueName])) {
                     $queuesConfig[$queueName] = [
