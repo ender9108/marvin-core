@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "046dffe485bf6006d4da970a2fb1d631",
+    "content-hash": "a0f79c79bf1c273a7c978ca56ee1fc47",
     "packages": [
         {
             "name": "api-platform/doctrine-common",
@@ -3622,16 +3622,16 @@
         },
         {
             "name": "simps/mqtt",
-            "version": "v1.4.6",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simps/mqtt.git",
-                "reference": "961ba5615e06786b82c5d85c967e4c29e8b7490e"
+                "reference": "7faf34fd7e53d179eb45ace04991d9015fdb80ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simps/mqtt/zipball/961ba5615e06786b82c5d85c967e4c29e8b7490e",
-                "reference": "961ba5615e06786b82c5d85c967e4c29e8b7490e",
+                "url": "https://api.github.com/repos/simps/mqtt/zipball/7faf34fd7e53d179eb45ace04991d9015fdb80ae",
+                "reference": "7faf34fd7e53d179eb45ace04991d9015fdb80ae",
                 "shasum": ""
             },
             "require": {
@@ -3651,7 +3651,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.x-dev"
+                    "dev-master": "2.x-dev"
                 }
             },
             "autoload": {
@@ -3687,7 +3687,7 @@
             ],
             "support": {
                 "issues": "https://github.com/simps/mqtt/issues",
-                "source": "https://github.com/simps/mqtt/tree/v1.4.6"
+                "source": "https://github.com/simps/mqtt/tree/v2.0.0"
             },
             "funding": [
                 {
@@ -3703,7 +3703,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-14T23:52:38+00:00"
+            "time": "2025-01-20T07:35:07+00:00"
         },
         {
             "name": "symfony/amqp-messenger",
