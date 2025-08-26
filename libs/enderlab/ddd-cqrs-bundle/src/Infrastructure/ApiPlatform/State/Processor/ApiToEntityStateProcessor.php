@@ -9,7 +9,7 @@ use ApiPlatform\Metadata\DeleteOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\State\ProcessorInterface;
-use EnderLab\DddCqrsApiPlatformBundle\ApiResourceInterface;
+use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\ApiResourceInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 

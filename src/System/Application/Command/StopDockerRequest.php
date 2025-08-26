@@ -7,7 +7,7 @@ use EnderLab\MarvinManagerBundle\Messenger\Attribute\AsMessageType;
 use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestMessage;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[AsMessageType(binding: ManagerMessageReference::REQUEST_STOP_DOCKER)]
+#[AsMessageType(binding: ManagerMessageReference::REQUEST_STOP_DOCKER->value)]
 class StopDockerRequest extends ManagerRequestMessage
 {
     public function __construct(
