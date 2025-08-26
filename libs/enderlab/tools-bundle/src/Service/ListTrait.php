@@ -6,21 +6,21 @@ use ReflectionClass;
 
 trait ListTrait
 {
-    private static array $cache = [];
+    private static array $internalCache = [];
 
-    public static function getConstantsList(): array
+    public static function constantsToArray(): array
     {
-        if (!empty(self::$cache)) {
-            return self::$cache;
+        if (!empty(self::$internalCache)) {
+            return self::$internalCache;
         }
 
         $class = new ReflectionClass(__CLASS__);
         $constants = $class->getConstants();
 
         foreach ($constants as $constant) {
-            self::$cache[$constant] = $constant;
+            self::$internalCache[$constant] = $constant;
         }
 
-        return self::$cache;
+        return self::$internalCache;
     }
 }
