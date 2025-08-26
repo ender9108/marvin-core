@@ -7,7 +7,7 @@ use EnderLab\MarvinManagerBundle\Messenger\Attribute\AsMessageType;
 use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestMessage;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[AsMessageType(binding: ManagerMessageReference::REQUEST_BUILD_DOCKER)]
+#[AsMessageType(binding: ManagerMessageReference::REQUEST_BUILD_DOCKER->value)]
 class BuildDockerRequest extends ManagerRequestMessage
 {
     public function __construct(

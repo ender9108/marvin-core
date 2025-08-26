@@ -8,7 +8,7 @@ use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestMessage;
 use EnderLab\MarvinManagerBundle\Messenger\ManagerResponseMessage;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[AsMessageType(binding: ManagerMessageReference::RESPONSE_INSTALL_DOCKER)]
+#[AsMessageType(binding: ManagerMessageReference::RESPONSE_INSTALL_DOCKER->value)]
 class InstallDockerResponse extends ManagerResponseMessage
 {
 
