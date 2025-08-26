@@ -13,9 +13,7 @@ use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\ApiResourceInterface;
 use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\State\Processor\ApiToEntityStateProcessor;
 use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\State\Provider\EntityToApiStateProvider;
 use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
-use Symfony\Component\JsonStreamer\Attribute\JsonStreamable;
 
-#[JsonStreamable]
 #[ApiResource(
     shortName: 'plugin_status',
     operations: [
