@@ -10,13 +10,11 @@ use Exception;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpReceivedStamp;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\MessageDecodingFailedException;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Messenger\Stamp\AckStamp;
 use Symfony\Component\Messenger\Stamp\BusNameStamp;
-use Symfony\Component\Messenger\Stamp\ErrorDetailsStamp;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -115,7 +113,7 @@ class ManagerSerializer implements SerializerInterface
     {
         if (
             !isset($headers['type'])
-            || !in_array($headers['type'], ManagerMessageReference::getConstantsList(), true)
+            || !in_array($headers['type'], ManagerMessageReference::values(), true)
         ) {
             throw new MessageDecodingFailedException('Unsupported message type.');
         }
@@ -139,7 +137,7 @@ class ManagerSerializer implements SerializerInterface
                 if (count($attributes) === 1) {
                     $arguments = $attributes[0]->getArguments();
 
-                    if (in_array($arguments['binding'], ManagerMessageReference::getConstantsList(), true)) {
+                    if (in_array($arguments['binding'], ManagerMessageReference::values(), true)) {
                         $mapping[$arguments['binding']] = get_class($handler);
                     }
                 }
@@ -157,7 +155,7 @@ class ManagerSerializer implements SerializerInterface
         if (count($attributes) === 1) {
             $arguments = $attributes[0]->getArguments();
 
-            if (in_array($arguments['binding'], ManagerMessageReference::getConstantsList(), true)) {
+            if (in_array($arguments['binding'], ManagerMessageReference::values(), true)) {
                 return $arguments['binding'];
             }
         }

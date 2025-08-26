@@ -22,7 +22,7 @@ class UserVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        if (!in_array($attribute, self::getConstantsList())) {
+        if (!in_array($attribute, self::constantsToArray())) {
             return false;
         }
 
