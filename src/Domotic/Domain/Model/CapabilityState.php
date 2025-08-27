@@ -2,8 +2,6 @@
 
 namespace App\Domotic\Domain\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use EnderLab\BlameableBundle\Interface\BlameableInterface;
 use EnderLab\BlameableBundle\Trait\BlameableTrait;
@@ -14,7 +12,8 @@ use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
-class CapabilityStateSchema extends AggregateRoot implements TimestampableInterface, BlameableInterface
+#[ORM\Cache(usage: 'READ_ONLY', region: 'read_only')]
+class CapabilityState extends AggregateRoot implements TimestampableInterface, BlameableInterface
 {
     use BlameableTrait;
     use TimestampableTrait;
@@ -26,7 +25,7 @@ class CapabilityStateSchema extends AggregateRoot implements TimestampableInterf
     private ?string $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotNull()]
+    #[Assert\NotNull]
     #[Assert\Length(max: 255)]
     private ?string $label = null;
 
@@ -35,16 +34,8 @@ class CapabilityStateSchema extends AggregateRoot implements TimestampableInterf
     #[Assert\Length(max: 128)]
     private ?string $reference = null;
 
-    /**
-     * @var Collection<int, CapabilityAction>
-     */
-    #[ORM\ManyToMany(targetEntity: CapabilityAction::class, inversedBy: 'capabilities')]
-    private Collection $capabilityActions;
-
-    public function __construct()
-    {
-        $this->capabilityActions = new ArrayCollection();
-    }
+    #[ORM\Column(type: 'json')]
+    private array $schema = [];
 
     public function getId(): ?string
     {
@@ -71,27 +62,13 @@ class CapabilityStateSchema extends AggregateRoot implements TimestampableInterf
         $this->reference = $reference;
     }
 
-    /**
-     * @return Collection<int, CapabilityAction>
-     */
-    public function getCapabilityActions(): Collection
+    public function getSchema(): ?array
     {
-        return $this->capabilityActions;
+        return $this->schema;
     }
 
-    public function addCapabilityAction(CapabilityAction $capabilityAction): static
+    public function setSchema(?array $schema): void
     {
-        if (!$this->capabilityActions->contains($capabilityAction)) {
-            $this->capabilityActions->add($capabilityAction);
-        }
-
-        return $this;
-    }
-
-    public function removeCapabilityAction(CapabilityAction $capabilityAction): static
-    {
-        $this->capabilityActions->removeElement($capabilityAction);
-
-        return $this;
+        $this->schema = $schema;
     }
 }

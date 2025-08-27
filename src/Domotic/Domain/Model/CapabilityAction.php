@@ -13,6 +13,7 @@ use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
+#[ORM\Cache(usage: 'READ_ONLY', region: 'read_only')]
 class CapabilityAction implements TimestampableInterface, BlameableInterface
 {
     use BlameableTrait;
@@ -33,17 +34,6 @@ class CapabilityAction implements TimestampableInterface, BlameableInterface
     #[Assert\NotNull()]
     #[Assert\Length(max: 128)]
     private ?string $reference = null;
-
-    /**
-     * @var Collection<int, Capability>
-     */
-    #[ORM\ManyToMany(targetEntity: Capability::class, mappedBy: 'capabilityActions')]
-    private Collection $capabilities;
-
-    public function __construct()
-    {
-        $this->capabilities = new ArrayCollection();
-    }
 
     public function getId(): ?string
     {
@@ -68,32 +58,5 @@ class CapabilityAction implements TimestampableInterface, BlameableInterface
     public function setReference(?string $reference): void
     {
         $this->reference = $reference;
-    }
-
-    /**
-     * @return Collection<int, Capability>
-     */
-    public function getCapabilities(): Collection
-    {
-        return $this->capabilities;
-    }
-
-    public function addCapability(Capability $capability): static
-    {
-        if (!$this->capabilities->contains($capability)) {
-            $this->capabilities->add($capability);
-            $capability->addCapabilityAction($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCapability(Capability $capability): static
-    {
-        if ($this->capabilities->removeElement($capability)) {
-            $capability->removeCapabilityAction($this);
-        }
-
-        return $this;
     }
 }

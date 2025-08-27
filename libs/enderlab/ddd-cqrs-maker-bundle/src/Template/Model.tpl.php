@@ -11,7 +11,10 @@ use EnderLab\TimestampableBundle\Interface\TimestampableInterface;
 use EnderLab\TimestampableBundle\Trait\TimestampableTrait;
 <?php endif ?>
 <?php if ($is_aggregate_root): ?>
-    use EnderLab\DddCqrsBundle\Domain\Aggregate\AggregateRoot;
+use EnderLab\DddCqrsBundle\Domain\Aggregate\AggregateRoot;
+use Symfony\Component\Uid\UuidV4;
+<?php else: ?>
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 <?php endif ?>
 use Doctrine\ORM\Mapping as ORM;
 <?= $use_statements; ?>
@@ -31,12 +34,21 @@ use BlameableTrait;
 #[ORM\Column(type: 'string', unique: true)]
 private ?string $id = null;
 <?php else: ?>
-#[ORM\GeneratedValue]
-#[ORM\Column(type: 'integer', options: ['unsigned' => true])]
-private ?int $id = null;
+#[ORM\Id]
+#[ORM\Column(type: 'uuid')]
+#[Orm\GeneratedValue(strategy: 'CUSTOM')]
+#[Orm\CustomIdGenerator(class: UuidGenerator::class)]
+private ?string $id = null;
 <?php endif ?>
 
-public function getId(): ?<?php if ($is_aggregate_root): ?>string<?php else: ?>int<?php endif ?>
+<?php if ($is_aggregate_root): ?>
+public function __construct()
+{
+$this->id = (string) new UuidV4();
+}
+<?php endif ?>
+
+public function getId(): ?string
 {
 return $this->id;
 }

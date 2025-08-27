@@ -10,7 +10,6 @@ use EnderLab\BlameableBundle\Trait\BlameableTrait;
 use EnderLab\DddCqrsBundle\Domain\Aggregate\AggregateRoot;
 use EnderLab\TimestampableBundle\Interface\TimestampableInterface;
 use EnderLab\TimestampableBundle\Trait\TimestampableTrait;
-use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\UuidV4;
 
 #[ORM\Entity]
@@ -30,15 +29,15 @@ class Device extends AggregateRoot implements TimestampableInterface, BlameableI
     private ?string $technicalName = null;
 
     /**
-     * @var Collection<int, Capability>
+     * @var Collection<int, CapabilityComposition>
      */
-    #[ORM\ManyToMany(targetEntity: Capability::class)]
-    private Collection $capabilities;
+    #[ORM\ManyToMany(targetEntity: CapabilityComposition::class)]
+    private Collection $capabilityCompositions;
 
     public function __construct()
     {
         $this->id = (string) new UuidV4();
-        $this->capabilities = new ArrayCollection();
+        $this->capabilityCompositions = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -71,25 +70,25 @@ class Device extends AggregateRoot implements TimestampableInterface, BlameableI
     }
 
     /**
-     * @return Collection<int, Capability>
+     * @return Collection<int, CapabilityComposition>
      */
-    public function getCapabilities(): Collection
+    public function getCapabilityCompositions(): Collection
     {
-        return $this->capabilities;
+        return $this->capabilityCompositions;
     }
 
-    public function addCapability(Capability $capability): static
+    public function addCapabilityComposition(CapabilityComposition $capabilityComposition): static
     {
-        if (!$this->capabilities->contains($capability)) {
-            $this->capabilities->add($capability);
+        if (!$this->capabilityCompositions->contains($capabilityComposition)) {
+            $this->capabilityCompositions->add($capabilityComposition);
         }
 
         return $this;
     }
 
-    public function removeCapability(Capability $capability): static
+    public function removeCapabilityComposition(CapabilityComposition $capabilityComposition): static
     {
-        $this->capabilities->removeElement($capability);
+        $this->capabilityCompositions->removeElement($capabilityComposition);
 
         return $this;
     }

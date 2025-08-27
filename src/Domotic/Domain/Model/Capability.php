@@ -2,20 +2,17 @@
 
 namespace App\Domotic\Domain\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use EnderLab\BlameableBundle\Interface\BlameableInterface;
 use EnderLab\BlameableBundle\Trait\BlameableTrait;
-use EnderLab\DddCqrsBundle\Domain\Aggregate\AggregateRoot;
 use EnderLab\TimestampableBundle\Interface\TimestampableInterface;
 use EnderLab\TimestampableBundle\Trait\TimestampableTrait;
-use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
 #[ORM\Entity]
-class Capability extends AggregateRoot implements TimestampableInterface, BlameableInterface
+#[ORM\Cache(usage: 'READ_ONLY', region: 'read_only')]
+class Capability implements TimestampableInterface, BlameableInterface
 {
     use BlameableTrait;
     use TimestampableTrait;
@@ -35,18 +32,6 @@ class Capability extends AggregateRoot implements TimestampableInterface, Blamea
     #[Assert\NotNull()]
     #[Assert\Length(max: 128)]
     private ?string $reference = null;
-
-    /**
-     * @var Collection<int, CapabilityAction>
-     */
-    #[ORM\ManyToMany(targetEntity: CapabilityAction::class, inversedBy: 'capabilities')]
-    private Collection $capabilityActions;
-
-    public function __construct()
-    {
-        $this->id = (string) new UuidV4();
-        $this->capabilityActions = new ArrayCollection();
-    }
 
     public function getId(): ?string
     {
@@ -71,29 +56,5 @@ class Capability extends AggregateRoot implements TimestampableInterface, Blamea
     public function setReference(?string $reference): void
     {
         $this->reference = $reference;
-    }
-
-    /**
-     * @return Collection<int, CapabilityAction>
-     */
-    public function getCapabilityActions(): Collection
-    {
-        return $this->capabilityActions;
-    }
-
-    public function addCapabilityAction(CapabilityAction $capabilityAction): static
-    {
-        if (!$this->capabilityActions->contains($capabilityAction)) {
-            $this->capabilityActions->add($capabilityAction);
-        }
-
-        return $this;
-    }
-
-    public function removeCapabilityAction(CapabilityAction $capabilityAction): static
-    {
-        $this->capabilityActions->removeElement($capabilityAction);
-
-        return $this;
     }
 }
