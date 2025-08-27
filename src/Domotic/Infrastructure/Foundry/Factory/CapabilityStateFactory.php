@@ -3,6 +3,8 @@
 namespace App\Domotic\Infrastructure\Foundry\Factory;
 
 use App\Domotic\Domain\Model\CapabilityState;
+use App\Domotic\Domain\ReferenceList\CapabilityStateAirQualityType;
+use App\Domotic\Domain\ReferenceList\CapabilityStateNotifyType;
 use App\Domotic\Domain\ReferenceList\CapabilityStateReferenceList;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
@@ -10,15 +12,12 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
 {
     private static array $datas = [
         [
-            'label' => 'domotic.capabilit_states.on_off',
+            'label' => 'domotic.capability_states.on_off',
             'reference' => CapabilityStateReferenceList::ON_OFF->value,
-            'schema' => [
-                'type' => 'boolean',
-                'value' => ['on' => true, 'off' => false]
-            ]
+            'schema' => ['type' => 'bool',]
         ],
         [
-            'label' => 'domotic.capabilit_states.brightness',
+            'label' => 'domotic.capability_states.brightness',
             'reference' => CapabilityStateReferenceList::BRIGHTNESS->value,
             'schema' => [
                 'type' => 'integer',
@@ -26,7 +25,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
             ]
         ],
         [
-            'label' => 'domotic.capabilit_states.color',
+            'label' => 'domotic.capability_states.color',
             'reference' => CapabilityStateReferenceList::COLOR->value,
             'schema' => [
                 'type' => 'object',
@@ -38,7 +37,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
             ]
         ],
         [
-            'label' => 'domotic.capabilit_states.color_temp',
+            'label' => 'domotic.capability_states.color_temp',
             'reference' => CapabilityStateReferenceList::COLOR_TEMP->value,
             'schema' => [
                 'type' => 'integer',
@@ -47,7 +46,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
             ]
         ],
         [
-            'label' => 'domotic.capabilit_states.position',
+            'label' => 'domotic.capability_states.position',
             'reference' => CapabilityStateReferenceList::POSITION->value,
             'schema' => [
                 'type' => 'integer',
@@ -56,7 +55,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
             ]
         ],
         [
-            'label' => 'domotic.capabilit_states.speed',
+            'label' => 'domotic.capability_states.speed',
             'reference' => CapabilityStateReferenceList::SPEED->value,
             'schema' => [
                 'type' => 'string',
@@ -64,7 +63,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
             ]
         ],
         [
-            'label' => 'domotic.capabilit_states.temperature',
+            'label' => 'domotic.capability_states.temperature',
             'reference' => CapabilityStateReferenceList::TEMPERATURE->value,
             'schema' => [
                 'type' => 'float',
@@ -72,7 +71,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
             ]
         ],
         [
-            'label' => 'domotic.capabilit_states.temperature_mode',
+            'label' => 'domotic.capability_states.temperature_mode',
             'reference' => CapabilityStateReferenceList::TEMPERATURE_MODE->value,
             'schema' => [
                 'type' => 'string',
@@ -80,98 +79,175 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
             ]
         ],
         [
-            'label' => 'domotic.capabilit_states.locked',
+            'label' => 'domotic.capability_states.locked',
             'reference' => CapabilityStateReferenceList::LOCKED->value,
+            'schema' => ['type' => 'bool',]
+        ],
+        [
+            'label' => 'domotic.capability_states.presence',
+            'reference' => CapabilityStateReferenceList::PRESENCE->value,
+            'schema' => ['type' => 'bool',]
+        ],
+        [
+            'label' => 'domotic.capability_states.contact',
+            'reference' => CapabilityStateReferenceList::CONTACT->value,
+            'schema' => ['type' => 'bool',]
+        ],
+        [
+            'label' => 'domotic.capability_states.vibration',
+            'reference' => CapabilityStateReferenceList::VIBRATION->value,
+            'schema' => ['type' => 'bool',]
+        ],
+        [
+            'label' => 'domotic.capability_states.humidity',
+            'reference' => CapabilityStateReferenceList::HUMIDITY->value,
             'schema' => [
-                'type' => 'bool',
-                'value' => ['lock' => true, 'unlock' => false]
+                'type' => 'float',
+                'unit' => 'percent',
             ]
         ],
         [
-            'label' => 'domotic.capabilit_states.presence',
-            'reference' => CapabilityStateReferenceList::PRESENCE->value,
-            'schema' => []
-        ],
-        [
-            'label' => 'domotic.capabilit_states.contact',
-            'reference' => CapabilityStateReferenceList::CONTACT->value,
-            'schema' => []
-        ],
-        [
-            'label' => 'domotic.capabilit_states.vibration',
-            'reference' => CapabilityStateReferenceList::VIBRATION->value,
-            'schema' => []
-        ],
-        [
-            'label' => 'domotic.capabilit_states.humidity',
-            'reference' => CapabilityStateReferenceList::HUMIDITY->value,
-            'schema' => []
-        ],
-        [
-            'label' => 'domotic.capabilit_states.illuminance',
+            'label' => 'domotic.capability_states.illuminance',
             'reference' => CapabilityStateReferenceList::ILLUMINANCE->value,
-            'schema' => []
+            'schema' => [
+                'type' => 'integer',
+                'unit' => 'lux',
+            ]
         ],
         [
-            'label' => 'domotic.capabilit_states.air_quality',
+            'label' => 'domotic.capability_states.air_quality',
             'reference' => CapabilityStateReferenceList::AIR_QUALITY->value,
-            'schema' => []
+            'schema' => [
+                'type' => 'string',
+                'value' => [
+                    CapabilityStateAirQualityType::EXCELLENT->value,
+                    CapabilityStateAirQualityType::GOOD->value,
+                    CapabilityStateAirQualityType::MODERATE->value,
+                    CapabilityStateAirQualityType::POOR->value,
+                    CapabilityStateAirQualityType::UNHEALTHY->value,
+                    CapabilityStateAirQualityType::HAZARDOUS->value,
+                ]
+            ]
         ],
         [
-            'label' => 'domotic.capabilit_states.smoke',
+            'label' => 'domotic.capability_states.pm2_5',
+            'reference' => CapabilityStateReferenceList::PM2_5->value,
+            'schema' => ['type' => 'float',]
+        ],
+        [
+            'label' => 'domotic.capability_states.pm10',
+            'reference' => CapabilityStateReferenceList::PM10->value,
+            'schema' => ['type' => 'float',]
+        ],
+        [
+            'label' => 'domotic.capability_states.voc_index',
+            'reference' => CapabilityStateReferenceList::VOC_INDEX->value,
+            'schema' => ['type' => 'float',]
+        ],
+        [
+            'label' => 'domotic.capability_states.co2',
+            'reference' => CapabilityStateReferenceList::CO2->value,
+            'schema' => ['type' => 'integer',]
+        ],
+        [
+            'label' => 'domotic.capability_states.smoke',
             'reference' => CapabilityStateReferenceList::SMOKE->value,
-            'schema' => []
+            'schema' => ['type' => 'bool',]
         ],
         [
-            'label' => 'domotic.capabilit_states.water_leak',
+            'label' => 'domotic.capability_states.water_leak',
             'reference' => CapabilityStateReferenceList::WATER_LEAK->value,
-            'schema' => []
+            'schema' => ['type' => 'bool',]
         ],
         [
-            'label' => 'domotic.capabilit_states.sound',
+            'label' => 'domotic.capability_states.sound',
             'reference' => CapabilityStateReferenceList::SOUND->value,
-            'schema' => []
+            'schema' => [
+                'type' => 'integer',
+                'unit' => 'dB',
+            ]
         ],
         [
-            'label' => 'domotic.capabilit_states.power',
+            'label' => 'domotic.capability_states.power',
             'reference' => CapabilityStateReferenceList::POWER->value,
-            'schema' => []
+            'schema' => [
+                'type' => 'float',
+                'unit' => 'W',
+            ]
         ],
         [
-            'label' => 'domotic.capabilit_states.energy',
+            'label' => 'domotic.capability_states.energy',
             'reference' => CapabilityStateReferenceList::ENERGY->value,
-            'schema' => []
+            'schema' => [
+                'type' => 'float',
+                'unit' => 'kWh',
+            ]
         ],
         [
-            'label' => 'domotic.capabilit_states.voltage',
+            'label' => 'domotic.capability_states.voltage',
             'reference' => CapabilityStateReferenceList::VOLTAGE->value,
-            'schema' => []
+            'schema' => [
+                'type' => 'float',
+                'unit' => 'V',
+            ]
         ],
         [
-            'label' => 'domotic.capabilit_states.current',
+            'label' => 'domotic.capability_states.current',
             'reference' => CapabilityStateReferenceList::CURRENT->value,
-            'schema' => []
+            'schema' => [
+                'type' => 'float',
+                'unit' => 'A',
+            ]
         ],
         [
-            'label' => 'domotic.capabilit_states.battery',
+            'label' => 'domotic.capability_states.battery',
             'reference' => CapabilityStateReferenceList::BATTERY->value,
-            'schema' => []
+            'schema' => [
+                'type' => 'integer',
+                'unit' => 'percent',
+            ]
         ],
         [
-            'label' => 'domotic.capabilit_states.last_event',
+            'label' => 'domotic.capability_states.last_event',
             'reference' => CapabilityStateReferenceList::LAST_EVENT->value,
-            'schema' => []
+            'schema' => [
+                'type' => 'string',
+                'value' => ['press', 'double', 'long', 'release']
+            ]
         ],
         [
-            'label' => 'domotic.capabilit_states.',
+            'label' => 'domotic.capability_states.scene',
             'reference' => CapabilityStateReferenceList::SCENE->value,
-            'schema' => []
+            'schema' => ['type' => 'string']
         ],
         [
-            'label' => 'domotic.capabilit_states.',
+            'label' => 'domotic.capability_states.notify',
             'reference' => CapabilityStateReferenceList::NOTIFY->value,
-            'schema' => []
-        ],
+            'schema' => [
+                'type' => 'string',
+                'value' => [
+                    CapabilityStateNotifyType::ALL->value,
+                    CapabilityStateNotifyType::BEEP->value,
+                    CapabilityStateNotifyType::BEEP_LONG->value,
+                    CapabilityStateNotifyType::CHIME->value,
+                    CapabilityStateNotifyType::SIREN->value,
+                    CapabilityStateNotifyType::MUTE->value,
+                    CapabilityStateNotifyType::BLINK->value,
+                    CapabilityStateNotifyType::FLASH->value,
+                    CapabilityStateNotifyType::STROBE->value,
+                    CapabilityStateNotifyType::PULSE->value,
+                    CapabilityStateNotifyType::VIBRATE_SHORT->value,
+                    CapabilityStateNotifyType::VIBRATE_LONG->value,
+                    CapabilityStateNotifyType::VIBRATE_PATTERN->value,
+                    CapabilityStateNotifyType::TEXT->value,
+                    CapabilityStateNotifyType::SCROLL_TEXT->value,
+                    CapabilityStateNotifyType::ICON->value,
+                    CapabilityStateNotifyType::SOUND_AND_LIGHT->value,
+                    CapabilityStateNotifyType::SOUND_AND_VIBRATION->value,
+
+                ]
+            ]
+        ]
     ];
 
     protected function defaults(): array|callable

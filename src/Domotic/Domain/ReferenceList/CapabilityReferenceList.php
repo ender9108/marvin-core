@@ -21,6 +21,10 @@ enum CapabilityReferenceList: string
     case HUMIDITY = 'humidity';
     case ILLUMINANCE = 'illuminance';
     case AIR_QUALITY = 'air_quality';
+    case PM2_5 = 'pm2.5';
+    case PM10 = 'pm10';
+    case VOC_INDEX = 'voc_index';
+    case CO2 = 'co2';
     case SMOKE = 'smoke';
     case WATER_LEAK = 'water_leak';
     case SOUND = 'sound';
