@@ -6,6 +6,7 @@ use App\System\Domain\Event\Plugin\PluginCreated;
 use App\System\Domain\Event\Plugin\PluginDeleted;
 use App\System\Domain\Event\Plugin\PluginDisabled;
 use App\System\Domain\Event\Plugin\PluginEnabled;
+use BadMethodCallException;
 use Doctrine\ORM\Mapping as ORM;
 use EnderLab\BlameableBundle\Interface\BlameableInterface;
 use EnderLab\BlameableBundle\Trait\BlameableTrait;
@@ -44,6 +45,11 @@ class Plugin extends AggregateRoot implements TimestampableInterface, BlameableI
     public function __construct() {
         $this->id = (string) new UuidV4();
         $this->recordThat(new PluginCreated($this->id));
+    }
+
+    public function update(Plugin $previousPlugin): void
+    {
+        $this->sendEventByStatus($previousPlugin->getStatus());
     }
 
     public function getId(): ?string
@@ -106,7 +112,6 @@ class Plugin extends AggregateRoot implements TimestampableInterface, BlameableI
 
     public function setStatus(PluginStatus $status): static
     {
-        $this->sendEventByStatus($status);
         $this->status = $status;
         return $this;
     }
