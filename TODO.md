@@ -1,0 +1,1 @@
+- Create tool on shared domain for get dto model from other domain by iri.
