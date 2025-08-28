@@ -2,7 +2,10 @@
 
 namespace App\System\Infrastructure\ApiPlatform\Resource;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\State\Options;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
@@ -29,6 +32,13 @@ use Symfony\Component\Validator\Constraints as Assert;
     processor: ApiToEntityStateProcessor::class,
     stateOptions: new Options(entityClass: Plugin::class)
 )]
+#[ApiFilter(SearchFilter::class, properties: [
+    'label' => 'partial',
+    'reference' => 'exact',
+    'status.id' => 'exact',
+    'status.reference' => 'exact',
+])]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'label', 'reference'])]
 final class PluginResource implements ApiResourceInterface
 {
     use ResourceTimestampableTrait;

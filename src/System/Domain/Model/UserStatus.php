@@ -11,7 +11,6 @@ use EnderLab\ToolsBundle\Service\ListTrait;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
 #[ORM\Entity]
-#[ORM\Table]
 #[ORM\Cache(usage: 'READ_ONLY', region: 'read_only')]
 class UserStatus implements TimestampableInterface, BlameableInterface
 {
