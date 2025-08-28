@@ -24,7 +24,7 @@ class CapabilityComposition implements TimestampableInterface, BlameableInterfac
     private ?string $id = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(unique: true, nullable: false)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Capability $capability = null;
 
     /**
