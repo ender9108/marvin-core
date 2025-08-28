@@ -18,6 +18,7 @@ class PluginStatus implements TimestampableInterface, BlameableInterface
 
     public const string STATUS_ENABLED = 'enabled';
     public const string STATUS_DISABLED = 'disabled';
+    public const string STATUS_TO_DELETE = 'to_delete';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]

@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use App\System\Domain\Model\Plugin;
+use App\System\Infrastructure\ApiPlatform\State\Processor\UpdatePluginProcessor;
 use EnderLab\BlameableBundle\Trait\ApiPlatform\ResourceBlameableTrait;
 use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\ApiResourceInterface;
 use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\State\Processor\ApiToEntityStateProcessor;
@@ -24,7 +25,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Get(),
-        new Patch(security: 'is_granted("ROLE_ADMIN")'),
+        new Patch(
+            security: 'is_granted("ROLE_ADMIN")',
+            processor: UpdatePluginProcessor::class,
+        ),
     ],
     routePrefix: 'system',
     normalizationContext: ['skip_null_values' => false,],
@@ -50,13 +54,13 @@ final class PluginResource implements ApiResourceInterface
     #[ApiProperty(readable: true, writable: false)]
     public ?string $label = null;
 
-    #[Assert\Length(max: 5000)]
+    #[ApiProperty(readable: true, writable: false)]
     public ?string $description = null;
 
     #[ApiProperty(readable: true, writable: false)]
     public ?string $reference = null;
 
-    #[Assert\NotBlank]
+    #[ApiProperty(readable: true, writable: false)]
     public ?string $version = null;
 
     #[Assert\NotNull]
