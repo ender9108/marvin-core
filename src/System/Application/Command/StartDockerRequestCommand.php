@@ -4,11 +4,11 @@ namespace App\System\Application\Command;
 
 use EnderLab\MarvinManagerBundle\List\ManagerMessageReference;
 use EnderLab\MarvinManagerBundle\Messenger\Attribute\AsMessageType;
-use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestMessage;
+use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestCommand;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[AsMessageType(binding: ManagerMessageReference::REQUEST_START_DOCKER->value)]
-class StartDockerRequest extends ManagerRequestMessage
+class StartDockerRequestCommand extends ManagerRequestCommand
 {
     public function __construct(
         #[Assert\Collection(fields: [

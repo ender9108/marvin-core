@@ -4,7 +4,7 @@ namespace EnderLab\MarvinManagerBundle\Messenger;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-abstract class ManagerResponseMessage
+abstract class ManagerResponseCommand
 {
     public function __construct(
         #[Assert\NotBlank]
