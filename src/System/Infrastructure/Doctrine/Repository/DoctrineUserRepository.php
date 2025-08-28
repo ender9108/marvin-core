@@ -3,6 +3,7 @@
 namespace App\System\Infrastructure\Doctrine\Repository;
 
 use App\System\Domain\Model\User;
+use App\System\Domain\Model\UserStatus;
 use App\System\Domain\Repository\UserRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -37,6 +38,8 @@ final class DoctrineUserRepository extends ServiceEntityRepository implements Us
             ->createQueryBuilder('u')
             ->andWhere('u.email = :email')
             ->setParameter('email', $email)
+            ->andWhere('u.status = :status')
+            ->setParameter('status', UserStatus::STATUS_ENABLED)
             ->getQuery()
             ->getOneOrNullResult()
         ;

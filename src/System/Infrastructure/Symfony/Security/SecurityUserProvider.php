@@ -3,6 +3,7 @@
 namespace App\System\Infrastructure\Symfony\Security;
 
 use App\System\Domain\Model\User;
+use App\System\Domain\Model\UserStatus;
 use App\System\Infrastructure\Doctrine\Repository\DoctrineUserRepository;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -26,7 +27,10 @@ readonly class SecurityUserProvider implements UserProviderInterface
         }
 
         /** @var User $userModel */
-        $userModel = $this->userRepository->find($user->getId());
+        $userModel = $this->userRepository->findOneBy([
+            'id' => $user->getId(),
+            'status' => UserStatus::STATUS_ENABLED
+        ]);
 
         if (!$userModel) {
             throw new HttpException(401, 'Invalid credentials.');
