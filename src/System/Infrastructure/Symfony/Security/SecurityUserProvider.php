@@ -2,6 +2,7 @@
 
 namespace App\System\Infrastructure\Symfony\Security;
 
+use App\System\Domain\Model\User;
 use App\System\Infrastructure\Doctrine\Repository\DoctrineUserRepository;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -24,13 +25,14 @@ readonly class SecurityUserProvider implements UserProviderInterface
             throw new HttpException(401, 'Invalid credentials.');
         }
 
-        $userEntity = $this->userRepository->find($user->getId());
+        /** @var User $userModel */
+        $userModel = $this->userRepository->find($user->getId());
 
-        if (!$userEntity) {
+        if (!$userModel) {
             throw new HttpException(401, 'Invalid credentials.');
         }
 
-        return new SecurityUser($userEntity);
+        return new SecurityUser($userModel);
     }
 
     public function supportsClass(string $class): bool
