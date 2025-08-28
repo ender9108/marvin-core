@@ -16,7 +16,6 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\System\Domain\Model\User;
 use App\System\Infrastructure\ApiPlatform\State\Provider\MeProvider;
-use DateTimeInterface;
 use EnderLab\BlameableBundle\Trait\ApiPlatform\ResourceBlameableTrait;
 use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\ApiResourceInterface;
 use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\State\Processor\ApiToEntityStateProcessor;

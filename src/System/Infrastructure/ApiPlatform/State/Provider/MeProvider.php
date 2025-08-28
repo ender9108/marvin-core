@@ -4,9 +4,11 @@ namespace App\System\Infrastructure\ApiPlatform\State\Provider;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use App\System\Domain\Model\User;
 use App\System\Domain\Repository\UserRepositoryInterface;
 use Exception;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
 final readonly class MeProvider implements ProviderInterface
@@ -19,7 +21,7 @@ final readonly class MeProvider implements ProviderInterface
     }
 
     /**
-     * @throws Exception
+     * @throws NotFoundHttpException
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
@@ -28,7 +30,11 @@ final readonly class MeProvider implements ProviderInterface
         }
 
         $resourceClass = $operation->getClass();
-        $user = $this->userRepository->findOneBy(['id' => $this->security->getUser()->getId()]);
+        $user = $this->userRepository->findOneBy(['id' => $this->security->getUser()]);
+
+        if (!$user instanceof User) {
+            throw new NotFoundHttpException('User not found.');
+        }
 
         return $this->objectMapper->map($user, $resourceClass);
     }
