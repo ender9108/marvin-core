@@ -2,13 +2,13 @@
 
 namespace EnderLab\Zigbee2mqttBundle\Application\Command\Plugin;
 
-use App\System\Application\Command\Plugin\DisablePluginCommand;
-use EnderLab\DddCqrsBundle\Application\Command\Attribute\AsCommandHandler;
+use App\System\Domain\Event\Plugin\PluginDisabled;
+use EnderLab\DddCqrsBundle\Domain\Event\Attribute\AsDomainEventHandler;
 
-#[AsCommandHandler]
+#[AsDomainEventHandler(['$.system.plugin.disabled',])]
 class DisablePluginCommandHandler
 {
-    public function __invoke(DisablePluginCommand $command): void
+    public function __invoke(PluginDisabled $event): void
     {
         /** @todo a faire quand j'aurais la liste des services à arrêter */
     }
