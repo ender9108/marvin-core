@@ -2,7 +2,10 @@
 
 namespace App\Domotic\Infrastructure\ApiPlatform\Resource;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\State\Options;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
@@ -28,6 +31,11 @@ use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
     processor: ApiToEntityStateProcessor::class,
     stateOptions: new Options(entityClass: Capability::class)
 )]
+#[ApiFilter(SearchFilter::class, properties: [
+    'label' => 'partial',
+    'reference' => 'exact'
+])]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'label'])]
 final class CapabilityResource implements ApiResourceInterface
 {
     use ResourceTimestampableTrait;

@@ -34,6 +34,10 @@ class Device extends AggregateRoot implements TimestampableInterface, BlameableI
     #[ORM\ManyToMany(targetEntity: CapabilityComposition::class)]
     private Collection $capabilityCompositions;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Protocol $protocol = null;
+
     public function __construct()
     {
         $this->id = (string) new UuidV4();
@@ -89,6 +93,18 @@ class Device extends AggregateRoot implements TimestampableInterface, BlameableI
     public function removeCapabilityComposition(CapabilityComposition $capabilityComposition): static
     {
         $this->capabilityCompositions->removeElement($capabilityComposition);
+
+        return $this;
+    }
+
+    public function getProtocol(): ?Protocol
+    {
+        return $this->protocol;
+    }
+
+    public function setProtocol(?Protocol $protocol): static
+    {
+        $this->protocol = $protocol;
 
         return $this;
     }

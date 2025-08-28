@@ -2,9 +2,13 @@
 
 namespace App\Domotic\Infrastructure\ApiPlatform\Resource;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\State\Options;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
@@ -15,6 +19,7 @@ use EnderLab\BlameableBundle\Trait\ApiPlatform\ResourceBlameableTrait;
 use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\ApiResourceInterface;
 use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\State\Processor\ApiToEntityStateProcessor;
 use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     shortName: 'zone',
@@ -23,6 +28,7 @@ use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
         new Get(),
         new Put(),
         new Patch(),
+        new Delete(),
     ],
     routePrefix: 'domotic',
     normalizationContext: ['skip_null_values' => false],
@@ -30,6 +36,8 @@ use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
     processor: ApiToEntityStateProcessor::class,
     stateOptions: new Options(entityClass: Zone::class)
 )]
+#[ApiFilter(SearchFilter::class, properties: ['label' => 'partial'])]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'label', 'area'])]
 final class ZoneResource implements ApiResourceInterface
 {
     use ResourceTimestampableTrait;

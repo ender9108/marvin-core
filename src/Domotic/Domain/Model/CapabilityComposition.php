@@ -23,14 +23,8 @@ class CapabilityComposition implements TimestampableInterface, BlameableInterfac
     #[Orm\CustomIdGenerator(class: UuidGenerator::class)]
     private ?string $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $label = null;
-
-    #[ORM\Column(length: 128)]
-    private ?string $reference = null;
-
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(unique: true, nullable: false)]
     private ?Capability $capability = null;
 
     /**
@@ -54,30 +48,6 @@ class CapabilityComposition implements TimestampableInterface, BlameableInterfac
     public function getId(): ?string
     {
         return $this->id;
-    }
-
-    public function getLabel(): ?string
-    {
-        return $this->label;
-    }
-
-    public function setLabel(string $label): static
-    {
-        $this->label = $label;
-
-        return $this;
-    }
-
-    public function getReference(): ?string
-    {
-        return $this->reference;
-    }
-
-    public function setReference(string $reference): static
-    {
-        $this->reference = $reference;
-
-        return $this;
     }
 
     public function getCapability(): ?Capability
