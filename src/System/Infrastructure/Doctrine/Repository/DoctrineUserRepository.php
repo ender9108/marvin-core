@@ -38,8 +38,6 @@ final class DoctrineUserRepository extends ServiceEntityRepository implements Us
             ->createQueryBuilder('u')
             ->andWhere('u.email = :email')
             ->setParameter('email', $email)
-            ->andWhere('u.status = :status')
-            ->setParameter('status', UserStatus::STATUS_ENABLED)
             ->getQuery()
             ->getOneOrNullResult()
         ;
