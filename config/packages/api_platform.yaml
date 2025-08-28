@@ -5,7 +5,7 @@ api_platform:
         paths:
             - '%kernel.project_dir%/src/System/Infrastructure/ApiPlatform/Resource/'
             - '%kernel.project_dir%/src/Domotic/Infrastructure/ApiPlatform/Resource/'
-            - '%kernel.project_dir%/src/Shared/Infrastructure/ApiPlatform/Resource/'
+            #- '%kernel.project_dir%/src/Shared/Infrastructure/ApiPlatform/Resource/'
     formats:
         json: ['application/json']
         jsonld: ['application/ld+json']
