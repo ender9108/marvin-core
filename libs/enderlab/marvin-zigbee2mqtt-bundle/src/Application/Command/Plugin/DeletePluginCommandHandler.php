@@ -1,6 +1,8 @@
 <?php
 
-use App\System\Application\Command\DeletePluginCommand;
+namespace EnderLab\Zigbee2mqttBundle\Application\Command\Plugin;
+
+use App\System\Application\Command\Plugin\DeletePluginCommand;
 use EnderLab\DddCqrsBundle\Application\Command\Attribute\AsCommandHandler;
 
 #[AsCommandHandler]
