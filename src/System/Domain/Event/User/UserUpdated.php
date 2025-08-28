@@ -9,7 +9,7 @@ use EnderLab\DddCqrsBundle\Domain\Event\Attribute\AsDomainEvent;
 class UserUpdated extends AbstractDomainEvent
 {
     public function __construct(
-        public ?string $userId = null,
+        public ?string $id = null,
         public array $changes = [],
     ) {
         parent::__construct();

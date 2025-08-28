@@ -9,7 +9,7 @@ use EnderLab\DddCqrsBundle\Domain\Event\Attribute\AsDomainEvent;
 class UserCreated extends AbstractDomainEvent
 {
     public function __construct(
-        public ?string $userId = null,
+        public ?string $id = null,
     ) {
         parent::__construct();
     }
