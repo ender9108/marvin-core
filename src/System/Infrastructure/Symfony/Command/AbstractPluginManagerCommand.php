@@ -5,7 +5,7 @@ namespace App\System\Infrastructure\Symfony\Command;
 use App\Domotic\Domain\Model\Protocol;
 use App\Domotic\Domain\Model\ProtocolStatus;
 use App\Domotic\Domain\Repository\ProtocolRepositoryInterface;
-use App\System\Application\Command\InstallDockerRequest;
+use App\System\Application\Command\InstallDockerRequestCommand;
 use App\System\Domain\Model\Plugin;
 use App\System\Domain\Model\PluginStatus;
 use App\System\Domain\Model\User;
@@ -459,6 +459,7 @@ abstract class AbstractPluginManagerCommand extends Command
         $this->force = (bool) $input->getOption('force');
 
         try {
+            $this->checkPluginRequirement();
             $this->em->getConnection()->beginTransaction();
             $this->io = new SymfonyStyle($input, $output);
 
@@ -512,7 +513,7 @@ abstract class AbstractPluginManagerCommand extends Command
                             $commands = [];
                             $commands[] = $this->actions['docker']['custom_commands'][$service] ?? [];
 
-                            $messages[] = new InstallDockerRequest(
+                            $messages[] = new InstallDockerRequestCommand(
                                 payload: [
                                     'service' => $service,
                                     'commands' => $commands
