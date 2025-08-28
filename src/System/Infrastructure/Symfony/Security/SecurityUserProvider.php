@@ -27,12 +27,9 @@ readonly class SecurityUserProvider implements UserProviderInterface
         }
 
         /** @var User $userModel */
-        $userModel = $this->userRepository->findOneBy([
-            'id' => $user->getId(),
-            'status' => UserStatus::STATUS_ENABLED
-        ]);
+        $userModel = $this->userRepository->findOneBy($user->getId());
 
-        if (!$userModel) {
+        if (!$userModel || $userModel->getStatus()->getReference() !== UserStatus::STATUS_ENABLED) {
             throw new HttpException(401, 'Invalid credentials.');
         }
 
@@ -49,12 +46,12 @@ readonly class SecurityUserProvider implements UserProviderInterface
      */
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
-        $userEntity = $this->userRepository->byIdentifier($identifier);
+        $userModel = $this->userRepository->byIdentifier($identifier);
 
-        if (null === $userEntity) {
+        if (null === $userModel || $userModel->getStatus()->getReference() !== UserStatus::STATUS_ENABLED) {
             throw new HttpException(401, 'Invalid credentials.');
         }
 
-        return new SecurityUser($userEntity, []);
+        return new SecurityUser($userModel, []);
     }
 }
