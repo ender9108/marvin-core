@@ -25,10 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Get(),
-        new Patch(
-            security: 'is_granted("ROLE_ADMIN")',
-            processor: UpdatePluginProcessor::class,
-        ),
+        new Patch(security: 'is_granted("ROLE_ADMIN")'),
     ],
     routePrefix: 'system',
     normalizationContext: ['skip_null_values' => false,],
