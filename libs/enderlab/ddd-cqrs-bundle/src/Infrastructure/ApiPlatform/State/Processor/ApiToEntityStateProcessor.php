@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\State\ProcessorInterface;
 use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\ApiResourceInterface;
+use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
@@ -39,9 +40,24 @@ readonly class ApiToEntityStateProcessor implements ProcessorInterface
 
         $entity = $this->objectMapper->map($data, $entityClass);
 
-        if ($operation instanceof DeleteOperationInterface) {
-            $this->removeProcessor->process($entity, $operation, $uriVariables, $context);
-            return null;
+        if (!is_object($entity)) {
+            throw new RuntimeException('Entity "'.$entityClass.'" is not object');
+        }
+
+        switch (true) {
+            case $operation instanceof Put:
+                if (method_exists($entity, 'update')) {
+                    $entity->update($context['previous_data']);
+                }
+                break;
+            case $operation instanceof DeleteOperationInterface:
+                if (method_exists($entity, 'delete')) {
+                    $entity->delete();
+                }
+
+                $this->removeProcessor->process($entity, $operation, $uriVariables, $context);
+                return null;
+            default:
         }
 
         $this->persistProcessor->process($entity, $operation, $uriVariables, $context);
