@@ -4,8 +4,8 @@ namespace EnderLab\MarvinManagerBundle\Messenger\Serializer;
 
 use EnderLab\MarvinManagerBundle\List\ManagerMessageReference;
 use EnderLab\MarvinManagerBundle\Messenger\Attribute\AsMessageType;
-use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestMessage;
-use EnderLab\MarvinManagerBundle\Messenger\ManagerResponseMessage;
+use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestCommand;
+use EnderLab\MarvinManagerBundle\Messenger\ManagerResponseCommand;
 use Exception;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
@@ -74,7 +74,7 @@ class ManagerSerializer implements SerializerInterface
      */
     public function encode(Envelope $envelope): array
     {
-        /** @var ManagerResponseMessage|ManagerRequestMessage $message */
+        /** @var ManagerResponseCommand|ManagerRequestCommand $message */
         $message = $envelope->getMessage();
 
         $violations = $this->validator->validate($message);
@@ -92,8 +92,8 @@ class ManagerSerializer implements SerializerInterface
         $type = $this->getBindingTypeMessage($message);
 
         $envelope = match (true) {
-            $message instanceof ManagerResponseMessage => $envelope->withoutStampsOfType(BusNameStamp::class),
-            $message instanceof ManagerRequestMessage => $envelope->withoutStampsOfType(AckStamp::class),
+            $message instanceof ManagerResponseCommand => $envelope->withoutStampsOfType(BusNameStamp::class),
+            $message instanceof ManagerRequestCommand => $envelope->withoutStampsOfType(AckStamp::class),
             default => throw new Exception(sprintf('Invalid message type %s', get_class($message))),
         };
 
@@ -147,7 +147,7 @@ class ManagerSerializer implements SerializerInterface
         });
     }
 
-    private function getBindingTypeMessage(ManagerResponseMessage|ManagerRequestMessage $message): ?string
+    private function getBindingTypeMessage(ManagerResponseCommand|ManagerRequestCommand $message): ?string
     {
         $reflectionClass = new \ReflectionClass($message);
         $attributes = $reflectionClass->getAttributes(name: AsMessageType::class);

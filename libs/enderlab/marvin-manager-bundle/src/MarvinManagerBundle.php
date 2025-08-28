@@ -55,7 +55,7 @@ class MarvinManagerBundle extends AbstractBundle
                     ],
                 ],
                 'routing' => [
-                    'EnderLab\\MarvinManagerBundle\\Messenger\\ManagerRequestMessage' => 'marvin.to.manager'
+                    'EnderLab\\MarvinManagerBundle\\Messenger\\ManagerRequestCommand' => 'marvin.to.manager'
                 ]
             ]
         ]);

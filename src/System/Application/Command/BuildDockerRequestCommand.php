@@ -4,14 +4,14 @@ namespace App\System\Application\Command;
 
 use EnderLab\MarvinManagerBundle\List\ManagerMessageReference;
 use EnderLab\MarvinManagerBundle\Messenger\Attribute\AsMessageType;
-use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestMessage;
+use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestCommand;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[AsMessageType(binding: ManagerMessageReference::REQUEST_RESTART_DOCKER->value)]
-class RestartDockerRequest extends ManagerRequestMessage
+#[AsMessageType(binding: ManagerMessageReference::REQUEST_BUILD_DOCKER->value)]
+class BuildDockerRequestCommand extends ManagerRequestCommand
 {
     public function __construct(
-        #[Assert\Collection([
+        #[Assert\Collection(fields: [
             'service' => new Assert\NotNull(),
         ])]
         public array $payload = []
