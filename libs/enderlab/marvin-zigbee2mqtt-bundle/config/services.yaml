@@ -1,16 +1,7 @@
 parameters:
-    plugin_reference: 'zigbee2mqtt'
-    plugin_requirements:
-    mqtt_host: '%env(MQTT_HOST)%'
-    mqtt_port: '%env(MQTT_PORT)%'
-    mqtt_user: '%env(MQTT_USER)%'
-    mqtt_password: '%env(MQTT_PASSWORD)%'
-    mqtt_client_id: '%env(MQTT_CLIENT_ID)%'
-    mqtt_version: '%env(MQTT_VERSION)%'
-    mqtt_base_topic: 'zigbee2mqtt2marvin'
-    exclude_topics:
-        - 'zigbee2mqtt2marvin/bridge/definitions'
-        - 'zigbee2mqtt2marvin/bridge/extensions'
+    z2m_plugin_reference: 'zigbee2mqtt'
+    z2m_plugin_requirements:
+    z2m_mqtt_client_id: 'marvin.zigbee2mqtt'
 
 services:
     _defaults:
