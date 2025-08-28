@@ -1,6 +1,6 @@
 <?php
 
-namespace App\System\Application\Command;
+namespace App\System\Application\Command\Docker;
 
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
