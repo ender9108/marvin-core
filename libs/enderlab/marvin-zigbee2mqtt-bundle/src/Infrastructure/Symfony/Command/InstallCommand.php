@@ -2,7 +2,6 @@
 
 namespace EnderLab\Zigbee2mqttBundle\Infrastructure\Symfony\Command;
 
-use App\System\Infrastructure\Symfony\Command\AbstractPluginManagerCommand;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,7 +35,7 @@ use Symfony\Component\Messenger\Exception\ExceptionInterface;
     name: 'marvin:zigbee2mqtt:install',
     description: 'Install zigbee2mqtt bundle',
 )]
-class Zigbee2mqttInstallCommand extends AbstractPluginManagerCommand
+class InstallCommand extends AbstractZigbeePluginManagerCommand
 {
     /**
      * @throws ExceptionInterface
@@ -47,7 +46,6 @@ class Zigbee2mqttInstallCommand extends AbstractPluginManagerCommand
         $io->info('Start zigbee2mqtt installation');
 
         $this->startInstall(function() {
-            $this->checkPluginRequirement();
             $this->registerPlugin(
                 'Zigbee2mqtt',
                 true,
@@ -69,21 +67,5 @@ class Zigbee2mqttInstallCommand extends AbstractPluginManagerCommand
 
         $io->success('Zigbee2mqtt is now installed');
         return Command::SUCCESS;
-    }
-
-
-    protected function getPluginRootPath(): string
-    {
-        return __DIR__.'/../../../../';
-    }
-
-    protected function getPluginReference(): string
-    {
-        return $this->parameters->get('plugin_reference');
-    }
-
-    protected function getPluginRequirements(): array
-    {
-        return $this->parameters->get('plugin_requirements') ?? [];
     }
 }
