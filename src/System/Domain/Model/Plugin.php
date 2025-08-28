@@ -2,6 +2,10 @@
 
 namespace App\System\Domain\Model;
 
+use App\System\Domain\Event\Plugin\PluginCreated;
+use App\System\Domain\Event\Plugin\PluginDeleted;
+use App\System\Domain\Event\Plugin\PluginDisabled;
+use App\System\Domain\Event\Plugin\PluginEnabled;
 use Doctrine\ORM\Mapping as ORM;
 use EnderLab\BlameableBundle\Interface\BlameableInterface;
 use EnderLab\BlameableBundle\Trait\BlameableTrait;
@@ -39,6 +43,7 @@ class Plugin extends AggregateRoot implements TimestampableInterface, BlameableI
 
     public function __construct() {
         $this->id = (string) new UuidV4();
+        $this->recordThat(new PluginCreated($this->id));
     }
 
     public function getId(): ?string
@@ -101,7 +106,20 @@ class Plugin extends AggregateRoot implements TimestampableInterface, BlameableI
 
     public function setStatus(PluginStatus $status): static
     {
+        $this->sendEventByStatus($status);
         $this->status = $status;
         return $this;
+    }
+
+    private function sendEventByStatus(PluginStatus $status): void
+    {
+        if ($this->status !== $status) {
+            match ($status->getReference()) {
+                PluginStatus::STATUS_DISABLED => $this->recordThat(new PluginDisabled($this->id)),
+                PluginStatus::STATUS_TO_DELETE => $this->recordThat(new PluginDeleted($this->id)),
+                PluginStatus::STATUS_ENABLED => $this->recordThat(new PluginEnabled($this->id)),
+                default => null,
+            };
+        }
     }
 }
