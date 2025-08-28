@@ -1,6 +1,8 @@
 <?php
 
-use App\System\Application\Command\DisablePluginCommand;
+namespace EnderLab\Zigbee2mqttBundle\Application\Command\Plugin;
+
+use App\System\Application\Command\Plugin\DisablePluginCommand;
 use EnderLab\DddCqrsBundle\Application\Command\Attribute\AsCommandHandler;
 
 #[AsCommandHandler]
