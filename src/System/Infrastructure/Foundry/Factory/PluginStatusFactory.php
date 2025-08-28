@@ -10,6 +10,7 @@ class PluginStatusFactory extends PersistentProxyObjectFactory
     private static array $datas = [
         ['label' => 'system.plugin.status.enabled', 'reference' => PluginStatus::STATUS_ENABLED],
         ['label' => 'system.plugin.status.disabled', 'reference' => PluginStatus::STATUS_DISABLED],
+        ['label' => 'system.plugin.status.to_delete', 'reference' => PluginStatus::STATUS_TO_DELETE],
     ];
 
     protected function defaults(): array|callable
