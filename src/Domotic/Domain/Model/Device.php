@@ -73,6 +73,15 @@ class Device extends AggregateRoot implements TimestampableInterface, BlameableI
         return $this;
     }
 
+    public function getCapabilityCompositionsByCapabilityReference(string $reference): Collection
+    {
+        return $this->capabilityCompositions->filter(
+            function (CapabilityComposition $capabilityComposition) use ($reference) {
+                return $capabilityComposition->getCapability()->getReference() === $reference;
+            }
+        );
+    }
+
     /**
      * @return Collection<int, CapabilityComposition>
      */
