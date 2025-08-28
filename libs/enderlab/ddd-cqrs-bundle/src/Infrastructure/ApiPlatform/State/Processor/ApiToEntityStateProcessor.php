@@ -17,14 +17,14 @@ readonly class ApiToEntityStateProcessor implements ProcessorInterface
 {
     public function __construct(
         #[Autowire(service: PersistProcessor::class)]
-        private ProcessorInterface $persistProcessor,
+        protected ProcessorInterface $persistProcessor,
         #[Autowire(service: RemoveProcessor::class)]
-        private ProcessorInterface $removeProcessor,
-        private ObjectMapperInterface $objectMapper,
+        protected ProcessorInterface $removeProcessor,
+        protected ObjectMapperInterface $objectMapper,
     ) {
     }
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ?object
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ?ApiResourceInterface
     {
         $stateOptions = $operation->getStateOptions();
         assert($stateOptions instanceof Options);
@@ -37,7 +37,6 @@ readonly class ApiToEntityStateProcessor implements ProcessorInterface
             $context['previous_data'] = $this->objectMapper->map($context['previous_data'], $entityClass);
         }
 
-        //$entity = $this->microMapper->map($data, $entityClass);
         $entity = $this->objectMapper->map($data, $entityClass);
 
         if ($operation instanceof DeleteOperationInterface) {
@@ -47,7 +46,9 @@ readonly class ApiToEntityStateProcessor implements ProcessorInterface
 
         $this->persistProcessor->process($entity, $operation, $uriVariables, $context);
 
-        //return $this->microMapper->map($entity, get_class($data));
-        return $this->objectMapper->map($entity, get_class($data));
+        /** @var ApiResourceInterface $resource */
+        $resource = $this->objectMapper->map($entity, get_class($data));
+
+        return $resource;
     }
 }
