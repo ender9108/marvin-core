@@ -36,7 +36,11 @@ class MarvinManagerBundle extends AbstractBundle
 
     public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
     {
-        $isAutoSetup = $builder->getParameter('app_name') === self::APP_MARVIN_MANAGER;
+        $isAutoSetup = false;
+
+        if ($builder->hasParameter('shared.app_name') === false) {
+            $isAutoSetup = true;
+        }
 
         $builder->prependExtensionConfig('framework', [
             'messenger' => [

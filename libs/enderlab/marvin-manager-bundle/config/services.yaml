@@ -1,5 +1,5 @@
 parameters:
-    manager_cache_timeout: 3600
+    marvin_manager_cache_timeout: 3600
 
 services:
     _defaults:
@@ -14,4 +14,4 @@ services:
 
 when@dev:
     parameters:
-        manager_cache_timeout: 1
+        marvin_manager_cache_timeout: 1
