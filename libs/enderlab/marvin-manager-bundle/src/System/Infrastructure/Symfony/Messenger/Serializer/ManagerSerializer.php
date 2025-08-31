@@ -126,7 +126,7 @@ class ManagerSerializer implements SerializerInterface
         $key = md5('marvin_core_request_'.count(iterator_to_array($handlersByType)));
 
         return $this->cache->get($key, function (ItemInterface $item) use ($handlersByType): array {
-            $item->expiresAfter($this->parameters->get('cache_timeout'));
+            $item->expiresAfter($this->parameters->get('marvin_manager_cache_timeout'));
             $mapping = [];
 
             foreach ($handlersByType as $handler) {

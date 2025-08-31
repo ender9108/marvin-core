@@ -25,7 +25,6 @@ use Symfony\Component\Messenger\Exception\ExceptionInterface;
  *       description => Zigbee2mqtt protocol for manage zigbee devices
  *       status => enbaled
  *
- *
  * registerDocker
  * registerSupervisorWorker
  * registerExchange

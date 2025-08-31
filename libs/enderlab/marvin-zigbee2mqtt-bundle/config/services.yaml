@@ -1,4 +1,5 @@
 parameters:
+    z2m_cache_timeout: 3600
     z2m_plugin_reference: 'zigbee2mqtt'
     z2m_plugin_requirements:
     z2m_mqtt_client_id: 'marvin.zigbee2mqtt'
@@ -10,3 +11,7 @@ services:
 
     EnderLab\Zigbee2mqttBundle\:
         resource: '../src/'
+
+when@dev:
+    parameters:
+        z2m_cache_timeout: 1

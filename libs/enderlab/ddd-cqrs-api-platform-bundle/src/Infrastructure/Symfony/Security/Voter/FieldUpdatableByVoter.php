@@ -8,6 +8,7 @@ use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\Symfony\Security\Attribute\
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -21,6 +22,7 @@ class FieldUpdatableByVoter extends Voter
 {
     public function __construct(
         private readonly CacheInterface $cache,
+        private readonly ParameterBagInterface $parameters,
         private readonly Security $security
     ) {
     }
@@ -100,7 +102,7 @@ class FieldUpdatableByVoter extends Voter
         $key = 'field_rules.'.strtr($className, ['\\' => '']);
 
         return $this->cache->get($key, function (CacheItemInterface $item) use ($newEntity) {
-            $item->expiresAfter(3600);
+            $item->expiresAfter($this->parameters->get('ddd_cqrs_api_platform_cache_timeout'));
 
             $rules = [];
             $refClass = new ReflectionClass($newEntity);

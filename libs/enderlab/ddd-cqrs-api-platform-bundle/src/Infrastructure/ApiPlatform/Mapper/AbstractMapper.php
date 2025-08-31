@@ -7,17 +7,17 @@ use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\Mapper\Attribut
 use Exception;
 use Psr\Cache\InvalidArgumentException;
 use ReflectionClass;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class AbstractMapper
 {
-    private const int CACHE_TIMEOUT = 3600;
-
     public function __construct(
        protected readonly TranslatorInterface $translator,
        protected readonly CacheInterface $cache,
+       protected readonly ParameterBagInterface $parameters
     ) {
     }
 
@@ -51,7 +51,8 @@ abstract class AbstractMapper
         $cacheKey = 'translatable_properties_' . strtolower(strtr(get_class($dto), ['\\' => '_']));
 
         return $this->cache->get($cacheKey, function (ItemInterface $item) use ($dto): array {
-            $item->expiresAfter(self::CACHE_TIMEOUT);
+            $item->expiresAfter($this->parameters->get('ddd_cqrs_api_platform_cache_timeout'));
+
             $reflectionClass = new ReflectionClass($dto);
             $reflectionProperties = $reflectionClass->getProperties();
             $translatableProperties = [];
