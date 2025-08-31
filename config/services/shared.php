@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Shared\Domain\Repository\TagRepositoryInterface;
-use App\Shared\Infrastructure\Symfony\Repository\DoctrineTagRepository;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -11,9 +9,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     $parameters
-        ->set('cache_timeout', 60)
-        ->set('project_dir', '%kernel.project_dir%')
-        ->set('app_name', '%env(APP_NAME)%')
+        ->set('shared.cache_timeout', 60)
+        ->set('shared.project_dir', '%kernel.project_dir%')
+        ->set('shared.app_name', '%env(APP_NAME)%')
     ;
 
     $services
@@ -29,5 +27,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->load('App\\Shared\\Infrastructure\\DataFixtures\\', dirname(__DIR__, 2).'/src/Shared/Infrastructure/DataFixtures/');
 
     // repositories
-    $services->set(TagRepositoryInterface::class)->class(DoctrineTagRepository::class);
 };
