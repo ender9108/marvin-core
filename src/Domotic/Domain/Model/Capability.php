@@ -43,9 +43,11 @@ class Capability implements TimestampableInterface, BlameableInterface
         return $this->label;
     }
 
-    public function setLabel(?string $label): void
+    public function setLabel(?string $label): self
     {
         $this->label = $label;
+
+        return $this;
     }
 
     public function getReference(): ?string
@@ -53,8 +55,10 @@ class Capability implements TimestampableInterface, BlameableInterface
         return $this->reference;
     }
 
-    public function setReference(?string $reference): void
+    public function setReference(?string $reference): self
     {
         $this->reference = $reference;
+
+        return $this;
     }
 }

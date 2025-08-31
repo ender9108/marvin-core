@@ -56,6 +56,7 @@
         "symfony/validator": "7.3.*",
         "symfony/web-link": "7.3.*",
         "symfony/yaml": "7.3.*",
+        "symfonycasts/micro-mapper": "^0.2.1",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0",
         "webmozart/assert": "^1.11"
@@ -73,6 +74,7 @@
             "App\\": "src/",
             "EnderLab\\BlameableBundle\\": "libs/enderlab/blameable-bundle/src",
             "EnderLab\\DddCqrsBundle\\": "libs/enderlab/ddd-cqrs-bundle/src",
+            "EnderLab\\DddCqrsApiPlatformBundle\\": "libs/enderlab/ddd-cqrs-api-platform-bundle/src",
             "EnderLab\\DddCqrsMakerBundle\\": "libs/enderlab/ddd-cqrs-maker-bundle/src",
             "EnderLab\\LockableBundle\\": "libs/enderlab/lockable-bundle/src",
             "EnderLab\\LoggerBundle\\": "libs/enderlab/logger-bundle/src",

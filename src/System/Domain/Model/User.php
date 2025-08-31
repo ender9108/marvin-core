@@ -38,6 +38,8 @@ class User extends AggregateRoot implements TimestampableInterface, BlameableInt
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
+    private ?string $plainPassword = null;
+
     #[ORM\ManyToOne(targetEntity: UserStatus::class)]
     private ?UserStatus $status = null;
 
@@ -97,6 +99,22 @@ class User extends AggregateRoot implements TimestampableInterface, BlameableInt
     {
         $this->password = $password;
         return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+        return $this;
+    }
+
+    public function eraseCredentials(): void
+    {
+        $this->plainPassword = null;
     }
 
     public function getRoles(): ?array
