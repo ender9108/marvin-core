@@ -2,6 +2,7 @@
 
 namespace App\Domotic\Infrastructure\ApiPlatform\Mapper\Zone;
 
+use App\Domotic\Domain\Model\Device;
 use App\Domotic\Domain\Model\Zone;
 use App\Domotic\Infrastructure\ApiPlatform\Resource\ZoneResource;
 use EnderLab\DddCqrsBundle\Application\Query\FindItemQuery;
@@ -10,19 +11,15 @@ use EnderLab\DddCqrsBundle\Domain\Exception\MissingModelException;
 use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfonycasts\MicroMapper\AsMapper;
 use Symfonycasts\MicroMapper\MapperInterface;
-use EnderLab\DddCqrsApiPlatformBundle\Mapper\AbstractMapper;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Contracts\Cache\CacheInterface;
+use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 #[AsMapper(from: ZoneResource::class, to: Zone::class)]
-class ZoneResourceToZoneMapper extends AbstractMapper implements MapperInterface
+readonly class ZoneResourceToZoneMapper implements MapperInterface
 {
     public function __construct(
-        private readonly QueryBus $queryBus,
-        TranslatorInterface $translator,
-        CacheInterface $cache,
+        private QueryBus $queryBus,
+        private MicroMapperInterface $microMapper,
     ) {
-        parent::__construct($translator, $cache);
     }
 
     /**
@@ -54,7 +51,16 @@ class ZoneResourceToZoneMapper extends AbstractMapper implements MapperInterface
         assert($dto instanceof ZoneResource);
         assert($entity instanceof Zone);
 
-        /* Add your mapping here */
+        $entity->setLabel($dto->label);
+        $entity->setArea($dto->area);
+
+        foreach ($dto->devices as $deviceResource) {
+            $entity->addDevice($this->microMapper->map(
+                $deviceResource,
+                Device::class,
+                [MicroMapperInterface::MAX_DEPTH => 0]
+            ));
+        }
 
         return $entity;
     }

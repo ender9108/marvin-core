@@ -51,4 +51,10 @@ final class ZoneResource implements ApiResourceInterface
 
     #[Assert\GreaterThanOrEqual(0)]
     public float $area = 0;
+
+    /**
+     * @var array <int, DeviceResource>
+     */
+    #[Assert\All([new Assert\Type(type: DeviceResource::class)])]
+    public array $devices = [];
 }

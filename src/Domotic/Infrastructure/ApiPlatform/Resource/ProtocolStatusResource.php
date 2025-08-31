@@ -29,10 +29,7 @@ use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
     processor: ApiToEntityStateProcessor::class,
     stateOptions: new Options(entityClass: ProtocolStatus::class)
 )]
-#[ApiFilter(SearchFilter::class, properties: [
-    'label' => 'partial',
-    'reference' => 'exact'
-])]
+#[ApiFilter(SearchFilter::class, properties: ['label' => 'partial', 'reference' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'label', 'reference'])]
 final class ProtocolStatusResource implements ApiResourceInterface
 {
