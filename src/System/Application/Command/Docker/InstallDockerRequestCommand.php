@@ -2,9 +2,9 @@
 
 namespace App\System\Application\Command\Docker;
 
-use EnderLab\MarvinManagerBundle\List\ManagerMessageReference;
-use EnderLab\MarvinManagerBundle\Messenger\Attribute\AsMessageType;
-use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestCommand;
+use EnderLab\MarvinManagerBundle\System\Infrastructure\List\ManagerMessageReference;
+use EnderLab\MarvinManagerBundle\System\Infrastructure\Symfony\Messenger\Attribute\AsMessageType;
+use EnderLab\MarvinManagerBundle\System\Infrastructure\Symfony\Messenger\ManagerRequestCommand;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[AsMessageType(binding: ManagerMessageReference::REQUEST_INSTALL_DOCKER->value)]

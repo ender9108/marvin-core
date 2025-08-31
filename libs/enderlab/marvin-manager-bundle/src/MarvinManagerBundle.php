@@ -2,8 +2,7 @@
 
 namespace EnderLab\MarvinManagerBundle;
 
-use EnderLab\MarvinManagerBundle\Messenger\Attribute\AsMessageType;
-use ReflectionClass;
+use EnderLab\MarvinManagerBundle\System\Infrastructure\Symfony\Messenger\Attribute\AsMessageType;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -35,7 +34,7 @@ class MarvinManagerBundle extends AbstractBundle
                 'transports' => [
                     'marvin.to.manager' => [
                         'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
-                        'serializer' => 'EnderLab\\MarvinManagerBundle\\Messenger\\Serializer\\ManagerSerializer',
+                        'serializer' => 'EnderLab\\MarvinManagerBundle\\System\\Infrastructure\\Symfony\\Messenger\\Serializer\\ManagerSerializer',
                         'options' => [
                             'auto_setup' => $isAutoSetup,
                             'exchange' => [
@@ -55,7 +54,27 @@ class MarvinManagerBundle extends AbstractBundle
                     ],
                 ],
                 'routing' => [
-                    'EnderLab\\MarvinManagerBundle\\Messenger\\ManagerRequestCommand' => 'marvin.to.manager'
+                    'EnderLab\\MarvinManagerBundle\\System\\Infrastructure\\Symfony\\Messenger\\ManagerRequestCommand' => 'marvin.to.manager'
+                ]
+            ]
+        ]);
+        $builder->prependExtensionConfig('doctrine', [
+            'orm' => [
+                'mappings' => [
+                    'MarvinManagerBundle' => [
+                        'is_bundle' => true,
+                        'type' => 'attribute',
+                        'dir' => 'src/System/Domain/Model',
+                        'prefix' => 'EnderLab\MarvinManagerBundle\System\Domain\Model',
+                        'alias' => 'MarvinManagerBundle',
+                    ],
+                ]
+            ]
+        ]);
+        $builder->prependExtensionConfig('api_platform', [
+            'mapping' => [
+                'paths' => [
+                    __DIR__ . '/System/Infrastructure/ApiPlatform/Resource'
                 ]
             ]
         ]);

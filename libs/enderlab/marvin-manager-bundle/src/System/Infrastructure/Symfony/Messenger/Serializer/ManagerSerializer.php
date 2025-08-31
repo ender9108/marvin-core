@@ -1,11 +1,10 @@
 <?php
+namespace EnderLab\MarvinManagerBundle\System\Infrastructure\Symfony\Messenger\Serializer;
 
-namespace EnderLab\MarvinManagerBundle\Messenger\Serializer;
-
-use EnderLab\MarvinManagerBundle\List\ManagerMessageReference;
-use EnderLab\MarvinManagerBundle\Messenger\Attribute\AsMessageType;
-use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestCommand;
-use EnderLab\MarvinManagerBundle\Messenger\ManagerResponseCommand;
+use EnderLab\MarvinManagerBundle\System\Infrastructure\List\ManagerMessageReference;
+use EnderLab\MarvinManagerBundle\System\Infrastructure\Symfony\Messenger\Attribute\AsMessageType;
+use EnderLab\MarvinManagerBundle\System\Infrastructure\Symfony\Messenger\ManagerRequestCommand;
+use EnderLab\MarvinManagerBundle\System\Infrastructure\Symfony\Messenger\ManagerResponseCommand;
 use Exception;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;

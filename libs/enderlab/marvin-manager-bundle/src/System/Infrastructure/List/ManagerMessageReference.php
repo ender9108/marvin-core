@@ -1,6 +1,5 @@
 <?php
-
-namespace EnderLab\MarvinManagerBundle\List;
+namespace EnderLab\MarvinManagerBundle\System\Infrastructure\List;
 
 
 use EnderLab\ToolsBundle\Service\EnumToArrayTrait;

@@ -47,7 +47,7 @@ class InstallCommand extends AbstractZigbeePluginManagerCommand
 
         $this->startInstall(function() {
             $this->registerPlugin(
-                'Zigbee2mqtt',
+                'zigbee2mqtt',
                 true,
                 'Zigbee2mqtt plugin for manage zigbee devices',
             );

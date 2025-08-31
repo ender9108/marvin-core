@@ -1,6 +1,5 @@
 <?php
-
-namespace EnderLab\MarvinManagerBundle\Messenger;
+namespace EnderLab\MarvinManagerBundle\System\Infrastructure\Symfony\Messenger;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
