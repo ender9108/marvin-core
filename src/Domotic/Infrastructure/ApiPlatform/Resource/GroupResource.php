@@ -26,7 +26,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Get(),
-        new Put(),
         new Patch(),
         new Delete(),
     ],

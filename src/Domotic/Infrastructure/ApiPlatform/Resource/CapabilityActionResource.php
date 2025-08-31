@@ -18,7 +18,7 @@ use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\State\Processor
 use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
 
 #[ApiResource(
-    shortName: 'capability',
+    shortName: 'capability_action',
     operations: [
         new GetCollection(),
         new Get(),

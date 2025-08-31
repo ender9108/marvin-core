@@ -12,7 +12,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Post;
 use App\Domotic\Domain\Model\CapabilityComposition;
 use EnderLab\BlameableBundle\Trait\ApiPlatform\ResourceBlameableTrait;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\ApiResourceInterface;
@@ -20,14 +20,18 @@ use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\State\Processor
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\State\Provider\EntityToApiStateProvider;
 use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
 
+/**
+ * @todo update or delete on ne peut pas supprimer une composition gérer par un plugin
+ * On peut uniquement agir sur des composition custom (à définir process de création d'un virtual device)
+ */
 #[ApiResource(
     shortName: 'capability_composition',
     operations: [
         new GetCollection(),
         new Get(),
-        new Put(),
-        new Patch(),
-        new Delete(),
+        new Post(security: 'is_granted("ROLE_ADMIN")'),
+        new Patch(security: 'is_granted("ROLE_ADMIN")'),
+        new Delete(security: 'is_granted("ROLE_ADMIN")'),
     ],
     routePrefix: 'domotic',
     normalizationContext: ['skip_null_values' => false],
@@ -53,7 +57,7 @@ final class CapabilityCompositionResource implements ApiResourceInterface
     use ResourceTimestampableTrait;
 
     #[ApiProperty(readable: true, writable: false, identifier: true)]
-    public ?int $id = null;
+    public ?string $id = null;
 
     public ?CapabilityResource $capability = null;
 
