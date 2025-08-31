@@ -12,7 +12,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->set('shared.cache_timeout', 60)
         ->set('shared.project_dir', '%kernel.project_dir%')
         ->set('shared.app_name', '%env(APP_NAME)%')
+        ->set('shared.cache_timeout', 3600)
     ;
+
+    if ('dev' === $containerConfigurator->env()) {
+        $parameters->set('shared.cache_timeout', 1);
+    }
 
     $services
         ->defaults()
