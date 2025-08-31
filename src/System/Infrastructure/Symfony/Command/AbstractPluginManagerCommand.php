@@ -56,9 +56,10 @@ abstract class AbstractPluginManagerCommand extends Command
         ],
     ];
 
+    protected ?SymfonyStyle $io = null;
+
     protected ?Plugin $plugin = null;
 
-    protected ?SymfonyStyle $io = null;
     private array $actions = [
         'record_plugin' => false,
         'create_users' => [],
