@@ -1,6 +1,5 @@
 <?php
-
-namespace EnderLab\MarvinManagerBundle\Messenger\Attribute;
+namespace EnderLab\MarvinManagerBundle\System\Infrastructure\Symfony\Messenger\Attribute;
 
 #[\Attribute(\Attribute::TARGET_CLASS)]
 class AsMessageType

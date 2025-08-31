@@ -1,8 +1,7 @@
 <?php
+namespace EnderLab\MarvinManagerBundle\System\Domain\Model;
 
-namespace EnderLab\MarvinManagerBundle\Entity;
-
-use EnderLab\MarvinManagerBundle\Repository\DockerRepository;
+use EnderLab\DddCqrsBundle\Domain\Aggregate\AggregateRoot;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,17 +9,17 @@ use EnderLab\BlameableBundle\Interface\BlameableInterface;
 use EnderLab\BlameableBundle\Trait\BlameableTrait;
 use EnderLab\TimestampableBundle\Interface\TimestampableInterface;
 use EnderLab\TimestampableBundle\Trait\TimestampableTrait;
+use Symfony\Component\Uid\UuidV4;
 
-#[ORM\Entity(repositoryClass: DockerRepository::class)]
-class Docker implements BlameableInterface, TimestampableInterface
+#[ORM\Entity]
+class Docker extends AggregateRoot implements BlameableInterface, TimestampableInterface
 {
     use TimestampableTrait;
     use BlameableTrait;
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid')]
+    private ?string $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $containerId = null;
@@ -51,10 +50,11 @@ class Docker implements BlameableInterface, TimestampableInterface
 
     public function __construct()
     {
+        $this->id = (string) new UuidV4();
         $this->dockerCustomCommands = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
