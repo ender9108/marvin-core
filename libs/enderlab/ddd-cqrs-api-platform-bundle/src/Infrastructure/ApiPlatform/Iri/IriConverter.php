@@ -1,6 +1,5 @@
 <?php
-
-namespace EnderLab\DddCqrsApiPlatformBundle\Iri;
+namespace EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\Iri;
 
 use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\InflectorFactory;
@@ -21,7 +20,7 @@ class IriConverter
     private static ?Inflector $inflector = null;
 
     public function __construct(
-        private EntityManagerInterface $em,
+        private readonly EntityManagerInterface $em,
     ) {
     }
 

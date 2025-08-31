@@ -5,7 +5,9 @@
     "licence": "MIT",
     "version": "1.0.4",
     "require": {
-        "enderlab/tools-bundle": "1.0.*"
+        "enderlab/ddd-cqrs-bundle": "1.*",
+        "enderlab/ddd-cqrs-api-platform-bundle": "1.*",
+        "enderlab/tools-bundle": "1.*"
     },
     "autoload": {
         "psr-4": {
@@ -16,11 +18,5 @@
         "psr-4": {
             "EnderLab\\MarvinManagerBundle\\Tests\\": "tests/"
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/ender9108/tools-bundle.git"
-        }
-    ]
+    }
 }

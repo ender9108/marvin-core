@@ -1,6 +1,5 @@
 <?php
-
-namespace EnderLab\DddCqrsApiPlatformBundle\Iri;
+namespace EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\Iri;
 
 use Stringable;
 
@@ -9,7 +8,7 @@ class Iri implements Stringable
     private ?string $iri = null;
     private ?string $domain = null;
     private ?string $entity = null;
-    private ?int $identifier = null;
+    private int|string|null $identifier = null;
 
     public function __construct(?string $iri = null)
     {

@@ -1,14 +1,12 @@
 <?php
 
-namespace EnderLab\DddCqrsApiPlatformBundle\Service;
-
-use EnderLab\DddCqrsApiPlatformBundle\Iri\Iri;
+namespace EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\Iri;
 
 class IriService
 {
     public static function serializeIri(Iri $iri): string
     {
-        return $iri->getIri();
+        return (string) $iri;
     }
 
     public static function deserializeIri(string $iri): ?Iri
