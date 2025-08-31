@@ -2,6 +2,10 @@
 
 namespace EnderLab\MarvinManagerBundle;
 
+use EnderLab\MarvinManagerBundle\System\Domain\Repository\DockerCustomCommandRepositoryInterface;
+use EnderLab\MarvinManagerBundle\System\Domain\Repository\DockerRepositoryInterface;
+use EnderLab\MarvinManagerBundle\System\Infrastructure\Doctrine\Repository\DoctrineDockerCustomCommandRepository;
+use EnderLab\MarvinManagerBundle\System\Infrastructure\Doctrine\Repository\DoctrineDockerRepository;
 use EnderLab\MarvinManagerBundle\System\Infrastructure\Symfony\Messenger\Attribute\AsMessageType;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -16,6 +20,11 @@ class MarvinManagerBundle extends AbstractBundle
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $container->import('../config/services.yaml');
+
+        $services = $container->services();
+
+        $services->set(DockerRepositoryInterface::class)->class(DoctrineDockerRepository::class);
+        $services->set(DockerCustomCommandRepositoryInterface::class)->class(DoctrineDockerCustomCommandRepository::class);
 
         $builder->registerAttributeForAutoconfiguration(AsMessageType::class, static function (
             ChildDefinition $definition,
