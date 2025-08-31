@@ -56,6 +56,7 @@ readonly class PluginResourceToPluginMapper  implements MapperInterface
             ->setReference($dto->reference)
             ->setDescription($dto->description)
             ->setVersion($dto->version)
+            ->setMetadata($dto->metadata)
             ->setStatus($this->microMapper->map(
                 $dto->status,
                 PluginStatus::class,

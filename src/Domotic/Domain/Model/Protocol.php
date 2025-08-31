@@ -35,6 +35,9 @@ class Protocol implements TimestampableInterface, BlameableInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column]
+    private array $metadata = [];
+
     public function getId(): ?string
     {
         return $this->id;
@@ -84,6 +87,18 @@ class Protocol implements TimestampableInterface, BlameableInterface
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getMetadata(): array
+    {
+        return $this->metadata;
+    }
+
+    public function setMetadata(array $metadata): static
+    {
+        $this->metadata = $metadata;
 
         return $this;
     }
