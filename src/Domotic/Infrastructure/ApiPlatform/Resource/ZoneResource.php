@@ -26,9 +26,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Get(),
-        new Put(),
-        new Patch(),
-        new Delete(),
+        new Patch(security: 'is_granted("ROLE_ADMIN")'),
+        new Delete(security: 'is_granted("ROLE_ADMIN")'),
     ],
     routePrefix: 'domotic',
     normalizationContext: ['skip_null_values' => false],
