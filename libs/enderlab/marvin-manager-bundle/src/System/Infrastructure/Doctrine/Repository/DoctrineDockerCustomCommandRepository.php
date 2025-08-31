@@ -6,7 +6,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use EnderLab\MarvinManagerBundle\System\Domain\Model\DockerCustomCommand;
 use EnderLab\MarvinManagerBundle\System\Domain\Repository\DockerCustomCommandRepositoryInterface;
 
-final class DoctrineDockerRepository extends ServiceEntityRepository implements DockerCustomCommandRepositoryInterface
+final class DoctrineDockerCustomCommandRepository extends ServiceEntityRepository implements DockerCustomCommandRepositoryInterface
 {
     private const string ENTITY_CLASS = DockerCustomCommand::class;
 
