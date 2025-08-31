@@ -1,18 +1,20 @@
 <?php
 
-namespace EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\State\Processor;
+namespace EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\State\Processor;
 
 use ApiPlatform\Doctrine\Common\State\PersistProcessor;
 use ApiPlatform\Doctrine\Common\State\RemoveProcessor;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\DeleteOperationInterface;
 use ApiPlatform\Metadata\Operation;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\State\ProcessorInterface;
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\ApiResourceInterface;
+use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\ApiResourceInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\ObjectMapper\ObjectMapperInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 readonly class ApiToEntityStateProcessor implements ProcessorInterface
 {
@@ -21,10 +23,14 @@ readonly class ApiToEntityStateProcessor implements ProcessorInterface
         protected ProcessorInterface $persistProcessor,
         #[Autowire(service: RemoveProcessor::class)]
         protected ProcessorInterface $removeProcessor,
-        protected ObjectMapperInterface $objectMapper,
+        protected MicroMapperInterface $microMapper,
+        private AuthorizationCheckerInterface $authChecker
     ) {
     }
 
+    /**
+     * @throws \Exception
+     */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ?ApiResourceInterface
     {
         $stateOptions = $operation->getStateOptions();
@@ -35,10 +41,11 @@ readonly class ApiToEntityStateProcessor implements ProcessorInterface
 
         if ($operation instanceof Put) {
             $data->id = $context['previous_data']->id;
-            $context['previous_data'] = $this->objectMapper->map($context['previous_data'], $entityClass);
+            $context['previous_data'] = $this->microMapper->map($context['previous_data'], $entityClass);
         }
 
-        $entity = $this->objectMapper->map($data, $entityClass);
+        $this->authChecker->isGranted('FIELDS_UPDATE', [$data, $context['previous_data'] ?? null]);
+        $entity = $this->microMapper->map($data, $entityClass);
 
         if (!is_object($entity)) {
             throw new RuntimeException('Entity "'.$entityClass.'" is not object');
@@ -46,6 +53,7 @@ readonly class ApiToEntityStateProcessor implements ProcessorInterface
 
         switch (true) {
             case $operation instanceof Put:
+            case $operation instanceof Patch:
                 if (method_exists($entity, 'update')) {
                     $entity->update($context['previous_data']);
                 }
@@ -63,7 +71,7 @@ readonly class ApiToEntityStateProcessor implements ProcessorInterface
         $this->persistProcessor->process($entity, $operation, $uriVariables, $context);
 
         /** @var ApiResourceInterface $resource */
-        $resource = $this->objectMapper->map($entity, get_class($data));
+        $resource = $this->microMapper->map($entity, get_class($data));
 
         return $resource;
     }
