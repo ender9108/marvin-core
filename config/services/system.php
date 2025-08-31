@@ -16,10 +16,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     $parameters
-        ->set('config_path', '%kernel.project_dir%/config')
-        ->set('docker_path', '%kernel.project_dir%/docker')
-        ->set('compose_file_path', '%kernel.project_dir%/compose.yaml')
-        ->set('plugin_map_path', '%kernel.project_dir%/config/plugins/plugin_map.json')
+        ->set('system.docker_path', '%kernel.project_dir%/docker')
+        ->set('system.compose_file_path', '%kernel.project_dir%/compose.yaml')
+        /** @todo What is it for? */
+        ->set('system.config_path', '%kernel.project_dir%/config')
+        ->set('system.plugin_map_path', '%kernel.project_dir%/config/plugins/plugin_map.json')
     ;
 
     $services
