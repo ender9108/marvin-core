@@ -38,6 +38,7 @@ class ProtocolToProtocolResourceMapper implements MapperInterface
         /* Add your mapping here */
         $dto->label = $entity->getLabel();
         $dto->reference = $entity->getReference();
+        $dto->metadata = $entity->getMetadata();
         $dto->status = $this->microMapper->map(
             $entity->getStatus(),
             ProtocolStatusResource::class,

@@ -53,6 +53,7 @@ readonly class ProtocolResourceToProtocolMapper implements MapperInterface
 
         $entity->setLabel($dto->label);
         $entity->setReference($dto->reference);
+        $entity->setMetadata($dto->metadata);
         $entity->setStatus($this->microMapper->map(
             $dto->status,
             ProtocolStatus::class,

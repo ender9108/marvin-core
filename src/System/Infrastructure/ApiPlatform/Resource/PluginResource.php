@@ -59,6 +59,8 @@ final class PluginResource implements ApiResourceInterface
     #[ApiProperty(readable: true, writable: false)]
     public ?string $version = null;
 
+    public array $metadata = [];
+
     #[Assert\NotNull]
     public ?PluginStatusResource $status = null;
 }

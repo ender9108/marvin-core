@@ -39,15 +39,16 @@ readonly class PluginToPluginResourceMapper implements MapperInterface
         $dto->reference = $entity->getReference();
         $dto->description = $entity->getDescription();
         $dto->version = $entity->getVersion();
-        $dto->createdAt = $entity->getCreatedAt();
-        $dto->updatedAt = $entity->getUpdatedAt();
-        $dto->createdBy = $entity->getCreatedBy();
-        $dto->updatedBy = $entity->getUpdatedBy();
+        $dto->metadata = $entity->getMetadata();
         $dto->status = $this->microMapper->map(
             $entity->getStatus(),
             PluginStatusResource::class, [
             MicroMapperInterface::MAX_DEPTH => 0
         ]);
+        $dto->createdAt = $entity->getCreatedAt();
+        $dto->updatedAt = $entity->getUpdatedAt();
+        $dto->createdBy = $entity->getCreatedBy();
+        $dto->updatedBy = $entity->getUpdatedBy();
 
         return $dto;
     }

@@ -38,6 +38,9 @@ class Plugin extends AggregateRoot implements TimestampableInterface, BlameableI
     #[ORM\Column(type: 'string', length: 8, nullable: true)]
     private ?string $version = null;
 
+    #[ORM\Column(type: 'json')]
+    private array $metadata = [];
+
     #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?PluginStatus $status = null;
@@ -101,6 +104,18 @@ class Plugin extends AggregateRoot implements TimestampableInterface, BlameableI
     public function setVersion(?string $version): static
     {
         $this->version = $version;
+
+        return $this;
+    }
+
+    public function getMetadata(): array
+    {
+        return $this->metadata;
+    }
+
+    public function setMetadata(array $metadata): static
+    {
+        $this->metadata = $metadata;
 
         return $this;
     }

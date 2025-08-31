@@ -49,5 +49,7 @@ final class ProtocolResource implements ApiResourceInterface
 
     public ?string $reference = null;
 
+    public array $metadata = [];
+
     public ?ProtocolStatusResource $status = null;
 }
