@@ -13,26 +13,31 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use App\System\Domain\Model\User;
 use App\System\Infrastructure\ApiPlatform\State\Provider\MeProvider;
 use EnderLab\BlameableBundle\Trait\ApiPlatform\ResourceBlameableTrait;
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\ApiResourceInterface;
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\State\Processor\ApiToEntityStateProcessor;
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\State\Provider\EntityToApiStateProvider;
+use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\ApiResourceInterface;
+use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\State\Processor\ApiToEntityStateProcessor;
+use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\State\Provider\EntityToApiStateProvider;
+use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\Symfony\Security\Attribute\FieldUpdatableBy;
 use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     shortName: 'user',
     operations: [
-        new GetCollection(security: 'is_granted("ROLE_SUPER_ADMIN")'),
-        new Get(security: "is_granted('CAN_VIEW', object)"),
+        new GetCollection(security: 'is_granted("ROLE_ADMIN")'),
         new Get(uriTemplate: '/users/me', provider: MeProvider::class),
-        new Post(security: 'is_granted("ROLE_SUPER_ADMIN")',),
-        new Patch(security: "is_granted('CAN_UPDATE', object)",),
-        new Put(security: "is_granted('CAN_UPDATE', object)",),
-        new Delete(security: 'is_granted("ROLE_SUPER_ADMIN")')
+        new Get(security: 'is_granted("CAN_VIEW", object)'),
+        new Post(
+            security: 'is_granted("ROLE_ADMIN")',
+            validationContext: ['groups' => ['Default', 'postValidation']],
+        ),
+        new Patch(
+            security: 'is_granted("CAN_UPDATE", object)',
+            validationContext: ['groups' => ['Default', 'patchValidation']],
+        ),
+        new Delete(security: 'is_granted("ROLE_ADMIN")')
     ],
     routePrefix: '/system',
     normalizationContext: ['skip_null_values' => false],
@@ -77,15 +82,20 @@ class UserResource implements ApiResourceInterface
 
     #[Assert\NotNull]
     #[Assert\Count(min: 1)]
+    #[FieldUpdatableBy(roles: ['ROLE_ADMIN'])]
     public array $roles = ['ROLE_USER'];
 
     #[Assert\NotNull]
+    #[FieldUpdatableBy(roles: ['ROLE_ADMIN'])]
     public ?UserTypeResource $type = null;
 
     #[Assert\NotNull]
+    #[FieldUpdatableBy(roles: ['ROLE_ADMIN'])]
     public ?UserStatusResource $status = null;
 
-    #[Assert\NotNull]
     #[ApiProperty(readable: false)]
+    #[Assert\NotNull(groups: ['postValidation'])]
+    #[Assert\Length(min: 10, max: 128, groups: ['postValidation'])]
+    #[Assert\NotCompromisedPassword(groups: ['postValidation'])]
     public ?string $password = null;
 }

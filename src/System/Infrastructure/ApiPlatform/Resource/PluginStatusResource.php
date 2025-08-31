@@ -12,9 +12,9 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\System\Domain\Model\PluginStatus;
 use EnderLab\BlameableBundle\Trait\ApiPlatform\ResourceBlameableTrait;
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\ApiResourceInterface;
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\State\Processor\ApiToEntityStateProcessor;
-use EnderLab\DddCqrsBundle\Infrastructure\ApiPlatform\State\Provider\EntityToApiStateProvider;
+use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\ApiResourceInterface;
+use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\State\Processor\ApiToEntityStateProcessor;
+use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\State\Provider\EntityToApiStateProvider;
 use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
 
 #[ApiResource(
@@ -39,7 +39,7 @@ final class PluginStatusResource implements ApiResourceInterface
     use ResourceTimestampableTrait;
     use ResourceBlameableTrait;
 
-    #[ApiProperty(readable: true, writable: false, identifier: true)]
+    #[ApiProperty(identifier: true)]
     public ?string $id = null;
 
     public ?string $label = null;

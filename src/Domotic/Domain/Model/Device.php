@@ -38,10 +38,20 @@ class Device extends AggregateRoot implements TimestampableInterface, BlameableI
     #[ORM\JoinColumn(nullable: false)]
     private ?Protocol $protocol = null;
 
+    /**
+     * @var Collection<int, Group>
+     */
+    #[ORM\ManyToMany(targetEntity: Group::class)]
+    private Collection $groups;
+
+    #[ORM\ManyToOne(inversedBy: 'devices')]
+    private ?Zone $zone = null;
+
     public function __construct()
     {
         $this->id = (string) new UuidV4();
         $this->capabilityCompositions = new ArrayCollection();
+        $this->groups = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -114,6 +124,42 @@ class Device extends AggregateRoot implements TimestampableInterface, BlameableI
     public function setProtocol(?Protocol $protocol): static
     {
         $this->protocol = $protocol;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getGroups(): Collection
+    {
+        return $this->groups;
+    }
+
+    public function addGroup(Group $group): static
+    {
+        if (!$this->groups->contains($group)) {
+            $this->groups->add($group);
+        }
+
+        return $this;
+    }
+
+    public function removeGroup(Group $group): static
+    {
+        $this->groups->removeElement($group);
+
+        return $this;
+    }
+
+    public function getZone(): ?Zone
+    {
+        return $this->zone;
+    }
+
+    public function setZone(?Zone $zone): static
+    {
+        $this->zone = $zone;
 
         return $this;
     }

@@ -6,22 +6,22 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\System\Domain\Model\User;
 use App\System\Domain\Repository\UserRepositoryInterface;
+use EnderLab\DddCqrsBundle\Domain\Exception\MissingModelException;
 use Exception;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\ObjectMapper\ObjectMapperInterface;
+use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 final readonly class MeProvider implements ProviderInterface
 {
     public function __construct(
         private Security $security,
-        private ObjectMapperInterface $objectMapper,
+        private MicroMapperInterface $microMapper,
         private UserRepositoryInterface $userRepository,
     ) {
     }
 
     /**
-     * @throws NotFoundHttpException
+     * @throws Exception
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
@@ -30,12 +30,12 @@ final readonly class MeProvider implements ProviderInterface
         }
 
         $resourceClass = $operation->getClass();
-        $user = $this->userRepository->findOneBy(['id' => $this->security->getUser()]);
+        $user = $this->userRepository->find($this->security->getUser()->getId());
 
         if (!$user instanceof User) {
-            throw new NotFoundHttpException('User not found.');
+            throw new MissingModelException('User not found.');
         }
 
-        return $this->objectMapper->map($user, $resourceClass);
+        return $this->microMapper->map($user, $resourceClass);
     }
 }

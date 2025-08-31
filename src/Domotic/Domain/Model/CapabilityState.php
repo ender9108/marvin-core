@@ -47,9 +47,11 @@ class CapabilityState extends AggregateRoot implements TimestampableInterface, B
         return $this->label;
     }
 
-    public function setLabel(?string $label): void
+    public function setLabel(?string $label): self
     {
         $this->label = $label;
+
+        return $this;
     }
 
     public function getReference(): ?string
@@ -57,9 +59,11 @@ class CapabilityState extends AggregateRoot implements TimestampableInterface, B
         return $this->reference;
     }
 
-    public function setReference(?string $reference): void
+    public function setReference(?string $reference): self
     {
         $this->reference = $reference;
+
+        return $this;
     }
 
     public function getSchema(): ?array
@@ -67,8 +71,10 @@ class CapabilityState extends AggregateRoot implements TimestampableInterface, B
         return $this->schema;
     }
 
-    public function setSchema(?array $schema): void
+    public function setSchema(?array $schema): self
     {
         $this->schema = $schema;
+
+        return $this;
     }
 }

@@ -36,6 +36,17 @@ class Zone implements TimestampableInterface, BlameableInterface
     #[ORM\JoinColumn(nullable: true)]
     private ?Zone $parentZone = null;
 
+    /**
+     * @var Collection<int, Device>
+     */
+    #[ORM\OneToMany(targetEntity: Device::class, mappedBy: 'zone')]
+    private Collection $devices;
+
+    public function __construct()
+    {
+        $this->devices = new ArrayCollection();
+    }
+
     public function getId(): ?string
     {
         return $this->id;
@@ -61,6 +72,36 @@ class Zone implements TimestampableInterface, BlameableInterface
     public function setArea(float $area): static
     {
         $this->area = $area;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Device>
+     */
+    public function getDevices(): Collection
+    {
+        return $this->devices;
+    }
+
+    public function addDevice(Device $device): static
+    {
+        if (!$this->devices->contains($device)) {
+            $this->devices->add($device);
+            $device->setZone($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevice(Device $device): static
+    {
+        if ($this->devices->removeElement($device)) {
+            // set the owning side to null (unless already changed)
+            if ($device->getZone() === $this) {
+                $device->setZone(null);
+            }
+        }
 
         return $this;
     }
