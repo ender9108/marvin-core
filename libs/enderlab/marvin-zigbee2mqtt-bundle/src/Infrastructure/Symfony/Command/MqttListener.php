@@ -11,5 +11,9 @@ use Symfony\Component\Console\Command\Command;
 )]
 class MqttListener extends Command
 {
+    public function __invoke(
 
+    ): int {
+        return Command::SUCCESS;
+    }
 }
