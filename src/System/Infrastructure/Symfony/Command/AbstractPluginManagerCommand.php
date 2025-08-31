@@ -264,18 +264,17 @@ abstract class AbstractPluginManagerCommand extends Command
      */
     protected function registerDocker(
         string $composeFilePath,
-        array $configFiles,
+        array $dockerConfigFiles,
         array $customCommands
     ): void {
         $this->checkIsSecureMode();
         $this->checkTypeMode(__METHOD__);
 
         try {
-            foreach ($configFiles as $configFile) {
-                $this->checkIsFileExists($configFile);
-            }
+            $this->checkIsFileExists($composeFilePath);
+            $this->checkIsFileExists($dockerConfigFiles);
 
-            $dockerPath = $this->parameters->get('docker_path');
+            $dockerPath = $this->parameters->get('system.docker_path');
             $dockerPluginBasePath = $dockerPath.'/'.$this->getPluginReference();
             $dockerPluginConfigPath = $dockerPluginBasePath.'/config';
             $dockerPluginVolumePath = $dockerPluginBasePath.'/volume';
@@ -290,8 +289,8 @@ abstract class AbstractPluginManagerCommand extends Command
 
             $this->checkComposeConflicts($composeContent);
 
-            foreach ($configFiles as $configFile) {
-                $this->actions['docker']['compose_files'][$configFile] = $dockerPluginConfigPath.'/'.basename($configFile);
+            foreach ($dockerConfigFiles as $dockerConfigFile) {
+                $this->actions['docker']['compose_files'][$dockerConfigFile] = $dockerPluginConfigPath.'/'.basename($dockerConfigFile);
             }
 
             $this->actions['docker']['compose_files'][$composeFilePath] = $dockerPluginBasePath.'/'.basename($composeFilePath);
@@ -329,7 +328,7 @@ abstract class AbstractPluginManagerCommand extends Command
     protected function registerSupervisorWorker(string $configDirectoryPath): void
     {
         try {
-            $dockerPath = $this->parameters->get('docker_path').'/supervisor/config/conf.d';
+            $dockerPath = $this->parameters->get('system.docker_path').'/supervisor/config/conf.d';
 
             $this->checkIsDirectory($configDirectoryPath);
 
@@ -542,7 +541,7 @@ abstract class AbstractPluginManagerCommand extends Command
             $filesystem->remove($this->rollbackActions['files']);
             $filesystem->remove($this->rollbackActions['directories']);
 
-            $mainComposeFile = $this->parameters->get('compose_file_path');
+            $mainComposeFile = $this->parameters->get('system.compose_file_path');
             $mainComposeContent = Yaml::parseFile($mainComposeFile);
 
             foreach ($this->rollbackActions['compose_services'] as $composeService) {
@@ -564,16 +563,22 @@ abstract class AbstractPluginManagerCommand extends Command
         }
     }
 
-    private function checkIsFileExists(string $filePath): void
+    private function checkIsFileExists(string|array $filePaths): void
     {
-        if (false === file_exists($filePath)) {
-            throw new IOException('File "'.$filePath.'" does not exists.');
+        if (is_string($filePaths)) {
+            $filePaths = [$filePaths];
+        }
+
+        foreach ($filePaths as $filePath) {
+            if (false === file_exists($filePath)) {
+                throw new IOException('File "'.$filePath.'" does not exists.');
+            }
         }
     }
 
     private function checkComposeConflicts(array $compose): void
     {
-        $mainComposeFile = $this->parameters->get('compose_file_path');
+        $mainComposeFile = $this->parameters->get('system.compose_file_path');
         $mainComposeContent = Yaml::parseFile($mainComposeFile);
 
         if (false === isset($compose['services'])) {
@@ -589,7 +594,7 @@ abstract class AbstractPluginManagerCommand extends Command
 
     private function updateComposeYaml(string $service, array $config): void
     {
-        $mainComposeFile = $this->parameters->get('compose_file_path');
+        $mainComposeFile = $this->parameters->get('system.compose_file_path');
         $mainComposeContent = Yaml::parseFile($mainComposeFile);
 
         $mainComposeContent['services'][$service] = $config;
