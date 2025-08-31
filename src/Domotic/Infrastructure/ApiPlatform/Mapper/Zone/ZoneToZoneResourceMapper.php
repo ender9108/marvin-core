@@ -3,22 +3,19 @@
 namespace App\Domotic\Infrastructure\ApiPlatform\Mapper\Zone;
 
 use App\Domotic\Domain\Model\Zone;
+use App\Domotic\Infrastructure\ApiPlatform\Resource\DeviceResource;
 use App\Domotic\Infrastructure\ApiPlatform\Resource\ZoneResource;
 use Psr\Cache\InvalidArgumentException;
 use Symfonycasts\MicroMapper\AsMapper;
 use Symfonycasts\MicroMapper\MapperInterface;
-use EnderLab\DddCqrsApiPlatformBundle\Mapper\AbstractMapper;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Contracts\Cache\CacheInterface;
+use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 #[AsMapper(from: Zone::class, to: ZoneResource::class)]
-class ZoneToZoneResourceMapper extends AbstractMapper implements MapperInterface
+readonly class ZoneToZoneResourceMapper implements MapperInterface
 {
     public function __construct(
-        TranslatorInterface $translator,
-        CacheInterface $cache,
+        private MicroMapperInterface $microMapper,
     ) {
-        parent::__construct($translator, $cache);
     }
 
     public function load(object $from, string $toClass, array $context): object
@@ -31,9 +28,6 @@ class ZoneToZoneResourceMapper extends AbstractMapper implements MapperInterface
         return $dto;
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function populate(object $from, object $to, array $context): object
     {
         $entity = $from;
@@ -44,11 +38,16 @@ class ZoneToZoneResourceMapper extends AbstractMapper implements MapperInterface
 
         $dto->label = $entity->getLabel();
         $dto->area = $entity->getArea();
+        $dto->devices = $this->microMapper->mapMultiple(
+            $entity->getDevices(),
+            DeviceResource::class,
+            [MicroMapperInterface::MAX_DEPTH => 0]
+        );
         $dto->createdAt = $entity->getCreatedAt();
         $dto->updatedAt = $entity->getUpdatedAt();
         $dto->createdBy = $entity->getCreatedBy();
         $dto->updatedBy = $entity->getUpdatedBy();
 
-        return $this->translateDto($dto);
+        return $dto;
     }
 }

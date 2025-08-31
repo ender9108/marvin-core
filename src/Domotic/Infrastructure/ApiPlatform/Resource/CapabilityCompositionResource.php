@@ -19,6 +19,7 @@ use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\ApiResourceInte
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\State\Processor\ApiToEntityStateProcessor;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\State\Provider\EntityToApiStateProvider;
 use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @todo update or delete on ne peut pas supprimer une composition gérer par un plugin
@@ -64,10 +65,12 @@ final class CapabilityCompositionResource implements ApiResourceInterface
     /**
      * @var array <int, CapabilityActionResource>
      */
+    #[Assert\All([new Assert\Type(type: CapabilityActionResource::class)])]
     public array $capabilityActions = [];
 
     /**
      * @var array <int, CapabilityStateResource>
      */
+    #[Assert\All([new Assert\Type(type: CapabilityStateResource::class)])]
     public array $capabilityStates = [];
 }

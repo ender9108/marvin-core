@@ -43,6 +43,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     'devices.technicalName' => 'exact',
 ])]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'name'])]
+/** @todo make validator to check if group ar used in scene or other */
 final class GroupResource implements ApiResourceInterface
 {
     use ResourceBlameableTrait;
@@ -62,5 +63,6 @@ final class GroupResource implements ApiResourceInterface
      * @var array <int, DeviceResource>
      */
     #[Assert\Count(min: 1)]
+    #[Assert\All([new Assert\Type(type: DeviceResource::class)])]
     public array $devices = [];
 }

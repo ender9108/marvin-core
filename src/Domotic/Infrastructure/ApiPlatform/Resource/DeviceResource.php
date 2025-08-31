@@ -8,8 +8,11 @@ use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Domotic\Domain\Model\Device;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\State\Provider\EntityToApiStateProvider;
 use EnderLab\BlameableBundle\Trait\ApiPlatform\ResourceBlameableTrait;
@@ -23,6 +26,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Get(),
+        new Post(security: 'is_granted("ROLE_ADMIN")'),
+        new Patch(security: 'is_granted("ROLE_ADMIN")'),
+        new Delete(security: 'is_granted("ROLE_ADMIN")'),
     ],
     routePrefix: 'domotic',
     normalizationContext: ['skip_null_values' => false],
@@ -57,6 +63,7 @@ final class DeviceResource implements ApiResourceInterface
      * @var array <int, CapabilityCompositionResource>
      */
     #[Assert\Count(min: 1)]
+    #[Assert\All([new Assert\Type(type: CapabilityCompositionResource::class)])]
     public array $capabilityCompositions = [];
 
     #[Assert\NotNull]
