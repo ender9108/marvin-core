@@ -1,8 +1,8 @@
 <?php
 namespace EnderLab\MarvinManagerBundle\System\Infrastructure\ApiPlatform\Mapper\Docker;
 
-use EnderLab\DddCqrsBundle\Application\Query\Bus\QueryBus;
 use EnderLab\DddCqrsBundle\Application\Query\FindItemQuery;
+use EnderLab\DddCqrsBundle\Application\Query\QueryBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Exception\MissingModelException;
 use EnderLab\MarvinManagerBundle\System\Domain\Model\Docker;
 use EnderLab\MarvinManagerBundle\System\Domain\Model\DockerCustomCommand;
@@ -16,7 +16,7 @@ use Symfonycasts\MicroMapper\MicroMapperInterface;
 readonly class DockerResourceToDockerMapper implements MapperInterface
 {
     public function __construct(
-        private QueryBus $queryBus,
+        private QueryBusInterface $queryBus,
         private MicroMapperInterface $microMapper,
     ) {
     }

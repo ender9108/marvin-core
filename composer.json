@@ -19,6 +19,7 @@
         "doctrine/doctrine-bundle": "^2.13",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.3",
+        "gesdinet/jwt-refresh-token-bundle": "*",
         "lexik/jwt-authentication-bundle": "^3.1",
         "nelmio/cors-bundle": "^2.5",
         "phpdocumentor/reflection-docblock": "^5.6",
@@ -71,7 +72,7 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/",
+            "Marvin\\": "src/",
             "EnderLab\\BlameableBundle\\": "libs/enderlab/blameable-bundle/src",
             "EnderLab\\DddCqrsBundle\\": "libs/enderlab/ddd-cqrs-bundle/src",
             "EnderLab\\DddCqrsApiPlatformBundle\\": "libs/enderlab/ddd-cqrs-api-platform-bundle/src",
@@ -86,7 +87,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Tests\\": "tests/"
+            "Marvin\\Tests\\": "tests/"
         }
     },
     "replace": {

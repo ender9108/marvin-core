@@ -18,5 +18,4 @@ trait EnumToArrayTrait
     {
         return array_combine(self::values(), self::names());
     }
-
 }

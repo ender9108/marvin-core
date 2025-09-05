@@ -5,3 +5,7 @@ services:
     
     EnderLab\DddCqrsBundle\:
         resource: '../src/'
+        exclude:
+            - '../src/Infrastructure/Framework/Symfony/DependencyInjection/*'
+            - '../src/Domain/Model/*'
+            - '../src/Domain/ValueObject/*'

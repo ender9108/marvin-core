@@ -3,14 +3,14 @@
 namespace EnderLab\DddCqrsBundle\Application\Query;
 
 use Doctrine\ORM\EntityManagerInterface;
-use EnderLab\DddCqrsBundle\Application\Query\Attribute\AsQueryHandler;
 use EnderLab\DddCqrsBundle\Domain\Repository\RepositoryInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-#[AsQueryHandler]
-class FindCollectionQueryHandler implements QueryHandlerInterface
+#[AsMessageHandler(bus: 'query.bus')]
+readonly class FindCollectionQueryHandler implements QueryHandlerInterface
 {
     public function __construct(
-        private readonly EntityManagerInterface $em,
+        private EntityManagerInterface $em,
     ) {
     }
 

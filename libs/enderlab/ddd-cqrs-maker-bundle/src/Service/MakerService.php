@@ -4,8 +4,8 @@ namespace EnderLab\DddCqrsMakerBundle\Service;
 
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\DBAL\Types\Type;
-use EnderLab\BlameableBundle\Interface\BlameableInterface;
-use EnderLab\DddCqrsBundle\Domain\Aggregate\AggregateRoot;
+use EnderLab\BlameableBundle\Infrastructure\Interface\BlameableInterface;
+use EnderLab\DddCqrsBundle\Domain\Model\AggregateRoot;
 use EnderLab\TimestampableBundle\Interface\TimestampableInterface;
 use Exception;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
@@ -23,8 +23,11 @@ class MakerService
     private const array DOMAIN_FOLDERS = [
         '%s'.DIRECTORY_SEPARATOR.'Application',
         '%s'.DIRECTORY_SEPARATOR.'Application'.DIRECTORY_SEPARATOR.'Command',
+        '%s'.DIRECTORY_SEPARATOR.'Application'.DIRECTORY_SEPARATOR.'CommandHandler',
         '%s'.DIRECTORY_SEPARATOR.'Application'.DIRECTORY_SEPARATOR.'Event',
+        '%s'.DIRECTORY_SEPARATOR.'Application'.DIRECTORY_SEPARATOR.'EventHandler',
         '%s'.DIRECTORY_SEPARATOR.'Application'.DIRECTORY_SEPARATOR.'Query',
+        '%s'.DIRECTORY_SEPARATOR.'Application'.DIRECTORY_SEPARATOR.'QueryHandler',
         '%s'.DIRECTORY_SEPARATOR.'Domain',
         '%s'.DIRECTORY_SEPARATOR.'Domain'.DIRECTORY_SEPARATOR.'Event',
         '%s'.DIRECTORY_SEPARATOR.'Domain'.DIRECTORY_SEPARATOR.'Exception',
@@ -32,15 +35,26 @@ class MakerService
         '%s'.DIRECTORY_SEPARATOR.'Domain'.DIRECTORY_SEPARATOR.'Repository',
         '%s'.DIRECTORY_SEPARATOR.'Domain'.DIRECTORY_SEPARATOR.'ValueObject',
         '%s'.DIRECTORY_SEPARATOR.'Infrastructure',
-        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'ApiPlatform',
-        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'ApiPlatform'.DIRECTORY_SEPARATOR.'Mapper',
-        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'ApiPlatform'.DIRECTORY_SEPARATOR.'Resource',
-        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'ApiPlatform'.DIRECTORY_SEPARATOR.'State',
-        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'ApiPlatform'.DIRECTORY_SEPARATOR.'State'.DIRECTORY_SEPARATOR.'Processor',
-        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'ApiPlatform'.DIRECTORY_SEPARATOR.'State'.DIRECTORY_SEPARATOR.'Provider',
+        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Persistence',
+        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Persistence'.DIRECTORY_SEPARATOR.'Doctrine',
+        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Persistence'.DIRECTORY_SEPARATOR.'Doctrine'.DIRECTORY_SEPARATOR.'ORM',
+        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Persistence'.DIRECTORY_SEPARATOR.'Doctrine'.DIRECTORY_SEPARATOR.'DBAL',
+        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Persistence'.DIRECTORY_SEPARATOR.'Doctrine'.DIRECTORY_SEPARATOR.'DBAL'.DIRECTORY_SEPARATOR.'Types',
         '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'DataFixtures',
-        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Symfony',
-        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Symfony'.DIRECTORY_SEPARATOR.'Repository',
+        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Framework',
+        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Framework'.DIRECTORY_SEPARATOR.'Symfony',
+        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Framework'.DIRECTORY_SEPARATOR.'ApiPlatform',
+        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Framework'.DIRECTORY_SEPARATOR.'ApiPlatform'.DIRECTORY_SEPARATOR.'State',
+        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Framework'.DIRECTORY_SEPARATOR.'ApiPlatform'.DIRECTORY_SEPARATOR.'State'.DIRECTORY_SEPARATOR.'Processor',
+        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Framework'.DIRECTORY_SEPARATOR.'ApiPlatform'.DIRECTORY_SEPARATOR.'State'.DIRECTORY_SEPARATOR.'Provider',
+        '%s'.DIRECTORY_SEPARATOR.'Presentation',
+        '%s'.DIRECTORY_SEPARATOR.'Presentation'.DIRECTORY_SEPARATOR.'Api',
+        '%s'.DIRECTORY_SEPARATOR.'Presentation'.DIRECTORY_SEPARATOR.'Api'.DIRECTORY_SEPARATOR.'Resource',
+        '%s'.DIRECTORY_SEPARATOR.'Presentation'.DIRECTORY_SEPARATOR.'Api'.DIRECTORY_SEPARATOR.'Mapper',
+        '%s'.DIRECTORY_SEPARATOR.'Presentation'.DIRECTORY_SEPARATOR.'Web',
+        '%s'.DIRECTORY_SEPARATOR.'Presentation'.DIRECTORY_SEPARATOR.'Web'.DIRECTORY_SEPARATOR.'Controller',
+        '%s'.DIRECTORY_SEPARATOR.'Presentation'.DIRECTORY_SEPARATOR.'Cli',
+        '%s'.DIRECTORY_SEPARATOR.'Presentation'.DIRECTORY_SEPARATOR.'Cli'.DIRECTORY_SEPARATOR.'Command',
     ];
     private const string TEMPLATE_DIR = __DIR__.'/../Template';
 

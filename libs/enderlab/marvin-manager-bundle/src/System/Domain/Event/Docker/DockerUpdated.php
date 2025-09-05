@@ -2,14 +2,18 @@
 namespace EnderLab\MarvinManagerBundle\System\Domain\Event\Docker;
 
 use EnderLab\DddCqrsBundle\Domain\Event\AbstractDomainEvent;
-use EnderLab\DddCqrsBundle\Domain\Event\Attribute\AsDomainEvent;
+use EnderLab\DddCqrsBundle\Domain\Event\DomainEventInterface;
 
-#[AsDomainEvent(routingKey: '$.system.docker.updated')]
-class DockerUpdated extends AbstractDomainEvent
+final readonly class DockerUpdated extends AbstractDomainEvent implements DomainEventInterface
 {
     public function __construct(
         public ?string $id = null,
     ) {
         parent::__construct();
+    }
+
+    public static function getRoutingKey(): string
+    {
+        return '$.system.docker.updated';
     }
 }

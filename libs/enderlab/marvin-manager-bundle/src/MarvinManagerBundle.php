@@ -71,14 +71,14 @@ class MarvinManagerBundle extends AbstractBundle
                 ]
             ]
         ]);
-        $builder->prependExtensionConfig('doctrine', [
+        /*$builder->prependExtensionConfig('doctrine', [
             'orm' => [
                 'mappings' => [
-                    'MarvinManagerBundle' => [
-                        'is_bundle' => true,
+                    'marvin_manager_mapping' => [
+                        'is_bundle' => false,
                         'type' => 'attribute',
-                        'dir' => 'src/System/Domain/Model',
-                        'prefix' => 'EnderLab\MarvinManagerBundle\System\Domain\Model',
+                        'dir' => __DIR__.'/System/Domain',
+                        'prefix' => 'EnderLab\MarvinManagerBundle\System\Domain',
                         'alias' => 'MarvinManagerBundle',
                     ],
                 ]
@@ -90,6 +90,6 @@ class MarvinManagerBundle extends AbstractBundle
                     __DIR__ . '/System/Infrastructure/ApiPlatform/Resource'
                 ]
             ]
-        ]);
+        ]);*/
     }
 }

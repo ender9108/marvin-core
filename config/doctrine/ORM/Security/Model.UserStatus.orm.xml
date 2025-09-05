@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity
+        name="Marvin\Security\Domain\Model\UserStatus"
+        repository-class="Marvin\Security\Infrastructure\Persistence\Doctrine\ORM\UserStatusOrmRepository"
+        table="security_user_status"
+    >
+        <cache usage="READ_ONLY" region="read_only" />
+        <id name="id" type="user_status_id">
+            <generator strategy="NONE" />
+        </id>
+        <embedded name="label" class="Marvin\Shared\Domain\ValueObject\Label" use-column-prefix="false" />
+        <embedded name="reference" class="Marvin\Shared\Domain\ValueObject\Reference" use-column-prefix="false" />
+        <embedded name="createdAt" class="Marvin\Shared\Domain\ValueObject\CreatedAt" use-column-prefix="false" />
+    </entity>
+</doctrine-mapping>

@@ -1,0 +1,20 @@
+<?php
+namespace Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types;
+
+use Marvin\Security\Domain\ValueObject\Identity\UserId;
+use Symfony\Bridge\Doctrine\Types\AbstractUidType;
+
+final class UserIdType extends AbstractUidType
+{
+    #[\Override]
+    public function getName(): string
+    {
+        return 'user_id';
+    }
+
+    #[\Override]
+    protected function getUidClass(): string
+    {
+        return UserId::class;
+    }
+}

@@ -1,3 +1,10 @@
+shared:
+    exceptions:
+        invalid_argument: Argument invalide
+
+
+
+
 domotic:
     capabilities:
         switchable: Bouton on / off

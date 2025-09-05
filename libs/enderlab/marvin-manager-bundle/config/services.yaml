@@ -9,8 +9,8 @@ services:
     EnderLab\MarvinManagerBundle\:
         resource: '../src/'
         exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
+            - '../src/**/Domain/Model/*'
+            - '../src/**/Domain/ValueObject/*'
 
 when@dev:
     parameters:

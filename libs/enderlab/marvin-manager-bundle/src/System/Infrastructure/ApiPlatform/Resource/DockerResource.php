@@ -9,12 +9,10 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use EnderLab\BlameableBundle\Trait\ApiPlatform\ResourceBlameableTrait;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\ApiResourceInterface;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\State\Processor\ApiToEntityStateProcessor;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\State\Provider\EntityToApiStateProvider;
 use EnderLab\MarvinManagerBundle\System\Domain\Model\Docker;
-use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
 
 #[ApiResource(
     shortName: 'docker',
@@ -35,9 +33,6 @@ use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
 #[ApiFilter(OrderFilter::class, properties: ['id', 'containerId', 'containerName'])]
 final class DockerResource implements ApiResourceInterface
 {
-    use ResourceTimestampableTrait;
-    use ResourceBlameableTrait;
-
     #[ApiProperty(identifier: true)]
     public ?string $id = null;
 

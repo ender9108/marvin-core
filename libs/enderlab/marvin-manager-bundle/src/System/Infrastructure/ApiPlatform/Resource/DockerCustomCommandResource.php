@@ -9,14 +9,10 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use EnderLab\BlameableBundle\Trait\ApiPlatform\ResourceBlameableTrait;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\ApiResourceInterface;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\State\Processor\ApiToEntityStateProcessor;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\ApiPlatform\State\Provider\EntityToApiStateProvider;
-use EnderLab\MarvinManagerBundle\System\Domain\Model\Docker;
 use EnderLab\MarvinManagerBundle\System\Domain\Model\DockerCustomCommand;
-use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     shortName: 'docker_custom_command',
@@ -37,9 +33,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(OrderFilter::class, properties: ['id', 'containerId', 'containerName'])]
 final class DockerCustomCommandResource implements ApiResourceInterface
 {
-    use ResourceTimestampableTrait;
-    use ResourceBlameableTrait;
-
     #[ApiProperty(identifier: true)]
     public ?string $id = null;
 
