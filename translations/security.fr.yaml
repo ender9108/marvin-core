@@ -1,0 +1,30 @@
+security:
+    exceptions:
+        invalid_user_status: Pour l'action "%action%", le statut passé en paramètre est invalide (%reference%).
+        user_not_found: Utilisateur introuvable.
+        user_not_found_with_email: Utilisateur introuvable avec l'email "%email%".
+        user_not_found_with_id: Utilisateur introuvable avec l'id "%id%".
+        user_status_not_found: Statut introuvable.
+        user_status_not_found_with_email: Statut introuvable avec la référence "%reference%".
+        user_status_not_found_with_id: Statut introuvable avec l'id "%id%".
+        user_type_not_found: Type introuvable.
+        user_type_not_found_with_email: Type introuvable avec la référence "%reference%".
+        user_type_not_found_with_id: Type introuvable avec l'id "%id%".
+        model_not_found: Modèle %s introuvable.
+        invalid_current_password: Votre mot de passe actuel est incorrect.
+        email_already_used: L'email "%s" existe déjà.
+        user_locked: Votre compte est bloqué, merci de contacter l'administrateur.
+        user_disabled: Votre compte est désactivé, merci de contacter l'administrateur.
+        user_deleted: Compte supprimer, merci de contacter l'administrateur pour en créer un nouveau.
+        last_user_type: Vous ne pouvez pas supprimer le dernier utilisateur de ce type.
+    user:
+        status:
+            enabled: Activé
+            disabled: Désactivé
+            locked: Bloqué
+            to_delete: A supprimer
+        type:
+            application: Application
+            system: Système
+            cli: Console
+            

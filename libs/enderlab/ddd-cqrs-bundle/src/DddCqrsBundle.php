@@ -2,15 +2,13 @@
 
 namespace EnderLab\DddCqrsBundle;
 
-use EnderLab\DddCqrsBundle\Application\Command\Attribute\AsCommandHandler;
-use EnderLab\DddCqrsBundle\Application\Command\Attribute\AsSyncCommandHandler;
-use EnderLab\DddCqrsBundle\Application\Query\Attribute\AsQueryHandler;
-use EnderLab\DddCqrsBundle\Domain\Event\Attribute\AsDomainEvent;
-use EnderLab\DddCqrsBundle\Domain\Event\Attribute\AsDomainEventHandler;
-use EnderLab\DddCqrsBundle\Infrastructure\Symfony\DependencyInjection\DomainEventMessengerCompilerPass;
-use ReflectionClass;
+use EnderLab\DddCqrsBundle\Application\Command\CommandHandlerInterface;
+use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
+use EnderLab\DddCqrsBundle\Application\Event\DomainEventHandlerInterface;
+use EnderLab\DddCqrsBundle\Application\Query\QueryHandlerInterface;
+use EnderLab\DddCqrsBundle\Domain\Event\DomainEventInterface;
+use EnderLab\DddCqrsBundle\Infrastructure\Framework\Symfony\DependencyInjection\DomainEventMessengerCompilerPass;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
-use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
@@ -48,61 +46,39 @@ class DddCqrsBundle extends AbstractBundle
     {
         $container->import('../config/services.yaml');
 
+        $services = $container->services();
+        $services
+            ->instanceof(CommandHandlerInterface::class)
+            ->tag('messenger.message_handler', ['bus' => 'command.bus'])
+        ;
+
+        $services
+            ->instanceof(SyncCommandHandlerInterface::class)
+            ->tag('messenger.message_handler', ['bus' => 'sync.command.bus'])
+        ;
+
+        $services
+            ->instanceof(QueryHandlerInterface::class)
+            ->tag('messenger.message_handler', ['bus' => 'query.bus'])
+        ;
+
+        $services
+            ->instanceof(DomainEventHandlerInterface::class)
+            ->tag('messenger.message_handler', ['bus' => 'domain.event.bus'])
+        ;
+
         $builder->setParameter('ddd_cqrs.exchange_name', $config['exchange_name']);
         $builder->setParameter('ddd_cqrs.queue_prefix', $config['queue_prefix']);
 
-        $builder->registerAttributeForAutoconfiguration(AsCommandHandler::class, static function (
-            ChildDefinition $definition,
-        ): void {
-            $definition
-                ->addTag('messenger.message_handler', ['bus' => 'command.bus'])
-                ->setLazy(true)
-            ;
-        });
+        $builder
+            ->registerForAutoconfiguration(DomainEventInterface::class)
+            ->addTag('enderlab.domain_event_routing_keys')
+        ;
 
-        $builder->registerAttributeForAutoconfiguration(AsSyncCommandHandler::class, static function (
-            ChildDefinition $definition,
-        ): void {
-            $definition
-                ->addTag('messenger.message_handler', ['bus' => 'sync.command.bus'])
-                ->setLazy(true)
-            ;
-        });
-
-        $builder->registerAttributeForAutoconfiguration(AsQueryHandler::class, static function (
-            ChildDefinition $definition,
-        ): void {
-            $definition
-                ->addTag('messenger.message_handler', ['bus' => 'query.bus'])
-                ->setLazy(true)
-            ;
-        });
-
-        $builder->registerAttributeForAutoconfiguration(AsDomainEventHandler::class, static function (
-            ChildDefinition $definition,
-            AsDomainEventHandler $attribute,
-            ReflectionClass $reflector
-        ): void {
-            $definition
-                ->addTag('messenger.message_handler', ['bus' => 'domain_event.bus'])
-                ->addTag('messenger.domain_event_listener')
-                ->setLazy(true)
-            ;
-
-            $definition->addTag('enderlab.domain_event_routing_key_handlers', [
-                'routingKeys' => $attribute->routingKeys,
-            ]);
-        });
-
-        $builder->registerAttributeForAutoconfiguration(AsDomainEvent::class, function (
-            ChildDefinition $definition,
-            AsDomainEvent $attribute
-        ): void {
-                $definition->addTag('enderlab.domain_event_routing_keys', [
-                    'routingKey' => $attribute->routingKey,
-                ]);
-            }
-        );
+        $builder
+            ->registerForAutoconfiguration(DomainEventHandlerInterface::class)
+            ->addTag('enderlab.domain_event_routing_key_handlers')
+        ;
     }
 
     public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
@@ -131,22 +107,24 @@ class DddCqrsBundle extends AbstractBundle
                 'buses' => [
                     'command.bus' => [
                         'middleware' => [
-                            'EnderLab\\DddCqrsBundle\\Infrastructure\\Messenger\\Middleware\\DomainExceptionMiddleware',
+                            'EnderLab\\DddCqrsBundle\\Infrastructure\\Framework\\Symfony\\Messenger\\Middleware\\DomainExceptionMiddleware',
                             'messenger.middleware.doctrine_transaction',
                             'validation',
                         ]
                     ],
                     'sync.command.bus' => [
                         'middleware' => [
-                            'EnderLab\\DddCqrsBundle\\Infrastructure\\Messenger\\Middleware\\DomainExceptionMiddleware',
+                            'EnderLab\\DddCqrsBundle\\Infrastructure\\Framework\\Symfony\\Messenger\\Middleware\\DomainExceptionMiddleware',
                             'messenger.middleware.doctrine_transaction',
                             'validation',
                         ]
                     ],
                     'query.bus' => [],
-                    'domain_event.bus' => [
+                    'domain.event.bus' => [
+                        'default_middleware' => 'allow_no_handlers',
                         'middleware' => [
-                            'EnderLab\\DddCqrsBundle\\Infrastructure\\Messenger\\Middleware\\DomainEventRoutingMiddleware',
+                            'EnderLab\\DddCqrsBundle\\Infrastructure\\Framework\\Symfony\\Messenger\\Middleware\\DomainExceptionMiddleware',
+                            'EnderLab\\DddCqrsBundle\\Infrastructure\\Framework\\Symfony\\Messenger\\Middleware\\DomainEventRoutingMiddleware',
                             'validation',
                         ]
                     ]

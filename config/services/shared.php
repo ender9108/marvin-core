@@ -1,7 +1,8 @@
 <?php
-
-declare(strict_types=1);
-
+use EnderLab\DddCqrsBundle\Application\Command\CommandHandlerInterface;
+use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
+use EnderLab\DddCqrsBundle\Application\Event\DomainEventHandlerInterface;
+use EnderLab\DddCqrsBundle\Application\Query\QueryHandlerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -26,10 +27,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ;
 
     $services
-        ->load('App\\Shared\\', dirname(__DIR__, 2).'/src/Shared')
-        ->exclude([dirname(__DIR__, 2).'/src/Shared/Infrastructure/Symfony/Kernel.php'])
+        ->load('Marvin\\Shared\\', dirname(__DIR__, 2).'/src/Shared')
+        ->exclude([
+            dirname(__DIR__, 2).'/src/Shared/Infrastructure/Framework/Symfony/Kernel.php',
+            dirname(__DIR__, 2).'/src/**/Domain/Model/*',
+            dirname(__DIR__, 2).'/src/**/Domain/ValueObject/*',
+        ])
     ;
-    $services->load('App\\Shared\\Infrastructure\\DataFixtures\\', dirname(__DIR__, 2).'/src/Shared/Infrastructure/DataFixtures/');
+    $services->load('Marvin\\Shared\\Infrastructure\\Framework\\Symfony\\DataFixtures\\', dirname(__DIR__, 2).'/src/Shared/Infrastructure/Framework/Symfony/DataFixtures/');
 
     // repositories
 };

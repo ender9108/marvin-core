@@ -22,5 +22,5 @@ framework:
                     delay: 500
             failed: 'doctrine://default?queue_name=failed'
         routing:
-            App\Domotic\Application\Command\DomoticEvent: domotic.events
-            App\Domotic\Application\Command\DomoticCommand: domotic.commands
+            #Marvin\Domotic\Application\Command\DomoticEvent: domotic.events
+            #Marvin\Domotic\Application\Command\DomoticCommand: domotic.commands

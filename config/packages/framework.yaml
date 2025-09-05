@@ -9,7 +9,7 @@ framework:
     # Note that the session will be started ONLY if you read or write from it.
     session: true
     exceptions:
-        App\Shared\Domain\Exception\MissingExceptionInterface:
+        Marvin\Shared\Domain\Exception\MissingExceptionInterface:
             status_code: 404
 
 when@test:

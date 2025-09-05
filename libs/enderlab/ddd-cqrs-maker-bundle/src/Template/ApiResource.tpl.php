@@ -15,7 +15,7 @@ use App\<?= $domain ?>\Domain\Model\<?= $model_class_name ?>;
 use EnderLab\TimestampableBundle\Trait\ApiPlatform\ResourceTimestampableTrait;
 <?php endif ?>
 <?php if ($is_blameable): ?>
-use EnderLab\BlameableBundle\Trait\ApiPlatform\ResourceBlameableTrait;
+use EnderLab\BlameableBundle\Infrastructure\Trait\ApiPlatform\ResourceBlameableTrait;
 <?php endif ?>
 
 #[ApiResource(

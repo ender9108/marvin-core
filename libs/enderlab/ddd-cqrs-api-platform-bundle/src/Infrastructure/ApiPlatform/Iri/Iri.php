@@ -7,7 +7,7 @@ class Iri implements Stringable
 {
     private ?string $iri = null;
     private ?string $domain = null;
-    private ?string $entity = null;
+    private ?string $model = null;
     private int|string|null $identifier = null;
 
     public function __construct(?string $iri = null)
@@ -28,9 +28,9 @@ class Iri implements Stringable
         return $this->domain;
     }
 
-    public function getEntity(): ?string
+    public function getModel(): ?string
     {
-        return $this->entity;
+        return $this->model;
     }
 
     public function getIdentifier(): ?int
@@ -47,7 +47,7 @@ class Iri implements Stringable
     {
         $parts = explode('/', ltrim($iri, '/'));
         $this->domain = $parts[1];
-        $this->entity = $parts[2];
+        $this->model = $parts[2];
         $this->identifier = (int) $parts[3];
     }
 

@@ -24,43 +24,43 @@ class IriConverter
     ) {
     }
 
-    public function entityToIri(object $entity): Iri
+    public function modelToIri(object $model): Iri
     {
         if (
-            false === method_exists($entity, 'getId') &&
-            false === property_exists($entity, 'id')
+            false === method_exists($model, 'getId') &&
+            false === property_exists($model, 'id')
         ) {
             throw new InvalidArgumentException(sprintf('This object "%s" is not an entity', get_class($entity)));
         }
 
-        $className = get_class($entity);
+        $className = get_class($model);
         $classNameParts = $this->getNamespacePart($className);
         $domainName = u($classNameParts[0])->snake()->toString();
-        $entityName = u(
-            $this->pluralizeEntityName($classNameParts[count($classNameParts) - 1])
+        $modelName = u(
+            $this->pluralizeModelName($classNameParts[count($classNameParts) - 1])
         )->snake()->toString();
 
-        return new Iri(self::BASE_IRI.$domainName.'/'.$entityName.'/'.$entity->getId());
+        return new Iri(self::BASE_IRI.$domainName.'/'.$modelName.'/'.$model->getId());
     }
 
-    public function iriToEntity(Iri|string $iri): object
+    public function iriToModel(Iri|string $iri): object
     {
         if (is_string($iri)) {
             $iri = new Iri($iri);
         }
 
         $domain = ucfirst(u($iri->getDomain())->camel()->toString());
-        $entityName = ucfirst($this->singularizeEntityName(
-            u($iri->getEntity())->camel()->toString()
+        $modelName = ucfirst($this->singularizeModelName(
+            u($iri->getModel())->camel()->toString()
         ));
         $id = $iri->getIdentifier();
-        $entityClass = 'App\\'.$domain.'\\Domain\\Model\\'.$entityName;
+        $modelClass = 'App\\'.$domain.'\\Domain\\Model\\'.$modelName;
 
-        if (false === class_exists($entityClass)) {
-            throw new InvalidArgumentException(sprintf('This object "%s" is not an entity', $entityClass));
+        if (false === class_exists($modelClass)) {
+            throw new InvalidArgumentException(sprintf('This object "%s" is not an model', $modelClass));
         }
 
-        $repository = $this->em->getRepository($entityClass);
+        $repository = $this->em->getRepository($modelClass);
 
         return $repository->find($id);
 
@@ -75,12 +75,12 @@ class IriConverter
         }));
     }
 
-    private function pluralizeEntityName(string $name): string
+    private function pluralizeModelName(string $name): string
     {
         return self::getInflector()->pluralize($name);
     }
 
-    private function singularizeEntityName(string $name): string
+    private function singularizeModelName(string $name): string
     {
         return self::getInflector()->singularize($name);
     }

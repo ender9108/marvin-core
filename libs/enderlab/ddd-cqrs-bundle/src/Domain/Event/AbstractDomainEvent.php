@@ -4,17 +4,12 @@ namespace EnderLab\DddCqrsBundle\Domain\Event;
 
 use DateTimeImmutable;
 
-class AbstractDomainEvent implements DomainEventInterface
+abstract readonly class AbstractDomainEvent
 {
-    private DateTimeImmutable $occurredOn;
+    public readonly DateTimeImmutable $occurredOn;
 
     public function __construct()
     {
         $this->occurredOn = new DateTimeImmutable();
-    }
-
-    public function getOccurredOn(): DateTimeImmutable
-    {
-        return $this->occurredOn;
     }
 }

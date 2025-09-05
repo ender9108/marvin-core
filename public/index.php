@@ -1,6 +1,5 @@
 <?php
-
-use App\Shared\Infrastructure\Symfony\Kernel;
+use Marvin\Shared\Infrastructure\Framework\Symfony\Kernel;
 
 require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 

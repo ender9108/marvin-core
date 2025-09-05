@@ -8,31 +8,42 @@ doctrine:
 
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
+        types:
+            email: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\EmailType
+            login_attempt_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\LoginAttemptIdType
+            user_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserIdType
+            user_status_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserStatusIdType
+            user_type_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserTypeIdType
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
         report_fields_where_declared: true
-        validate_xml_mapping: true
+        validate_xml_mapping: false
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         identity_generation_preferences:
             Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
         auto_mapping: true
         mappings:
-            Domotic:
-                type: attribute
-                is_bundle: false
-                dir: '%kernel.project_dir%/src/Domotic/Domain'
-                prefix: 'App\Domotic\Domain'
-            #Shared:
+            #Domotic:
             #    type: attribute
             #    is_bundle: false
-            #    dir: '%kernel.project_dir%/src/Shared/Domain'
-            #    prefix: 'App\Shared\Domain'
-            System:
-                type: attribute
+            #    dir: '%kernel.project_dir%/src/Domotic/Domain'
+            #    prefix: 'Marvin\Domotic\Domain'
+            Marvin\Shared:
+                type: xml
+                dir: '%kernel.project_dir%/config/doctrine/ORM/Shared'
+                prefix: 'Marvin\Shared\Domain'
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/System/Domain'
-                prefix: 'App\System\Domain'
+            Marvin\Security:
+                type: xml
+                dir: '%kernel.project_dir%/config/doctrine/ORM/Security'
+                prefix: 'Marvin\Security\Domain'
+                is_bundle: false
+            #System:
+            #    type: attribute
+            #    is_bundle: false
+            #    dir: '%kernel.project_dir%/src/System/Domain'
+            #    prefix: 'Marvin\System\Domain'
         controller_resolver:
             auto_mapping: false
 when@test:
