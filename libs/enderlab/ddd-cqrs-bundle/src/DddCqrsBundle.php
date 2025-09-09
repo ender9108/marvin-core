@@ -107,25 +107,19 @@ class DddCqrsBundle extends AbstractBundle
                 'buses' => [
                     'command.bus' => [
                         'middleware' => [
-                            'EnderLab\\DddCqrsBundle\\Infrastructure\\Framework\\Symfony\\Messenger\\Middleware\\DomainExceptionMiddleware',
                             'messenger.middleware.doctrine_transaction',
-                            'validation',
                         ]
                     ],
                     'sync.command.bus' => [
                         'middleware' => [
-                            'EnderLab\\DddCqrsBundle\\Infrastructure\\Framework\\Symfony\\Messenger\\Middleware\\DomainExceptionMiddleware',
                             'messenger.middleware.doctrine_transaction',
-                            'validation',
                         ]
                     ],
                     'query.bus' => [],
                     'domain.event.bus' => [
                         'default_middleware' => 'allow_no_handlers',
                         'middleware' => [
-                            'EnderLab\\DddCqrsBundle\\Infrastructure\\Framework\\Symfony\\Messenger\\Middleware\\DomainExceptionMiddleware',
                             'EnderLab\\DddCqrsBundle\\Infrastructure\\Framework\\Symfony\\Messenger\\Middleware\\DomainEventRoutingMiddleware',
-                            'validation',
                         ]
                     ]
                 ],

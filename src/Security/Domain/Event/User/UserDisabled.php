@@ -13,6 +13,6 @@ final readonly class UserDisabled extends AbstractDomainEvent implements DomainE
 
     public static function getRoutingKey(): string
     {
-        return '$.system.user.disabled';
+        return '$.security.user.disabled';
     }
 }

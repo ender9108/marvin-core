@@ -13,6 +13,6 @@ final readonly class UserCreated extends AbstractDomainEvent implements DomainEv
 
     public static function getRoutingKey(): string
     {
-        return '$.system.user.created';
+        return '$.security.user.created';
     }
 }

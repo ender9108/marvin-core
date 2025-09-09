@@ -4,27 +4,28 @@ namespace Marvin\Shared\Domain\ValueObject;
 use DateTimeImmutable;
 use DateTimeInterface;
 use EnderLab\DddCqrsBundle\Domain\Assert;
+use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Stringable;
 
-final readonly class CreatedAt implements Stringable
+final readonly class CreatedAt implements ValueObjectInterface, Stringable
 {
     private const string DATE_FORMAT = 'Y-m-d H:i:s';
 
-    public DateTimeInterface $createdAt;
+    public DateTimeInterface $value;
 
     public function __construct(DateTimeInterface $createdAt) {
         Assert::dateGreaterThanNow($createdAt);
 
-        $this->createdAt = $createdAt;
+        $this->value = $createdAt;
     }
 
     public function equals(CreatedAt $createdAt): bool
     {
-        return $this->createdAt === $createdAt->createdAt;
+        return $this->value === $createdAt->value;
     }
 
     public function __toString(): string
     {
-        return $this->createdAt->format(self::DATE_FORMAT);
+        return $this->value->format(self::DATE_FORMAT);
     }
 }

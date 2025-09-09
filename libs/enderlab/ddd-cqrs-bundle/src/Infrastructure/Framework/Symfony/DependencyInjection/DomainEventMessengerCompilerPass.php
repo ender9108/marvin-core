@@ -46,7 +46,7 @@ class DomainEventMessengerCompilerPass implements CompilerPassInterface
 
             // Ajoute toutes les variations des events (created, updated, deleted)
             foreach ($eventTypes as $eventType) {
-                $key = implode('.', $parts) . 'DependencyInjection' . $eventType;
+                $key = implode('.', $parts) . '.' . $eventType;
                 if (!in_array($key, $queuesConfig[$queueName]['binding_keys'], true)) {
                     $queuesConfig[$queueName]['binding_keys'][] = $key;
                 }

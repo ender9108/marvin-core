@@ -12,8 +12,8 @@ final readonly class CreateUser implements SyncCommandInterface
 {
     public function __construct(
         public Email $email,
-        public Firstname $firstName,
-        public Lastname $lastName,
+        public Firstname $firstname,
+        public Lastname $lastname,
         public Roles $roles,
         public Reference $type,
         public string $password,

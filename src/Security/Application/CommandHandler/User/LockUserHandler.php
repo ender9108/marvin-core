@@ -1,5 +1,4 @@
 <?php
-
 namespace Marvin\Security\Application\CommandHandler\User;
 
 use Marvin\Security\Application\Command\User\LockUser;

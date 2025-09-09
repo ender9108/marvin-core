@@ -13,6 +13,6 @@ final readonly class UserEnabled extends AbstractDomainEvent implements DomainEv
 
     public static function getRoutingKey(): string
     {
-        return '$.system.user.enabled';
+        return '$.security.user.enabled';
     }
 }

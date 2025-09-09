@@ -1,9 +1,9 @@
 <?php
+namespace Marvin\Security\Application\CommandHandler\User;
 
 use Marvin\Security\Application\Command\User\EnableUser;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Marvin\Security\Domain\Repository\UserStatusRepositoryInterface;
-use Marvin\Security\Domain\Service\BeforeDeleteOrUpdateStatusUserVerifier;
 use Marvin\Shared\Domain\ValueObject\Reference;
 use Marvin\Security\Domain\Model\UserStatus;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;

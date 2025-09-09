@@ -21,9 +21,9 @@ readonly class JWTListener
         $request = $this->requestStack->getCurrentRequest();
         $user = $this->userRepository->byIdentifier($payload['username']);
 
-        $payload['firstName'] = $user->firstName->firstname;
-        $payload['lastName'] = $user->lastName->lastname;
-        $payload['status'] = $user->status->reference->reference;
+        $payload['firstname'] = $user->firstname->value;
+        $payload['lastname'] = $user->lastname->value;
+        $payload['status'] = $user->status->reference->value;
         $payload['id'] = $user->id->toString();
         $payload['ip'] = $request?->getClientIp();
 

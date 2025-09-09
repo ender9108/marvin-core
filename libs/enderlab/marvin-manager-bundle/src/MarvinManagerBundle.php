@@ -20,12 +20,6 @@ class MarvinManagerBundle extends AbstractBundle
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $container->import('../config/services.yaml');
-
-        $services = $container->services();
-
-        $services->set(DockerRepositoryInterface::class)->class(DoctrineDockerRepository::class);
-        $services->set(DockerCustomCommandRepositoryInterface::class)->class(DoctrineDockerCustomCommandRepository::class);
-
         $builder->registerAttributeForAutoconfiguration(AsMessageType::class, static function (
             ChildDefinition $definition,
             AsMessageType $attribute
@@ -47,7 +41,7 @@ class MarvinManagerBundle extends AbstractBundle
                 'transports' => [
                     'marvin.to.manager' => [
                         'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
-                        'serializer' => 'EnderLab\\MarvinManagerBundle\\System\\Infrastructure\\Symfony\\Messenger\\Serializer\\ManagerSerializer',
+                        'serializer' => 'EnderLab\\MarvinManagerBundle\\System\\Infrastructure\\Framework\\Symfony\\Messenger\\Serializer\\ManagerSerializer',
                         'options' => [
                             'auto_setup' => $isAutoSetup,
                             'exchange' => [
@@ -67,29 +61,9 @@ class MarvinManagerBundle extends AbstractBundle
                     ],
                 ],
                 'routing' => [
-                    'EnderLab\\MarvinManagerBundle\\System\\Infrastructure\\Symfony\\Messenger\\ManagerRequestCommand' => 'marvin.to.manager'
+                    'EnderLab\\MarvinManagerBundle\\System\\Infrastructure\\Framework\\Symfony\\Messenger\\ManagerRequestCommand' => 'marvin.to.manager'
                 ]
             ]
         ]);
-        /*$builder->prependExtensionConfig('doctrine', [
-            'orm' => [
-                'mappings' => [
-                    'marvin_manager_mapping' => [
-                        'is_bundle' => false,
-                        'type' => 'attribute',
-                        'dir' => __DIR__.'/System/Domain',
-                        'prefix' => 'EnderLab\MarvinManagerBundle\System\Domain',
-                        'alias' => 'MarvinManagerBundle',
-                    ],
-                ]
-            ]
-        ]);
-        $builder->prependExtensionConfig('api_platform', [
-            'mapping' => [
-                'paths' => [
-                    __DIR__ . '/System/Infrastructure/ApiPlatform/Resource'
-                ]
-            ]
-        ]);*/
     }
 }

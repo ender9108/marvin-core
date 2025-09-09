@@ -2,12 +2,14 @@
 namespace Marvin\Security\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert;
+use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
+use Marvin\Security\Domain\List\Role;
 use Override;
 use Stringable;
 
-readonly class Roles implements Stringable
+readonly class Roles implements ValueObjectInterface, Stringable
 {
-    private array $roles;
+    private array $value;
 
     public function __construct(array $roles = [Role::USER])
     {
@@ -15,13 +17,13 @@ readonly class Roles implements Stringable
         Assert::allIsInstanceOf($roles, Role::class);
 
         $roles[] = Role::USER;
-        $this->roles = array_unique(\array_map(fn (Role $role) => $role->value, $roles));
+        $this->value = array_unique(\array_map(fn (Role $role) => $role->value, $roles));
     }
 
     #[Override]
     public function __toString(): string
     {
-        return implode(',', $this->roles);
+        return implode(',', $this->value);
     }
 
     public static function admin(): self
@@ -41,7 +43,7 @@ readonly class Roles implements Stringable
 
     public function toArray(): array
     {
-        return $this->roles;
+        return $this->value;
     }
 
     public static function fromArray(array $roles): self
@@ -51,12 +53,12 @@ readonly class Roles implements Stringable
 
     public function contains(string $role): bool
     {
-        return in_array($role, $this->roles, true);
+        return in_array($role, $this->value, true);
     }
 
     public function isUser(): bool
     {
-        return count($this->roles) === 1 && $this->contains(Role::USER->value);
+        return count($this->value) === 1 && $this->contains(Role::USER->value);
     }
 
     public function isAdmin(): bool

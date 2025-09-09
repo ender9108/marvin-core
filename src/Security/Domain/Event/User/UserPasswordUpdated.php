@@ -10,7 +10,6 @@ final readonly class UserPasswordUpdated extends AbstractDomainEvent implements 
 {
     public function __construct(
         public UserId $id,
-        #[SensitiveParameter]
         public string $newPassword,
     ) {
         parent::__construct();
@@ -18,6 +17,6 @@ final readonly class UserPasswordUpdated extends AbstractDomainEvent implements 
 
     public static function getRoutingKey(): string
     {
-        return '$.system.user.password_updated';
+        return '$.security.user.password_updated';
     }
 }

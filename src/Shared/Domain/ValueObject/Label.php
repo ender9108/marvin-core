@@ -3,29 +3,30 @@
 namespace Marvin\Shared\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert;
+use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Stringable;
 
-final class Label implements Stringable
+final class Label implements ValueObjectInterface, Stringable
 {
     private const int MIN = 5;
     private const int MAX = 255;
 
-    public readonly string $label;
+    public readonly string $value;
 
     public function __construct(string $label) {
         Assert::notEmpty($label);
         Assert::lengthBetween($label, self::MIN, self::MAX);
 
-        $this->label = $label;
+        $this->value = $label;
     }
 
     public function equals(Label $label): bool
     {
-        return $this->label === $label->label;
+        return $this->value === $label->value;
     }
 
     public function __toString(): string
     {
-        return $this->label;
+        return $this->value;
     }
 }

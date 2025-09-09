@@ -1,7 +1,7 @@
 <?php
 namespace Marvin\Security\Infrastructure\Framework\Symfony\EventListener;
 
-use Marvin\Security\Application\Command\User\RegisterUserLoginAttempt;
+use Marvin\Security\Application\Command\User\UserLoginAttempt;
 use Marvin\Security\Infrastructure\Framework\Symfony\Security\SecurityUser;
 use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -22,7 +22,7 @@ final readonly class LoginFailureListener
         $user = $event->getPassport()?->getUser();
 
         if ($user && $event->getException() instanceof BadCredentialsException) {
-            $this->commandBus->dispatch(new RegisterUserLoginAttempt($user->id));
+            $this->commandBus->dispatch(new UserLoginAttempt($user->id));
         }
     }
 }

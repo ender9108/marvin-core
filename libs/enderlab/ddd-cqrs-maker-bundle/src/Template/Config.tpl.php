@@ -13,6 +13,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autoconfigure()
     ;
 
-    $services->load('App\\<?= $domainName ?>\\Infrastructure\\DataFixtures\\', dirname(__DIR__, 2) . '/src/<?= $domainName ?>/Infrastructure/DataFixtures/');
-    $services->load('App\\<?= $domainName ?>\\', dirname(__DIR__, 2) . '/src/<?= $domainName ?>');
+    $services->load('<?= $rootNamespace ?>\\<?= $domainName ?>\\Infrastructure\\DataFixtures\\', dirname(__DIR__, 2) . '/src/<?= $domainName ?>/Infrastructure/DataFixtures/');
+    $services->load('<?= $rootNamespace ?>\\<?= $domainName ?>\\', dirname(__DIR__, 2) . '/src/<?= $domainName ?>');
 };

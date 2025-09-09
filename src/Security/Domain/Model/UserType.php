@@ -10,11 +10,7 @@ use DateTimeImmutable;
 
 class UserType
 {
-    public const string TYPE_APPLICATION = 'app';
-    public const string TYPE_CLI = 'cli';
-    public const string TYPE_SYSTEM = 'system';
-
-    protected(set) UserTypeId $id;
+    private(set) UserTypeId $id;
 
     public function __construct(
         private(set) Label $label,

@@ -44,13 +44,12 @@ class MakerService
         '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Framework',
         '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Framework'.DIRECTORY_SEPARATOR.'Symfony',
         '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Framework'.DIRECTORY_SEPARATOR.'ApiPlatform',
-        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Framework'.DIRECTORY_SEPARATOR.'ApiPlatform'.DIRECTORY_SEPARATOR.'State',
-        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Framework'.DIRECTORY_SEPARATOR.'ApiPlatform'.DIRECTORY_SEPARATOR.'State'.DIRECTORY_SEPARATOR.'Processor',
-        '%s'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Framework'.DIRECTORY_SEPARATOR.'ApiPlatform'.DIRECTORY_SEPARATOR.'State'.DIRECTORY_SEPARATOR.'Provider',
         '%s'.DIRECTORY_SEPARATOR.'Presentation',
         '%s'.DIRECTORY_SEPARATOR.'Presentation'.DIRECTORY_SEPARATOR.'Api',
         '%s'.DIRECTORY_SEPARATOR.'Presentation'.DIRECTORY_SEPARATOR.'Api'.DIRECTORY_SEPARATOR.'Resource',
-        '%s'.DIRECTORY_SEPARATOR.'Presentation'.DIRECTORY_SEPARATOR.'Api'.DIRECTORY_SEPARATOR.'Mapper',
+        '%s'.DIRECTORY_SEPARATOR.'Presentation'.DIRECTORY_SEPARATOR.'Api'.DIRECTORY_SEPARATOR.'State',
+        '%s'.DIRECTORY_SEPARATOR.'Presentation'.DIRECTORY_SEPARATOR.'Api'.DIRECTORY_SEPARATOR.'State'.DIRECTORY_SEPARATOR.'Processor',
+        '%s'.DIRECTORY_SEPARATOR.'Presentation'.DIRECTORY_SEPARATOR.'Api'.DIRECTORY_SEPARATOR.'State'.DIRECTORY_SEPARATOR.'Provider',
         '%s'.DIRECTORY_SEPARATOR.'Presentation'.DIRECTORY_SEPARATOR.'Web',
         '%s'.DIRECTORY_SEPARATOR.'Presentation'.DIRECTORY_SEPARATOR.'Web'.DIRECTORY_SEPARATOR.'Controller',
         '%s'.DIRECTORY_SEPARATOR.'Presentation'.DIRECTORY_SEPARATOR.'Cli',
@@ -538,6 +537,7 @@ class MakerService
         }
 
         $domainPath = $this->rootPath . $domainName;
+        $rootNamespace = $this->parameters->get('maker.root_namespace');
 
         mkdir($domainPath);
         $this->io->success(sprintf('Folder "%s" created.', $domainName));
@@ -555,6 +555,7 @@ class MakerService
             self::TEMPLATE_DIR . '/Config.tpl.php',
             [
                 'domainName' => $domainName,
+                'rootNamespace' => $rootNamespace,
             ]
         );
 

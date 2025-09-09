@@ -1,6 +1,7 @@
 <?php
 namespace Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory;
 
+use Marvin\Security\Domain\List\UserTypeReference;
 use Marvin\Security\Domain\Model\UserType;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\Reference;
@@ -9,9 +10,9 @@ use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 class UserTypeFactory extends PersistentProxyObjectFactory
 {
     private static array $datas = [
-        ['label' => 'system.user.type.application', 'reference' => UserType::TYPE_APPLICATION],
-        ['label' => 'system.user.type.system', 'reference' => UserType::TYPE_SYSTEM],
-        ['label' => 'system.user.type.cli', 'reference' => UserType::TYPE_CLI],
+        ['label' => 'system.user.type.application', 'reference' => UserTypeReference::TYPE_APPLICATION->value],
+        ['label' => 'system.user.type.system', 'reference' => UserTypeReference::TYPE_SYSTEM->value],
+        ['label' => 'system.user.type.cli', 'reference' => UserTypeReference::TYPE_CLI->value],
     ];
 
     protected function defaults(): array|callable
