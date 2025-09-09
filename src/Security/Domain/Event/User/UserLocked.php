@@ -13,6 +13,6 @@ final readonly class UserLocked extends AbstractDomainEvent implements DomainEve
 
     public static function getRoutingKey(): string
     {
-        return '$.system.user.locked';
+        return '$.security.user.locked';
     }
 }

@@ -17,6 +17,6 @@ final readonly class UserDeleted extends AbstractDomainEvent implements DomainEv
 
     public static function getRoutingKey(): string
     {
-        return '$.system.user.deleted';
+        return '$.security.user.deleted';
     }
 }

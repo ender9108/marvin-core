@@ -1,7 +1,0 @@
-{
-  "docker_build":  "docker compose build zigbee2mqtt",
-  "docker_start": "docker compose up -d zigbee2mqtt",
-  "docker_stop": "docker compose down zigbee2mqtt",
-  "docker_restart": "docker compose restart zigbee2mqtt",
-  "docker_update": "docker compose pull zigbee2mqtt"
-}

@@ -3,29 +3,30 @@
 namespace Marvin\Security\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert;
+use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Stringable;
 
-final class Lastname implements Stringable
+final class Lastname implements ValueObjectInterface, Stringable
 {
     private const int MIN = 1;
     private const int MAX = 255;
 
-    public readonly string $lastname;
+    public readonly string $value;
 
     public function __construct(string $lastname) {
         Assert::notEmpty($lastname);
         Assert::lengthBetween($lastname, self::MIN, self::MAX);
 
-        $this->lastname = $lastname;
+        $this->value = $lastname;
     }
 
     public function equals(Lastname $lastname): bool
     {
-        return $this->lastname === $lastname->lastname;
+        return $this->value === $lastname->value;
     }
 
     public function __toString(): string
     {
-        return $this->lastname;
+        return $this->value;
     }
 }

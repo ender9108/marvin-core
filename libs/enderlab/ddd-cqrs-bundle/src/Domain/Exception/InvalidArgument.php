@@ -8,7 +8,7 @@ final class InvalidArgument extends DomainException implements TranslatableExcep
     #[Override]
     public function translationId(): string
     {
-        return 'shared.exceptions.invalid_argument';
+        return $this->getMessage();
     }
 
     #[Override]

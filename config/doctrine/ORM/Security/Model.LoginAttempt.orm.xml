@@ -14,6 +14,6 @@
         <many-to-one field="user" target-entity="Marvin\Security\Domain\Model\User">
             <join-column nullable="false" on-delete="CASCADE" />
         </many-to-one>
-        <embedded name="createdAt" class="Marvin\Shared\Domain\ValueObject\CreatedAt" use-column-prefix="false" />
+        <embedded name="createdAt" class="Marvin\Shared\Domain\ValueObject\CreatedAt" />
     </entity>
 </doctrine-mapping>

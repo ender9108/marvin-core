@@ -10,9 +10,9 @@ security:
         user_type_not_found: Type introuvable.
         user_type_not_found_with_email: Type introuvable avec la référence "%reference%".
         user_type_not_found_with_id: Type introuvable avec l'id "%id%".
-        model_not_found: Modèle %s introuvable.
+        model_not_found: Modèle %model% introuvable.
         invalid_current_password: Votre mot de passe actuel est incorrect.
-        email_already_used: L'email "%s" existe déjà.
+        email_already_used: L'email "%email%" existe déjà.
         user_locked: Votre compte est bloqué, merci de contacter l'administrateur.
         user_disabled: Votre compte est désactivé, merci de contacter l'administrateur.
         user_deleted: Compte supprimer, merci de contacter l'administrateur pour en créer un nouveau.

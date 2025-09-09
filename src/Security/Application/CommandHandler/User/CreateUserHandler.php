@@ -2,6 +2,7 @@
 namespace Marvin\Security\Application\CommandHandler\User;
 
 use Marvin\Security\Application\Command\User\CreateUser;
+use Marvin\Security\Domain\Exception\UserStatusNotFound;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Marvin\Security\Domain\Repository\UserStatusRepositoryInterface;
@@ -29,11 +30,12 @@ final readonly class CreateUserHandler implements SyncCommandHandlerInterface
         $this->uniqueEmailVerifier->verify($command->email);
 
         $type = $this->userTypeRepository->byReference($command->type);
+
         $statusEnabled = $this->userStatusRepository->byReference(new Reference(UserStatus::STATUS_ENABLED));
         $user = User::create(
             $command->email,
-            $command->firstName,
-            $command->lastName,
+            $command->firstname,
+            $command->lastname,
             $statusEnabled,
             $type,
             $command->roles

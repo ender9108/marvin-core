@@ -5,6 +5,6 @@
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
 >
     <embeddable name="Marvin\Shared\Domain\ValueObject\Label">
-        <field name="label" length="255" />
+        <field name="value" length="255" />
     </embeddable>
 </doctrine-mapping>

@@ -12,9 +12,9 @@
             <generator strategy="NONE" />
         </id>
         <field name="email" type="email" unique="true" />
-        <embedded name="firstName" class="Marvin\Security\Domain\ValueObject\Firstname" use-column-prefix="false" />
-        <embedded name="lastName" class="Marvin\Security\Domain\ValueObject\Lastname" use-column-prefix="false" />
-        <embedded name="roles" class="Marvin\Security\Domain\ValueObject\Roles" use-column-prefix="false" />
+        <embedded name="firstname" class="Marvin\Security\Domain\ValueObject\Firstname" />
+        <embedded name="lastname" class="Marvin\Security\Domain\ValueObject\Lastname" />
+        <embedded name="roles" class="Marvin\Security\Domain\ValueObject\Roles" />
 
         <many-to-one field="status" target-entity="Marvin\Security\Domain\Model\UserStatus">
             <join-column nullable="false" />
@@ -23,7 +23,7 @@
             <join-column nullable="false" />
         </many-to-one>
         <field name="password" length="255" />
-        <embedded name="createdAt" class="Marvin\Shared\Domain\ValueObject\CreatedAt" use-column-prefix="false" />
-        <embedded name="updatedAt" class="Marvin\Shared\Domain\ValueObject\UpdatedAt" use-column-prefix="false" />
+        <embedded name="createdAt" class="Marvin\Shared\Domain\ValueObject\CreatedAt" />
+        <embedded name="updatedAt" class="Marvin\Shared\Domain\ValueObject\UpdatedAt" />
     </entity>
 </doctrine-mapping>

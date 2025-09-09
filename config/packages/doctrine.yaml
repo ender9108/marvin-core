@@ -16,7 +16,7 @@ doctrine:
             user_type_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserTypeIdType
     orm:
         auto_generate_proxy_classes: true
-        enable_lazy_ghost_objects: true
+        enable_native_lazy_objects: true
         report_fields_where_declared: true
         validate_xml_mapping: false
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware

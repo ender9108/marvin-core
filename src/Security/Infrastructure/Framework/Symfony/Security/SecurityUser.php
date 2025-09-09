@@ -27,7 +27,7 @@ final readonly class SecurityUser implements JWTUserInterface, PasswordAuthentic
             $user->email,
             (string) $user->password,
             $user->roles->toArray(),
-            $user->status->reference->reference
+            $user->status->reference->value
         );
     }
 

@@ -2,13 +2,14 @@
 
 namespace Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory;
 
+use Marvin\Security\Domain\List\Role;
+use Marvin\Security\Domain\List\UserTypeReference;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Model\UserStatus;
 use Marvin\Security\Domain\Model\UserType;
 use Marvin\Security\Domain\Service\PasswordHasherInterface;
 use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Lastname;
-use Marvin\Security\Domain\ValueObject\Role;
 use Marvin\Security\Domain\ValueObject\Roles;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
@@ -17,49 +18,49 @@ class UserFactory extends PersistentProxyObjectFactory
 {
     private static array $datas = [
         [
-            'firstName' => 'Marvin',
-            'lastName' => 'Domotic',
+            'firstname' => 'Marvin',
+            'lastname' => 'Domotic',
             'email' => 'marvin.domotic@marvin.test',
             'roles' => [Role::SUPER_ADMIN],
             'password' => 'Test123456789',
             'status' => UserStatus::STATUS_ENABLED,
-            'type' => UserType::TYPE_CLI,
+            'type' => UserTypeReference::TYPE_CLI->value,
         ],
         [
-            'firstName' => 'Administrator',
-            'lastName' => 'Administrator',
+            'firstname' => 'Administrator',
+            'lastname' => 'Administrator',
             'email' => 'administrator@marvin.test',
             'roles' => [Role::SUPER_ADMIN],
             'password' => 'Test123456789',
             'status' => UserStatus::STATUS_ENABLED,
-            'type' => UserType::TYPE_APPLICATION,
+            'type' => UserTypeReference::TYPE_APPLICATION->value,
         ],
         [
-            'firstName' => 'Johnny',
-            'lastName' => 'Begood',
+            'firstname' => 'Johnny',
+            'lastname' => 'Begood',
             'email' => 'johnny.begood@marvin.test',
             'roles' => [Role::ADMIN],
             'password' => 'Test123456789',
             'status' => UserStatus::STATUS_ENABLED,
-            'type' => UserType::TYPE_APPLICATION,
+            'type' => UserTypeReference::TYPE_APPLICATION->value,
         ],
         [
-            'firstName' => 'Alexandre',
-            'lastName' => 'Berthelot',
+            'firstname' => 'Alexandre',
+            'lastname' => 'Berthelot',
             'email' => 'darkender91@gmail.com',
             'roles' => [Role::SUPER_ADMIN],
             'password' => 'Test123456789',
             'status' => UserStatus::STATUS_ENABLED,
-            'type' => UserType::TYPE_APPLICATION,
+            'type' => UserTypeReference::TYPE_APPLICATION->value,
         ],
         [
-            'firstName' => 'John',
-            'lastName' => 'Doe',
+            'firstname' => 'John',
+            'lastname' => 'Doe',
             'email' => 'john.doe@test.com',
             'roles' => [Role::USER],
             'password' => 'Test123456789',
             'status' => UserStatus::STATUS_ENABLED,
-            'type' => UserType::TYPE_APPLICATION,
+            'type' => UserTypeReference::TYPE_APPLICATION->value,
         ],
     ];
 
@@ -78,8 +79,8 @@ class UserFactory extends PersistentProxyObjectFactory
     {
         return $this
             ->beforeInstantiate(function(array $parameters): array {
-                $parameters['firstName'] = new Firstname($parameters['firstName']);
-                $parameters['lastName'] = new Lastname($parameters['lastName']);
+                $parameters['firstname'] = new Firstname($parameters['firstname']);
+                $parameters['lastname'] = new Lastname($parameters['lastname']);
                 $parameters['email'] = new Email($parameters['email']);
                 $parameters['roles'] = new Roles($parameters['roles']);
 

@@ -5,6 +5,6 @@
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
 >
     <embeddable name="Marvin\Shared\Domain\ValueObject\Description">
-        <field name="description" type="text" />
+        <field name="value" type="text" />
     </embeddable>
 </doctrine-mapping>

@@ -9,6 +9,7 @@ use Marvin\Security\Domain\ValueObject\Lastname;
 use Marvin\Security\Domain\ValueObject\Roles;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Reference;
+use Marvin\Shared\Infrastructure\Framework\Symfony\Service\ExceptionMessageManager;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -22,6 +23,7 @@ final readonly class CreateUserCommand
 {
     public function __construct(
         private SyncCommandBusInterface $commandBus,
+        private ExceptionMessageManager $exceptionMessageManager,
     ) {
     }
 
@@ -56,11 +58,12 @@ final readonly class CreateUserCommand
                 $password,
             ));
 
-            $io->success(sprintf('User %s created successfully.', $user->email->email));
+            $io->success(sprintf('User %s created successfully.', $user->email->value));
 
             return Command::SUCCESS;
         } catch (DomainException $de) {
-            $io->error($de->getMessage());
+            $message = $this->exceptionMessageManager->getMessage($de);
+            $io->error($message);
 
             return Command::FAILURE;
         }

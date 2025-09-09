@@ -21,6 +21,7 @@ final readonly class ExceptionListener
     public function __invoke(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
+
         if ($exception instanceof TranslatableExceptionInterface) {
             $message = $this->translator->trans(
                 $exception->translationId(),

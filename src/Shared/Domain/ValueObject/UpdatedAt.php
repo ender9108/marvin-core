@@ -3,27 +3,28 @@ namespace Marvin\Shared\Domain\ValueObject;
 
 use DateTimeInterface;
 use EnderLab\DddCqrsBundle\Domain\Assert;
+use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Stringable;
 
-final class UpdatedAt implements Stringable
+final class UpdatedAt implements ValueObjectInterface, Stringable
 {
     private const string DATE_FORMAT = 'Y-m-d H:i:s';
 
-    public readonly DateTimeInterface $updatedAt;
+    public readonly DateTimeInterface $value;
 
     public function __construct(DateTimeInterface $updatedAt) {
         Assert::dateGreaterThanNow($updatedAt);
 
-        $this->updatedAt = $updatedAt;
+        $this->value = $updatedAt;
     }
 
     public function equals(UpdatedAt $updatedAt): bool
     {
-        return $this->updatedAt === $updatedAt->updatedAt;
+        return $this->value === $updatedAt->value;
     }
 
     public function __toString(): string
     {
-        return $this->updatedAt->format(self::DATE_FORMAT);
+        return $this->value->format(self::DATE_FORMAT);
     }
 }

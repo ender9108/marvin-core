@@ -17,6 +17,6 @@ final readonly class UserEmailUpdated extends AbstractDomainEvent implements Dom
 
     public static function getRoutingKey(): string
     {
-        return '$.system.user.email_updated';
+        return '$.security.user.email_updated';
     }
 }

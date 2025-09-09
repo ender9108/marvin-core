@@ -5,6 +5,6 @@
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
 >
     <embeddable name="Marvin\Shared\Domain\ValueObject\CreatedAt">
-        <field name="createdAt" type="datetime" />
+        <field name="value" type="datetime" />
     </embeddable>
 </doctrine-mapping>

@@ -1,4 +1,5 @@
 <?php
+namespace Marvin\Security\Application\CommandHandler\User;
 
 use Marvin\Security\Application\Command\User\UpdateUserProfil;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;

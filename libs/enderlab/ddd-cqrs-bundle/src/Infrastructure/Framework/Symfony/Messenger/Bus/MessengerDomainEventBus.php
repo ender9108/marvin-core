@@ -1,6 +1,5 @@
 <?php
-
-namespace EnderLab\DddCqrsBundle\Domain\Event\Bus;
+namespace EnderLab\DddCqrsBundle\Infrastructure\Framework\Symfony\Messenger\Bus;
 
 use EnderLab\DddCqrsBundle\Application\Event\DomainEventBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Event\DomainEventInterface;

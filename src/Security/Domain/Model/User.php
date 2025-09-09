@@ -27,8 +27,8 @@ class User extends AggregateRoot
 
     public function __construct(
         private(set) Email $email,
-        private(set) Firstname $firstName,
-        private(set) Lastname $lastName,
+        private(set) Firstname $firstname,
+        private(set) Lastname $lastname,
         private(set) Roles $roles,
         private(set) UserStatus $status,
         private(set) UserType $type,
@@ -42,16 +42,16 @@ class User extends AggregateRoot
 
     public static function create(
         Email $email,
-        Firstname $firstName,
-        Lastname $lastName,
+        Firstname $firstname,
+        Lastname $lastname,
         UserStatus $status,
         UserType $type,
-        ?Roles $roles
+        ?Roles $roles = null
     ): self {
         return new self(
             $email,
-            $firstName,
-            $lastName,
+            $firstname,
+            $lastname,
             $roles ?? Roles::user(),
             $status,
             $type
@@ -68,11 +68,11 @@ class User extends AggregateRoot
 
     public function updateProfile(
         Firstname $firstname,
-        Lastname $lastName,
+        Lastname $lastname,
         Roles $roles
     ): self {
-        $this->firstName = $firstname;
-        $this->lastName = $lastName;
+        $this->firstname = $firstname;
+        $this->lastname = $lastname;
         $this->roles = $roles;
         $this->updatedAt = new UpdatedAt(new DateTimeImmutable());
 
@@ -81,10 +81,10 @@ class User extends AggregateRoot
 
     public function enableUser(UserStatus $status): self
     {
-        if ($status->reference->reference !== UserStatus::STATUS_ENABLED) {
+        if ($status->reference->value !== UserStatus::STATUS_ENABLED) {
             throw InvalidUserStatus::withByActionAndReference(
                 'enableUser',
-                $status->reference->reference
+                $status->reference->value
             );
         }
 
@@ -97,10 +97,10 @@ class User extends AggregateRoot
 
     public function disableUser(UserStatus $status): self
     {
-        if ($status->reference->reference !== UserStatus::STATUS_DISABLED) {
+        if ($status->reference->value !== UserStatus::STATUS_DISABLED) {
             throw InvalidUserStatus::withByActionAndReference(
                 'disableUser',
-                $status->reference->reference
+                $status->reference->value
             );
         }
 
@@ -124,10 +124,10 @@ class User extends AggregateRoot
 
     public function lockUser(UserStatus $status): self
     {
-        if ($status->reference->reference !== UserStatus::STATUS_LOCKED) {
+        if ($status->reference->value !== UserStatus::STATUS_LOCKED) {
             throw InvalidUserStatus::withByActionAndReference(
                 'lockUser',
-                $status->reference->reference
+                $status->reference->value
             );
         }
 
