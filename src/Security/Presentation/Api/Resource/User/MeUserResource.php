@@ -13,7 +13,7 @@ use Marvin\Security\Presentation\Api\State\Provider\MeUserProvider;
     security: 'is_granted("ROLE_USER")',
     provider: MeUserProvider::class
 )]
-final readonly class MeUserResource implements UserResourceInterface
+final readonly class MeUserResource
 {
     public function __construct(
         #[ApiProperty(writable: false, identifier: true)]

@@ -8,7 +8,7 @@ use Marvin\Security\Domain\Event\User\UserDisabled;
 use Marvin\Security\Domain\Event\User\UserEmailUpdated;
 use Marvin\Security\Domain\Event\User\UserEnabled;
 use Marvin\Security\Domain\Event\User\UserLocked;
-use Marvin\Security\Domain\Event\User\UserPasswordUpdated;
+use Marvin\Security\Domain\Event\User\UserPasswordChanged;
 use Marvin\Security\Domain\Exception\InvalidCurrentPassword;
 use Marvin\Security\Domain\Exception\InvalidUserStatus;
 use Marvin\Security\Domain\Service\PasswordHasherInterface;
@@ -153,7 +153,7 @@ class User extends AggregateRoot
         }
 
         $this->password = $passwordHasher->hash($this, $newPassword);
-        $this->recordThat(new UserPasswordUpdated($this->id, $newPassword));
+        $this->recordThat(new UserPasswordChanged($this->id, $newPassword));
 
         return $this;
     }
