@@ -9,10 +9,7 @@ use Webmozart\Assert\Assert as WebmozartAssert;
 
 final class Assert extends WebmozartAssert
 {
-    public static function dateGreaterThanNow(DateTimeInterface $date): void
-    {
-        self::greaterThanEq($date->format('Y-m-d'), new DateTimeImmutable()->format('Y-m-d'));
-    }
+
 
     #[Override]
     protected static function reportInvalidArgument($message): void

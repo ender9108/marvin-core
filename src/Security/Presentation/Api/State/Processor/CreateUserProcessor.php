@@ -4,15 +4,13 @@ namespace Marvin\Security\Presentation\Api\State\Processor;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
-use EnderLab\DddCqrsBundle\Domain\Assert;
+use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use Exception;
 use Marvin\Security\Application\Command\User\CreateUser;
-use Marvin\Security\Domain\List\Role;
-use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Lastname;
 use Marvin\Security\Domain\ValueObject\Roles;
-use Marvin\Security\Presentation\Api\Resource\User\PostUserResource;
+use Marvin\Security\Presentation\Api\Resource\User\CreateUserResource;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Reference;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
@@ -26,12 +24,12 @@ final readonly class CreateUserProcessor implements ProcessorInterface
     }
 
     /**
-     * @param PostUserResource $data
+     * @param CreateUserResource $data
      * @throws Exception
      */
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): PostUserResource
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): CreateUserResource
     {
-        Assert::isInstanceOf($data, PostUserResource::class);
+        Assert::isInstanceOf($data, CreateUserResource::class);
 
         $model = $this->commandBus->handle(new CreateUser(
             new Email($data->email),
@@ -42,6 +40,6 @@ final readonly class CreateUserProcessor implements ProcessorInterface
             $data->password,
         ));
 
-        return $this->objectMapper->map($model, PostUserResource::class);
+        return $this->objectMapper->map($model, CreateUserResource::class);
     }
 }

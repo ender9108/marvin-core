@@ -1,7 +1,7 @@
 <?php
 namespace Marvin\Shared\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\Assert;
+use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Override;
 use Stringable;

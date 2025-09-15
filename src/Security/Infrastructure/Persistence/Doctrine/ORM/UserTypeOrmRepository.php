@@ -55,7 +55,7 @@ final class UserTypeOrmRepository extends ServiceEntityRepository implements Use
     #[Override]
     public function byReference(Reference $reference): UserType
     {
-        $userType = $this->findOneBy(['reference.reference' => $reference->reference]);
+        $userType = $this->findOneBy(['reference.value' => $reference->value]);
 
         if (null === $userType) {
             throw UserTypeNotFound::withReference($reference);

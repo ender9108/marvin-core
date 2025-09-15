@@ -10,6 +10,8 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-swoole": "*",
+        "ext-intl": "*",
+        "ext-simplexml": "*",
         "api-platform/doctrine-orm": "*",
         "api-platform/json-api": "^4.0",
         "api-platform/json-hal": "^4.0",

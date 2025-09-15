@@ -1,7 +1,7 @@
 <?php
 namespace Marvin\Security\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\Assert;
+use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Marvin\Security\Domain\List\Role;
 use Override;
