@@ -13,7 +13,7 @@ use ApiPlatform\State\ProcessorInterface;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\Framework\ApiPlatform\ApiResourceInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\ObjectMapper\ObjectMapperInterface;
+use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 final readonly class ApiToEntityStateProcessor implements ProcessorInterface
 {
@@ -22,7 +22,7 @@ final readonly class ApiToEntityStateProcessor implements ProcessorInterface
         protected ProcessorInterface $persistProcessor,
         #[Autowire(service: RemoveProcessor::class)]
         protected ProcessorInterface $removeProcessor,
-        private ObjectMapperInterface $objectMapper,
+        private MicroMapperInterface $microMapper,
     ) {
     }
 
@@ -39,10 +39,14 @@ final readonly class ApiToEntityStateProcessor implements ProcessorInterface
 
         if ($operation instanceof Put) {
             $data->id = $context['previous_data']->id;
-            $context['previous_data'] = $this->objectMapper->map($context['previous_data'], $entityClass);
+            $context['previous_data'] = $this->microMapper->map($context['previous_data'], $entityClass, [
+                MicroMapperInterface::MAX_DEPTH => 0
+            ]);
         }
 
-        $entity = $this->objectMapper->map($data, $entityClass);
+        $entity = $this->microMapper->map($data, $entityClass, [
+            MicroMapperInterface::MAX_DEPTH => 0
+        ]);
 
         if (!is_object($entity)) {
             throw new RuntimeException('Entity "'.$entityClass.'" is not object');
@@ -68,7 +72,9 @@ final readonly class ApiToEntityStateProcessor implements ProcessorInterface
         $this->persistProcessor->process($entity, $operation, $uriVariables, $context);
 
         /** @var ApiResourceInterface $resource */
-        $resource = $this->objectMapper->map($entity, get_class($data));
+        $resource = $this->microMapper->map($entity, get_class($data), [
+            MicroMapperInterface::MAX_DEPTH => 0
+        ]);
 
         return $resource;
     }

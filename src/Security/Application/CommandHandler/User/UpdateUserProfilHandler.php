@@ -6,7 +6,7 @@ use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-#[AsMessageHandler(bus: 'sync.command.bus')]
+#[AsMessageHandler]
 final readonly class UpdateUserProfilHandler implements SyncCommandHandlerInterface
 {
     public function __construct(

@@ -7,7 +7,7 @@ use Marvin\Security\Domain\Service\PasswordHasherInterface;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-#[AsMessageHandler(bus: 'sync.command.bus')]
+#[AsMessageHandler]
 final readonly class UpdateUserPasswordHandler implements SyncCommandHandlerInterface
 {
     public function __construct(

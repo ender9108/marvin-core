@@ -1,0 +1,12 @@
+assert:
+    expected_string: 'Attendu un string. Obtenu: %value%'
+    expected_int: 'Attendu un integer. Obtenu: %value%'
+    expected_throw: 'Exception attendue "%class%", exception reçue "%actual%".'
+    expected_uuid: 'La valeur %value% n''est pas un UUID valide.'
+    expected_map: 'Map attendue - tableau associatif avec des clés sous forme de chaînes de caractères.'
+    expected_list: 'Liste attendue - tableau non associatif.'
+    expected_count_between: 'Attendu, un tableau qui contient entre %min% et %max% éléments. Obtenu : %count%.'
+    expected_max_count: 'Attendu, un tableau qui contient au maximum %max% éléments. Obtenu : %count%.'
+    expected_min_count: 'Attendu, un tableau qui contient au minimum %min% éléments. Obtenu : %count%.'
+    expected_valid_array_key: 'Chaîne ou entier attendu. Obtenu : %value%.'
+    expected_key_not_exist: 'Attendu que la clé %key% n''existe pas.'

@@ -5,16 +5,23 @@ use Override;
 
 final class InvalidArgument extends DomainException implements TranslatableExceptionInterface
 {
+    public function __construct(
+        private readonly string $translationId,
+        private readonly array $parameters,
+    ) {
+        parent::__construct($translationId);
+    }
+
     #[Override]
     public function translationId(): string
     {
-        return $this->getMessage();
+        return $this->translationId;
     }
 
     #[Override]
     public function translationParameters(): array
     {
-        return [];
+        return $this->parameters;
     }
 
     #[Override]

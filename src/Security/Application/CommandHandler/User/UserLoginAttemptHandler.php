@@ -11,7 +11,7 @@ use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-#[AsMessageHandler(bus: 'sync.command.bus')]
+#[AsMessageHandler]
 final readonly class UserLoginAttemptHandler implements SyncCommandHandlerInterface
 {
     private const int ATTEMPTS_LIMIT = 3;

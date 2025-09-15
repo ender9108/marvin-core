@@ -3,7 +3,7 @@ namespace Marvin\Shared\Domain\ValueObject;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use EnderLab\DddCqrsBundle\Domain\Assert;
+use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Stringable;
 

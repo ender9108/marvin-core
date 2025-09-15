@@ -55,7 +55,7 @@ final class UserStatusOrmRepository extends ServiceEntityRepository implements U
     #[Override]
     public function byReference(Reference $reference): UserStatus
     {
-        $userStatus = $this->findOneBy(['reference.reference' => $reference->reference]);
+        $userStatus = $this->findOneBy(['reference.value' => $reference->value]);
 
         if ($userStatus === null) {
             throw UserStatusNotFound::withReference($reference);
