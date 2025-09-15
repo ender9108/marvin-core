@@ -1,14 +1,14 @@
 <?php
 namespace Marvin\Security\Application\CommandHandler\User;
 
-use Marvin\Security\Application\Command\User\UpdateUserPassword;
+use Marvin\Security\Application\Command\User\ChangeUserPassword;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Marvin\Security\Domain\Service\PasswordHasherInterface;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class UpdateUserPasswordHandler implements SyncCommandHandlerInterface
+final readonly class ChangeUserPasswordHandler implements SyncCommandHandlerInterface
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,
@@ -16,7 +16,7 @@ final readonly class UpdateUserPasswordHandler implements SyncCommandHandlerInte
     ) {
     }
 
-    public function __invoke(UpdateUserPassword $command): void
+    public function __invoke(ChangeUserPassword $command): void
     {
         $user = $this->userRepository->byId($command->id);
         $user->updatePassword(

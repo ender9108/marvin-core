@@ -17,8 +17,8 @@ use Marvin\Security\Presentation\Api\Resource\UserType\UserTypeResource;
 #[ApiResource(
     shortName: 'user',
     operations: [
-        new GetCollection(),
-        new Get()
+        new GetCollection(security: 'is_granted("ROLE_ADMIN")'),
+        new Get(security: 'is_granted("ROLE_ADMIN") or object.id == user.id')
     ],
     routePrefix: '/security',
     normalizationContext: ['skip_null_values' => false],
@@ -32,7 +32,7 @@ use Marvin\Security\Presentation\Api\Resource\UserType\UserTypeResource;
     'type.label.value',
     'status.label.value'
 ])]
-final readonly class GetUserResource implements UserResourceInterface
+final readonly class GetUserResource
 {
     public function __construct(
         #[ApiProperty(writable: false, identifier: true)]

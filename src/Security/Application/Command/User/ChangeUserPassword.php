@@ -4,7 +4,7 @@ namespace Marvin\Security\Application\Command\User;
 use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandInterface;
 
-final readonly class UpdateUserPassword implements SyncCommandInterface
+final readonly class ChangeUserPassword implements SyncCommandInterface
 {
     public function __construct(
         public UserId $id,

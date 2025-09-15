@@ -6,7 +6,7 @@ use EnderLab\DddCqrsBundle\Domain\Event\AbstractDomainEvent;
 use EnderLab\DddCqrsBundle\Domain\Event\DomainEventInterface;
 use SensitiveParameter;
 
-final readonly class UserPasswordUpdated extends AbstractDomainEvent implements DomainEventInterface
+final readonly class UserPasswordChanged extends AbstractDomainEvent implements DomainEventInterface
 {
     public function __construct(
         public UserId $id,
