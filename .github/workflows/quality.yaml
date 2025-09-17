@@ -13,7 +13,7 @@ jobs:
               with:
                   php-version: 8.4
                   tools: composer:v2
-                  extensions: pdo_pgsql amqp swoole apcu intl opcache zip
+                  extensions: pdo_pgsql, amqp, swoole, apcu, intl, opcache, zip
 
             - name: Setup Cache
               run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
