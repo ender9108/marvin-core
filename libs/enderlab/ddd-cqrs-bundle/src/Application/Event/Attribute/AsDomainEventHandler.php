@@ -1,6 +1,6 @@
 <?php
 
-namespace EnderLab\DddCqrsBundle\Domain\Event\Attribute;
+namespace EnderLab\DddCqrsBundle\Application\Event\Attribute;
 
 use Attribute;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;

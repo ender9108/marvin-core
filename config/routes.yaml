@@ -6,3 +6,9 @@ api_refresh_token:
 
 api_token_invalidate:
     path: /api/token/invalidate
+
+controllers:
+    resource: ../src/
+    type: attribute
+    schemes:
+        - HTTPS

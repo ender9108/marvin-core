@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Marvin{% endblock %}</title>
+        <link rel="icon" href="{{ asset('images/logo_transparent.png') }}">
+        {% block stylesheets %}
+        {% endblock %}
+
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body data-bs-theme="dark">
+        <div class="container-fluid">
+            {% block body %}{% endblock %}
+        </div>
+    </body>
+</html>

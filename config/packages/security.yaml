@@ -17,7 +17,6 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             user_checker: Marvin\Security\Infrastructure\Framework\Symfony\Security\UserChecker
-            
         api:
             pattern: ^/api
             stateless: true
@@ -28,28 +27,24 @@ security:
             logout:
                 path: api_token_invalidate
             user_checker: Marvin\Security\Infrastructure\Framework\Symfony\Security\UserChecker
-        #login:
-        #    pattern: ^/api/login
-        #    stateless: true
-        #    provider: app_user_provider
-        #    json_login:
-        #        check_path: /api/login_check
-        #        success_handler: lexik_jwt_authentication.handler.authentication_success
-        #        failure_handler: lexik_jwt_authentication.handler.authentication_failure
-        #api:
-        #    pattern: ^/api
-        #    stateless: true
-        #    #provider: app_user_provider
-        #    jwt: ~
-        #    #switch_user: { parameter: X-Switch-User }
+        web:
+            lazy: true
+            provider: app_user_provider
+            custom_authenticator: Marvin\Security\Infrastructure\Framework\Symfony\Security\FormAuthenticator
+            logout:
+                path: marvin.logout
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
 
     access_control:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/docs, roles: PUBLIC_ACCESS }
         - { path: ^/api/token/refresh, roles: PUBLIC_ACCESS }
         - { path: ^/api/password/(request|reset), roles: PUBLIC_ACCESS }
-        #- { path: ^/login, roles: PUBLIC_ACCESS }
-        #- { path: ^/password/(request|reset), roles: PUBLIC_ACCESS }
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/password/(request|reset), roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
         #- { path: ^/, roles: IS_AUTHENTICATED_FULLY }
 

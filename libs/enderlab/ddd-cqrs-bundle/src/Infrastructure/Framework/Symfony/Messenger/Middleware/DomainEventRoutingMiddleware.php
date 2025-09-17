@@ -3,7 +3,7 @@
 namespace EnderLab\DddCqrsBundle\Infrastructure\Framework\Symfony\Messenger\Middleware;
 
 use EnderLab\DddCqrsBundle\Domain\Event\Attribute\AsDomainEvent;
-use EnderLab\DddCqrsBundle\Domain\Event\Attribute\AsDomainEventHandler;
+use EnderLab\DddCqrsBundle\Application\Event\Attribute\AsDomainEventHandler;
 use EnderLab\DddCqrsBundle\Domain\Event\DomainEventInterface;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
