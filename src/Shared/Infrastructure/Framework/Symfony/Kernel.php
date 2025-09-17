@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Shared\Infrastructure\Framework\Symfony;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;

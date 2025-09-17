@@ -2,9 +2,9 @@
 
 namespace Marvin\Security\Domain\Exception;
 
-use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
+use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Override;
 
@@ -21,8 +21,8 @@ final class UserNotFound extends DomainException implements TranslatableExceptio
     public static function withEmail(Email $email): self
     {
         return new self(
-            sprintf('User with email %s was not found', $email->email),
-            $email->email,
+            sprintf('User with email %s was not found', $email->value),
+            $email->value,
         );
     }
 
@@ -50,6 +50,7 @@ final class UserNotFound extends DomainException implements TranslatableExceptio
     }
 
     #[Override]
+    /** @return array<string, string> */
     public function translationParameters(): array
     {
         return [

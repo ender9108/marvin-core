@@ -1,13 +1,14 @@
 <?php
+
 namespace Marvin\Security\Infrastructure\Persistence\Doctrine\ORM;
 
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Marvin\Security\Domain\Exception\UserStatusNotFound;
+use Marvin\Security\Domain\Model\UserStatus;
 use Marvin\Security\Domain\Repository\UserStatusRepositoryInterface;
 use Marvin\Security\Domain\ValueObject\Identity\UserStatusId;
 use Marvin\Shared\Domain\ValueObject\Reference;
-use Marvin\Security\Domain\Model\UserStatus;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Override;
 
 /**

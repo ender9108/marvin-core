@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Shared\Domain\ValueObject;
 
 use DateTimeImmutable;
@@ -13,7 +14,8 @@ final readonly class CreatedAt implements ValueObjectInterface, Stringable
 
     public DateTimeInterface $value;
 
-    public function __construct(DateTimeInterface $createdAt) {
+    public function __construct(DateTimeInterface $createdAt)
+    {
         Assert::dateGreaterThanNow($createdAt);
 
         $this->value = $createdAt;

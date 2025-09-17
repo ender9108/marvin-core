@@ -10,8 +10,8 @@ use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 class UserStatusFactory extends PersistentProxyObjectFactory
 {
     private static array $datas = [
-        ['label' => 'security.user.status.enabled', 'reference' => UserStatus::STATUS_ENABLED,],
-        ['label' => 'security.user.status.disabled', 'reference' => UserStatus::STATUS_DISABLED,],
+        ['label' => 'security.user.status.enabled', 'reference' => UserStatus::STATUS_ENABLED, ],
+        ['label' => 'security.user.status.disabled', 'reference' => UserStatus::STATUS_DISABLED, ],
         ['label' => 'security.user.status.locked', 'reference' => UserStatus::STATUS_LOCKED],
         ['label' => 'security.user.status.to_delete', 'reference' => UserStatus::STATUS_TO_DELETE],
     ];
@@ -21,10 +21,11 @@ class UserStatusFactory extends PersistentProxyObjectFactory
         return [];
     }
 
+    #[\Override]
     protected function initialize(): static
     {
         return $this
-            ->beforeInstantiate(function(array $parameters): array {
+            ->beforeInstantiate(function (array $parameters): array {
                 $parameters['label'] = new Label($parameters['label']);
                 $parameters['reference'] = new Reference($parameters['reference']);
 

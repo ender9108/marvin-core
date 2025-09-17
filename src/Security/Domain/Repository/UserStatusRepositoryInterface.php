@@ -1,9 +1,10 @@
 <?php
+
 namespace Marvin\Security\Domain\Repository;
 
+use Marvin\Security\Domain\Model\UserStatus;
 use Marvin\Security\Domain\ValueObject\Identity\UserStatusId;
 use Marvin\Shared\Domain\ValueObject\Reference;
-use Marvin\Security\Domain\Model\UserStatus;
 
 interface UserStatusRepositoryInterface
 {

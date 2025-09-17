@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Infrastructure\Framework\Symfony\EventListener;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;

@@ -12,6 +12,7 @@ class InvalidCurrentPassword extends DomainException implements TranslatableExce
         return 'security.exceptions.invalid_current_password';
     }
 
+    /** @return array<string, string> */
     public function translationParameters(): array
     {
         return [];

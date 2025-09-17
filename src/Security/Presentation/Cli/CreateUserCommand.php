@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Presentation\Cli;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
@@ -43,7 +44,7 @@ final readonly class CreateUserCommand
         string $password,
     ): int {
         try {
-            $roles = match($roleReference) {
+            $roles = match ($roleReference) {
                 'user' => Roles::user(),
                 'admin' => Roles::admin(),
                 'superAdmin' => Roles::superAdmin(),

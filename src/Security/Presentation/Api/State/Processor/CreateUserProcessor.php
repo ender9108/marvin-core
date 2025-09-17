@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Presentation\Api\State\Processor;
 
 use ApiPlatform\Metadata\Operation;
@@ -13,12 +14,12 @@ use Marvin\Security\Domain\ValueObject\Roles;
 use Marvin\Security\Presentation\Api\Resource\User\CreateUserResource;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Reference;
-use Symfony\Component\ObjectMapper\ObjectMapperInterface;
+use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 final readonly class CreateUserProcessor implements ProcessorInterface
 {
     public function __construct(
-        private ObjectMapperInterface $objectMapper,
+        private MicroMapperInterface $microMapper,
         private SyncCommandBusInterface $commandBus,
     ) {
     }
@@ -35,11 +36,11 @@ final readonly class CreateUserProcessor implements ProcessorInterface
             new Email($data->email),
             new Firstname($data->firstname),
             new Lastname($data->lastname),
-            Roles::user(),
-            new Reference($data->type),
+            Roles::fromArray($data->roles),
+            new Reference($data->type->reference),
             $data->password,
         ));
 
-        return $this->objectMapper->map($model, CreateUserResource::class);
+        return $this->microMapper->map($model, CreateUserResource::class);
     }
 }

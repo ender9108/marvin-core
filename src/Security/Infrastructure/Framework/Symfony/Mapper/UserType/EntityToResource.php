@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Infrastructure\Framework\Symfony\Mapper\UserType;
 
 use Marvin\Security\Domain\Model\UserType;

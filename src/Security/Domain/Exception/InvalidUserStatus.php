@@ -28,6 +28,7 @@ class InvalidUserStatus extends DomainException implements TranslatableException
         return 'security.exceptions.invalid_user_status';
     }
 
+    /** @return array<string, string> */
     public function translationParameters(): array
     {
         return [

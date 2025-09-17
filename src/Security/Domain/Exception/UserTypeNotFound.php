@@ -2,10 +2,10 @@
 
 namespace Marvin\Security\Domain\Exception;
 
-use Marvin\Security\Domain\ValueObject\Identity\UserTypeId;
-use Marvin\Shared\Domain\ValueObject\Reference;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
+use Marvin\Security\Domain\ValueObject\Identity\UserTypeId;
+use Marvin\Shared\Domain\ValueObject\Reference;
 use Override;
 
 final class UserTypeNotFound extends DomainException implements TranslatableExceptionInterface
@@ -21,8 +21,8 @@ final class UserTypeNotFound extends DomainException implements TranslatableExce
     public static function withReference(Reference $reference): self
     {
         return new self(
-            sprintf('User type with reference %s was not found', $reference->reference),
-            $reference->reference,
+            sprintf('User type with reference %s was not found', $reference->value),
+            $reference->value,
         );
     }
 
@@ -50,6 +50,7 @@ final class UserTypeNotFound extends DomainException implements TranslatableExce
     }
 
     #[Override]
+    /** @return array<string, string> */
     public function translationParameters(): array
     {
         return [

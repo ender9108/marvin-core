@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Domain\Repository;
 
 use Marvin\Security\Domain\Model\LoginAttempt;

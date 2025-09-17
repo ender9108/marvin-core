@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Infrastructure\Persistence\Doctrine\EventListener;
 
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
@@ -41,7 +42,7 @@ final readonly class CacheInvalidationListener
                 ];
                 break;
             default:
-                $this->logger->info('No cache keys found for entity: ' . get_class($entity));
+                $this->logger->info('No cache keys found for entity: ' . $entity::class);
                 break;
         }
 

@@ -17,6 +17,8 @@ security:
         user_disabled: Votre compte est désactivé, merci de contacter l'administrateur.
         user_deleted: Compte supprimer, merci de contacter l'administrateur pour en créer un nouveau.
         last_user_type: Vous ne pouvez pas supprimer le dernier utilisateur de ce type.
+        role_not_exist: Le rôle "%role%" n'existe pas.
+        invalid_same_password: Vous ne pouvez pas saisir le même mot de passe que le précédent.
     user:
         status:
             enabled: Activé

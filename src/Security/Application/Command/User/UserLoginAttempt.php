@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Application\Command\User;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandInterface;

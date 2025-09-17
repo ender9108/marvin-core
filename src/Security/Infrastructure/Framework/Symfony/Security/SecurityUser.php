@@ -1,14 +1,18 @@
 <?php
+
 namespace Marvin\Security\Infrastructure\Framework\Symfony\Security;
 
+use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use Marvin\Shared\Domain\ValueObject\Email;
-use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * @property string $id
+ */
 final readonly class SecurityUser implements JWTUserInterface, PasswordAuthenticatedUserInterface, EquatableInterface
 {
     public function __construct(
@@ -33,11 +37,17 @@ final readonly class SecurityUser implements JWTUserInterface, PasswordAuthentic
 
     public function isEqualTo(UserInterface $user): bool
     {
-        // TODO: Implement isEqualTo() method.
+        return $this->getUserIdentifier() === $user->getUserIdentifier();
     }
 
-    public static function createFromPayload($username, array $payload): JWTUserInterface|SecurityUser
-    {
+    /**
+     * @param mixed $username
+     * @param array<string, string> $payload
+     */
+    public static function createFromPayload(
+        mixed $username,
+        array $payload
+    ): JWTUserInterface|SecurityUser {
         return new self(
             new UserId($payload['id']),
             new Email($payload['email']),

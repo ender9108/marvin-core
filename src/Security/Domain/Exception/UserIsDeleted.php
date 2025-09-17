@@ -12,6 +12,7 @@ class UserIsDeleted extends DomainException implements TranslatableExceptionInte
         return 'security.exceptions.user_deleted';
     }
 
+    /** @return array<string, string> */
     public function translationParameters(): array
     {
         return [];

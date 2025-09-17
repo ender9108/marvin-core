@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Application\QueryHandler;
 
 use EnderLab\DddCqrsBundle\Application\Query\QueryHandlerInterface;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Presentation\Api\Resource\UserStatus;
 
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;

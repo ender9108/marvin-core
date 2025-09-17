@@ -1,9 +1,10 @@
 <?php
+
 namespace Marvin\Security\Domain\Event\User;
 
-use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use EnderLab\DddCqrsBundle\Domain\Event\AbstractDomainEvent;
 use EnderLab\DddCqrsBundle\Domain\Event\DomainEventInterface;
+use Marvin\Security\Domain\ValueObject\Identity\UserId;
 
 final readonly class UserDeleted extends AbstractDomainEvent implements DomainEventInterface
 {

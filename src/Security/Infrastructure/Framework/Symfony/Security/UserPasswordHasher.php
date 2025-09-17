@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Infrastructure\Framework\Symfony\Security;
 
 use Marvin\Security\Domain\Model\User;
@@ -6,7 +7,7 @@ use Marvin\Security\Domain\Service\PasswordHasherInterface;
 use Override;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserPasswordHasher implements PasswordHasherInterface
+final readonly class UserPasswordHasher implements PasswordHasherInterface
 {
     public function __construct(
         private UserPasswordHasherInterface $passwordHasher
@@ -24,6 +25,7 @@ class UserPasswordHasher implements PasswordHasherInterface
     public function verify(User $user, string $password): bool
     {
         $securityUser = SecurityUser::create($user);
+
         return $this->passwordHasher->isPasswordValid($securityUser, $password);
     }
 }

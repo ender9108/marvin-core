@@ -1,9 +1,12 @@
 <?php
+
 namespace Marvin\Security\Infrastructure\Persistence\Doctrine\ORM;
 
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\Persistence\ManagerRegistry;
 use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
 use EnderLab\DddCqrsBundle\Infrastructure\Persistence\Doctrine\ORM\PaginatorOrm;
 use Marvin\Security\Domain\Exception\UserNotFound;
@@ -11,8 +14,6 @@ use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Model\UserStatus;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Marvin\Security\Domain\ValueObject\Identity\UserId;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Marvin\Security\Infrastructure\Persistence\Doctrine\Cache\UserCacheKeys;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Reference;
@@ -94,7 +95,9 @@ final class UserOrmRepository extends ServiceEntityRepository implements UserRep
     }
 
     public function getUserCollection(
+        /** @var array<string, mixed> $criterias */
         array $criterias = [],
+        /** @var array<string, string> $orderBy */
         array $orderBy = [],
         int $page = 0,
         int $itemsPerPage = 20

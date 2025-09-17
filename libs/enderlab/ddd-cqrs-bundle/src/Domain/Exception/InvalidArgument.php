@@ -7,7 +7,7 @@ final class InvalidArgument extends DomainException implements TranslatableExcep
 {
     public function __construct(
         private readonly string $translationId,
-        private readonly array $parameters,
+        private readonly array $parameters = [],
     ) {
         parent::__construct($translationId);
     }

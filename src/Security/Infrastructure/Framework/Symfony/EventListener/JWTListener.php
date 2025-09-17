@@ -1,8 +1,9 @@
 <?php
+
 namespace Marvin\Security\Infrastructure\Framework\Symfony\EventListener;
 
-use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
+use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\RequestStack;
 

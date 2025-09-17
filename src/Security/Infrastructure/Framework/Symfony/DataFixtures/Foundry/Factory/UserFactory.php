@@ -75,10 +75,11 @@ class UserFactory extends PersistentProxyObjectFactory
         return [];
     }
 
+    #[\Override]
     protected function initialize(): static
     {
         return $this
-            ->beforeInstantiate(function(array $parameters): array {
+            ->beforeInstantiate(function (array $parameters): array {
                 $parameters['firstname'] = new Firstname($parameters['firstname']);
                 $parameters['lastname'] = new Lastname($parameters['lastname']);
                 $parameters['email'] = new Email($parameters['email']);
@@ -86,7 +87,7 @@ class UserFactory extends PersistentProxyObjectFactory
 
                 return $parameters;
             })
-            ->afterInstantiate(function(User $user) {
+            ->afterInstantiate(function (User $user): void {
                 $user->definePassword($user->password, $this->passwordHasher);
             })
         ;

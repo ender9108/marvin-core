@@ -6,14 +6,15 @@ use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Stringable;
 
-final class Lastname implements ValueObjectInterface, Stringable
+final readonly class Lastname implements ValueObjectInterface, Stringable
 {
     private const int MIN = 1;
     private const int MAX = 255;
 
-    public readonly string $value;
+    public string $value;
 
-    public function __construct(string $lastname) {
+    public function __construct(string $lastname)
+    {
         Assert::notEmpty($lastname);
         Assert::lengthBetween($lastname, self::MIN, self::MAX);
 
