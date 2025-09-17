@@ -14,7 +14,6 @@
         "ext-swoole": "*",
         "api-platform/doctrine-orm": "*",
         "api-platform/json-api": "^4.0",
-        "api-platform/json-hal": "^4.0",
         "api-platform/jsonld": "^4.0",
         "api-platform/symfony": "^3 || ^4",
         "doctrine/dbal": "^3",
