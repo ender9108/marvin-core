@@ -2,15 +2,15 @@
 
 namespace Marvin\Security\Domain\Model;
 
+use DateTimeImmutable;
 use Marvin\Security\Domain\ValueObject\Identity\UserTypeId;
 use Marvin\Shared\Domain\ValueObject\CreatedAt;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\Reference;
-use DateTimeImmutable;
 
 class UserType
 {
-    private(set) UserTypeId $id;
+    public private(set) UserTypeId $id;
 
     public function __construct(
         private(set) Label $label,

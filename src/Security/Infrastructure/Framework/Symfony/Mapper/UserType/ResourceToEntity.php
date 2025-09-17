@@ -1,10 +1,13 @@
 <?php
+
 namespace Marvin\Security\Infrastructure\Framework\Symfony\Mapper\UserType;
 
 use EnderLab\DddCqrsBundle\Application\Query\FindItemQuery;
 use EnderLab\DddCqrsBundle\Application\Query\QueryBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Exception\MissingModelException;
+use Marvin\Security\Domain\Exception\UserTypeNotFound;
 use Marvin\Security\Domain\Model\UserType;
+use Marvin\Security\Domain\ValueObject\Identity\UserTypeId;
 use Marvin\Security\Presentation\Api\Resource\UserType\UserTypeResource;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\Reference;
@@ -36,7 +39,7 @@ readonly class ResourceToEntity implements MapperInterface
         ;
 
         if (!$entity) {
-            throw new MissingModelException($dto->id, UserType::class);
+            throw UserTypeNotFound::withId(new UserTypeId($dto->id));
         }
 
         return $entity;

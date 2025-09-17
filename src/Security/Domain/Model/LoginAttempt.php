@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Domain\Model;
 
 use DateTimeImmutable;

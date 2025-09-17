@@ -18,6 +18,7 @@ class ModelNotFound extends DomainException implements TranslatableExceptionInte
         return 'security.exceptions.model_not_found';
     }
 
+    /** @return array<string, string> */
     public function translationParameters(): array
     {
         return [

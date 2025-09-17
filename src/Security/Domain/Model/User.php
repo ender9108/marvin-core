@@ -1,7 +1,9 @@
 <?php
+
 namespace Marvin\Security\Domain\Model;
 
 use DateTimeImmutable;
+use EnderLab\DddCqrsBundle\Domain\Model\AggregateRoot;
 use Marvin\Security\Domain\Event\User\UserCreated;
 use Marvin\Security\Domain\Event\User\UserDeleted;
 use Marvin\Security\Domain\Event\User\UserDisabled;
@@ -10,6 +12,7 @@ use Marvin\Security\Domain\Event\User\UserEnabled;
 use Marvin\Security\Domain\Event\User\UserLocked;
 use Marvin\Security\Domain\Event\User\UserPasswordChanged;
 use Marvin\Security\Domain\Exception\InvalidCurrentPassword;
+use Marvin\Security\Domain\Exception\InvalidSamePassword;
 use Marvin\Security\Domain\Exception\InvalidUserStatus;
 use Marvin\Security\Domain\Service\PasswordHasherInterface;
 use Marvin\Security\Domain\ValueObject\Firstname;
@@ -18,7 +21,6 @@ use Marvin\Security\Domain\ValueObject\Lastname;
 use Marvin\Security\Domain\ValueObject\Roles;
 use Marvin\Shared\Domain\ValueObject\CreatedAt;
 use Marvin\Shared\Domain\ValueObject\Email;
-use EnderLab\DddCqrsBundle\Domain\Model\AggregateRoot;
 use Marvin\Shared\Domain\ValueObject\UpdatedAt;
 
 class User extends AggregateRoot
@@ -148,11 +150,17 @@ class User extends AggregateRoot
 
     public function updatePassword(string $currentPassword, string $newPassword, PasswordHasherInterface $passwordHasher): self
     {
-        if ($this->password === null || ! $passwordHasher->verify($this, $currentPassword)) {
+        if ($this->password === null || !$passwordHasher->verify($this, $currentPassword)) {
             throw new InvalidCurrentPassword();
         }
 
-        $this->password = $passwordHasher->hash($this, $newPassword);
+        $newPasswordHash = $passwordHasher->hash($this, $newPassword);
+
+        if ($newPasswordHash === $this->password) {
+            throw new InvalidSamePassword();
+        }
+
+        $this->password = $newPasswordHash;
         $this->recordThat(new UserPasswordChanged($this->id, $newPassword));
 
         return $this;

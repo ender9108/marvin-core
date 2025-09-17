@@ -23,6 +23,7 @@ class EmailAlreadyUsed extends DomainException implements TranslatableExceptionI
         return 'security.exceptions.email_already_used';
     }
 
+    /** @return array<string, string> */
     public function translationParameters(): array
     {
         return [

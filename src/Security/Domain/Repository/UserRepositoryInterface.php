@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Domain\Repository;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -22,7 +23,9 @@ interface UserRepositoryInterface
     public function byIdentifier(string $identifier): ?User;
 
     public function getUserCollection(
+        /** @var array<string, mixed> $criterias */
         array $criterias = [],
+        /** @var array<string, mixed> $orderBy */
         array $orderBy = [],
         int $page = 0,
         int $itemsPerPage = 20

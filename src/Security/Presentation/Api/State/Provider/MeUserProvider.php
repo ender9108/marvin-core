@@ -8,14 +8,14 @@ use Marvin\Security\Domain\Exception\UserNotFound;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\ObjectMapper\ObjectMapperInterface;
+use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 final readonly class MeUserProvider implements ProviderInterface
 {
     public function __construct(
         private Security $security,
         private UserRepositoryInterface $userRepository,
-        private ObjectMapperInterface $objectMapper,
+        private MicroMapperInterface $microMapper,
     ) {
     }
 
@@ -26,12 +26,8 @@ final readonly class MeUserProvider implements ProviderInterface
         }
 
         $resourceClass = $operation->getClass();
-        $user = $this->userRepository->find($this->security->getUser()->id);
+        $user = $this->userRepository->byId($this->security->getUser()->id);
 
-        if (!$user instanceof User) {
-            throw UserNotFound::withId($user->id);
-        }
-
-        return $this->objectMapper->map($user, $resourceClass);
+        return $this->microMapper->map($user, $resourceClass);
     }
 }

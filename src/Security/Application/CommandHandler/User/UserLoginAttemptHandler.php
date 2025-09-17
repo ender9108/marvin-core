@@ -1,14 +1,15 @@
 <?php
+
 namespace Marvin\Security\Application\CommandHandler\User;
 
+use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
+use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Security\Application\Command\User\LockUser;
 use Marvin\Security\Application\Command\User\UserLoginAttempt;
 use Marvin\Security\Domain\Model\LoginAttempt;
+use Marvin\Security\Domain\Model\UserStatus;
 use Marvin\Security\Domain\Repository\LoginAttemptRepositoryInterface;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
-use Marvin\Security\Domain\Model\UserStatus;
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]

@@ -1,10 +1,11 @@
 <?php
+
 namespace Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types;
 
-use Marvin\Shared\Domain\ValueObject\Email;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
+use Marvin\Shared\Domain\ValueObject\Email;
 
 final class EmailType extends Type
 {
@@ -25,7 +26,7 @@ final class EmailType extends Type
             return null;
         }
 
-        if (! \is_string($value)) {
+        if (!\is_string($value)) {
             throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', 'string', Email::class]);
         }
 
@@ -47,7 +48,7 @@ final class EmailType extends Type
             return null;
         }
 
-        if (! \is_string($value)) {
+        if (!\is_string($value)) {
             throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', 'string', Email::class]);
         }
 

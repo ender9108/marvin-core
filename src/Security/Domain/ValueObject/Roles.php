@@ -1,7 +1,9 @@
 <?php
+
 namespace Marvin\Security\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
+use EnderLab\DddCqrsBundle\Domain\Exception\InvalidArgument;
 use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Marvin\Security\Domain\List\Role;
 use Override;
@@ -48,7 +50,21 @@ readonly class Roles implements ValueObjectInterface, Stringable
 
     public static function fromArray(array $roles): self
     {
-        return new self($roles);
+        $enumRoles = [];
+
+        foreach ($roles as $role) {
+            $enumRole = Role::tryFrom($role);
+
+            if ($enumRole === null) {
+                throw new InvalidArgument('security.exceptions.role_not_exist', [
+                    '%role%' => $role,
+                ]);
+            }
+
+            $enumRoles[] = $enumRole;
+        }
+
+        return new self($enumRoles);
     }
 
     public function contains(string $role): bool

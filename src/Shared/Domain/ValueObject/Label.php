@@ -6,14 +6,15 @@ use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Stringable;
 
-final class Label implements ValueObjectInterface, Stringable
+final readonly class Label implements ValueObjectInterface, Stringable
 {
     private const int MIN = 5;
     private const int MAX = 255;
 
-    public readonly string $value;
+    public string $value;
 
-    public function __construct(string $label) {
+    public function __construct(string $label)
+    {
         Assert::notEmpty($label);
         Assert::lengthBetween($label, self::MIN, self::MAX);
 

@@ -9,9 +9,9 @@
         "ext-amqp": "*",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "ext-swoole": "*",
         "ext-intl": "*",
         "ext-simplexml": "*",
+        "ext-swoole": "*",
         "api-platform/doctrine-orm": "*",
         "api-platform/json-api": "^4.0",
         "api-platform/json-hal": "^4.0",
@@ -30,6 +30,7 @@
         "simps/mqtt": "^2.0",
         "symfony/amqp-messenger": "7.3.*",
         "symfony/asset": "7.3.*",
+        "symfony/asset-mapper": "7.3.*",
         "symfony/console": "7.3.*",
         "symfony/doctrine-messenger": "7.3.*",
         "symfony/dotenv": "7.3.*",
@@ -105,13 +106,32 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "importmap:install": "symfony-cmd"
         },
         "post-install-cmd": [
             "@auto-scripts"
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "marvin:code-quality": [
+            "./vendor/bin/ecs check",
+            "bin/console lint:yaml config --parse-tags",
+            "bin/console lint:twig templates",
+            "bin/console lint:container",
+            "./vendor/bin/phpstan analyse --memory-limit=-1",
+            "./vendor/bin/rector --dry-run"
+        ],
+        "marvin:migration": [
+            "bin/console doctrine:migrations:migrate"
+        ],
+        "marvin:tests": [
+            "bin/console doctrine:database:drop --force --if-exists --env=test",
+            "bin/console doctrine:database:create --env=test",
+            "bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration --env=test",
+            "bin/console cache:clear --env=test",
+            "bin/phpunit"
         ]
     },
     "conflict": {
@@ -127,8 +147,12 @@
     "require-dev": {
         "deptrac/deptrac": "^3.0",
         "doctrine/doctrine-fixtures-bundle": "^3.7",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-doctrine": "*",
+        "phpstan/phpstan-symfony": "*",
+        "phpstan/phpstan-webmozart-assert": "^2.0",
         "phpunit/phpunit": "^9.5",
-        "rector/rector": "^1.2",
+        "rector/rector": "2.*",
         "symfony/browser-kit": "7.3.*",
         "symfony/css-selector": "7.3.*",
         "symfony/debug-bundle": "7.3.*",
@@ -136,6 +160,7 @@
         "symfony/phpunit-bridge": "^7.3",
         "symfony/stopwatch": "7.3.*",
         "symfony/web-profiler-bundle": "7.3.*",
+        "symplify/easy-coding-standard": "*",
         "zenstruck/browser": "^1.9",
         "zenstruck/foundry": "^2.2"
     },

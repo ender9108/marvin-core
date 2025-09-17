@@ -12,6 +12,7 @@ class UserIsLocaked extends DomainException implements TranslatableExceptionInte
         return 'security.exceptions.user_locked';
     }
 
+    /** @return array<string, string> */
     public function translationParameters(): array
     {
         return [];

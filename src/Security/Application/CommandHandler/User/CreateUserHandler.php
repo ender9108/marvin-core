@@ -1,17 +1,18 @@
 <?php
+
 namespace Marvin\Security\Application\CommandHandler\User;
 
+use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Security\Application\Command\User\CreateUser;
 use Marvin\Security\Domain\Exception\UserStatusNotFound;
 use Marvin\Security\Domain\Model\User;
+use Marvin\Security\Domain\Model\UserStatus;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Marvin\Security\Domain\Repository\UserStatusRepositoryInterface;
 use Marvin\Security\Domain\Repository\UserTypeRepositoryInterface;
 use Marvin\Security\Domain\Service\PasswordHasherInterface;
 use Marvin\Security\Domain\Service\UniqueEmailVerifier;
 use Marvin\Shared\Domain\ValueObject\Reference;
-use Marvin\Security\Domain\Model\UserStatus;
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
@@ -26,7 +27,8 @@ final readonly class CreateUserHandler implements SyncCommandHandlerInterface
     ) {
     }
 
-    public function __invoke(CreateUser $command): User {
+    public function __invoke(CreateUser $command): User
+    {
         $this->uniqueEmailVerifier->verify($command->email);
 
         $type = $this->userTypeRepository->byReference($command->type);

@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory;
 
 use Marvin\Security\Domain\List\UserTypeReference;
@@ -20,10 +21,11 @@ class UserTypeFactory extends PersistentProxyObjectFactory
         return [];
     }
 
+    #[\Override]
     protected function initialize(): static
     {
         return $this
-            ->beforeInstantiate(function(array $parameters): array {
+            ->beforeInstantiate(function (array $parameters): array {
                 $parameters['label'] = new Label($parameters['label']);
                 $parameters['reference'] = new Reference($parameters['reference']);
 

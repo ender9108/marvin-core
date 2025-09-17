@@ -1,11 +1,14 @@
 <?php
+
 namespace Marvin\Security\Infrastructure\Framework\Symfony\Mapper\UserStatus;
 
-use Marvin\Security\Domain\Model\UserStatus;
-use Marvin\Security\Presentation\Api\Resource\UserStatus\UserStatusResource;
 use EnderLab\DddCqrsBundle\Application\Query\FindItemQuery;
 use EnderLab\DddCqrsBundle\Application\Query\QueryBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Exception\MissingModelException;
+use Marvin\Security\Domain\Exception\UserStatusNotFound;
+use Marvin\Security\Domain\Model\UserStatus;
+use Marvin\Security\Domain\ValueObject\Identity\UserStatusId;
+use Marvin\Security\Presentation\Api\Resource\UserStatus\UserStatusResource;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\Reference;
 use Symfonycasts\MicroMapper\AsMapper;
@@ -35,7 +38,7 @@ readonly class ResourceToEntity implements MapperInterface
         ;
 
         if (!$entity) {
-            throw new MissingModelException($from->id, UserStatus::class);
+            throw UserStatusNotFound::withId(new UserStatusId($from->id));
         }
 
         return $entity;

@@ -1,13 +1,14 @@
 <?php
+
 namespace Marvin\Security\Infrastructure\Persistence\Doctrine\ORM;
 
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Marvin\Security\Domain\Exception\UserTypeNotFound;
 use Marvin\Security\Domain\Model\UserType;
 use Marvin\Security\Domain\Repository\UserTypeRepositoryInterface;
 use Marvin\Security\Domain\ValueObject\Identity\UserTypeId;
 use Marvin\Shared\Domain\ValueObject\Reference;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Override;
 
 /**

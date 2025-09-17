@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Shared\Infrastructure\Framework\Symfony\Service;
 
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;

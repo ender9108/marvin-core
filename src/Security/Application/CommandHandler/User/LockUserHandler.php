@@ -1,13 +1,15 @@
 <?php
+
 namespace Marvin\Security\Application\CommandHandler\User;
 
+use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Security\Application\Command\User\LockUser;
+use Marvin\Security\Domain\Model\User;
+use Marvin\Security\Domain\Model\UserStatus;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Marvin\Security\Domain\Repository\UserStatusRepositoryInterface;
 use Marvin\Security\Domain\Service\BeforeDeleteOrUpdateStatusUserVerifier;
 use Marvin\Shared\Domain\ValueObject\Reference;
-use Marvin\Security\Domain\Model\UserStatus;
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
@@ -19,7 +21,7 @@ final readonly class LockUserHandler implements SyncCommandHandlerInterface
     ) {
     }
 
-    public function __invoke(LockUser $command): void
+    public function __invoke(LockUser $command): User
     {
         $user = $this->userRepository->byId($command->id);
         $lockStatus = $this
@@ -28,5 +30,8 @@ final readonly class LockUserHandler implements SyncCommandHandlerInterface
         ;
 
         $user->lockUser($lockStatus);
+        $this->userRepository->save($user);
+
+        return $user;
     }
 }

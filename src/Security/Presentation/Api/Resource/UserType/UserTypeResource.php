@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Presentation\Api\Resource\UserType;
 
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;

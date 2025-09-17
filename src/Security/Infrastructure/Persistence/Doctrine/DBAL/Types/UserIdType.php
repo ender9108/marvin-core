@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types;
 
 use Marvin\Security\Domain\ValueObject\Identity\UserId;

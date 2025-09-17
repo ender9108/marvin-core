@@ -6,14 +6,15 @@ use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Stringable;
 
-final class Reference implements ValueObjectInterface, Stringable
+final readonly class Reference implements ValueObjectInterface, Stringable
 {
     private const int MIN = 3;
     private const int MAX = 64;
 
-    public readonly string $value;
+    public string $value;
 
-    public function __construct(string $reference) {
+    public function __construct(string $reference)
+    {
         Assert::notEmpty($reference);
         Assert::lengthBetween($reference, self::MIN, self::MAX);
 
