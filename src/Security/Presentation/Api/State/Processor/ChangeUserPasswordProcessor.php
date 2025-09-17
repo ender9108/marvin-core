@@ -9,8 +9,7 @@ use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use Exception;
 use Marvin\Security\Application\Command\User\ChangeUserPassword;
 use Marvin\Security\Domain\ValueObject\Identity\UserId;
-use Marvin\Security\Presentation\Api\Resource\User\ChangeUserPasswordResource;
-use Marvin\Security\Presentation\Api\Resource\User\GetUserResource;
+use Marvin\Security\Presentation\Api\Resource\User\UserResource;
 use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 final readonly class ChangeUserPasswordProcessor implements ProcessorInterface
@@ -22,12 +21,12 @@ final readonly class ChangeUserPasswordProcessor implements ProcessorInterface
     }
 
     /**
-     * @param ChangeUserPasswordResource $data
+     * @param UserResource $data
      * @throws Exception
      */
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): GetUserResource
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): UserResource
     {
-        Assert::isInstanceOf($data, ChangeUserPasswordResource::class);
+        Assert::isInstanceOf($data, UserResource::class);
 
         $data->id = $uriVariables['id'];
 
@@ -37,6 +36,6 @@ final readonly class ChangeUserPasswordProcessor implements ProcessorInterface
             $data->newPassword,
         ));
 
-        return $this->microMapper->map($model, GetUserResource::class);
+        return $this->microMapper->map($model, UserResource::class);
     }
 }

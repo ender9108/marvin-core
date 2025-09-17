@@ -124,4 +124,22 @@ final class UserOrmRepository extends ServiceEntityRepository implements UserRep
 
         return new PaginatorOrm($paginator);
     }
+
+    public function emailExists(Email|string $email): bool
+    {
+        if ($email instanceof Email) {
+            $email = $email->value;
+        }
+
+        $count = $this
+            ->createQueryBuilder('u')
+            ->select('COUNT(u)')
+            ->where('u.email = :email')
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;
+    }
 }

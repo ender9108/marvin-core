@@ -20,6 +20,8 @@ interface UserRepositoryInterface
 
     public function byEmail(Email $email): ?User;
 
+    public function emailExists(Email|string $email): bool;
+
     public function byIdentifier(string $identifier): ?User;
 
     public function getUserCollection(
