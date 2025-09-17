@@ -3,10 +3,7 @@
 namespace EnderLab\DddCqrsBundle\Domain\Model;
 
 use EnderLab\DddCqrsBundle\Domain\Event\DomainEventInterface;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Uid\UuidV4;
 
-#[ORM\MappedSuperclass]
 abstract class AggregateRoot
 {
 

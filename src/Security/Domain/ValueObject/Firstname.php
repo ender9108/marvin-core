@@ -2,9 +2,9 @@
 
 namespace Marvin\Security\Domain\ValueObject;
 
+use EnderLab\DddCqrsBundle\Domain\Assert;
 use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Stringable;
-use Webmozart\Assert\Assert;
 
 final readonly class Firstname implements ValueObjectInterface, Stringable
 {
