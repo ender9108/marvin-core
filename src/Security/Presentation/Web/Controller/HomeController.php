@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Presentation\Web\Controller;
 
 use LogicException;
@@ -12,6 +13,6 @@ class HomeController extends AbstractController
     #[Route(path: '/', name: 'marvin.home')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        return $this->render('security/home.html.twig',);
+        return $this->render('security/home.html.twig', );
     }
 }

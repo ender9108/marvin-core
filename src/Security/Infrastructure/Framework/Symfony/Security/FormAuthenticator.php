@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Infrastructure\Framework\Symfony\Security;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;

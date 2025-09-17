@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Infrastructure\Framework\Symfony\Validator;
 
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
