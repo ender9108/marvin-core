@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Presentation\Web\Controller;
 
 use LogicException;

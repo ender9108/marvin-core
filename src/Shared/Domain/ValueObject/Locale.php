@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Shared\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
