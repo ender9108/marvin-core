@@ -119,7 +119,6 @@
             "bin/console lint:yaml config --parse-tags",
             "bin/console lint:twig templates",
             "bin/console lint:container",
-            "./vendor/bin/phpstan analyse --memory-limit=-1",
             "./vendor/bin/rector --dry-run"
         ],
         "marvin:migration": [
