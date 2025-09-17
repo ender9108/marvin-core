@@ -34,7 +34,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             dirname(__DIR__, 2).'/src/**/Domain/ValueObject/*',
         ])
     ;
-    $services->load('Marvin\\Shared\\Infrastructure\\Framework\\Symfony\\DataFixtures\\', dirname(__DIR__, 2).'/src/Shared/Infrastructure/Framework/Symfony/DataFixtures/');
+    //$services->load('Marvin\\Shared\\Infrastructure\\Framework\\Symfony\\DataFixtures\\', dirname(__DIR__, 2).'/src/Shared/Infrastructure/Framework/Symfony/DataFixtures/');
 
     // repositories
 };
