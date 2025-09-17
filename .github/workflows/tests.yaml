@@ -48,7 +48,7 @@ jobs:
               run: sudo systemctl start mysql
 
             - name: Tests
-              run: composer app:tests
+              run: composer marvin:tests
               env:
                   APP_ENV: test
                   DATABASE_URL: mysql://root:root@127.0.0.1:${{ job.services.database.ports['3306'] }}/app_test 
