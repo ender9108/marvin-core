@@ -2,11 +2,13 @@
 
 namespace Marvin\Shared\Domain;
 
-use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
+use EnderLab\ToolsBundle\Service\ListTrait;
 
-enum Application: string
+final class Application
 {
-    use EnumToArrayTrait;
+    use ListTrait;
 
-    case APP_NAME = 'Marvin';
+    public const string APP_NAME = 'Marvin';
+    public const array APP_AVAILABLE_LOCALES = ['fr', 'en'];
+    public const array APP_AVAILABLE_THEMES = ['dark', 'light'];
 }

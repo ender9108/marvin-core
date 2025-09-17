@@ -9,8 +9,7 @@ use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use Exception;
 use Marvin\Security\Application\Command\User\ChangeUserEmail;
 use Marvin\Security\Domain\ValueObject\Identity\UserId;
-use Marvin\Security\Presentation\Api\Resource\User\ChangeUserEmailResource;
-use Marvin\Security\Presentation\Api\Resource\User\GetUserResource;
+use Marvin\Security\Presentation\Api\Resource\User\UserResource;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Symfonycasts\MicroMapper\MicroMapperInterface;
 
@@ -23,12 +22,12 @@ final readonly class ChangeUserEmailProcessor implements ProcessorInterface
     }
 
     /**
-     * @param ChangeUserEmailResource $data
+     * @param UserResource $data
      * @throws Exception
      */
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): GetUserResource
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): UserResource
     {
-        Assert::isInstanceOf($data, ChangeUserEmailResource::class);
+        Assert::isInstanceOf($data, UserResource::class);
 
         $data->id = $uriVariables['id'];
 
@@ -37,6 +36,6 @@ final readonly class ChangeUserEmailProcessor implements ProcessorInterface
             new Email($data->email),
         ));
 
-        return $this->microMapper->map($model, GetUserResource::class);
+        return $this->microMapper->map($model, UserResource::class);
     }
 }

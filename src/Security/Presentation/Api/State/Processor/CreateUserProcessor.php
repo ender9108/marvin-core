@@ -11,7 +11,7 @@ use Marvin\Security\Application\Command\User\CreateUser;
 use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Lastname;
 use Marvin\Security\Domain\ValueObject\Roles;
-use Marvin\Security\Presentation\Api\Resource\User\CreateUserResource;
+use Marvin\Security\Presentation\Api\Resource\User\UserResource;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Reference;
 use Symfonycasts\MicroMapper\MicroMapperInterface;
@@ -25,12 +25,12 @@ final readonly class CreateUserProcessor implements ProcessorInterface
     }
 
     /**
-     * @param CreateUserResource $data
+     * @param UserResource $data
      * @throws Exception
      */
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): CreateUserResource
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): UserResource
     {
-        Assert::isInstanceOf($data, CreateUserResource::class);
+        Assert::isInstanceOf($data, UserResource::class);
 
         $model = $this->commandBus->handle(new CreateUser(
             new Email($data->email),
@@ -41,6 +41,6 @@ final readonly class CreateUserProcessor implements ProcessorInterface
             $data->password,
         ));
 
-        return $this->microMapper->map($model, CreateUserResource::class);
+        return $this->microMapper->map($model, UserResource::class);
     }
 }

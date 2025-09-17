@@ -21,6 +21,8 @@ use Marvin\Security\Domain\ValueObject\Lastname;
 use Marvin\Security\Domain\ValueObject\Roles;
 use Marvin\Shared\Domain\ValueObject\CreatedAt;
 use Marvin\Shared\Domain\ValueObject\Email;
+use Marvin\Shared\Domain\ValueObject\Locale;
+use Marvin\Shared\Domain\ValueObject\Theme;
 use Marvin\Shared\Domain\ValueObject\UpdatedAt;
 
 class User extends AggregateRoot
@@ -32,6 +34,8 @@ class User extends AggregateRoot
         private(set) Firstname $firstname,
         private(set) Lastname $lastname,
         private(set) Roles $roles,
+        private(set) Locale $locale,
+        private(set) Theme $theme,
         private(set) UserStatus $status,
         private(set) UserType $type,
         private(set) ?string $password = null,
@@ -48,13 +52,17 @@ class User extends AggregateRoot
         Lastname $lastname,
         UserStatus $status,
         UserType $type,
-        ?Roles $roles = null
+        ?Roles $roles = null,
+        ?Locale $locale = null,
+        ?Theme $theme = null,
     ): self {
         return new self(
             $email,
             $firstname,
             $lastname,
             $roles ?? Roles::user(),
+            $locale ?? Locale::fr(),
+            $theme ?? Theme::dark(),
             $status,
             $type
         );
