@@ -14,13 +14,16 @@
         ]
     },
     "deptrac/deptrac": {
-        "version": "3.0",
+        "version": "4.2",
         "recipe": {
             "repo": "github.com/symfony/recipes-contrib",
             "branch": "main",
             "version": "3.0",
             "ref": "05ab8813714080c7bc915cb10c780e6cfdbdb991"
-        }
+        },
+        "files": [
+            "deptrac.yaml"
+        ]
     },
     "doctrine/deprecations": {
         "version": "1.1",
@@ -130,13 +133,16 @@
         ]
     },
     "phpstan/phpstan": {
-        "version": "1.12",
+        "version": "2.1",
         "recipe": {
             "repo": "github.com/symfony/recipes-contrib",
             "branch": "main",
             "version": "1.0",
             "ref": "5e490cc197fb6bb1ae22e5abbc531ddc633b6767"
-        }
+        },
+        "files": [
+            "phpstan.dist.neon"
+        ]
     },
     "phpunit/phpunit": {
         "version": "9.6",

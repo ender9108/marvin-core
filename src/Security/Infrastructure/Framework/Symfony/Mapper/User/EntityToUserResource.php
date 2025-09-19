@@ -27,6 +27,8 @@ readonly class EntityToUserResource implements MapperInterface
             $from->firstname->value,
             $from->lastname->value,
             $from->roles->toArray(),
+            $from->locale->value,
+            $from->theme->value,
             $this->microMapper->map($from->type, UserTypeResource::class, ['MAX_DEPTH' => 0]),
         );
 

@@ -62,7 +62,7 @@ services:
         image: postgres:${DB_VERSION-16}-alpine
         container_name: '${APP_NAME}-database'
         environment:
-            POSTGRES_DB: ${DB_NAME:-test}
+            POSTGRES_DB: ${DB_NAME:-marvin}
             POSTGRES_USER: ${DB_USER:-test}
             POSTGRES_PASSWORD: ${DB_PASSWORD:-test}
         ports:
