@@ -119,9 +119,10 @@ class DddCqrsBundle extends AbstractBundle
                     'domain.event.bus' => [
                         'default_middleware' => 'allow_no_handlers',
                         'middleware' => [
+                            'EnderLab\\DddCqrsBundle\\Infrastructure\\Framework\\Symfony\\Messenger\\Middleware\\DomainExceptionMiddleware',
                             'EnderLab\\DddCqrsBundle\\Infrastructure\\Framework\\Symfony\\Messenger\\Middleware\\DomainEventRoutingMiddleware',
                         ]
-                    ]
+                    ],
                 ],
                 'routing' => [
                     'EnderLab\\DddCqrsBundle\\Application\\Query\\QueryInterface' => 'query.messages',

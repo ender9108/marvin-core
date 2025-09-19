@@ -101,9 +101,11 @@ final class UserResource
         #[EmailExist(groups: ['postCreateUser', 'patchChangeEmailUser'])]
         #[Groups(groups: ['postCreateUser', 'patchChangeEmailUser'])]
         public string $email,
+
         #[Groups(groups: ['postCreateUser', 'patchUpdateProfileUser'])]
         #[Assert\NotBlank(groups: ['postCreateUser', 'patchUpdateProfileUser'])]
         public string $firstname,
+
         #[Groups(groups: ['postCreateUser', 'patchUpdateProfileUser'])]
         #[Assert\NotBlank(groups: ['postCreateUser', 'patchUpdateProfileUser'])]
         public string $lastname,
@@ -112,25 +114,32 @@ final class UserResource
         #[Groups(groups: ['postCreateUser'])]
         #[Assert\NotBlank(groups: ['postCreateUser'])]
         public array $roles,
+
         #[Groups(groups: ['postCreateUser', 'patchUpdateProfileUser'])]
         #[Assert\Choice(choices: Application::APP_AVAILABLE_LOCALES, groups: ['postCreateUser', 'patchUpdateProfileUser'])]
         public string $locale = 'fr',
+
         #[Groups(groups: ['postCreateUser', 'patchUpdateProfileUser'])]
         #[Assert\Choice(choices: Application::APP_AVAILABLE_THEMES, groups: ['postCreateUser', 'patchUpdateProfileUser'])]
         public string $theme = 'dark',
+
         #[Groups(groups: ['postCreateUser'])]
         #[Assert\NotBlank(groups: ['postCreateUser'])]
         public UserTypeResource $type,
+
         #[ApiProperty(readable: true, writable: false)]
         public ?UserStatusResource $status = null,
+
         #[Groups(groups: ['postCreateUser'])]
         #[Assert\NotBlank(groups: ['postCreateUser'])]
         #[ApiProperty(readable: false)]
         public ?string $password = null,
+
         #[Groups(groups: ['patchChangePasswordUser'])]
         #[Assert\NotBlank(groups: ['patchChangePasswordUser'])]
         #[ApiProperty(readable: false)]
         public ?string $currentPassword = null,
+
         #[Groups(groups: ['patchChangePasswordUser'])]
         #[Assert\NotBlank(groups: ['patchChangePasswordUser'])]
         #[ApiProperty(readable: false)]

@@ -14,6 +14,8 @@ use Marvin\Security\Domain\ValueObject\Lastname;
 use Marvin\Security\Domain\ValueObject\Roles;
 use Marvin\Security\Presentation\Api\Resource\User\UserResource;
 use Marvin\Shared\Domain\ValueObject\Email;
+use Marvin\Shared\Domain\ValueObject\Locale;
+use Marvin\Shared\Domain\ValueObject\Theme;
 use Symfonycasts\MicroMapper\AsMapper;
 use Symfonycasts\MicroMapper\MapperInterface;
 use Symfonycasts\MicroMapper\MicroMapperInterface;
@@ -40,6 +42,8 @@ readonly class UserResourceToEntity implements MapperInterface
                 $this->microMapper->map($from->status, UserStatus::class, ['MAX_DEPTH' => 0]),
                 $this->microMapper->map($from->type, UserType::class, ['MAX_DEPTH' => 0]),
                 new Roles($from->roles),
+                new Locale($from->locale),
+                new Theme($from->theme),
             )
         ;
 

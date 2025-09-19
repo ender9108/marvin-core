@@ -23,7 +23,7 @@ final class DomainEventDispatcher
 
     public function onFlush(OnFlushEventArgs $args): void
     {
-        /*$uow = $args->getObjectManager()->getUnitOfWork();
+        $uow = $args->getObjectManager()->getUnitOfWork();
 
         // On capture insertions, updates et deletions
         $models = array_merge(
@@ -40,7 +40,7 @@ final class DomainEventDispatcher
             foreach ($model->releaseEvents() as $event) {
                 $this->eventsToDispatch[] = $event;
             }
-        }*/
+        }
     }
 
     public function postFlush(PostFlushEventArgs $args): void
@@ -49,10 +49,10 @@ final class DomainEventDispatcher
             return;
         }
 
-        /*foreach ($this->eventsToDispatch as $event) {
+        foreach ($this->eventsToDispatch as $event) {
             $this->eventBus->dispatch($event);
         }
 
-        $this->eventsToDispatch = [];*/
+        $this->eventsToDispatch = [];
     }
 }

@@ -1,6 +1,0 @@
-2025-08-25 09:18:33,609 INFO Included extra file "/etc/supervisor/conf.d/marvin_domain_event.conf" during parsing
-2025-08-25 09:18:33,609 INFO Included extra file "/etc/supervisor/conf.d/marvin_to_manager_worker.conf" during parsing
-2025-08-25 09:18:33,612 INFO RPC interface 'supervisor' initialized
-2025-08-25 09:25:32,287 INFO Included extra file "/etc/supervisor/conf.d/marvin_domain_event.conf" during parsing
-2025-08-25 09:25:32,287 INFO Included extra file "/etc/supervisor/conf.d/marvin_to_manager_worker.conf" during parsing
-2025-08-25 09:25:32,290 INFO RPC interface 'supervisor' initialized

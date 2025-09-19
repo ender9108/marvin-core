@@ -3,6 +3,7 @@
 namespace EnderLab\DddCqrsBundle\Infrastructure\Framework\Symfony\DependencyInjection;
 
 use EnderLab\DddCqrsBundle\Domain\Event\Attribute\AsDomainEvent;
+use EnderLab\DddCqrsBundle\Domain\Event\DomainEventInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -18,6 +19,7 @@ class DomainEventMessengerCompilerPass implements CompilerPassInterface
         $exchangeName = $container->getParameter('ddd_cqrs.exchange_name');
         $queuesConfig = [];
 
+        /** @var DomainEventInterface $className */
         foreach ($taggedServices as $className => $tags) {
             $routingKey = $className::getRoutingKey() ?? null;
 

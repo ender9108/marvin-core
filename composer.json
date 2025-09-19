@@ -126,13 +126,6 @@
         ],
         "marvin:migration": [
             "bin/console doctrine:migrations:migrate"
-        ],
-        "marvin:tests": [
-            "bin/console doctrine:database:drop --force --if-exists --env=test",
-            "bin/console doctrine:database:create --env=test",
-            "bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration --env=test",
-            "bin/console cache:clear --env=test",
-            "bin/phpunit"
         ]
     },
     "conflict": {
@@ -149,11 +142,11 @@
         "deptrac/deptrac": "^4.2",
         "doctrine/doctrine-fixtures-bundle": "^3.7",
         "phpstan/phpstan": "^2.1",
-        "phpstan/phpstan-doctrine": "*",
-        "phpstan/phpstan-symfony": "*",
+        "phpstan/phpstan-doctrine": "^2.0",
+        "phpstan/phpstan-symfony": "^2.0",
         "phpstan/phpstan-webmozart-assert": "^2.0",
         "phpunit/phpunit": "^9.5",
-        "rector/rector": "2.*",
+        "rector/rector": "^2.1",
         "symfony/browser-kit": "7.3.*",
         "symfony/css-selector": "7.3.*",
         "symfony/debug-bundle": "7.3.*",
@@ -161,7 +154,7 @@
         "symfony/phpunit-bridge": "^7.3",
         "symfony/stopwatch": "7.3.*",
         "symfony/web-profiler-bundle": "7.3.*",
-        "symplify/easy-coding-standard": "*",
+        "symplify/easy-coding-standard": "^12.6",
         "zenstruck/browser": "^1.9",
         "zenstruck/foundry": "^2.2"
     },

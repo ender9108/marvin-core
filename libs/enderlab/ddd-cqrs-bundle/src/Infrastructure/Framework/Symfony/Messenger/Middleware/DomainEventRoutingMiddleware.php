@@ -37,7 +37,7 @@ readonly class DomainEventRoutingMiddleware implements MiddlewareInterface
     {
         $message = $envelope->getMessage();
         $reflectionMessage = new ReflectionClass($message);
-
+dd($message);
         // 1. PUBLISH
         if (!$envelope->last(AmqpReceivedStamp::class)) {
             if ($message instanceof DomainEventInterface) {
@@ -46,14 +46,15 @@ readonly class DomainEventRoutingMiddleware implements MiddlewareInterface
                     new AmqpStamp($message::getRoutingKey(), AMQP_NOPARAM, [])
                 );
 
-                $this->logger->error(sprintf(
+                $this->logger->info(sprintf(
                     'Dispatch message %s to routingKey %s.',
                     get_class($message),
                     $message::getRoutingKey()
                 ));
             }
 
-            return $stack->next()->handle($envelope, $stack);
+            // Do not handle locally on publish: let default SendMessage middleware send it to transport.
+            return $envelope;
         }
 
         // 2. CONSUME
@@ -65,16 +66,16 @@ readonly class DomainEventRoutingMiddleware implements MiddlewareInterface
         $routingKey = $amqpStamp->getAmqpEnvelope()->getRoutingKey();
 
         foreach ($this->handlers as $handler) {;
-            dd($handler);
-            /*$reflectionHandler = new ReflectionClass($handler);
-            $attributes = $reflectionHandler
-                ->getParentClass()
-                ->getAttributes(AsDomainEventHandler::class)
+            $reflectionHandler = new ReflectionClass($handler);
+            $parentClass = $reflectionHandler->getParentClass();
+            $attributes = $parentClass
+                ? $parentClass->getAttributes(AsDomainEventHandler::class)
+                : $reflectionHandler->getAttributes(AsDomainEventHandler::class)
             ;
 
             foreach ($attributes as $attr) {
                 /** @var AsDomainEventHandler $instance */
-                /*$instance = $attr->newInstance();
+                $instance = $attr->newInstance();
 
                 if (in_array($routingKey, $instance->routingKeys, true)) {
                     $this->logger->info(sprintf(
@@ -82,9 +83,10 @@ readonly class DomainEventRoutingMiddleware implements MiddlewareInterface
                         $reflectionMessage->getName(),
                         $reflectionHandler->getParentClass()->getName()
                     ));
+
                     return $stack->next()->handle($envelope, $stack);
                 }
-            }*/
+            }
         }
 
         return $envelope;
