@@ -12,6 +12,8 @@ use ApiPlatform\Metadata\GetCollection;
 use DateTimeInterface;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\Framework\ApiPlatform\State\Provider\EntityToApiStateProvider;
 use Marvin\Security\Domain\Model\UserStatus;
+use Marvin\Shared\Infrastructure\Framework\Symfony\MapperTransformer\DatetimeValueObjectTransformer;
+use Symfony\Component\ObjectMapper\Attribute\Map;
 
 #[ApiResource(
     shortName: 'user_status',
@@ -25,6 +27,7 @@ use Marvin\Security\Domain\Model\UserStatus;
     stateOptions: new Options(entityClass: UserStatus::class)
 )]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'label.value', 'reference.value'])]
+#[Map(source: UserStatus::class)]
 final readonly class UserStatusResource
 {
     public function __construct(
@@ -32,6 +35,7 @@ final readonly class UserStatusResource
         public string $id,
         public string $label,
         public string $reference,
+        #[Map(transform: DatetimeValueObjectTransformer::class)]
         public DateTimeInterface $createdAt,
     ) {
     }

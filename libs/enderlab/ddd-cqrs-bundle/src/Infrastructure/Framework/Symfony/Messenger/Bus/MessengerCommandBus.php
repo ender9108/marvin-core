@@ -5,6 +5,7 @@ use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
 use EnderLab\DddCqrsBundle\Application\Command\CommandInterface;
 use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\BusNameStamp;
 
 final readonly class MessengerCommandBus implements CommandBusInterface
 {
@@ -18,6 +19,9 @@ final readonly class MessengerCommandBus implements CommandBusInterface
      */
     public function dispatch(CommandInterface $command): void
     {
-        $this->messageBus->dispatch($command);
+        $this->messageBus->dispatch(
+            $command,
+            [new BusNameStamp('command')]
+        );
     }
 }

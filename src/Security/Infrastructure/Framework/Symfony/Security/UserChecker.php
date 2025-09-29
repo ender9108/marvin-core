@@ -5,7 +5,7 @@ namespace Marvin\Security\Infrastructure\Framework\Symfony\Security;
 use Marvin\Security\Domain\Exception\UserIsDeleted;
 use Marvin\Security\Domain\Exception\UserIsDisabled;
 use Marvin\Security\Domain\Exception\UserIsLocaked;
-use Marvin\Security\Domain\Model\UserStatus;
+use Marvin\Security\Domain\List\UserStatusReference;
 use Override;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -17,11 +17,11 @@ final readonly class UserChecker implements UserCheckerInterface
     {
         if ($user instanceof SecurityUser) {
             switch ($user->status) {
-                case UserStatus::STATUS_LOCKED:
+                case UserStatusReference::STATUS_LOCKED->value:
                     throw new UserIsLocaked();
-                case UserStatus::STATUS_DISABLED:
+                case UserStatusReference::STATUS_DISABLED->value:
                     throw new UserIsDisabled();
-                case UserStatus::STATUS_TO_DELETE:
+                case UserStatusReference::STATUS_TO_DELETE->value:
                     throw new UserIsDeleted();
             }
         }

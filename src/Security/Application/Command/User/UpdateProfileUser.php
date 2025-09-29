@@ -7,14 +7,17 @@ use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use Marvin\Security\Domain\ValueObject\Lastname;
 use Marvin\Security\Domain\ValueObject\Roles;
+use Marvin\Shared\Domain\ValueObject\Locale;
+use Marvin\Shared\Domain\ValueObject\Theme;
 
-final readonly class UpdateUserProfile implements SyncCommandInterface
+final readonly class UpdateProfileUser implements SyncCommandInterface
 {
     public function __construct(
         public UserId $id,
-        public Firstname $firstname,
-        public Lastname $lastname,
-        public Roles $roles
+        public ?Firstname $firstname = null,
+        public ?Lastname $lastname = null,
+        public ?Theme $theme = null,
+        public ?Locale $locale = null,
     ) {
     }
 }

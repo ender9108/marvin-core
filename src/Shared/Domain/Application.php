@@ -10,5 +10,7 @@ final class Application
 
     public const string APP_NAME = 'Marvin';
     public const array APP_AVAILABLE_LOCALES = ['fr', 'en'];
+    public const string APP_DEFAULT_LOCALE = 'fr';
     public const array APP_AVAILABLE_THEMES = ['dark', 'light'];
+    public const string APP_DEFAULT_THEME = 'dark';
 }

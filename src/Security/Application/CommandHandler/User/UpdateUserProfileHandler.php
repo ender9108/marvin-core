@@ -3,7 +3,7 @@
 namespace Marvin\Security\Application\CommandHandler\User;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
-use Marvin\Security\Application\Command\User\UpdateUserProfile;
+use Marvin\Security\Application\Command\User\UpdateProfileUser;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -15,7 +15,7 @@ final readonly class UpdateUserProfileHandler implements SyncCommandHandlerInter
     ) {
     }
 
-    public function __invoke(UpdateUserProfile $command): void
+    public function __invoke(UpdateProfileUser $command): void
     {
         $user = $this->userRepository->byId($command->id);
         $user->updateProfile(

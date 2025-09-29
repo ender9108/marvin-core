@@ -6,8 +6,8 @@ use EnderLab\DddCqrsBundle\Domain\Event\DomainEventInterface;
 
 trait DomainEventHandlerTrait
 {
-    public static function supports(DomainEventInterface $event): bool
+    public static function supports(string $routingKey): bool
     {
-        return in_array($event::getRoutingKey(), self::$routingKeys);
+        return in_array($routingKey, self::$routingKeys, true);
     }
 }

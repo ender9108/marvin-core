@@ -10,12 +10,7 @@ use Marvin\Shared\Domain\ValueObject\Reference;
 
 class UserStatus
 {
-    public const string STATUS_ENABLED = 'enabled';
-    public const string STATUS_DISABLED = 'disabled';
-    public const string STATUS_TO_DELETE = 'to_delete';
-    public const string STATUS_LOCKED = 'locked';
-
-    public private(set) UserStatusId $id;
+    private(set) UserStatusId $id;
 
     public function __construct(
         public readonly Label $label,

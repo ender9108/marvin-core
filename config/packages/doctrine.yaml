@@ -10,6 +10,8 @@ doctrine:
         use_savepoints: true
         types:
             email: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\EmailType
+            createdAt: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\CreatedAtType
+            updatedAt: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\UpdatedAtType
             login_attempt_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\LoginAttemptIdType
             user_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserIdType
             user_status_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserStatusIdType

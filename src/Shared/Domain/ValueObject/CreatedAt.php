@@ -8,7 +8,7 @@ use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Stringable;
 
-final readonly class CreatedAt implements ValueObjectInterface, Stringable
+final readonly class CreatedAt implements DatetimeValueObjectInterface, Stringable
 {
     private const string DATE_FORMAT = 'Y-m-d H:i:s';
 

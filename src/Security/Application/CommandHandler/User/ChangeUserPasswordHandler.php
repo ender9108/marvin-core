@@ -3,7 +3,7 @@
 namespace Marvin\Security\Application\CommandHandler\User;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
-use Marvin\Security\Application\Command\User\ChangeUserPassword;
+use Marvin\Security\Application\Command\User\ChangePasswordUser;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Marvin\Security\Domain\Service\PasswordHasherInterface;
@@ -18,7 +18,7 @@ final readonly class ChangeUserPasswordHandler implements SyncCommandHandlerInte
     ) {
     }
 
-    public function __invoke(ChangeUserPassword $command): User
+    public function __invoke(ChangePasswordUser $command): User
     {
         $user = $this->userRepository->byId($command->id);
         $user->updatePassword(

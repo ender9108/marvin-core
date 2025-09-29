@@ -3,7 +3,7 @@
 namespace Marvin\Security\Application\CommandHandler\User;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
-use Marvin\Security\Application\Command\User\ChangeUserEmail;
+use Marvin\Security\Application\Command\User\ChangeEmailUser;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -16,7 +16,7 @@ final readonly class ChangeUserEmailHandler implements SyncCommandHandlerInterfa
     ) {
     }
 
-    public function __invoke(ChangeUserEmail $command): User
+    public function __invoke(ChangeEmailUser $command): User
     {
         $user = $this->userRepository->byId($command->id);
         $user->changeEmail($command->email);

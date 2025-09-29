@@ -3,10 +3,9 @@
 namespace Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory;
 
 use Marvin\Security\Domain\List\Role;
+use Marvin\Security\Domain\List\UserStatusReference;
 use Marvin\Security\Domain\List\UserTypeReference;
 use Marvin\Security\Domain\Model\User;
-use Marvin\Security\Domain\Model\UserStatus;
-use Marvin\Security\Domain\Model\UserType;
 use Marvin\Security\Domain\Service\PasswordHasherInterface;
 use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Lastname;
@@ -23,7 +22,7 @@ class UserFactory extends PersistentProxyObjectFactory
             'email' => 'marvin.domotic@marvin.test',
             'roles' => [Role::SUPER_ADMIN],
             'password' => 'Test123456789',
-            'status' => UserStatus::STATUS_ENABLED,
+            'status' => UserStatusReference::STATUS_ENABLED->value,
             'type' => UserTypeReference::TYPE_CLI->value,
         ],
         [
@@ -32,7 +31,7 @@ class UserFactory extends PersistentProxyObjectFactory
             'email' => 'administrator@marvin.test',
             'roles' => [Role::SUPER_ADMIN],
             'password' => 'Test123456789',
-            'status' => UserStatus::STATUS_ENABLED,
+            'status' => UserStatusReference::STATUS_ENABLED->value,
             'type' => UserTypeReference::TYPE_APPLICATION->value,
         ],
         [
@@ -41,7 +40,7 @@ class UserFactory extends PersistentProxyObjectFactory
             'email' => 'johnny.begood@marvin.test',
             'roles' => [Role::ADMIN],
             'password' => 'Test123456789',
-            'status' => UserStatus::STATUS_ENABLED,
+            'status' => UserStatusReference::STATUS_ENABLED->value,
             'type' => UserTypeReference::TYPE_APPLICATION->value,
         ],
         [
@@ -50,7 +49,7 @@ class UserFactory extends PersistentProxyObjectFactory
             'email' => 'darkender91@gmail.com',
             'roles' => [Role::SUPER_ADMIN],
             'password' => 'Test123456789',
-            'status' => UserStatus::STATUS_ENABLED,
+            'status' => UserStatusReference::STATUS_ENABLED->value,
             'type' => UserTypeReference::TYPE_APPLICATION->value,
         ],
         [
@@ -59,7 +58,7 @@ class UserFactory extends PersistentProxyObjectFactory
             'email' => 'john.doe@test.com',
             'roles' => [Role::USER],
             'password' => 'Test123456789',
-            'status' => UserStatus::STATUS_ENABLED,
+            'status' => UserStatusReference::STATUS_ENABLED->value,
             'type' => UserTypeReference::TYPE_APPLICATION->value,
         ],
     ];

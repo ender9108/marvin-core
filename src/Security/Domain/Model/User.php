@@ -10,10 +10,10 @@ use Marvin\Security\Domain\Event\User\UserDisabled;
 use Marvin\Security\Domain\Event\User\UserEmailUpdated;
 use Marvin\Security\Domain\Event\User\UserEnabled;
 use Marvin\Security\Domain\Event\User\UserLocked;
-use Marvin\Security\Domain\Event\User\UserPasswordChanged;
 use Marvin\Security\Domain\Exception\InvalidCurrentPassword;
 use Marvin\Security\Domain\Exception\InvalidSamePassword;
 use Marvin\Security\Domain\Exception\InvalidUserStatus;
+use Marvin\Security\Domain\List\UserStatusReference;
 use Marvin\Security\Domain\Service\PasswordHasherInterface;
 use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Identity\UserId;
@@ -43,7 +43,7 @@ class User extends AggregateRoot
         public readonly CreatedAt $createdAt = new CreatedAt(new DateTimeImmutable())
     ) {
         $this->id = new UserId();
-        $this->recordThat(new UserCreated($this->id));
+        //$this->recordThat(new UserCreated($this->id));
     }
 
     public static function create(
@@ -71,27 +71,29 @@ class User extends AggregateRoot
     public function changeEmail(Email $email): self
     {
         $this->email = $email;
-        $this->updatedAt = new UpdatedAt(new DateTimeImmutable());
-        $this->recordThat(new UserEmailUpdated($this->id, $email));
+        //$this->recordThat(new UserEmailUpdated($this->id, $email));
         return $this;
     }
 
     public function updateProfile(
         Firstname $firstname,
         Lastname $lastname,
-        Roles $roles
+        Roles $roles,
+        Theme $theme,
+        Locale $locale,
     ): self {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
         $this->roles = $roles;
-        $this->updatedAt = new UpdatedAt(new DateTimeImmutable());
+        $this->theme = $theme;
+        $this->locale = $locale;
 
         return $this;
     }
 
     public function enableUser(UserStatus $status): self
     {
-        if ($status->reference->value !== UserStatus::STATUS_ENABLED) {
+        if ($status->reference->value !== UserStatusReference::STATUS_ENABLED->value) {
             throw InvalidUserStatus::withByActionAndReference(
                 'enableUser',
                 $status->reference->value
@@ -99,15 +101,14 @@ class User extends AggregateRoot
         }
 
         $this->status = $status;
-        $this->updatedAt = new UpdatedAt(new DateTimeImmutable());
-        $this->recordThat(new UserEnabled($this->id));
+        //$this->recordThat(new UserEnabled($this->id));
 
         return $this;
     }
 
     public function disableUser(UserStatus $status): self
     {
-        if ($status->reference->value !== UserStatus::STATUS_DISABLED) {
+        if ($status->reference->value !== UserStatusReference::STATUS_DISABLED->value) {
             throw InvalidUserStatus::withByActionAndReference(
                 'disableUser',
                 $status->reference->value
@@ -115,8 +116,7 @@ class User extends AggregateRoot
         }
 
         $this->status = $status;
-        $this->updatedAt = new UpdatedAt(new DateTimeImmutable());
-        $this->recordThat(new UserDisabled($this->id));
+        //$this->recordThat(new UserDisabled($this->id));
 
         return $this;
     }
@@ -134,7 +134,7 @@ class User extends AggregateRoot
 
     public function lockUser(UserStatus $status): self
     {
-        if ($status->reference->value !== UserStatus::STATUS_LOCKED) {
+        if ($status->reference->value !== UserStatusReference::STATUS_LOCKED->value) {
             throw InvalidUserStatus::withByActionAndReference(
                 'lockUser',
                 $status->reference->value
@@ -142,8 +142,7 @@ class User extends AggregateRoot
         }
 
         $this->status = $status;
-        $this->updatedAt = new UpdatedAt(new DateTimeImmutable());
-        $this->recordThat(new UserLocked($this->id));
+        //$this->recordThat(new UserLocked($this->id));
 
         return $this;
     }
@@ -151,7 +150,6 @@ class User extends AggregateRoot
     public function definePassword(string $password, PasswordHasherInterface $passwordHasher): self
     {
         $this->password = $passwordHasher->hash($this, $password);
-        $this->updatedAt = new UpdatedAt(new DateTimeImmutable());
 
         return $this;
     }
@@ -169,7 +167,6 @@ class User extends AggregateRoot
         }
 
         $this->password = $newPasswordHash;
-        $this->recordThat(new UserPasswordChanged($this->id, $newPassword));
 
         return $this;
     }

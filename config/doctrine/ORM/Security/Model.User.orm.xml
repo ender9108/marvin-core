@@ -16,6 +16,7 @@
         <embedded name="lastname" class="Marvin\Security\Domain\ValueObject\Lastname" />
         <embedded name="roles" class="Marvin\Security\Domain\ValueObject\Roles" />
         <embedded name="locale" class="Marvin\Shared\Domain\ValueObject\Locale" />
+        <embedded name="theme" class="Marvin\Shared\Domain\ValueObject\Theme" />
 
         <many-to-one field="status" target-entity="Marvin\Security\Domain\Model\UserStatus">
             <join-column nullable="false" />

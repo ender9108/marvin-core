@@ -6,8 +6,8 @@ use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Security\Application\Command\User\LockUser;
 use Marvin\Security\Application\Command\User\UserLoginAttempt;
+use Marvin\Security\Domain\List\UserStatusReference;
 use Marvin\Security\Domain\Model\LoginAttempt;
-use Marvin\Security\Domain\Model\UserStatus;
 use Marvin\Security\Domain\Repository\LoginAttemptRepositoryInterface;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -32,7 +32,7 @@ final readonly class UserLoginAttemptHandler implements SyncCommandHandlerInterf
         if ($attempts < self::ATTEMPTS_LIMIT) {
             $this->loginAttemptRepository->save(LoginAttempt::create($user));
         } else {
-            if ($user->status->reference->value !== UserStatus::STATUS_LOCKED) {
+            if ($user->status->reference->value !== UserStatusReference::STATUS_LOCKED->value) {
                 $this->commandBus->handle(new LockUser($user->id));
             }
         }
