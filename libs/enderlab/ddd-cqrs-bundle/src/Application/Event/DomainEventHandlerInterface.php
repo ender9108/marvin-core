@@ -5,5 +5,5 @@ use EnderLab\DddCqrsBundle\Domain\Event\DomainEventInterface;
 
 interface DomainEventHandlerInterface
 {
-    public static function supports(DomainEventInterface $event): bool;
+    public static function supports(string $routingKey): bool;
 }

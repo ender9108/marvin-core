@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use EnderLab\DddCqrsBundle\Application\Exception\MissingModelException;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-#[AsMessageHandler(bus: 'query.bus')]
+#[AsMessageHandler(fromTransport: 'query.messages')]
 readonly class FindItemQueryItemHandler implements QueryHandlerInterface
 {
     public function __construct(

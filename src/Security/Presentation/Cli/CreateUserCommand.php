@@ -9,7 +9,9 @@ use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Lastname;
 use Marvin\Security\Domain\ValueObject\Roles;
 use Marvin\Shared\Domain\ValueObject\Email;
+use Marvin\Shared\Domain\ValueObject\Locale;
 use Marvin\Shared\Domain\ValueObject\Reference;
+use Marvin\Shared\Domain\ValueObject\Theme;
 use Marvin\Shared\Infrastructure\Framework\Symfony\Service\ExceptionMessageManager;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -38,6 +40,10 @@ final readonly class CreateUserCommand
         string $lastname,
         #[Argument(name: 'roles')]
         string $roleReference,
+        #[Argument(name: 'locale')]
+        string $locale,
+        #[Argument(name: 'theme')]
+        string $theme,
         #[Argument(name: 'type')]
         string $type,
         #[Argument(name: 'password')]
@@ -55,11 +61,13 @@ final readonly class CreateUserCommand
                 new Firstname($firstname),
                 new Lastname($lastname),
                 $roles,
+                new Locale($locale),
+                new Theme($theme),
                 new Reference($type),
                 $password,
             ));
 
-            $io->success(sprintf('User %s created successfully.', $user->email->value));
+            $io->success(sprintf('User %s created successfully.', $email));
 
             return Command::SUCCESS;
         } catch (DomainException $de) {

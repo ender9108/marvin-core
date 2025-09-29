@@ -6,7 +6,7 @@ use EnderLab\DddCqrsBundle\Application\Command\SyncCommandInterface;
 use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use Marvin\Shared\Domain\ValueObject\Email;
 
-final readonly class ChangeUserEmail implements SyncCommandInterface
+final readonly class ChangeEmailUser implements SyncCommandInterface
 {
     public function __construct(
         public UserId $id,

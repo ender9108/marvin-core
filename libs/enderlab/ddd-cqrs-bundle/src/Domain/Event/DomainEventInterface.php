@@ -2,8 +2,6 @@
 
 namespace EnderLab\DddCqrsBundle\Domain\Event;
 
-use DateTimeImmutable;
-
 interface DomainEventInterface
 {
     public const string EVENT_CREATED = 'created';

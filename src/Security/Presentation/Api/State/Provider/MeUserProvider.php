@@ -4,8 +4,6 @@ namespace Marvin\Security\Presentation\Api\State\Provider;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use Marvin\Security\Domain\Exception\UserNotFound;
-use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfonycasts\MicroMapper\MicroMapperInterface;

@@ -1,5 +1,5 @@
 <?php
-namespace EnderLab\DddCqrsBundle\Infrastructure\Persistence\Doctrine\EventDispatcher;
+namespace EnderLab\DddCqrsBundle\Infrastructure\Persistence\Doctrine\DomainEventDispatcher;
 
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -17,7 +17,7 @@ final class DomainEventDispatcher
     /** @var DomainEventInterface[] */
     private array $eventsToDispatch = [];
 
-    public function __construct(private readonly DomainEventBusInterface $eventBus)
+    public function __construct(private readonly DomainEventBusInterface $domainEventBus)
     {
     }
 
@@ -50,7 +50,7 @@ final class DomainEventDispatcher
         }
 
         foreach ($this->eventsToDispatch as $event) {
-            $this->eventBus->dispatch($event);
+            $this->domainEventBus->dispatch($event);
         }
 
         $this->eventsToDispatch = [];

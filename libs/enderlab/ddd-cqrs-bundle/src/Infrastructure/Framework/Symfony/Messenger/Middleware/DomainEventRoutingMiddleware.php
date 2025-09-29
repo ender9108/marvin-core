@@ -1,5 +1,4 @@
 <?php
-
 namespace EnderLab\DddCqrsBundle\Infrastructure\Framework\Symfony\Messenger\Middleware;
 
 use EnderLab\DddCqrsBundle\Domain\Event\Attribute\AsDomainEvent;
@@ -24,7 +23,7 @@ readonly class DomainEventRoutingMiddleware implements MiddlewareInterface
      */
     public function __construct(
         private readonly LoggerInterface $logger,
-        #[AutowireIterator('enderlab.domain_event_routing_key_handlers')]
+        #[AutowireIterator('enderlab.domain_event_handlers_routing_key')]
         private iterable $handlers
     ) {
     }
@@ -36,10 +35,9 @@ readonly class DomainEventRoutingMiddleware implements MiddlewareInterface
     public function handle(Envelope $envelope, StackInterface $stack): Envelope
     {
         $message = $envelope->getMessage();
-        $reflectionMessage = new ReflectionClass($message);
-dd($message);
+
         // 1. PUBLISH
-        if (!$envelope->last(AmqpReceivedStamp::class)) {
+        if (null === $envelope->last(AmqpReceivedStamp::class)) {
             if ($message instanceof DomainEventInterface) {
                 $envelope = $envelope->with(
                     new TransportNamesStamp('domain.event'),
@@ -53,8 +51,7 @@ dd($message);
                 ));
             }
 
-            // Do not handle locally on publish: let default SendMessage middleware send it to transport.
-            return $envelope;
+            return $stack->next()->handle($envelope, $stack);
         }
 
         // 2. CONSUME
@@ -66,29 +63,18 @@ dd($message);
         $routingKey = $amqpStamp->getAmqpEnvelope()->getRoutingKey();
 
         foreach ($this->handlers as $handler) {;
-            $reflectionHandler = new ReflectionClass($handler);
-            $parentClass = $reflectionHandler->getParentClass();
-            $attributes = $parentClass
-                ? $parentClass->getAttributes(AsDomainEventHandler::class)
-                : $reflectionHandler->getAttributes(AsDomainEventHandler::class)
-            ;
+            if ($handler::supports($routingKey)) {
+                $this->logger->info(sprintf(
+                    'Dispatching message %s (routingKey: %s) to handler "%s".',
+                    get_class($message),
+                    $routingKey,
+                    get_class($handler)
+                ));
 
-            foreach ($attributes as $attr) {
-                /** @var AsDomainEventHandler $instance */
-                $instance = $attr->newInstance();
-
-                if (in_array($routingKey, $instance->routingKeys, true)) {
-                    $this->logger->info(sprintf(
-                        'Dispatching message %s to handler "%s".',
-                        $reflectionMessage->getName(),
-                        $reflectionHandler->getParentClass()->getName()
-                    ));
-
-                    return $stack->next()->handle($envelope, $stack);
-                }
+                return $stack->next()->handle($envelope, $stack);
             }
         }
 
-        return $envelope;
+        return $stack->next()->handle($envelope, $stack);
     }
 }

@@ -13,7 +13,7 @@ final readonly class Theme implements ValueObjectInterface, Stringable
 
     public string $value;
 
-    public function __construct(string $theme = Application::APP_AVAILABLE_THEMES[0])
+    public function __construct(string $theme = Application::APP_DEFAULT_THEME)
     {
         Assert::notEmpty($theme);
         Assert::lengthBetween($theme, 1, self::MAX);

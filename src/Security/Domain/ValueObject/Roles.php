@@ -13,7 +13,7 @@ readonly class Roles implements ValueObjectInterface, Stringable
 {
     private array $value;
 
-    public function __construct(array $roles = [Role::USER])
+    public function __construct(array $roles = [])
     {
         Assert::notEmpty($roles);
         Assert::allIsInstanceOf($roles, Role::class);
@@ -45,7 +45,13 @@ readonly class Roles implements ValueObjectInterface, Stringable
 
     public function toArray(): array
     {
-        return $this->value;
+        $results = [];
+
+        foreach ($this->value as $role) {
+            $results[] = $role;
+        }
+
+        return $results;
     }
 
     public static function fromArray(array $roles): self
@@ -53,15 +59,7 @@ readonly class Roles implements ValueObjectInterface, Stringable
         $enumRoles = [];
 
         foreach ($roles as $role) {
-            $enumRole = Role::tryFrom($role);
-
-            if ($enumRole === null) {
-                throw new InvalidArgument('security.exceptions.role_not_exist', [
-                    '%role%' => $role,
-                ]);
-            }
-
-            $enumRoles[] = $enumRole;
+            $enumRoles[] = Role::from($role);
         }
 
         return new self($enumRoles);

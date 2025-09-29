@@ -2,6 +2,7 @@
 
 namespace Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory;
 
+use Marvin\Security\Domain\List\UserStatusReference;
 use Marvin\Security\Domain\Model\UserStatus;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\Reference;
@@ -10,10 +11,10 @@ use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 class UserStatusFactory extends PersistentProxyObjectFactory
 {
     private static array $datas = [
-        ['label' => 'security.user.status.enabled', 'reference' => UserStatus::STATUS_ENABLED, ],
-        ['label' => 'security.user.status.disabled', 'reference' => UserStatus::STATUS_DISABLED, ],
-        ['label' => 'security.user.status.locked', 'reference' => UserStatus::STATUS_LOCKED],
-        ['label' => 'security.user.status.to_delete', 'reference' => UserStatus::STATUS_TO_DELETE],
+        ['label' => 'security.user.status.enabled', 'reference' => UserStatusReference::STATUS_ENABLED->value, ],
+        ['label' => 'security.user.status.disabled', 'reference' => UserStatusReference::STATUS_DISABLED->value, ],
+        ['label' => 'security.user.status.locked', 'reference' => UserStatusReference::STATUS_LOCKED->value],
+        ['label' => 'security.user.status.to_delete', 'reference' => UserStatusReference::STATUS_TO_DELETE->value],
     ];
 
     protected function defaults(): array|callable

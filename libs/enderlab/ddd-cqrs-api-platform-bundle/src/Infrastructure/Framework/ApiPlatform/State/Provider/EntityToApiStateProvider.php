@@ -12,6 +12,7 @@ use ApiPlatform\State\ProviderInterface;
 use ArrayIterator;
 use Exception;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 readonly class EntityToApiStateProvider implements ProviderInterface
@@ -21,7 +22,7 @@ readonly class EntityToApiStateProvider implements ProviderInterface
         private ProviderInterface $collectionProvider,
         #[Autowire(service: ItemProvider::class)]
         private ProviderInterface $itemProvider,
-        private MicroMapperInterface $microMapper,
+        private ObjectMapperInterface $objectMapper,
     ) {
     }
 
@@ -38,9 +39,7 @@ readonly class EntityToApiStateProvider implements ProviderInterface
             $dtos = [];
 
             foreach ($entities as $entity) {
-                $dtos[] = $this->microMapper->map($entity, $resourceClass, [
-                    MicroMapperInterface::MAX_DEPTH => 0
-                ]);
+                $dtos[] = $this->objectMapper->map($entity, $resourceClass);
             }
 
             return new TraversablePaginator(
@@ -57,8 +56,6 @@ readonly class EntityToApiStateProvider implements ProviderInterface
             return null;
         }
 
-        return $this->microMapper->map($entity, $resourceClass, [
-            MicroMapperInterface::MAX_DEPTH => 0
-        ]);
+        return $this->objectMapper->map($entity, $resourceClass);
     }
 }

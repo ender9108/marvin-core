@@ -10,6 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
 use EnderLab\DddCqrsBundle\Infrastructure\Persistence\Doctrine\ORM\PaginatorOrm;
 use Marvin\Security\Domain\Exception\UserNotFound;
+use Marvin\Security\Domain\List\UserStatusReference;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Model\UserStatus;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
@@ -62,7 +63,7 @@ final class UserOrmRepository extends ServiceEntityRepository implements UserRep
             ->where('u.id != :id')
             ->setParameter('id', $user->id)
             ->andWhere('s.reference = :reference')
-            ->setParameter('reference', new Reference(UserStatus::STATUS_ENABLED))
+            ->setParameter('reference', new Reference(UserStatusReference::STATUS_ENABLED->value))
             ->andWhere('t = :type')
             ->setParameter('type', $user->type)
             ->getQuery()

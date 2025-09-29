@@ -4,8 +4,8 @@ namespace Marvin\Security\Application\CommandHandler\User;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Security\Application\Command\User\DisableUser;
+use Marvin\Security\Domain\List\UserStatusReference;
 use Marvin\Security\Domain\Model\User;
-use Marvin\Security\Domain\Model\UserStatus;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Marvin\Security\Domain\Repository\UserStatusRepositoryInterface;
 use Marvin\Security\Domain\Service\BeforeDeleteOrUpdateStatusUserVerifier;
@@ -28,7 +28,7 @@ final readonly class DisableUserHandler implements SyncCommandHandlerInterface
         $this->beforeDeleteOrUpdateStatusUserVerifier->verify($user);
         $disableStatus = $this
             ->userStatusRepository
-            ->byReference(new Reference(UserStatus::STATUS_DISABLED))
+            ->byReference(new Reference(UserStatusReference::STATUS_DISABLED->value))
         ;
         $user->disableUser($disableStatus);
         $this->userRepository->save($user);

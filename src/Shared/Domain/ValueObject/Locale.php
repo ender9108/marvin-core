@@ -9,15 +9,14 @@ use Stringable;
 
 final readonly class Locale implements ValueObjectInterface, Stringable
 {
-    private const int MIN = 2;
-    private const int MAX = 2;
+    private const int LENGTH = 2;
 
     public string $value;
 
-    public function __construct(string $locale = Application::APP_AVAILABLE_LOCALES[0])
+    public function __construct(string $locale = Application::APP_DEFAULT_LOCALE)
     {
         Assert::notEmpty($locale);
-        Assert::lengthBetween($locale, self::MIN, self::MAX);
+        Assert::length($locale, self::LENGTH);
         Assert::inArray($locale, Application::APP_AVAILABLE_LOCALES);
 
         $this->value = $locale;

@@ -4,8 +4,8 @@ namespace Marvin\Security\Application\CommandHandler\User;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Security\Application\Command\User\EnableUser;
+use Marvin\Security\Domain\List\UserStatusReference;
 use Marvin\Security\Domain\Model\User;
-use Marvin\Security\Domain\Model\UserStatus;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Marvin\Security\Domain\Repository\UserStatusRepositoryInterface;
 use Marvin\Shared\Domain\ValueObject\Reference;
@@ -25,7 +25,7 @@ final readonly class EnableUserHandler implements SyncCommandHandlerInterface
         $user = $this->userRepository->byId($command->id);
         $enableStatus = $this
             ->userStatusRepository
-            ->byReference(new Reference(UserStatus::STATUS_ENABLED))
+            ->byReference(new Reference(UserStatusReference::STATUS_ENABLED->value))
         ;
 
         $user->enableUser($enableStatus);
