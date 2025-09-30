@@ -2,7 +2,7 @@
 
 namespace Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Story;
 
-use Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory\UserFactory;
+use Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory\DockerFactory;
 use Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory\UserStatusFactory;
 use Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory\UserTypeFactory;
 use Zenstruck\Foundry\Story;
@@ -35,12 +35,12 @@ class SecurityStory extends Story
 
     private function createUser(): void
     {
-        foreach (UserFactory::getDatas() as $data) {
+        foreach (DockerFactory::getDatas() as $data) {
             $data = array_merge($data, [
                 'status' => $this->statuses[$data['status']],
                 'type' => $this->types[$data['type']],
             ]);
-            UserFactory::createOne($data);
+            DockerFactory::createOne($data);
         }
     }
 }

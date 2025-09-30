@@ -9,7 +9,7 @@ use Marvin\Security\Domain\List\Role;
 use Override;
 use Stringable;
 
-readonly class Roles implements ValueObjectInterface, Stringable
+final readonly class Roles implements ValueObjectInterface, Stringable
 {
     private array $value;
 

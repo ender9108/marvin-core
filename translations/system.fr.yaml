@@ -1,0 +1,7 @@
+security:
+    exceptions:
+        docker_not_found: Docker introuvable.
+        docker_not_found_with_id: Docker introuvable avec l'id "%id%".
+        docker_command_not_found: Commande docker introuvable.
+        docker_command_not_found_with_id: Commande docker introuvable avec l'id "%id%".
+            

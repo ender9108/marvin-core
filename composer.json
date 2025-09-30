@@ -156,7 +156,7 @@
         "symfony/web-profiler-bundle": "7.3.*",
         "symplify/easy-coding-standard": "^12.6",
         "zenstruck/browser": "^1.9",
-        "zenstruck/foundry": "^2.2"
+        "zenstruck/foundry": "^2.7"
     },
     "repositories": []
 }

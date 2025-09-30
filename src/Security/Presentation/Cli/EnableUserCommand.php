@@ -5,6 +5,7 @@ namespace Marvin\Security\Presentation\Cli;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use Marvin\Security\Application\Command\User\DisableUser;
+use Marvin\Security\Application\Command\User\EnableUser;
 use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use Marvin\Shared\Infrastructure\Framework\Symfony\Service\ExceptionMessageManager;
 use Symfony\Component\Console\Attribute\Argument;
@@ -13,10 +14,10 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'marvin:security:disable-user',
-    description: 'Disable a user',
+    name: 'marvin:security:enable-user',
+    description: 'Enable a user',
 )]
-final readonly class DisableUserCommand
+final readonly class EnableUserCommand
 {
     public function __construct(
         private SyncCommandBusInterface $commandBus,
@@ -30,9 +31,9 @@ final readonly class DisableUserCommand
         string $id,
     ): int {
         try {
-            $this->commandBus->handle(new DisableUser(new UserId($id)));
+            $this->commandBus->handle(new EnableUser(new UserId($id)));
 
-            $io->success('User disabled successfully.');
+            $io->success('User enabled successfully.');
 
             return Command::SUCCESS;
         } catch (DomainException $de) {
