@@ -35,5 +35,6 @@
     </listeners>
 
     <extensions>
+        <extension class="Zenstruck\Browser\Test\BrowserExtension" />
     </extensions>
 </phpunit>

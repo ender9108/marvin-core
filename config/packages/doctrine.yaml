@@ -16,6 +16,8 @@ doctrine:
             user_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserIdType
             user_status_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserStatusIdType
             user_type_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserTypeIdType
+            docker_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\DockerIdType
+            docker_command_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\DockerCommandIdType
     orm:
         auto_generate_proxy_classes: true
         enable_native_lazy_objects: true
@@ -41,11 +43,11 @@ doctrine:
                 dir: '%kernel.project_dir%/config/doctrine/ORM/Security'
                 prefix: 'Marvin\Security\Domain'
                 is_bundle: false
-            #System:
-            #    type: attribute
-            #    is_bundle: false
-            #    dir: '%kernel.project_dir%/src/System/Domain'
-            #    prefix: 'Marvin\System\Domain'
+            Marvin\System:
+                type: xml
+                dir: '%kernel.project_dir%/config/doctrine/ORM/System'
+                prefix: 'Marvin\System\Domain'
+                is_bundle: false
         controller_resolver:
             auto_mapping: false
 when@test:

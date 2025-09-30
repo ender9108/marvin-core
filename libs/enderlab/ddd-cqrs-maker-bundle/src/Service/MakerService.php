@@ -537,7 +537,7 @@ class MakerService
         }
 
         $domainPath = $this->rootPath . $domainName;
-        $rootNamespace = $this->parameters->get('maker.root_namespace');
+        $rootNamespace = $this->parameters->get('ddd_cqrs.root_namespace');
 
         mkdir($domainPath);
         $this->io->success(sprintf('Folder "%s" created.', $domainName));

@@ -7,7 +7,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Story\SystemStory;
 
-class SecurityFixtures extends Fixture implements OrderedFixtureInterface
+class SystemFixtures extends Fixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {

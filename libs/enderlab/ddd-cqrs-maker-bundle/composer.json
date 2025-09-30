@@ -13,5 +13,8 @@
         "psr-4": {
             "EnderLab\\DddCqrsMakerBundle\\Tests\\": "tests/"
         }
+    },
+    "require-dev": {
+        "symfony/maker-bundle": "^1.0"
     }
 }

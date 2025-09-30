@@ -7,6 +7,7 @@ use EnderLab\MarvinManagerBundle\System\Infrastructure\Framework\Symfony\Messeng
 use EnderLab\MarvinManagerBundle\System\Infrastructure\Framework\Symfony\Messenger\ManagerResponseCommand;
 use Exception;
 use Psr\Cache\InvalidArgumentException;
+use ReflectionClass;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Messenger\Envelope;
@@ -130,7 +131,7 @@ class ManagerSerializer implements SerializerInterface
             $mapping = [];
 
             foreach ($handlersByType as $handler) {
-                $reflectionClass = new \ReflectionClass($handler);
+                $reflectionClass = new ReflectionClass($handler);
                 $attributes = $reflectionClass->getAttributes(name: AsMessageType::class);
 
                 if (count($attributes) === 1) {
@@ -148,7 +149,7 @@ class ManagerSerializer implements SerializerInterface
 
     private function getBindingTypeMessage(ManagerResponseCommand|ManagerRequestCommand $message): ?string
     {
-        $reflectionClass = new \ReflectionClass($message);
+        $reflectionClass = new ReflectionClass($message);
         $attributes = $reflectionClass->getAttributes(name: AsMessageType::class);
 
         if (count($attributes) === 1) {
