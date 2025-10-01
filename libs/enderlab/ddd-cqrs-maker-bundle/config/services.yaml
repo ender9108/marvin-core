@@ -10,3 +10,13 @@ services:
     EnderLab\DddCqrsMakerBundle\:
         resource: '../src/'
 
+    EnderLab\DddCqrsMakerBundle\Maker\MakeBoundedContext:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+        tags: ['maker.command']
+
+    EnderLab\DddCqrsMakerBundle\Maker\MakeModel:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+        tags: ['maker.command']
+
