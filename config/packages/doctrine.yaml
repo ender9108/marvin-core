@@ -29,11 +29,6 @@ doctrine:
             Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
         auto_mapping: true
         mappings:
-            #Domotic:
-            #    type: attribute
-            #    is_bundle: false
-            #    dir: '%kernel.project_dir%/src/Domotic/Domain'
-            #    prefix: 'Marvin\Domotic\Domain'
             Marvin\Shared:
                 type: xml
                 dir: '%kernel.project_dir%/config/doctrine/ORM/Shared'
