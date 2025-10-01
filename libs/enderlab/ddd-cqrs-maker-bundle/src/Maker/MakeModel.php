@@ -230,7 +230,7 @@ final class MakeModel extends AbstractMaker
                 $ctorInits[] = sprintf('        __DOLLAR__this->%s = new ArrayCollection();', $f['name']);
             } else {
                 $phpType = $this->phpTypeFor($type);
-                $ctorParams[] = sprintf('        private(set) %s __DOLLAR__%s,', $phpType, $f['name']);
+                $ctorParams[] = sprintf('private(set) %s __DOLLAR__%s,', $phpType, $f['name']);
             }
         }
         if (!empty($ctorParams)) {
@@ -250,7 +250,7 @@ final class MakeModel extends AbstractMaker
             sprintf('        __DOLLAR__this->id = new %sId();', $modelNorm),
         ], $ctorInits);
 
-        $modelCode = sprintf("<?php\n\nnamespace Marvin\\%s\\Domain\\Model;\n\n%s\nfinal class %s\n{\n%s\n\n    public function __construct(\n%s\n    ) {\n%s\n    }\n}\n", $bcNorm, $useCode, $modelNorm, $this->indentLines($props), $this->indentLines($ctorParams), implode("\n", $ctorBodyLines));
+        $modelCode = sprintf("<?php\n\nnamespace Marvin\\%s\\Domain\\Model;\n\n%s\nfinal class %s\n{\n%s\n\n    public function __construct(\n%s\n) {\n%s\n}\n}\n", $bcNorm, $useCode, $modelNorm, $this->indentLines($props), $this->indentLines($ctorParams), implode("\n", $ctorBodyLines));
 
         // Build interface
         $interfaceCode = sprintf("<?php\n\nnamespace Marvin\\%s\\Domain\\Repository;\n\nuse Marvin\\%s\\Domain\\Model\\%s;\nuse Marvin\\%s\\Domain\\ValueObject\\Identity\\%sId;\n\ninterface %sRepositoryInterface\n{\n    public function save(%s __DOLLAR__model, bool __DOLLAR__flush = true): void;\n\n    public function remove(%s __DOLLAR__model, bool __DOLLAR__flush = true): void;\n\n    public function byId(%sId __DOLLAR__id): %s;\n}\n", $bcNorm, $bcNorm, $modelNorm, $bcNorm, $modelNorm, $modelNorm, $modelNorm, $modelNorm, $modelNorm, $modelNorm);
@@ -414,7 +414,7 @@ final class MakeModel extends AbstractMaker
         }
 
         $io->success(sprintf('Model %s generated in bounded context %s.', $modelNorm, $bcNorm));
-        $io->writeln(sprintf(' - PHP: %s', $modelPath));
+        $io->writeln(sprintf(' - Model: %s', $modelPath));
         $io->writeln(sprintf(' - Repository interface: %s', $interfacePath));
         $io->writeln(sprintf(' - Doctrine repository: %s', $repoPath));
         $io->writeln(sprintf(' - XML mapping: %s', $xmlPath));
