@@ -16,6 +16,7 @@ doctrine:
             user_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserIdType
             user_status_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserStatusIdType
             user_type_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserTypeIdType
+            request_reset_password_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\RequestResetPasswordIdType
             docker_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\DockerIdType
             docker_command_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\DockerCommandIdType
     orm:

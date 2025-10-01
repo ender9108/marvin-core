@@ -4,12 +4,7 @@ namespace Marvin\Security\Domain\Model;
 
 use DateTimeImmutable;
 use EnderLab\DddCqrsBundle\Domain\Model\AggregateRoot;
-use Marvin\Security\Domain\Event\User\UserCreated;
 use Marvin\Security\Domain\Event\User\UserDeleted;
-use Marvin\Security\Domain\Event\User\UserDisabled;
-use Marvin\Security\Domain\Event\User\UserEmailUpdated;
-use Marvin\Security\Domain\Event\User\UserEnabled;
-use Marvin\Security\Domain\Event\User\UserLocked;
 use Marvin\Security\Domain\Exception\InvalidCurrentPassword;
 use Marvin\Security\Domain\Exception\InvalidSamePassword;
 use Marvin\Security\Domain\Exception\InvalidUserStatus;
@@ -43,7 +38,6 @@ class User extends AggregateRoot
         public readonly CreatedAt $createdAt = new CreatedAt(new DateTimeImmutable())
     ) {
         $this->id = new UserId();
-        //$this->recordThat(new UserCreated($this->id));
     }
 
     public static function create(
@@ -71,7 +65,7 @@ class User extends AggregateRoot
     public function changeEmail(Email $email): self
     {
         $this->email = $email;
-        //$this->recordThat(new UserEmailUpdated($this->id, $email));
+
         return $this;
     }
 
@@ -101,7 +95,6 @@ class User extends AggregateRoot
         }
 
         $this->status = $status;
-        //$this->recordThat(new UserEnabled($this->id));
 
         return $this;
     }
@@ -116,7 +109,6 @@ class User extends AggregateRoot
         }
 
         $this->status = $status;
-        //$this->recordThat(new UserDisabled($this->id));
 
         return $this;
     }
@@ -142,7 +134,6 @@ class User extends AggregateRoot
         }
 
         $this->status = $status;
-        //$this->recordThat(new UserLocked($this->id));
 
         return $this;
     }
@@ -154,7 +145,7 @@ class User extends AggregateRoot
         return $this;
     }
 
-    public function updatePassword(string $currentPassword, string $newPassword, PasswordHasherInterface $passwordHasher): self
+    public function changePassword(string $currentPassword, string $newPassword, PasswordHasherInterface $passwordHasher): self
     {
         if ($this->password === null || !$passwordHasher->verify($this, $currentPassword)) {
             throw new InvalidCurrentPassword();

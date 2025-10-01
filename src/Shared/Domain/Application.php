@@ -13,4 +13,7 @@ final class Application
     public const string APP_DEFAULT_LOCALE = 'fr';
     public const array APP_AVAILABLE_THEMES = ['dark', 'light'];
     public const string APP_DEFAULT_THEME = 'dark';
+
+    public const string APP_EMAIL_FROM = 'app.marvin@marvin.fr';
+    public const string APP_EMAIL_NAME = 'Marvin';
 }

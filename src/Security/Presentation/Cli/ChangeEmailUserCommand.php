@@ -19,7 +19,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     name: 'marvin:security:change-email-user',
     description: 'Change user email',
 )]
-final class ChangeEmailUserCommand
+final readonly class ChangeEmailUserCommand
 {
     public function __construct(
         private SyncCommandBusInterface $commandBus,
@@ -44,7 +44,7 @@ final class ChangeEmailUserCommand
 
             return Command::SUCCESS;
         } catch (DomainException $de) {
-            $io->error($this->exceptionMessageManager->getMessage($de));
+            $io->error($this->exceptionMessageManager->cliResponseFormat($de));
 
             return Command::FAILURE;
         }

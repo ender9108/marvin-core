@@ -71,7 +71,7 @@ final readonly class CreateUserCommand
 
             return Command::SUCCESS;
         } catch (DomainException $de) {
-            $message = $this->exceptionMessageManager->getMessage($de);
+            $message = $this->exceptionMessageManager->cliResponseFormat($de);
             $io->error($message);
 
             return Command::FAILURE;
