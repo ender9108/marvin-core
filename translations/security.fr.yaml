@@ -19,6 +19,8 @@ security:
         last_user_type: Vous ne pouvez pas supprimer le dernier utilisateur de ce type.
         role_not_exist: Le rôle "%role%" n'existe pas.
         invalid_same_password: Vous ne pouvez pas saisir le même mot de passe que le précédent.
+    email:
+        request_change_password_subject: Réinitialisation de votre mot de passe
     user:
         status:
             enabled: Activé

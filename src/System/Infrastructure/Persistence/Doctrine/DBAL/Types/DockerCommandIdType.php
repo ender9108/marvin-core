@@ -9,7 +9,7 @@ final class DockerCommandIdType extends AbstractUidType
     #[\Override]
     public function getName(): string
     {
-        return 'docker_custom_command_id';
+        return 'docker_command_id';
     }
 
     #[\Override]

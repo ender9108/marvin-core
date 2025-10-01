@@ -37,7 +37,7 @@ final readonly class EnableUserCommand
 
             return Command::SUCCESS;
         } catch (DomainException $de) {
-            $io->error($this->exceptionMessageManager->getMessage($de));
+            $io->error($this->exceptionMessageManager->cliResponseFormat($de));
 
             return Command::FAILURE;
         }

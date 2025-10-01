@@ -8,6 +8,7 @@ use Marvin\Security\Application\Command\User\ChangeEmailUser;
 use Marvin\Security\Application\Command\User\ChangePasswordUser;
 use Marvin\Security\Application\Command\User\DisableUser;
 use Marvin\Security\Application\Command\User\EnableUser;
+use Marvin\Security\Application\Command\User\RequestResetPasswordUser;
 use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Infrastructure\Framework\Symfony\Service\ExceptionMessageManager;
@@ -17,10 +18,10 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'marvin:security:change-password-user',
+    name: 'marvin:security:request-reset-password-user',
     description: 'Change user password',
 )]
-final readonly class ChangePasswordUserCommand
+final readonly class RequestResetPasswordUserCommand
 {
     public function __construct(
         private SyncCommandBusInterface $commandBus,
@@ -30,21 +31,13 @@ final readonly class ChangePasswordUserCommand
 
     public function __invoke(
         SymfonyStyle $io,
-        #[Argument(name: 'id')]
-        string $id,
-        #[Argument(name: 'currentPassword')]
-        string $currentPassword,
-        #[Argument(name: 'newPassword')]
-        string $newPassword,
+        #[Argument(name: 'mail')]
+        string $mail,
     ): int {
         try {
-            $this->commandBus->handle(new ChangePasswordUser(
-                new UserId($id),
-                $currentPassword,
-                $newPassword,
-            ));
+            $this->commandBus->handle(new RequestResetPasswordUser(new Email($mail),));
 
-            $io->success('Update user password successfully.');
+            $io->success('Request reset password successfully.');
 
             return Command::SUCCESS;
         } catch (DomainException $de) {

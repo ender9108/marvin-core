@@ -10,7 +10,7 @@ use Marvin\Security\Domain\Service\PasswordHasherInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class ChangeUserPasswordHandler implements SyncCommandHandlerInterface
+final readonly class ChangePasswordUserHandler implements SyncCommandHandlerInterface
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,
@@ -21,7 +21,7 @@ final readonly class ChangeUserPasswordHandler implements SyncCommandHandlerInte
     public function __invoke(ChangePasswordUser $command): User
     {
         $user = $this->userRepository->byId($command->id);
-        $user->updatePassword(
+        $user->changePassword(
             $command->currentPassword,
             $command->newPassword,
             $this->passwordHasher
