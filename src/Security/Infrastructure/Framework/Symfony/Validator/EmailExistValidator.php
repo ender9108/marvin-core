@@ -9,7 +9,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 class EmailExistValidator extends ConstraintValidator
 {
     public function __construct(
-        private UserRepositoryInterface $userRepository,
+        private readonly UserRepositoryInterface $userRepository,
     ) {
     }
 

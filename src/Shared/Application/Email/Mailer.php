@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Shared\Application\Email;
 
 interface Mailer

@@ -12,9 +12,9 @@ final readonly class RequestResetPassword
 {
     public readonly RequestResetPasswordIdType $id;
 
-    private(set) ExpiresAt $expiresAt;
+    public private(set) ExpiresAt $expiresAt;
 
-    private(set) CreatedAt $createdAt;
+    public private(set) CreatedAt $createdAt;
 
     /**
      * @throws DateMalformedStringException

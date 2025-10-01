@@ -15,10 +15,7 @@ final readonly class SubCollectionResourceTransformer implements TransformCallab
 
     public function __invoke(mixed $value, object $source, ?object $target): mixed
     {
-        if (
-            is_array($value) ||
-            $value instanceof Traversable
-        ) {
+        if (is_iterable($value)) {
             $callable = new SubResourceTransformer($this->objectMapper);
 
             foreach ($value as $item) {

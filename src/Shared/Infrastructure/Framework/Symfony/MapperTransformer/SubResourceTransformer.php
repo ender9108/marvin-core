@@ -17,8 +17,7 @@ final readonly class SubResourceTransformer implements TransformCallableInterfac
 {
     public function __construct(
         private ObjectMapperInterface $objectMapper,
-    )
-    {
+    ) {
     }
 
     public function __invoke(mixed $value, object $source, ?object $target): mixed

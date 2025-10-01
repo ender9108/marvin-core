@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\System\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert;
@@ -12,7 +13,8 @@ final readonly class Version implements ValueObjectInterface, Stringable
 
     public string $value;
 
-    public function __construct(string $version) {
+    public function __construct(string $version)
+    {
         Assert::notEmpty($version);
         Assert::lengthBetween($version, self::MIN, self::MAX);
 

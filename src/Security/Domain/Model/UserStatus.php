@@ -10,7 +10,7 @@ use Marvin\Shared\Domain\ValueObject\Reference;
 
 class UserStatus
 {
-    private(set) UserStatusId $id;
+    public private(set) UserStatusId $id;
 
     public function __construct(
         public readonly Label $label,

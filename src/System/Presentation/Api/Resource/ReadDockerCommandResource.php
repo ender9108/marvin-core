@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\System\Presentation\Api\Resource;
 
 use ApiPlatform\Doctrine\Orm\State\Options;
