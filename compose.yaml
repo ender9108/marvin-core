@@ -66,7 +66,7 @@ services:
             POSTGRES_USER: ${DB_USER:-test}
             POSTGRES_PASSWORD: ${DB_PASSWORD:-test}
         ports:
-            - '5432:5432'
+            - '127.0.0.1:5432:5432'
         volumes:
             - ./docker/database/volume/data:/var/lib/postgresql/data
         healthcheck:
@@ -85,8 +85,8 @@ services:
             RABBITMQ_MQTT_USER: '${RABBITMQ_MQTT_USER:-marvin}'
             RABBITMQ_MQTT_PASSWORD: '${RABBITMQ_MQTT_PASSWORD:-PasswordChangeMe!}'
         ports:
-            - '15672:15672'
-            - '5672:5672'
+            - '127.0.0.1:15672:15672'
+            - '127.0.0.1:5672:5672'
         volumes:
             - ./docker/rabbitmq/config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
             - ./docker/rabbitmq/config/definitions.json:/etc/rabbitmq/definitions.json
@@ -106,5 +106,5 @@ services:
             - ./docker/mqtt_broker/volume/data:/mosquitto/data
             - ./docker/mqtt_broker/volume/log:/mosquitto/log
         ports:
-            - "1883:1883"
-            - "9002:9001"
+            - "127.0.0.1:1883:1883"
+            - "127.0.0.1:9002:9001"
