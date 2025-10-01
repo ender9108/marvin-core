@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types;
 
 use Marvin\System\Domain\ValueObject\Identity\DockerCommandId;

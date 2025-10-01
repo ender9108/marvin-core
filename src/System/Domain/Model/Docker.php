@@ -1,10 +1,11 @@
 <?php
+
 namespace Marvin\System\Domain\Model;
 
 use DateTimeImmutable;
-use EnderLab\DddCqrsBundle\Domain\Model\AggregateRoot;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use EnderLab\DddCqrsBundle\Domain\Model\AggregateRoot;
 use Marvin\Shared\Domain\ValueObject\CreatedAt;
 use Marvin\Shared\Domain\ValueObject\UpdatedAt;
 use Marvin\System\Domain\ValueObject\Identity\DockerId;

@@ -21,6 +21,5 @@ final readonly class ResetPasswordUserHandler implements SyncCommandHandlerInter
 
     public function __invoke(ChangePasswordUser $command): void
     {
-
     }
 }

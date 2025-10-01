@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Security\Infrastructure\Persistence\Doctrine\ORM;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

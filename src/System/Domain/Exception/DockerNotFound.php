@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\System\Domain\Exception;
 
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;

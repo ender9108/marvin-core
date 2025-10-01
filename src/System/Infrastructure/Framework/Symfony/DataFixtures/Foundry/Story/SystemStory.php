@@ -13,6 +13,5 @@ class SystemStory extends Story
 
     public function buildDockers(): void
     {
-
     }
 }

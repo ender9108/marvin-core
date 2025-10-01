@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\Shared\Infrastructure\Framework\Symfony\Mailer;
 
 use Marvin\Shared\Application\Email\EmailDefinition;

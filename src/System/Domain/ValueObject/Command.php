@@ -1,4 +1,5 @@
 <?php
+
 namespace Marvin\System\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert;
@@ -9,7 +10,8 @@ final readonly class Command implements ValueObjectInterface, Stringable
 {
     public string $value;
 
-    public function __construct(string $command) {
+    public function __construct(string $command)
+    {
         Assert::notEmpty($command);
 
         $this->value = $command;

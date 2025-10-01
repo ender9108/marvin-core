@@ -35,7 +35,7 @@ final readonly class RequestResetPasswordUserCommand
         string $mail,
     ): int {
         try {
-            $this->commandBus->handle(new RequestResetPasswordUser(new Email($mail),));
+            $this->commandBus->handle(new RequestResetPasswordUser(new Email($mail), ));
 
             $io->success('Request reset password successfully.');
 

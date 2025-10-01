@@ -6,5 +6,4 @@ use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 
 interface DatetimeValueObjectInterface extends ValueObjectInterface
 {
-
 }
