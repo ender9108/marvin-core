@@ -19,6 +19,8 @@ doctrine:
             request_reset_password_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\RequestResetPasswordIdType
             docker_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\DockerIdType
             docker_command_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\DockerCommandIdType
+            plugin_status_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\PluginStatusIdType
+            plugin_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\PluginIdType
     orm:
         auto_generate_proxy_classes: true
         enable_native_lazy_objects: true

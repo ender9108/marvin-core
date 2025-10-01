@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity
+        name="Marvin\System\Domain\Model\PluginStatus"
+        repository-class="Marvin\System\Infrastructure\Persistence\Doctrine\ORM\PluginStatusOrmRepository"
+        table="system_plugin_status"
+    >
+        <id name="id" type="plugin_status_id">
+            <generator strategy="NONE" />
+        </id>
+
+        <embedded name="label" class="Marvin\Shared\Domain\ValueObject\Label" />
+        <embedded name="reference" class="Marvin\Shared\Domain\ValueObject\Reference" />
+    </entity>
+</doctrine-mapping>

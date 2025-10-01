@@ -9,7 +9,7 @@ use Marvin\Shared\Domain\ValueObject\CreatedAt;
 use Marvin\Shared\Domain\ValueObject\UpdatedAt;
 use Marvin\System\Domain\ValueObject\Identity\DockerId;
 
-class Docker extends AggregateRoot
+final class Docker extends AggregateRoot
 {
     public readonly DockerId $id;
 
@@ -23,8 +23,8 @@ class Docker extends AggregateRoot
         private(set) ?string $containerStatus,
         private(set) ?string $containerProject,
         private(set) array $definition = [],
-        private(set) UpdatedAt $updatedAt,
-        private(set) CreatedAt $createdAt = new CreatedAt(new DateTimeImmutable())
+        private(set) ?UpdatedAt $updatedAt = null,
+        public readonly CreatedAt $createdAt = new CreatedAt(new DateTimeImmutable())
     ) {
         $this->id = new DockerId();
         $this->dockerCommands = new ArrayCollection();
@@ -65,7 +65,6 @@ class Docker extends AggregateRoot
     public function removeDockerCommand(DockerCommand $dockerCommand): static
     {
         if ($this->dockerCommands->removeElement($dockerCommand)) {
-            // set the owning side to null (unless already changed)
             if ($dockerCommand->docker === $this) {
                 $dockerCommand->docker = null;
             }

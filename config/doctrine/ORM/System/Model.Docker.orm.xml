@@ -20,7 +20,7 @@
         <field name="containerProject" type="string" length="255" nullable="true" />
         <field name="definition" type="json" />
 
-        <one-to-many field="dockerCommands" target-entity="Marvin\System\Domain\Model\DockerCommand" mapped-by="docker" orphan-removal="true" fetch="LAZY">
+        <one-to-many field="dockerCommands" target-entity="Marvin\System\Domain\Model\DockerCommand" mapped-by="docker">
             <cascade>
                 <cascade-persist />
                 <cascade-remove />

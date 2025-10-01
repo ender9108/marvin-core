@@ -1,0 +1,50 @@
+<?php
+
+namespace Marvin\System\Infrastructure\Persistence\Doctrine\ORM;
+
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use Marvin\System\Domain\Exception\PluginNotFound;
+use Marvin\System\Domain\Model\Plugin;
+use Marvin\System\Domain\Repository\PluginRepositoryInterface;
+use Marvin\System\Domain\ValueObject\Identity\PluginId;
+use Override;
+
+/**
+ * @extends ServiceEntityRepository<Plugin>
+ */
+final class PluginOrmRepository extends ServiceEntityRepository implements PluginRepositoryInterface
+{
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Plugin::class);
+    }
+
+    #[Override]
+    public function save(Plugin $model, bool $flush = true): void
+    {
+        $this->getEntityManager()->persist($model);
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    #[Override]
+    public function remove(Plugin $model, bool $flush = true): void
+    {
+        $this->getEntityManager()->remove($model);
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    #[Override]
+    public function byId(PluginId $id): Plugin
+    {
+        $entity = $this->findOneBy(['id' => $id]);
+        if (null === $entity) {
+            throw PluginNotFound::withId($id);
+        }
+        return $entity;
+    }
+}

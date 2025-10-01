@@ -1,5 +1,9 @@
 security:
     exceptions:
+        plugin_not_found: Plugin introuvable.
+        plugin_not_found_with_id: Plugin introuvable avec l'id "%id%".
+        pluginstatus_not_found: PluginStatus introuvable.
+        pluginstatus_not_found_with_id: PluginStatus introuvable avec l'id "%id%".
         docker_not_found: Docker introuvable.
         docker_not_found_with_id: Docker introuvable avec l'id "%id%".
         docker_command_not_found: Commande docker introuvable.
