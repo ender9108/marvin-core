@@ -10,7 +10,7 @@ use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Marvin\Security\Domain\Repository\UserStatusRepositoryInterface;
 use Marvin\Security\Domain\Repository\UserTypeRepositoryInterface;
 use Marvin\Security\Domain\Service\PasswordHasherInterface;
-use Marvin\Security\Domain\Service\UniqueEmailVerifier;
+use Marvin\Security\Domain\Service\UniqueEmailVerifierInterface;
 use Marvin\Shared\Domain\ValueObject\Reference;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -22,7 +22,7 @@ final readonly class CreateUserHandler implements SyncCommandHandlerInterface
         private UserStatusRepositoryInterface $userStatusRepository,
         private UserTypeRepositoryInterface $userTypeRepository,
         private PasswordHasherInterface $passwordHasher,
-        private UniqueEmailVerifier $uniqueEmailVerifier
+        private UniqueEmailVerifierInterface $uniqueEmailVerifier
     ) {
     }
 

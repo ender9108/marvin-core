@@ -8,7 +8,7 @@ use Marvin\Security\Domain\ValueObject\Identity\RequestResetPasswordIdType;
 use Marvin\Shared\Domain\ValueObject\CreatedAt;
 use Marvin\Shared\Domain\ValueObject\ExpiresAt;
 
-final readonly class RequestResetPassword
+class RequestResetPassword
 {
     public readonly RequestResetPasswordIdType $id;
 
