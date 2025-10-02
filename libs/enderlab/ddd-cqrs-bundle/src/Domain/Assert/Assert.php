@@ -69,22 +69,6 @@ class Assert
 
     /**
      * @psalm-pure
-     * @psalm-assert numeric $value
-     *
-     * @throws InvalidArgument
-     */
-    public static function integerish(mixed $value, string $message = ''): void
-    {
-        if (!\is_numeric($value) || $value != (int) $value) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected an integerish value. Got: %s',
-                static::typeToString($value)
-            ));
-        }
-    }
-
-    /**
-     * @psalm-pure
      * @psalm-assert positive-int $value
      *
      * @param mixed  $value
@@ -92,13 +76,13 @@ class Assert
      *
      * @throws InvalidArgument
      */
-    public static function positiveInteger($value, $message = '')
+    public static function positiveInteger(mixed $value, string $message = ''): void
     {
         if (!(\is_int($value) && $value > 0)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected a positive integer. Got: %s',
-                static::valueToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_positive_int',
+                ['%value%' => static::typeToString($value)]
+            );
         }
     }
 
@@ -111,13 +95,13 @@ class Assert
      *
      * @throws InvalidArgument
      */
-    public static function float($value, $message = '')
+    public static function float(mixed $value, string $message = ''): void
     {
         if (!\is_float($value)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected a float. Got: %s',
-                static::typeToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_float',
+                ['%value%' => static::typeToString($value)]
+            );
         }
     }
 
@@ -130,13 +114,13 @@ class Assert
      *
      * @throws InvalidArgument
      */
-    public static function numeric($value, $message = '')
+    public static function numeric(mixed $value, string $message = ''): void
     {
         if (!\is_numeric($value)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected a numeric. Got: %s',
-                static::typeToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_numeric',
+                ['%value%' => static::typeToString($value)]
+            );
         }
     }
 
@@ -149,13 +133,13 @@ class Assert
      *
      * @throws InvalidArgument
      */
-    public static function natural($value, $message = '')
+    public static function natural(mixed $value, string $message = ''): void
     {
         if (!\is_int($value) || $value < 0) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected a non-negative integer. Got: %s',
-                static::valueToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_natural',
+                ['%value%' => static::typeToString($value)]
+            );
         }
     }
 
@@ -168,13 +152,13 @@ class Assert
      *
      * @throws InvalidArgument
      */
-    public static function boolean($value, $message = '')
+    public static function boolean(mixed $value, string $message = ''): void
     {
         if (!\is_bool($value)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected a boolean. Got: %s',
-                static::typeToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_boolean',
+                ['%value%' => static::typeToString($value)]
+            );
         }
     }
 
@@ -187,13 +171,13 @@ class Assert
      *
      * @throws InvalidArgument
      */
-    public static function scalar($value, $message = '')
+    public static function scalar(mixed $value, string $message = ''): void
     {
         if (!\is_scalar($value)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected a scalar. Got: %s',
-                static::typeToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_scalar',
+                ['%value%' => static::typeToString($value)]
+            );
         }
     }
 
@@ -206,13 +190,13 @@ class Assert
      *
      * @throws InvalidArgument
      */
-    public static function object($value, $message = '')
+    public static function object(mixed $value, string $message = ''): void
     {
         if (!\is_object($value)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected an object. Got: %s',
-                static::typeToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_object',
+                ['%value%' => static::typeToString($value)]
+            );
         }
     }
 
@@ -222,25 +206,27 @@ class Assert
      *
      * @param mixed       $value
      * @param string|null $type    type of resource this should be. @see https://www.php.net/manual/en/function.get-resource-type.php
-     * @param string      $message
+     * @param string $message
      *
      * @throws InvalidArgument
      */
-    public static function resource($value, $type = null, $message = '')
+    public static function resource(mixed $value, ?string $type = null, string $message = ''): void
     {
         if (!\is_resource($value)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected a resource. Got: %s',
-                static::typeToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_resource',
+                ['%value%' => static::typeToString($value)]
+            );
         }
 
         if ($type && $type !== \get_resource_type($value)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected a resource of type %2$s. Got: %s',
-                static::typeToString($value),
-                $type
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_resource_type',
+                [
+                    '%value%' => static::typeToString($value),
+                    '%type%'  => $type,
+                ]
+            );
         }
     }
 
@@ -253,13 +239,13 @@ class Assert
      *
      * @throws InvalidArgument
      */
-    public static function isCallable($value, $message = '')
+    public static function isCallable(mixed $value, string $message = ''): void
     {
         if (!\is_callable($value)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected a callable. Got: %s',
-                static::typeToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_callable',
+                ['%value%' => static::typeToString($value)]
+            );
         }
     }
 
@@ -272,42 +258,13 @@ class Assert
      *
      * @throws InvalidArgument
      */
-    public static function isArray($value, $message = '')
+    public static function isArray(mixed $value, string $message = ''): void
     {
         if (!\is_array($value)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected an array. Got: %s',
-                static::typeToString($value)
-            ));
-        }
-    }
-
-    /**
-     * @psalm-pure
-     * @psalm-assert iterable $value
-     *
-     * @deprecated use "isIterable" or "isInstanceOf" instead
-     *
-     * @param mixed  $value
-     * @param string $message
-     *
-     * @throws InvalidArgument
-     */
-    public static function isTraversable($value, $message = '')
-    {
-        @\trigger_error(
-            \sprintf(
-                'The "%s" assertion is deprecated. You should stop using it, as it will soon be removed in 2.0 version. Use "isIterable" or "isInstanceOf" instead.',
-                __METHOD__
-            ),
-            \E_USER_DEPRECATED
-        );
-
-        if (!\is_array($value) && !($value instanceof Traversable)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected a traversable. Got: %s',
-                static::typeToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_array',
+                ['%value%' => static::typeToString($value)]
+            );
         }
     }
 
@@ -320,13 +277,13 @@ class Assert
      *
      * @throws InvalidArgument
      */
-    public static function isArrayAccessible($value, $message = '')
+    public static function isArrayAccessible(mixed $value, string $message = ''): void
     {
         if (!\is_array($value) && !($value instanceof ArrayAccess)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected an array accessible. Got: %s',
-                static::typeToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_array_access',
+                ['%value%' => static::typeToString($value)]
+            );
         }
     }
 
@@ -339,7 +296,7 @@ class Assert
      *
      * @throws InvalidArgument
      */
-    public static function isCountable($value, $message = '')
+    public static function isCountable(mixed $value, string $message = ''): void
     {
         if (
             !\is_array($value)
@@ -347,10 +304,10 @@ class Assert
             && !($value instanceof ResourceBundle)
             && !($value instanceof SimpleXMLElement)
         ) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected a countable. Got: %s',
-                static::typeToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_countable',
+                ['%value%' => static::typeToString($value)]
+            );
         }
     }
 
@@ -363,13 +320,13 @@ class Assert
      *
      * @throws InvalidArgument
      */
-    public static function isIterable($value, $message = '')
+    public static function isIterable(mixed $value, string $message = ''): void
     {
         if (!\is_array($value) && !($value instanceof Traversable)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected an iterable. Got: %s',
-                static::typeToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_iterable',
+                ['%value%' => static::typeToString($value)]
+            );
         }
     }
 
@@ -380,19 +337,21 @@ class Assert
      * @psalm-assert ExpectedType $value
      *
      * @param mixed         $value
-     * @param string|object $class
-     * @param string        $message
+     * @param object|string $class
+     * @param string $message
      *
      * @throws InvalidArgument
      */
-    public static function isInstanceOf($value, $class, $message = '')
+    public static function isInstanceOf(mixed $value, object|string $class, string $message = ''): void
     {
         if (!($value instanceof $class)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected an instance of %2$s. Got: %s',
-                static::typeToString($value),
-                $class
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_instance_of',
+                [
+                    '%value%' => static::typeToString($value),
+                    '%class%' => $class,
+                ]
+            );
         }
     }
 
@@ -403,19 +362,21 @@ class Assert
      * @psalm-assert !ExpectedType $value
      *
      * @param mixed         $value
-     * @param string|object $class
-     * @param string        $message
+     * @param object|string $class
+     * @param string $message
      *
      * @throws InvalidArgument
      */
-    public static function notInstanceOf($value, $class, $message = '')
+    public static function notInstanceOf(mixed $value, object|string $class, string $message = ''): void
     {
         if ($value instanceof $class) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'Expected an instance other than %2$s. Got: %s',
-                static::typeToString($value),
-                $class
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_not_instance_of',
+                [
+                    '%value%' => static::typeToString($value),
+                    '%class%' => $class,
+                ]
+            );
         }
     }
 
@@ -425,11 +386,11 @@ class Assert
      *
      * @param mixed                $value
      * @param array<object|string> $classes
-     * @param string               $message
+     * @param string $message
      *
      * @throws InvalidArgument
      */
-    public static function isInstanceOfAny($value, array $classes, $message = '')
+    public static function isInstanceOfAny(mixed $value, array $classes, string $message = ''): void
     {
         foreach ($classes as $class) {
             if ($value instanceof $class) {
@@ -437,11 +398,13 @@ class Assert
             }
         }
 
-        static::reportInvalidArgument(\sprintf(
-            $message ?: 'Expected an instance of any of %2$s. Got: %s',
-            static::typeToString($value),
-            \implode(', ', \array_map(array(static::class, 'valueToString'), $classes))
-        ));
+        static::reportInvalidArgument(
+            $message ?: 'assert.expected_is_instance_of_any',
+            [
+                '%value%' => static::typeToString($value),
+                '%classes%' => \implode(', ', \array_map(array(static::class, 'valueToString'), $classes))
+            ]
+        );
     }
 
     /**
@@ -451,21 +414,23 @@ class Assert
      * @psalm-assert ExpectedType|class-string<ExpectedType> $value
      *
      * @param object|string $value
-     * @param string        $class
-     * @param string        $message
+     * @param string $class
+     * @param string $message
      *
      * @throws InvalidArgument
      */
-    public static function isAOf($value, $class, $message = '')
+    public static function isAOf(object|string $value, string $class, string $message = ''): void
     {
         static::string($class, 'Expected class as a string. Got: %s');
 
         if (!\is_a($value, $class, \is_string($value))) {
-            static::reportInvalidArgument(sprintf(
-                $message ?: 'Expected an instance of this class or to this class among its parents "%2$s". Got: %s',
-                static::valueToString($value),
-                $class
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_is_a_of',
+                [
+                    '%value%' => static::typeToString($value),
+                    '%class%' => $class,
+                ]
+            );
         }
     }
 
@@ -477,12 +442,12 @@ class Assert
      * @psalm-assert !class-string<UnexpectedType> $value
      *
      * @param object|string $value
-     * @param string        $class
-     * @param string        $message
+     * @param string $class
+     * @param string $message
      *
      * @throws InvalidArgument
      */
-    public static function isNotA($value, $class, $message = '')
+    public static function isNotA(object|string $value, string $class, string $message = ''): void
     {
         static::string($class, 'Expected class as a string. Got: %s');
 
