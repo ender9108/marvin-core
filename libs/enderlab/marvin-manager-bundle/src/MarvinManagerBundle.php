@@ -2,11 +2,7 @@
 
 namespace EnderLab\MarvinManagerBundle;
 
-use EnderLab\MarvinManagerBundle\System\Domain\Repository\DockerCustomCommandRepositoryInterface;
-use EnderLab\MarvinManagerBundle\System\Domain\Repository\DockerRepositoryInterface;
-use EnderLab\MarvinManagerBundle\System\Infrastructure\Doctrine\Repository\DoctrineDockerCustomCommandRepository;
-use EnderLab\MarvinManagerBundle\System\Infrastructure\Doctrine\Repository\DoctrineDockerRepository;
-use EnderLab\MarvinManagerBundle\System\Infrastructure\Symfony\Messenger\Attribute\AsMessageType;
+use EnderLab\MarvinManagerBundle\System\Infrastructure\Framework\Symfony\Messenger\Attribute\AsMessageType;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

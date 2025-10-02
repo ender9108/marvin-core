@@ -16,7 +16,7 @@ class SystemFixtures extends Fixture implements OrderedFixtureInterface
 
     public function getOrder(): int
     {
-        return 10;
+        return 20;
     }
 
     public static function getGroups(): array
