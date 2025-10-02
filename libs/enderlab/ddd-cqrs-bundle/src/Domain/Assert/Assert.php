@@ -12,6 +12,7 @@ use Closure;
 use Countable;
 use DateTime;
 use DateTimeImmutable;
+use DateTimeZone;
 use EnderLab\DddCqrsBundle\Domain\Exception\InvalidArgument;
 use Exception;
 use ResourceBundle;
@@ -430,6 +431,16 @@ class Assert
                     '%value%' => static::typeToString($value),
                     '%class%' => $class,
                 ]
+            );
+        }
+    }
+
+    public static function isValidTimezone(string $value, string $message = ''): void
+    {
+        if (!\in_array($value, DateTimeZone::listIdentifiers(), true)) {
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_valid_timezone',
+                ['%value%' => $value]
             );
         }
     }

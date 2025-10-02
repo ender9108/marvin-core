@@ -21,7 +21,10 @@ final readonly class UpdateUserProfileHandler implements SyncCommandHandlerInter
         $user->updateProfile(
             $command->firstname,
             $command->lastname,
-            $command->roles
+            $command->roles,
+            $command->theme,
+            $command->locale,
+            $command->timezone,
         );
         $this->userRepository->save($user);
     }

@@ -25,6 +25,7 @@
             <join-column nullable="false" />
         </many-to-one>
         <field name="password" length="255" />
+        <embedded name="timezone" class="Marvin\Security\Domain\ValueObject\Timezone" />
         <embedded name="createdAt" class="Marvin\Shared\Domain\ValueObject\CreatedAt" />
         <embedded name="updatedAt" class="Marvin\Shared\Domain\ValueObject\UpdatedAt" />
     </entity>
