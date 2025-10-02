@@ -16,6 +16,7 @@
         <embedded name="reference" class="Marvin\Shared\Domain\ValueObject\Reference" />
         <embedded name="description" class="Marvin\Shared\Domain\ValueObject\Description" />
         <embedded name="version" class="Marvin\System\Domain\ValueObject\Version" />
+        <embedded name="metadata" class="Marvin\System\Domain\ValueObject\Metadata" />
         <many-to-one field="status" target-entity="Marvin\System\Domain\Model\PluginStatus">
             <join-column />
         </many-to-one>

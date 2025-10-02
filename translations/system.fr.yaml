@@ -2,10 +2,20 @@ security:
     exceptions:
         plugin_not_found: Plugin introuvable.
         plugin_not_found_with_id: Plugin introuvable avec l'id "%id%".
-        pluginstatus_not_found: PluginStatus introuvable.
-        pluginstatus_not_found_with_id: PluginStatus introuvable avec l'id "%id%".
+        plugin_already_exist: Ce plugin existe déjà.
+        plugin_already_exist_with_reference: Le plugin avec la référence "%reference%" existe déjà
+        plugin_requirement_missing: Dépendance manquante.
+        plugin_requirement_missing_with_references: 'Les dépendances suivantes sont manquantes: %references%.'
+        plugin_installation_method_not_allowed: Vous ne pouvez pas utiliser cette méthode en mode installation.
+        plugin_installation_method_not_allowed_with_method_name: Vous ne pouvez pas utiliser cette méthode "%method_name%" en mode installation.
+        plugin_uninstallation_method_not_allowed: Vous ne pouvez pas utiliser cette méthode en mode désinstallation.
+        plugin_uninstallation_method_not_allowed_with_method_name: Vous ne pouvez pas utiliser cette méthode "%method_name%" en mode désinstallation.
+        plugin_status_not_found: PluginStatus introuvable.
+        plugin_status_not_found_with_id: PluginStatus introuvable avec l'id "%id%".
+        plugin_status_not_found_with_reference: PluginStatus introuvable avec la référence "%reference%".
         docker_not_found: Docker introuvable.
         docker_not_found_with_id: Docker introuvable avec l'id "%id%".
         docker_command_not_found: Commande docker introuvable.
         docker_command_not_found_with_id: Commande docker introuvable avec l'id "%id%".
+        
             

@@ -3,13 +3,11 @@
 namespace Marvin\Security\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\DddCqrsBundle\Domain\Exception\InvalidArgument;
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Marvin\Security\Domain\List\Role;
+use Marvin\Shared\Domain\ValueObject\ArrayValueObjectInterface;
 use Override;
-use Stringable;
 
-final readonly class Roles implements ValueObjectInterface, Stringable
+final readonly class Roles implements ArrayValueObjectInterface
 {
     private array $value;
 
