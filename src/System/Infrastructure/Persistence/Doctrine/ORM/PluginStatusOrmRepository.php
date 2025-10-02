@@ -4,7 +4,7 @@ namespace Marvin\System\Infrastructure\Persistence\Doctrine\ORM;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Marvin\System\Domain\Exception\PluginstatusNotFound;
+use Marvin\System\Domain\Exception\PluginStatusNotFound;
 use Marvin\System\Domain\Model\PluginStatus;
 use Marvin\System\Domain\Repository\PluginStatusRepositoryInterface;
 use Marvin\System\Domain\ValueObject\Identity\PluginStatusId;
@@ -43,7 +43,7 @@ final class PluginStatusOrmRepository extends ServiceEntityRepository implements
     {
         $entity = $this->findOneBy(['id' => $id]);
         if (null === $entity) {
-            throw PluginstatusNotFound::withId($id);
+            throw PluginStatusNotFound::withId($id);
         }
         return $entity;
     }

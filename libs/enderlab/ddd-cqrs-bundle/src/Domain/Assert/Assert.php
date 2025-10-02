@@ -1377,15 +1377,15 @@ class Assert
      *
      * @throws InvalidArgument
      */
-    public static function fileExists($value, $message = '')
+    public static function fileExists(mixed $value, string $message = ''): void
     {
         static::string($value);
 
         if (!\file_exists($value)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'The file %s does not exist.',
-                static::valueToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.file_does_not_exist',
+                ['%value%' => static::valueToString($value)]
+            );
         }
     }
 
@@ -1395,15 +1395,15 @@ class Assert
      *
      * @throws InvalidArgument
      */
-    public static function file($value, $message = '')
+    public static function file(mixed $value, string $message = ''): void
     {
         static::fileExists($value, $message);
 
         if (!\is_file($value)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'The path %s is not a file.',
-                static::valueToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_file',
+                ['%value%' => static::valueToString($value)]
+            );
         }
     }
 
@@ -1413,15 +1413,15 @@ class Assert
      *
      * @throws InvalidArgument
      */
-    public static function directory($value, $message = '')
+    public static function directory(mixed $value, string $message = ''): void
     {
         static::fileExists($value, $message);
 
         if (!\is_dir($value)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'The path %s is no directory.',
-                static::valueToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_directory',
+                ['%value%' => static::valueToString($value)]
+            );
         }
     }
 

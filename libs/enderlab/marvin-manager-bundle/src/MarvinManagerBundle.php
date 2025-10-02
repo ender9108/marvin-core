@@ -3,6 +3,7 @@
 namespace EnderLab\MarvinManagerBundle;
 
 use EnderLab\MarvinManagerBundle\System\Infrastructure\Framework\Symfony\Messenger\Attribute\AsMessageType;
+use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -32,34 +33,49 @@ class MarvinManagerBundle extends AbstractBundle
             $isAutoSetup = true;
         }
 
-        $builder->prependExtensionConfig('framework', [
-            'messenger' => [
-                'transports' => [
-                    'marvin.to.manager' => [
-                        'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
-                        'serializer' => 'EnderLab\\MarvinManagerBundle\\System\\Infrastructure\\Framework\\Symfony\\Messenger\\Serializer\\ManagerSerializer',
-                        'options' => [
-                            'auto_setup' => $isAutoSetup,
-                            'exchange' => [
-                                'name' => 'marvin.to.manager',
-                                'type' => 'direct',
-                                'default_publish_routing_key' => 'marvin.to.manager.request'
-                            ],
-                            'queues' => [
-                                'manager.to.marvin.response' => [
-                                    'binding_keys' => 'manager.to.marvin.response'
-                                ]
+        if ($builder->hasParameter('env(MESSENGER_TRANSPORT_DSN)')) {
+            $transportType = parse_url($builder->getParameter('env(MESSENGER_TRANSPORT_DSN)'), PHP_URL_SCHEME);
+
+            switch ($transportType) {
+                case 'amqp':
+                    $options = [
+                        'auto_setup' => $isAutoSetup,
+                        'exchange' => [
+                            'name' => 'marvin.to.manager',
+                            'type' => 'direct',
+                            'default_publish_routing_key' => 'marvin.to.manager.request'
+                        ],
+                        'queues' => [
+                            'manager.to.marvin.response' => [
+                                'binding_keys' => 'manager.to.marvin.response'
+                            ]
+                        ]
+                    ];
+                    break;
+                case 'doctrine':
+                    /* @todo manage doctrine transport */
+                    break;
+                default:
+                    throw new InvalidArgumentException(sprintf('Invalid transport type %s', $transportType));
+            }
+
+            $builder->prependExtensionConfig('framework', [
+                'messenger' => [
+                    'transports' => [
+                        'marvin.to.manager' => [
+                            'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
+                            'serializer' => 'EnderLab\\MarvinManagerBundle\\System\\Infrastructure\\Framework\\Symfony\\Messenger\\Serializer\\ManagerSerializer',
+                            'options' => $options,
+                            'retry_strategy' => [
+                                'delay' => 500,
                             ]
                         ],
-                        'retry_strategy' => [
-                            'delay' => 500,
-                        ]
                     ],
-                ],
-                'routing' => [
-                    'EnderLab\\MarvinManagerBundle\\System\\Infrastructure\\Framework\\Symfony\\Messenger\\ManagerRequestCommand' => 'marvin.to.manager'
+                    'routing' => [
+                        'EnderLab\\MarvinManagerBundle\\System\\Infrastructure\\Framework\\Symfony\\Messenger\\ManagerRequestCommand' => 'marvin.to.manager'
+                    ]
                 ]
-            ]
-        ]);
+            ]);
+        }
     }
 }

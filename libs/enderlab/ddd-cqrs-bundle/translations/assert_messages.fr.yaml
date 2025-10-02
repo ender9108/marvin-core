@@ -29,3 +29,7 @@ assert:
     expected_is_instance_of_any: 'Attendu une instance de %classes%. Obtenu : %value%.'
     expected_is_a_of: 'Attendu une instance de cette classe ou de cette classe parmi ses parents %class%. Obtenu : %value%.'
     expected_valid_timezone: 'Attendu une timezone valide. Obtenu : %value%.'
+    expected_directory: 'Le chemin %value% n''est pas un répertoire.'
+    file_does_not_exist: 'Le fichier %value% n''existe pas.'
+    expected_file: 'Le chemin %value% n''est pas un fichier.'
+    
