@@ -28,3 +28,4 @@ assert:
     expected_not_instance_of: 'Attendu une instance différente de %class%. Obtenu : %value%.'
     expected_is_instance_of_any: 'Attendu une instance de %classes%. Obtenu : %value%.'
     expected_is_a_of: 'Attendu une instance de cette classe ou de cette classe parmi ses parents %class%. Obtenu : %value%.'
+    expected_valid_timezone: 'Attendu une timezone valide. Obtenu : %value%.'

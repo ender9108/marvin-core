@@ -6,6 +6,7 @@ use EnderLab\DddCqrsBundle\Application\Command\SyncCommandInterface;
 use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Lastname;
 use Marvin\Security\Domain\ValueObject\Roles;
+use Marvin\Security\Domain\ValueObject\Timezone;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Locale;
 use Marvin\Shared\Domain\ValueObject\Reference;
@@ -21,6 +22,7 @@ final readonly class CreateUser implements SyncCommandInterface
         public Locale $locale,
         public Theme $theme,
         public Reference $type,
+        public Timezone $timezone,
         public string $password,
     ) {
     }

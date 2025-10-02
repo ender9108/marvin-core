@@ -14,6 +14,7 @@ use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use Marvin\Security\Domain\ValueObject\Lastname;
 use Marvin\Security\Domain\ValueObject\Roles;
+use Marvin\Security\Domain\ValueObject\Timezone;
 use Marvin\Shared\Domain\ValueObject\CreatedAt;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Locale;
@@ -33,6 +34,7 @@ class User extends AggregateRoot
         private(set) Theme $theme,
         private(set) UserStatus $status,
         private(set) UserType $type,
+        private(set) Timezone $timezone,
         private(set) ?string $password = null,
         private(set) ?UpdatedAt $updatedAt = null,
         public readonly CreatedAt $createdAt = new CreatedAt(new DateTimeImmutable())
@@ -46,6 +48,7 @@ class User extends AggregateRoot
         Lastname $lastname,
         UserStatus $status,
         UserType $type,
+        Timezone $timezone,
         ?Roles $roles = null,
         ?Locale $locale = null,
         ?Theme $theme = null,
@@ -58,7 +61,8 @@ class User extends AggregateRoot
             $locale ?? Locale::fr(),
             $theme ?? Theme::dark(),
             $status,
-            $type
+            $type,
+            $timezone
         );
     }
 
@@ -70,17 +74,19 @@ class User extends AggregateRoot
     }
 
     public function updateProfile(
-        Firstname $firstname,
-        Lastname $lastname,
-        Roles $roles,
-        Theme $theme,
-        Locale $locale,
+        ?Firstname $firstname = null,
+        ?Lastname $lastname = null,
+        ?Roles $roles = null,
+        ?Theme $theme = null,
+        ?Locale $locale = null,
+        ?Timezone $timezone = null,
     ): self {
-        $this->firstname = $firstname;
-        $this->lastname = $lastname;
-        $this->roles = $roles;
-        $this->theme = $theme;
-        $this->locale = $locale;
+        $this->firstname = $firstname ?? $this->firstname;
+        $this->lastname = $lastname ?? $this->lastname;
+        $this->roles = $roles ?? $this->roles;
+        $this->theme = $theme ?? $this->theme;
+        $this->locale = $locale ?? $this->locale;
+        $this->timezone = $timezone ?? $this->timezone;
 
         return $this;
     }

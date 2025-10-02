@@ -39,7 +39,10 @@ final readonly class CreateUserHandler implements SyncCommandHandlerInterface
             $command->lastname,
             $statusEnabled,
             $type,
-            $command->roles
+            $command->timezone,
+            $command->roles,
+            $command->locale,
+            $command->theme,
         );
         $user->definePassword($command->password, $this->passwordHasher);
         $this->userRepository->save($user);
