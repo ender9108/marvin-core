@@ -8,7 +8,7 @@ use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Override;
 
-final class LastUserType extends DomainException implements TranslatableExceptionInterface
+final class LastUserAdmin extends DomainException implements TranslatableExceptionInterface
 {
     #[Override]
     public function translationId(): string

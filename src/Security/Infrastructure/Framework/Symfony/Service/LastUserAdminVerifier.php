@@ -1,12 +1,13 @@
 <?php
 
-namespace Marvin\Security\Domain\Service;
+namespace Marvin\Security\Infrastructure\Framework\Symfony\Service;
 
-use Marvin\Security\Domain\Exception\LastUserType;
+use Marvin\Security\Domain\Exception\LastUserAdmin;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
+use Marvin\Security\Domain\Service\LastUserAdminVerifierInterface;
 
-final readonly class BeforeDeleteOrUpdateStatusUserVerifier
+final readonly class LastUserAdminVerifier implements LastUserAdminVerifierInterface
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,
@@ -22,7 +23,7 @@ final readonly class BeforeDeleteOrUpdateStatusUserVerifier
         $countSameRoleUsers = $this->userRepository->countSameEnabledUserType($user);
 
         if ($countSameRoleUsers === 1) {
-            throw new LastUserType();
+            throw new LastUserAdmin();
         }
     }
 }

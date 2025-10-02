@@ -33,6 +33,7 @@ final readonly class RequestResetPasswordUserHandler implements SyncCommandHandl
 
         $this->requestResetPasswordRepository->save($request);
 
+        /* @todo send email */
         $email = '';
 
         return $user;

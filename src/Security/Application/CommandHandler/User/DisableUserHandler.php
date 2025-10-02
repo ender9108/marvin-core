@@ -8,7 +8,7 @@ use Marvin\Security\Domain\List\UserStatusReference;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Marvin\Security\Domain\Repository\UserStatusRepositoryInterface;
-use Marvin\Security\Domain\Service\BeforeDeleteOrUpdateStatusUserVerifier;
+use Marvin\Security\Domain\Service\LastUserAdminVerifierInterface;
 use Marvin\Shared\Domain\ValueObject\Reference;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -18,7 +18,7 @@ final readonly class DisableUserHandler implements SyncCommandHandlerInterface
     public function __construct(
         private UserRepositoryInterface $userRepository,
         private UserStatusRepositoryInterface $userStatusRepository,
-        private BeforeDeleteOrUpdateStatusUserVerifier $beforeDeleteOrUpdateStatusUserVerifier,
+        private LastUserAdminVerifierInterface $beforeDeleteOrUpdateStatusUserVerifier,
     ) {
     }
 

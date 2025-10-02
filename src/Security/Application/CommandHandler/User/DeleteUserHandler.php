@@ -5,15 +5,15 @@ namespace Marvin\Security\Application\CommandHandler\User;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Security\Application\Command\User\DeleteUser;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
-use Marvin\Security\Domain\Service\BeforeDeleteOrUpdateStatusUserVerifier;
+use Marvin\Security\Domain\Service\LastUserAdminVerifierInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
 final readonly class DeleteUserHandler implements SyncCommandHandlerInterface
 {
     public function __construct(
-        private UserRepositoryInterface  $userRepository,
-        private BeforeDeleteOrUpdateStatusUserVerifier $beforeDeleteOrUpdateStatusUserVerifier,
+        private UserRepositoryInterface $userRepository,
+        private LastUserAdminVerifierInterface $beforeDeleteOrUpdateStatusUserVerifier,
     ) {
     }
 
