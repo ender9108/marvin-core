@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity
+        name="Marvin\Domotic\Domain\Model\Device"
+        repository-class="Marvin\Domotic\Infrastructure\Persistence\Doctrine\ORM\DeviceOrmRepository"
+        table="domotic_device"
+    >
+        <id name="id" type="device_id">
+            <generator strategy="NONE" />
+        </id>
+
+        <embedded name="label" class="Marvin\Shared\Domain\ValueObject\Label" />
+        <field name="technicalname" type="string" length="255" nullable="true" />
+        <many-to-one field="protocol" target-entity="Marvin\Domotic\Domain\Model\Protocol">
+            <join-column />
+        </many-to-one>
+        <many-to-one field="zone" target-entity="Marvin\Domotic\Domain\Model\Zone">
+            <join-column />
+        </many-to-one>
+        <many-to-many field="groups" target-entity="Marvin\Domotic\Domain\Model\Group" inversed-by="devices">
+            <join-table name="domotic_groups_devices" />
+        </many-to-many>
+        <embedded name="updatedAt" class="Marvin\Shared\Domain\ValueObject\UpdatedAt" />
+        <embedded name="createdAt" class="Marvin\Shared\Domain\ValueObject\CreatedAt" />
+    </entity>
+</doctrine-mapping>

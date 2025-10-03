@@ -24,6 +24,8 @@ doctrine:
             zone_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\ZoneIdType
             protocol_status_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\ProtocolStatusIdType
             protocol_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\ProtocolIdType
+            device_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\DeviceIdType
+            group_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\GroupIdType
     orm:
         auto_generate_proxy_classes: true
         enable_native_lazy_objects: true
