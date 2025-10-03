@@ -1,5 +1,13 @@
 domotic:
     exceptions:
+        capability_composition_not_found: CapabilityComposition introuvable.
+        capability_composition_not_found_with_id: CapabilityComposition introuvable avec l'id "%id%".
+        capability_state_not_found: CapabilityState introuvable.
+        capability_state_not_found_with_id: CapabilityState introuvable avec l'id "%id%".
+        capability_action_not_found: CapabilityAction introuvable.
+        capability_action_not_found_with_id: CapabilityAction introuvable avec l'id "%id%".
+        capability_not_found: Capability introuvable.
+        capability_not_found_with_id: Capability introuvable avec l'id "%id%".
         group_not_found: Group introuvable.
         group_not_found_with_id: Group introuvable avec l'id "%id%".
         device_not_found: Device introuvable.

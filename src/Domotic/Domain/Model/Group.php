@@ -3,12 +3,12 @@
 namespace Marvin\Domotic\Domain\Model;
 
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Marvin\Domotic\Domain\ValueObject\Identity\GroupId;
 use Marvin\Shared\Domain\ValueObject\CreatedAt;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\Slug;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
 use Marvin\Shared\Domain\ValueObject\UpdatedAt;
 
 final class Group
@@ -16,7 +16,7 @@ final class Group
     public readonly GroupId $id;
 
     /** @var Collection<int, Device>  */
-    private(set) Collection $devices;
+    public private(set) Collection $devices;
 
     public function __construct(
         private(set) Label $label,

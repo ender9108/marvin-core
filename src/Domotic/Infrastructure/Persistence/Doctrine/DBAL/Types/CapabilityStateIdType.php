@@ -2,20 +2,20 @@
 
 namespace Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types;
 
-use Marvin\Domotic\Domain\ValueObject\Identity\ProtocolId;
 use Symfony\Bridge\Doctrine\Types\AbstractUidType;
+use Marvin\Domotic\Domain\ValueObject\Identity\CapabilityStateId;
 
-final class ProtocolIdType extends AbstractUidType
+final class CapabilityStateIdType extends AbstractUidType
 {
     #[\Override]
     public function getName(): string
     {
-        return 'protocol_id';
+        return 'capability_state_id';
     }
 
     #[\Override]
     protected function getUidClass(): string
     {
-        return ProtocolId::class;
+        return CapabilityStateId::class;
     }
 }

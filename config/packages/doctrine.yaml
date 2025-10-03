@@ -26,6 +26,10 @@ doctrine:
             protocol_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\ProtocolIdType
             device_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\DeviceIdType
             group_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\GroupIdType
+            capability_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\CapabilityIdType
+            capability_action_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\CapabilityActionIdType
+            capability_state_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\CapabilityStateIdType
+            capability_composition_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\CapabilityCompositionIdType
     orm:
         auto_generate_proxy_classes: true
         enable_native_lazy_objects: true

@@ -115,7 +115,7 @@
             "@auto-scripts"
         ],
         "marvin:code-quality": [
-            "./vendor/bin/ecs check --fix",
+            "./vendor/bin/ecs check",
             "bin/console lint:yaml config --parse-tags",
             "bin/console lint:twig templates",
             "bin/console lint:container",

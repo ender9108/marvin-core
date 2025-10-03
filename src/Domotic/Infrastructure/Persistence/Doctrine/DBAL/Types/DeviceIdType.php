@@ -2,8 +2,8 @@
 
 namespace Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types;
 
-use Symfony\Bridge\Doctrine\Types\AbstractUidType;
 use Marvin\Domotic\Domain\ValueObject\Identity\DeviceId;
+use Symfony\Bridge\Doctrine\Types\AbstractUidType;
 
 final class DeviceIdType extends AbstractUidType
 {

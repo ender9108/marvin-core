@@ -4,11 +4,8 @@ namespace Marvin\Shared\Domain\ValueObject;
 
 final readonly class Metadata implements ArrayValueObjectInterface
 {
-    public array $value;
-
-    public function __construct(array $metadata = [])
+    public function __construct(public array $value = [])
     {
-        $this->value = $metadata;
     }
 
     public function equals(Metadata $metadata): bool
