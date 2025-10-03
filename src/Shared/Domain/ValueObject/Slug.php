@@ -16,6 +16,6 @@ final readonly class Slug implements ValueObjectInterface, Stringable
 
     public function __toString(): string
     {
-        return (string) $this->value;
+        return $this->value;
     }
 }
