@@ -20,3 +20,8 @@ services:
             $projectDir: '%kernel.project_dir%'
         tags: ['maker.command']
 
+    EnderLab\DddCqrsMakerBundle\Maker\MakeValueObject:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+        tags: ['maker.command']
+

@@ -83,39 +83,74 @@ class DddCqrsBundle extends AbstractBundle
 
     public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
     {
+        $transportType = parse_url((string) $builder->resolveEnvPlaceholders(
+            $builder->getParameter('env(MESSENGER_TRANSPORT_DSN)'),
+            true // forcer la résolution
+        ), PHP_URL_SCHEME);
+        $optionsDomainEventTransport = [];
+        $optionsCommandTransport = [];
+
+        switch ($transportType) {
+            case 'amqp':
+                $optionsDomainEventTransport = [
+                    'options' => [
+                        'exchange' => [
+                            'name' => self::DEFAULT_EXCHANGE_NAME,
+                            'type' => 'topic',
+                        ],
+                        'queues' => []
+                    ],
+                    'retry_strategy' => [
+                        'max_retries' => 3,
+                        'delay' => 500,
+                    ]
+                ];
+                $optionsCommandTransport = [
+                    'options' => [
+                        'exchange' => [
+                            'name' => 'command.messages',
+                            'type' => 'topic',
+                        ],
+                        'queues' => ['command' => []]
+                    ],
+                    'retry_strategy' => [
+                        'max_retries' => 3,
+                        'delay' => 500,
+                    ]
+                ];
+                break;
+            case 'doctrine':
+                /** @todo create custom transport with multiple queues */
+                $optionsDomainEventTransport = [
+                    'options' => [],
+                    'retry_strategy' => [
+                        'max_retries' => 3,
+                        'delay' => 500,
+                    ]
+                ];
+                $optionsCommandTransport = [
+                    'options' => ['queue_name' => 'command'],
+                    'retry_strategy' => [
+                        'max_retries' => 3,
+                        'delay' => 500,
+                    ]
+                ];
+                break;
+        }
+
         $builder->prependExtensionConfig('framework', [
             'messenger' => [
                 'transports' => [
                     'domain.event.messages' => [
                         'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
-                        'options' => [
-                            'exchange' => [
-                                'name' => self::DEFAULT_EXCHANGE_NAME,
-                                'type' => 'topic',
-                            ],
-                            'queues' => []
-                        ],
-                        'retry_strategy' => [
-                            'max_retries' => 3,
-                            'delay' => 500,
-                        ]
+                        'options' => $optionsDomainEventTransport['options'],
+                        'retry_strategy' => $optionsDomainEventTransport['retry_strategy']
                     ],
                     'query.messages' => 'sync://',
                     'command.messages' => [
                         'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
-                        'options' => [
-                            'exchange' => [
-                                'name' => 'command.messages',
-                                'type' => 'topic',
-                            ],
-                            'queues' => [
-                                'command' => []
-                            ]
-                        ],
-                        'retry_strategy' => [
-                            'max_retries' => 3,
-                            'delay' => 500,
-                        ]
+                        'options' => $optionsCommandTransport['options'],
+                        'retry_strategy' => $optionsCommandTransport['retry_strategy']
                     ],
                     'sync.command.messages' => 'sync://'
                 ],
@@ -123,14 +158,14 @@ class DddCqrsBundle extends AbstractBundle
                 'buses' => [
                     'command' => [
                         'middleware' => [
-                            'EnderLab\\DddCqrsBundle\\Infrastructure\\Framework\\Symfony\\Messenger\\Middleware\\DebugMiddleware',
                             'messenger.middleware.doctrine_transaction',
+                            'validator',
                         ]
                     ],
                     'sync.command' => [
                         'middleware' => [
-                            'EnderLab\\DddCqrsBundle\\Infrastructure\\Framework\\Symfony\\Messenger\\Middleware\\DebugMiddleware',
                             'messenger.middleware.doctrine_transaction',
+                            'validator',
                         ]
                     ],
                     'query' => [],
