@@ -27,12 +27,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->load('Marvin\\Shared\\', dirname(__DIR__, 2).'/src/Shared')
         ->exclude([
             dirname(__DIR__, 2).'/src/Shared/Infrastructure/Framework/Symfony/Kernel.php',
-            dirname(__DIR__, 2).'/src/**/Domain/Model/*',
-            dirname(__DIR__, 2).'/src/**/Domain/ValueObject/*',
+            dirname(__DIR__, 2).'/src/Shared/Domain/Model/*',
+            dirname(__DIR__, 2).'/src/Shared/Domain/ValueObject/*',
         ])
-    ;
-    $services
-        ->load('Marvin\\Shared\\', dirname(__DIR__, 2).'/src/Shared')
     ;
 
     // repositories

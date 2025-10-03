@@ -1,8 +1,6 @@
 <?php
 
-namespace Marvin\System\Domain\ValueObject;
-
-use Marvin\Shared\Domain\ValueObject\ArrayValueObjectInterface;
+namespace Marvin\Shared\Domain\ValueObject;
 
 final readonly class Metadata implements ArrayValueObjectInterface
 {

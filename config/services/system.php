@@ -13,6 +13,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autoconfigure()
     ;
 
-    //$services->load('Marvin\\System\\Infrastructure\\DataFixtures\\', dirname(__DIR__, 2).'/src/System/Infrastructure/DataFixtures/');
-    $services->load('Marvin\\System\\', dirname(__DIR__, 2).'/src/System');
+    $services
+        ->load('Marvin\\System\\Infrastructure\\Framework\\Symfony\\DataFixtures\\', dirname(__DIR__, 2).'/src/System/Infrastructure/Framework/Symfony/DataFixtures/')
+        ->load('Marvin\\System\\', dirname(__DIR__, 2).'/src/System')
+        ->exclude([
+            dirname(__DIR__, 2).'/src/System/Domain/Model/*',
+            dirname(__DIR__, 2).'/src/System/Domain/ValueObject/*',
+        ])
+    ;
 };

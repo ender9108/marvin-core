@@ -4,19 +4,21 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity
-        name="Marvin\Domotic\Domain\Model\Zone"
-        repository-class="Marvin\Domotic\Infrastructure\Persistence\Doctrine\ORM\ZoneOrmRepository"
-        table="domotic_zone"
+        name="Marvin\Domotic\Domain\Model\Protocol"
+        repository-class="Marvin\Domotic\Infrastructure\Persistence\Doctrine\ORM\ProtocolOrmRepository"
+        table="domotic_protocol"
     >
-        <id name="id" type="zone_id">
+        <id name="id" type="protocol_id">
             <generator strategy="NONE" />
         </id>
 
         <embedded name="label" class="Marvin\Shared\Domain\ValueObject\Label" />
-        <many-to-one field="parentZone" target-entity="Marvin\Domotic\Domain\Model\Zone">
-            <join-column nullable="true" />
+        <embedded name="reference" class="Marvin\Shared\Domain\ValueObject\Reference" />
+        <many-to-one field="status" target-entity="Marvin\Domotic\Domain\Model\ProtocolStatus">
+            <join-column nullable="false" />
         </many-to-one>
-        <embedded name="area" class="Marvin\Domotic\Domain\ValueObject\Area" />
+        <embedded name="description" class="Marvin\Shared\Domain\ValueObject\Description" />
+        <embedded name="metadata" class="Marvin\SHared\Domain\ValueObject\Metadata" />
         <embedded name="updatedAt" class="Marvin\Shared\Domain\ValueObject\UpdatedAt" />
         <embedded name="createdAt" class="Marvin\Shared\Domain\ValueObject\CreatedAt" />
     </entity>
