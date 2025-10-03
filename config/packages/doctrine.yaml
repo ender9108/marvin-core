@@ -21,6 +21,8 @@ doctrine:
             docker_command_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\DockerCommandIdType
             plugin_status_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\PluginStatusIdType
             plugin_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\PluginIdType
+            zone_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\ZoneIdType
+            protocol_status_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\ProtocolStatusIdType
     orm:
         auto_generate_proxy_classes: true
         enable_native_lazy_objects: true
@@ -45,6 +47,11 @@ doctrine:
                 type: xml
                 dir: '%kernel.project_dir%/config/doctrine/ORM/System'
                 prefix: 'Marvin\System\Domain'
+                is_bundle: false
+            Marvin\Domotic:
+                type: xml
+                dir: '%kernel.project_dir%/config/doctrine/ORM/Domotic'
+                prefix: 'Marvin\Domotic\Domain'
                 is_bundle: false
         controller_resolver:
             auto_mapping: false

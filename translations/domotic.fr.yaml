@@ -1,0 +1,6 @@
+domotic:
+    exceptions:
+        protocol_status_not_found: ProtocolStatus introuvable.
+        protocol_status_not_found_with_id: ProtocolStatus introuvable avec l'id "%id%".
+        zone_not_found: Zone introuvable.
+        zone_not_found_with_id: Zone introuvable avec l'id "%id%".
