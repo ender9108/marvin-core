@@ -15,7 +15,7 @@ final class Device
     public readonly DeviceId $id;
 
     /** @var Collection<int, Group>  */
-    private(set) Collection $groups;
+    public private(set) Collection $groups;
 
     public function __construct(
         private(set) Label $label,

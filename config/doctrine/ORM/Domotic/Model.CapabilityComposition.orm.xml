@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity
+        name="Marvin\Domotic\Domain\Model\CapabilityComposition"
+        repository-class="Marvin\Domotic\Infrastructure\Persistence\Doctrine\ORM\CapabilityCompositionOrmRepository"
+        table="domotic_capability_composition"
+    >
+        <id name="id" type="capability_composition_id">
+            <generator strategy="NONE" />
+        </id>
+
+        <many-to-one field="capability" target-entity="Marvin\Domotic\Domain\Model\Capability" inversed-by="no">
+    <join-column />
+</many-to-one>
+        <many-to-many field="capabilityactions" target-entity="Marvin\Domotic\Domain\Model\CapabilityAction" mapped-by="" />
+        <many-to-many field="capabilitystates" target-entity="Marvin\Domotic\Domain\Model\CapabilityState" mapped-by="" />
+    </entity>
+</doctrine-mapping>

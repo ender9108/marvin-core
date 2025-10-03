@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
+use Exception;
 use InvalidArgumentException;
 use Marvin\Shared\Domain\ValueObject\Description;
 use Marvin\Shared\Domain\ValueObject\Label;
@@ -27,7 +28,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Exception;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -73,7 +73,7 @@ abstract class AbstractPluginManagerCommand extends Command
         'supervisor' => []
     ];
 
-    private FileSystem $fileSystem;
+    private readonly FileSystem $fileSystem;
     private array $rollbackActions = [
         'directories' => [],
         'files' => [],
@@ -97,18 +97,18 @@ abstract class AbstractPluginManagerCommand extends Command
         $this->fileSystem = new Filesystem();
     }
 
-    protected function configure(): void {
+    protected function configure(): void
+    {
         $this->addOption('force', 'f', InputOption::VALUE_OPTIONAL, 'Force reinstallation of the plugin', 0);
         $this->addOption('dry-run', 'd', InputOption::VALUE_NONE, 'Used to test the installation');
     }
 
     protected function startInstall(
-        Callable $callback,
+        callable $callback,
         string $pluginReference,
         InputInterface $input,
         OutputInterface $output
-    ): void
-    {
+    ): void {
         $this->type = self::TYPE_INSTALL;
         $this->dryRun = $input->getOption('dry-run');
 
@@ -116,12 +116,11 @@ abstract class AbstractPluginManagerCommand extends Command
     }
 
     protected function startUninstall(
-        Callable $callback,
+        callable $callback,
         string $pluginReference,
         InputInterface $input,
         OutputInterface $output
-    ): void
-    {
+    ): void {
         $this->type = self::TYPE_UNINSTALL;
         $this->dryRun = $input->getOption('dry-run');
 
@@ -129,12 +128,11 @@ abstract class AbstractPluginManagerCommand extends Command
     }
 
     protected function startUpdate(
-        Callable $callback,
+        callable $callback,
         string $pluginReference,
         InputInterface $input,
         OutputInterface $output
-    ): void
-    {
+    ): void {
         $this->type = self::TYPE_UPDATE;
         $this->dryRun = $input->getOption('dry-run');
 
@@ -144,7 +142,8 @@ abstract class AbstractPluginManagerCommand extends Command
     /**
      * @throws Exception
      */
-    protected function checkPluginRequirement(array $requirements): void {
+    protected function checkPluginRequirement(array $requirements): void
+    {
         $missingReferences = [];
 
         /** @var string $requirementReference */
@@ -230,7 +229,7 @@ abstract class AbstractPluginManagerCommand extends Command
             $this->checkComposeConflicts($composeContent);
 
             foreach ($configFiles as $configFile) {
-                $this->actions['docker']['compose_files'][$configFile] = $dockerPluginConfigPath.'/'.basename($configFile);
+                $this->actions['docker']['compose_files'][$configFile] = $dockerPluginConfigPath.'/'.basename((string) $configFile);
             }
 
             $this->actions['docker']['compose_files'][$composeFilePath] = $dockerPluginBasePath.'/'.basename($composeFilePath);
@@ -350,12 +349,11 @@ abstract class AbstractPluginManagerCommand extends Command
      * @throws \Doctrine\DBAL\Exception|ExceptionInterface
      */
     private function secureAction(
-        Callable $callback,
+        callable $callback,
         string $pluginReference,
         InputInterface $input,
         OutputInterface $output
-    ): void
-    {
+    ): void {
         $this->isSecureMode = true;
         $this->force = (bool) $input->getOption('force');
         $this->reference = $pluginReference;

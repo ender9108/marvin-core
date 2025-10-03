@@ -2,8 +2,8 @@
 
 namespace Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types;
 
-use Symfony\Bridge\Doctrine\Types\AbstractUidType;
 use Marvin\Domotic\Domain\ValueObject\Identity\ProtocolStatusId;
+use Symfony\Bridge\Doctrine\Types\AbstractUidType;
 
 final class ProtocolStatusIdType extends AbstractUidType
 {

@@ -7,7 +7,7 @@ use Marvin\Security\Domain\List\Role;
 use Marvin\Shared\Domain\ValueObject\ArrayValueObjectInterface;
 use Override;
 
-final readonly class Roles implements ArrayValueObjectInterface
+final readonly class Roles implements ArrayValueObjectInterface, \Stringable
 {
     private array $value;
 
