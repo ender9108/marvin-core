@@ -129,12 +129,12 @@ final class MakeModel extends AbstractMaker
                     $scale = (string) $io->ask('Scale for decimal (default 0)', '0');
                 }
                 $voFqcns = array_flip(array_values($voMap));
-                if (!isset($voFqcns[$type]) && in_array($type, ['string','text','int','integer','smallint','bigint','float','decimal','bool','boolean','datetime','datetime_immutable','datetimetz','datetimetz_immutable','date','date_immutable','time','time_immutable','dateinterval','json','array','simple_array','uuid','ulid','many_to_one','one_to_one'], true)) {
+                if (!isset($voFqcns[$type]) && in_array($type, ['string','text','int','integer','smallint','bigint','float','decimal','bool','boolean','datetime','datetime_immutable','datetimetz','datetimetz_immutable','date','date_immutable','time','time_immutable','dateinterval','json','array','simple_array','uuid','ulid'], true)) {
                     $nullable = $io->confirm('Nullable?', false);
                 }
                 if (in_array($type, ['ManyToOne','OneToOne','OneToMany','ManyToMany'], true)) {
                     $targetChoices = $this->findModelClassnames($root, $bcNorm);
-                    $tq = new Question('Target model class (FQCN or short name in this BC)', null);
+                    $tq = new Question('What class should this entity be related to?', null);
                     $tq->setAutocompleterValues(array_merge(array_keys($targetChoices), array_values($targetChoices)));
                     $targetInput = (string) $io->askQuestion($tq);
                     $targetFqcn = $this->resolveTargetFqcn($targetInput, $bcNorm);
@@ -144,19 +144,25 @@ final class MakeModel extends AbstractMaker
                     if ($type === 'ManyToOne') {
                         // owning side
                         $rel['owning'] = true;
+                        $rel['inversedBy'] = $io->ask(sprintf('Do you want to add a new field to %s so that you can access/update the %s objects from it? Enter the field name on the target (or leave blank to skip)', $this->shortClass($targetFqcn), $modelNorm), null);
+                        $rel['nullableJoin'] = $io->confirm('Is the join column nullable?', true);
                     } elseif ($type === 'OneToOne') {
-                        $rel['owning'] = $io->confirm('Owning side?', true);
+                        $rel['owning'] = $io->confirm('Is this the owning side?', true);
                         if (!$rel['owning']) {
-                            $rel['mappedBy'] = $io->ask('mappedBy (field on target)');
+                            $rel['mappedBy'] = $io->ask('Enter the mappedBy field on the target entity');
+                        } else {
+                            $rel['inversedBy'] = $io->ask('Enter the inversedBy field on the target entity (optional)', null);
                         }
                     } elseif ($type === 'OneToMany') {
-                        $rel['mappedBy'] = $io->ask('mappedBy (field on target)');
+                        $rel['mappedBy'] = $io->ask('Enter the mappedBy field on the target entity');
+                        $rel['orphanRemoval'] = $io->confirm('Enable orphanRemoval on this relation?', false);
                     } elseif ($type === 'ManyToMany') {
-                        $rel['owning'] = $io->confirm('Owning side?', true);
+                        $rel['owning'] = $io->confirm('Is this the owning side?', true);
                         if ($rel['owning']) {
-                            $rel['inversedBy'] = $io->ask('inversedBy on target (optional)', null);
+                            $rel['inversedBy'] = $io->ask('Enter the inversedBy field on the target entity (optional)', null);
+                            $rel['joinTableName'] = $io->ask('Join table name (leave empty to use default)', null);
                         } else {
-                            $rel['mappedBy'] = $io->ask('mappedBy on target');
+                            $rel['mappedBy'] = $io->ask('Enter the mappedBy field on the target entity');
                         }
                     }
                 }
@@ -297,17 +303,29 @@ final class MakeModel extends AbstractMaker
                 $field = $f['name'];
                 $target = $rel['target'];
                 if ($type === 'ManyToOne') {
-                    $fieldsXml[] = sprintf("<many-to-one field=\"%s\" target-entity=\"%s\">\n    <join-column%s />\n</many-to-one>", $field, $target, $f['nullable'] ? ' nullable="true"' : '');
+                    $attrs = sprintf('field="%s" target-entity="%s"', $field, $target);
+                    if (!empty($rel['inversedBy'])) {
+                        $attrs .= sprintf(' inversed-by="%s"', (string) $rel['inversedBy']);
+                    }
+                    $joinNullable = isset($rel['nullableJoin']) ? (bool) $rel['nullableJoin'] : (bool) $f['nullable'];
+                    $fieldsXml[] = sprintf("<many-to-one %s>\n    <join-column%s />\n</many-to-one>", $attrs, $joinNullable ? ' nullable="true"' : '');
                 } elseif ($type === 'OneToOne') {
                     if (!empty($rel['owning'])) {
-                        $fieldsXml[] = sprintf("<one-to-one field=\"%s\" target-entity=\"%s\">\n    <join-column%s />\n</one-to-one>", $field, $target, $f['nullable'] ? ' nullable="true"' : '');
+                        $attrs = sprintf('field="%s" target-entity="%s"', $field, $target);
+                        if (!empty($rel['inversedBy'])) {
+                            $attrs .= sprintf(' inversed-by="%s"', (string) $rel['inversedBy']);
+                        }
+                        $joinNullable = isset($rel['nullableJoin']) ? (bool) $rel['nullableJoin'] : (bool) $f['nullable'];
+                        $fieldsXml[] = sprintf("<one-to-one %s>\n    <join-column%s />\n</one-to-one>", $attrs, $joinNullable ? ' nullable="true"' : '');
                     } else {
                         $mappedBy = (string) ($rel['mappedBy'] ?? '');
                         $fieldsXml[] = sprintf("<one-to-one field=\"%s\" target-entity=\"%s\" mapped-by=\"%s\" />", $field, $target, $mappedBy);
                     }
                 } elseif ($type === 'OneToMany') {
                     $mappedBy = (string) ($rel['mappedBy'] ?? '');
-                    $fieldsXml[] = sprintf("<one-to-many field=\"%s\" target-entity=\"%s\" mapped-by=\"%s\" />", $field, $target, $mappedBy);
+                    $attrs = sprintf('field="%s" target-entity="%s" mapped-by="%s"', $field, $target, $mappedBy);
+                    $orphan = !empty($rel['orphanRemoval']) ? ' orphan-removal="true"' : '';
+                    $fieldsXml[] = sprintf("<one-to-many %s%s />", $attrs, $orphan);
                 } elseif ($type === 'ManyToMany') {
                     if (!empty($rel['owning'])) {
                         $inversedBy = $rel['inversedBy'] ?? null;
@@ -315,7 +333,10 @@ final class MakeModel extends AbstractMaker
                         if ($inversedBy) {
                             $attrs .= sprintf(' inversed-by="%s"', $inversedBy);
                         }
-                        $joinTable = strtolower($this->tableName($bcNorm, $modelNorm) . '_' . $field);
+                        $joinTable = (string) ($rel['joinTableName'] ?? '');
+                        if ($joinTable === '') {
+                            $joinTable = strtolower($this->tableName($bcNorm, $modelNorm) . '_' . $field);
+                        }
                         $fieldsXml[] = sprintf("<many-to-many %s>\n    <join-table name=\"%s\" />\n</many-to-many>", $attrs, $joinTable);
                     } else {
                         $mappedBy = (string) ($rel['mappedBy'] ?? '');
