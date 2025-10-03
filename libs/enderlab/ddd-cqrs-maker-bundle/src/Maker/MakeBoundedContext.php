@@ -150,6 +150,8 @@ PHP;
             $io->warning(sprintf('Services file already exists, skipping: %s', $servicesPath));
         }
 
-        $io->success(sprintf('Bounded context "%s" generated at %s. %d directories created (including root). Services file: %s', $normalized, $targetBC, $createdCount + 1, $servicesPath));
+        $io->success(sprintf('Bounded context "%s" generated at %s.', $normalized, $targetBC));
+        $io->success(sprintf('%d directories created (including root).', $createdCount + 1));
+        $io->success(sprintf('Services file: %s.', $servicesPath));
     }
 }

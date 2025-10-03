@@ -82,15 +82,20 @@ final class MakeModel extends AbstractMaker
 
         $fieldSpecs = (array) $input->getOption('fields');
         $fields = [];
+        // Discover available ValueObjects (implementing ValueObjectInterface)
+        $voMap = $this->findValueObjectClasses($root); // [short => FQCN]
+        $voAutocomplete = array_merge(array_keys($voMap), array_values($voMap));
         // Broader list inspired by Symfony make:entity
         $allTypes = [
             'string','text','boolean','bool','integer','int','smallint','bigint','float','decimal',
-            'datetime','datetime_immutable','datetimetz','datetimetz_immutable','date','date_immutable','time','time_immutable','dateinterval',
+            'datetime','datetime_immutable','datetimetz','datetimetz_immutable','date','date_immutable',
+            'time','time_immutable','dateinterval',
             'json','array','simple_array','uuid','ulid',
+            'ManyToOne','OneToOne','OneToMany','ManyToMany',
+            'manytoone','onetoone','onetomany','manytomany',
             'many_to_one','one_to_one','one_to_many','many_to_many',
-            // camelCase aliases to match make:entity habits
-            'manyToOne','oneToOne','oneToMany','manyToMany'
         ];
+        $allTypes = array_values(array_unique(array_merge($allTypes, $voAutocomplete)));
         if (empty($fieldSpecs)) {
             $io->writeln('Define fields. Leave name empty to finish.');
             while (true) {
@@ -99,10 +104,18 @@ final class MakeModel extends AbstractMaker
                     break;
                 }
                 $name = $this->normalizeFieldName($name);
-                $q = new Question('Field type (autocomplete: '.implode(', ', $allTypes).')', 'string');
+                $q = new Question('Field type', 'string');
                 $q->setAutocompleterValues($allTypes);
                 $inputType = (string) $io->askQuestion($q);
-                $type = $this->canonicalizeType($inputType);
+                $inputTypeTrim = trim($inputType);
+                $normShort = $this->normalizePascal($inputTypeTrim);
+                if (isset($voMap[$normShort])) {
+                    $type = $voMap[$normShort]; // FQCN of VO
+                } elseif (in_array($inputTypeTrim, $voMap, true)) {
+                    $type = $inputTypeTrim; // already FQCN
+                } else {
+                    $type = $this->canonicalizeType($inputTypeTrim);
+                }
                 $length = null;
                 $nullable = false;
                 $precision = null;
@@ -115,10 +128,11 @@ final class MakeModel extends AbstractMaker
                     $precision = (string) $io->ask('Precision for decimal (default 10)', '10');
                     $scale = (string) $io->ask('Scale for decimal (default 0)', '0');
                 }
-                if (in_array($type, ['string','text','int','integer','smallint','bigint','float','decimal','bool','boolean','datetime','datetime_immutable','datetimetz','datetimetz_immutable','date','date_immutable','time','time_immutable','dateinterval','json','array','simple_array','uuid','ulid','many_to_one','one_to_one'], true)) {
+                $voFqcns = array_flip(array_values($voMap));
+                if (!isset($voFqcns[$type]) && in_array($type, ['string','text','int','integer','smallint','bigint','float','decimal','bool','boolean','datetime','datetime_immutable','datetimetz','datetimetz_immutable','date','date_immutable','time','time_immutable','dateinterval','json','array','simple_array','uuid','ulid','many_to_one','one_to_one'], true)) {
                     $nullable = $io->confirm('Nullable?', false);
                 }
-                if (in_array($type, ['many_to_one','one_to_one','one_to_many','many_to_many'], true)) {
+                if (in_array($type, ['ManyToOne','OneToOne','OneToMany','ManyToMany'], true)) {
                     $targetChoices = $this->findModelClassnames($root, $bcNorm);
                     $tq = new Question('Target model class (FQCN or short name in this BC)', null);
                     $tq->setAutocompleterValues(array_merge(array_keys($targetChoices), array_values($targetChoices)));
@@ -127,17 +141,17 @@ final class MakeModel extends AbstractMaker
                     $rel = [
                         'target' => $targetFqcn,
                     ];
-                    if ($type === 'many_to_one') {
+                    if ($type === 'ManyToOne') {
                         // owning side
                         $rel['owning'] = true;
-                    } elseif ($type === 'one_to_one') {
+                    } elseif ($type === 'OneToOne') {
                         $rel['owning'] = $io->confirm('Owning side?', true);
                         if (!$rel['owning']) {
                             $rel['mappedBy'] = $io->ask('mappedBy (field on target)');
                         }
-                    } elseif ($type === 'one_to_many') {
+                    } elseif ($type === 'OneToMany') {
                         $rel['mappedBy'] = $io->ask('mappedBy (field on target)');
-                    } elseif ($type === 'many_to_many') {
+                    } elseif ($type === 'ManyToMany') {
                         $rel['owning'] = $io->confirm('Owning side?', true);
                         if ($rel['owning']) {
                             $rel['inversedBy'] = $io->ask('inversedBy on target (optional)', null);
@@ -164,7 +178,15 @@ final class MakeModel extends AbstractMaker
                 if ($name === '') {
                     continue;
                 }
-                $type = $this->canonicalizeType($parts[1] ?? 'string');
+                $rawType = (string) ($parts[1] ?? 'string');
+                $normShortOpt = $this->normalizePascal($rawType);
+                if (isset($voMap[$normShortOpt])) {
+                    $type = $voMap[$normShortOpt];
+                } elseif (in_array($rawType, $voMap, true)) {
+                    $type = $rawType;
+                } else {
+                    $type = $this->canonicalizeType($rawType);
+                }
                 $length = null;
                 $precision = null;
                 $scale = null;
@@ -219,18 +241,26 @@ final class MakeModel extends AbstractMaker
         foreach ($fields as $f) {
             $type = $f['type'];
             $rel = $f['relation'] ?? null;
-            if (in_array($type, ['many_to_one','one_to_one'], true) && is_array($rel)) {
+            if (in_array($type, ['ManyToOne','OneToOne'], true) && is_array($rel)) {
                 $targetFqcn = $rel['target'];
                 $short = $this->shortClass($targetFqcn);
                 $useClasses[] = $targetFqcn;
-                $ctorParams[] = sprintf('        private(set) %s __DOLLAR__%s,', $short, $f['name']);
-            } elseif (in_array($type, ['one_to_many','many_to_many'], true) && is_array($rel)) {
+                $ctorParams[] = sprintf('private(set) %s __DOLLAR__%s,', $short, $f['name']);
+            } elseif (in_array($type, ['OneToMany','ManyToMany'], true) && is_array($rel)) {
                 $needsCollections = true;
-                $props[] = sprintf('    private Collection __DOLLAR__%s;', $f['name']);
+                $props[] = sprintf('private Collection __DOLLAR__%s;', $f['name']);
                 $ctorInits[] = sprintf('        __DOLLAR__this->%s = new ArrayCollection();', $f['name']);
             } else {
-                $phpType = $this->phpTypeFor($type);
-                $ctorParams[] = sprintf('private(set) %s __DOLLAR__%s,', $phpType, $f['name']);
+                // Handle ValueObject types (FQCN)
+                $voFqcns = array_flip(array_values($voMap));
+                if (isset($voFqcns[$type])) {
+                    $useClasses[] = $type;
+                    $shortVo = $this->shortClass($type);
+                    $ctorParams[] = sprintf('private(set) %s __DOLLAR__%s,', $shortVo, $f['name']);
+                } else {
+                    $phpType = $this->phpTypeFor($type);
+                    $ctorParams[] = sprintf('private(set) %s __DOLLAR__%s,', $phpType, $f['name']);
+                }
             }
         }
         if (!empty($ctorParams)) {
@@ -250,7 +280,7 @@ final class MakeModel extends AbstractMaker
             sprintf('        __DOLLAR__this->id = new %sId();', $modelNorm),
         ], $ctorInits);
 
-        $modelCode = sprintf("<?php\n\nnamespace Marvin\\%s\\Domain\\Model;\n\n%s\nfinal class %s\n{\n%s\n\n    public function __construct(\n%s\n) {\n%s\n}\n}\n", $bcNorm, $useCode, $modelNorm, $this->indentLines($props), $this->indentLines($ctorParams), implode("\n", $ctorBodyLines));
+        $modelCode = sprintf("<?php\n\nnamespace Marvin\\%s\\Domain\\Model;\n\n%s\nfinal class %s\n{\n%s\n\n    public function __construct(\n%s\n    ) {\n%s\n    }\n}\n", $bcNorm, $useCode, $modelNorm, $this->indentLines($props), $this->indentLines($ctorParams, 2), implode("\n", $ctorBodyLines));
 
         // Build interface
         $interfaceCode = sprintf("<?php\n\nnamespace Marvin\\%s\\Domain\\Repository;\n\nuse Marvin\\%s\\Domain\\Model\\%s;\nuse Marvin\\%s\\Domain\\ValueObject\\Identity\\%sId;\n\ninterface %sRepositoryInterface\n{\n    public function save(%s __DOLLAR__model, bool __DOLLAR__flush = true): void;\n\n    public function remove(%s __DOLLAR__model, bool __DOLLAR__flush = true): void;\n\n    public function byId(%sId __DOLLAR__id): %s;\n}\n", $bcNorm, $bcNorm, $modelNorm, $bcNorm, $modelNorm, $modelNorm, $modelNorm, $modelNorm, $modelNorm, $modelNorm);
@@ -263,22 +293,22 @@ final class MakeModel extends AbstractMaker
         foreach ($fields as $f) {
             $type = $f['type'];
             $rel = $f['relation'] ?? null;
-            if (in_array($type, ['many_to_one','one_to_one','one_to_many','many_to_many'], true) && is_array($rel)) {
+            if (in_array($type, ['ManyToOne','OneToOne','OneToMany','ManyToMany'], true) && is_array($rel)) {
                 $field = $f['name'];
                 $target = $rel['target'];
-                if ($type === 'many_to_one') {
-                    $fieldsXml[] = sprintf("        <many-to-one field=\"%s\" target-entity=\"%s\">\n            <join-column%s />\n        </many-to-one>", $field, $target, $f['nullable'] ? ' nullable="true"' : '');
-                } elseif ($type === 'one_to_one') {
+                if ($type === 'ManyToOne') {
+                    $fieldsXml[] = sprintf("<many-to-one field=\"%s\" target-entity=\"%s\">\n    <join-column%s />\n</many-to-one>", $field, $target, $f['nullable'] ? ' nullable="true"' : '');
+                } elseif ($type === 'OneToOne') {
                     if (!empty($rel['owning'])) {
-                        $fieldsXml[] = sprintf("        <one-to-one field=\"%s\" target-entity=\"%s\">\n            <join-column%s />\n        </one-to-one>", $field, $target, $f['nullable'] ? ' nullable="true"' : '');
+                        $fieldsXml[] = sprintf("<one-to-one field=\"%s\" target-entity=\"%s\">\n    <join-column%s />\n</one-to-one>", $field, $target, $f['nullable'] ? ' nullable="true"' : '');
                     } else {
                         $mappedBy = (string) ($rel['mappedBy'] ?? '');
-                        $fieldsXml[] = sprintf("        <one-to-one field=\"%s\" target-entity=\"%s\" mapped-by=\"%s\" />", $field, $target, $mappedBy);
+                        $fieldsXml[] = sprintf("<one-to-one field=\"%s\" target-entity=\"%s\" mapped-by=\"%s\" />", $field, $target, $mappedBy);
                     }
-                } elseif ($type === 'one_to_many') {
+                } elseif ($type === 'OneToMany') {
                     $mappedBy = (string) ($rel['mappedBy'] ?? '');
-                    $fieldsXml[] = sprintf("        <one-to-many field=\"%s\" target-entity=\"%s\" mapped-by=\"%s\" />", $field, $target, $mappedBy);
-                } elseif ($type === 'many_to_many') {
+                    $fieldsXml[] = sprintf("<one-to-many field=\"%s\" target-entity=\"%s\" mapped-by=\"%s\" />", $field, $target, $mappedBy);
+                } elseif ($type === 'ManyToMany') {
                     if (!empty($rel['owning'])) {
                         $inversedBy = $rel['inversedBy'] ?? null;
                         $attrs = sprintf('field="%s" target-entity="%s"', $field, $target);
@@ -286,17 +316,24 @@ final class MakeModel extends AbstractMaker
                             $attrs .= sprintf(' inversed-by="%s"', $inversedBy);
                         }
                         $joinTable = strtolower($this->tableName($bcNorm, $modelNorm) . '_' . $field);
-                        $fieldsXml[] = sprintf("        <many-to-many %s>\n            <join-table name=\"%s\" />\n        </many-to-many>", $attrs, $joinTable);
+                        $fieldsXml[] = sprintf("<many-to-many %s>\n    <join-table name=\"%s\" />\n</many-to-many>", $attrs, $joinTable);
                     } else {
                         $mappedBy = (string) ($rel['mappedBy'] ?? '');
-                        $fieldsXml[] = sprintf("        <many-to-many field=\"%s\" target-entity=\"%s\" mapped-by=\"%s\" />", $field, $target, $mappedBy);
+                        $fieldsXml[] = sprintf("<many-to-many field=\"%s\" target-entity=\"%s\" mapped-by=\"%s\" />", $field, $target, $mappedBy);
                     }
                 }
                 continue;
             }
 
+            // ValueObject as embedded
+            $voFqcns = array_flip(array_values($voMap));
+            if (isset($voFqcns[$type])) {
+                $fieldsXml[] = sprintf('<embedded name="%s" class="%s" />', $f['name'], $type);
+                continue;
+            }
+
             if ($type === 'uuid') {
-                $fieldsXml[] = sprintf('        <field name="%s" type="guid" />', $f['name']);
+                $fieldsXml[] = sprintf('<field name="%s" type="guid" />', $f['name']);
                 continue;
             }
             $attrs = [sprintf('name="%s"', $f['name']), sprintf('type="%s"', $this->doctrineTypeFor($type))];
@@ -314,11 +351,12 @@ final class MakeModel extends AbstractMaker
             if (!empty($f['nullable'])) {
                 $attrs[] = 'nullable="true"';
             }
-            $fieldsXml[] = '        <field ' . implode(' ', $attrs) . ' />';
+            $fieldsXml[] = '<field ' . implode(' ', $attrs) . ' />';
         }
 
         $idTypeName = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $modelNorm)) . '_id';
-        $xml = sprintf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<doctrine-mapping xmlns=\"http://doctrine-project.org/schemas/orm/doctrine-mapping\"\n                  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n                  xsi:schemaLocation=\"http://doctrine-project.org/schemas/orm/doctrine-mapping\n                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd\">\n    <entity\n        name=\"%s\"\n        repository-class=\"%s\"\n        table=\"%s\"\n    >\n        <id name=\"id\" type=\"%s\">\n            <generator strategy=\"NONE\" />\n        </id>\n\n%s\n    </entity>\n</doctrine-mapping>\n", $modelFqcn, $repoFqcn, $this->tableName($bcNorm, $modelNorm), $idTypeName, $this->indentLines($fieldsXml));
+                $fieldsBlock = $this->indentLines($fieldsXml, 2);
+        $xml = sprintf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<doctrine-mapping xmlns=\"http://doctrine-project.org/schemas/orm/doctrine-mapping\"\n                  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n                  xsi:schemaLocation=\"http://doctrine-project.org/schemas/orm/doctrine-mapping\n                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd\">\n    <entity\n        name=\"%s\"\n        repository-class=\"%s\"\n        table=\"%s\"\n    >\n        <id name=\"id\" type=\"%s\">\n            <generator strategy=\"NONE\" />\n        </id>\n\n%s\n    </entity>\n</doctrine-mapping>\n", $modelFqcn, $repoFqcn, $this->tableName($bcNorm, $modelNorm), $idTypeName, $fieldsBlock);
 
         // Build VO Identity class
         $voPath = sprintf('%s/src/%s/Domain/ValueObject/Identity/%sId.php', $root, $bcNorm, $modelNorm);
@@ -426,8 +464,19 @@ final class MakeModel extends AbstractMaker
 
     private function normalizePascal(string $value): string
     {
-        $value = preg_replace('/[^a-z0-9]+/i', ' ', $value ?? '');
-        return str_replace(' ', '', ucwords(strtolower((string) $value)));
+        $value = (string) $value;
+        // Replace any non-alphanumeric character by a space to create word boundaries
+        $value = preg_replace('/[^a-zA-Z0-9]+/', ' ', $value) ?? '';
+        $parts = preg_split('/\s+/', trim($value)) ?: [];
+        $out = '';
+        foreach ($parts as $p) {
+            if ($p === '') {
+                continue;
+            }
+            // Preserve existing internal capitals: only uppercase the first char, keep the rest as-is
+            $out .= strtoupper(substr($p, 0, 1)) . substr($p, 1);
+        }
+        return $out;
     }
 
     private function normalizeFieldName(string $value): string
@@ -487,14 +536,22 @@ final class MakeModel extends AbstractMaker
 
     private function canonicalizeType(string $type): string
     {
+        // Preserve FQCNs for ValueObjects or custom classes
+        if (str_contains($type, '\\')) {
+            return trim($type);
+        }
         $t = strtolower(trim($type));
         $map = [
             'boolean' => 'bool',
             'integer' => 'int',
-            'manytoone' => 'many_to_one',
-            'onetoone' => 'one_to_one',
-            'onetomany' => 'one_to_many',
-            'manytomany' => 'many_to_many',
+            'manytoone' => 'ManyToOne',
+            'onetoone' => 'OneToOne',
+            'onetomany' => 'OneToMany',
+            'manytomany' => 'ManyToMany',
+            'many_to_one' => 'ManyToOne',
+            'one_to_one' => 'OneToOne',
+            'one_to_many' => 'OneToMany',
+            'many_to_many' => 'ManyToMany',
         ];
         $t = str_replace(['-'], ['_'], $t);
         return $map[$t] ?? $t;
@@ -549,5 +606,37 @@ final class MakeModel extends AbstractMaker
         }
         $short = $this->normalizePascal($input);
         return sprintf('Marvin\\%s\\Domain\\Model\\%s', $bcNorm, $short);
+    }
+
+    /**
+     * Discover ValueObject classes implementing ValueObjectInterface across all BCs.
+     * @return array<string,string> Keys: short class name; Values: FQCN
+     */
+    private function findValueObjectClasses(string $root): array
+    {
+        $base = rtrim($root, DIRECTORY_SEPARATOR) . '/src';
+        $result = [];
+        if (!is_dir($base)) {
+            return $result;
+        }
+        foreach (scandir($base) ?: [] as $bcDir) {
+            if ($bcDir === '.' || $bcDir === '..') { continue; }
+            $voDir = $base . '/' . $bcDir . '/Domain/ValueObject';
+            if (!is_dir($voDir)) { continue; }
+            foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($voDir, \FilesystemIterator::SKIP_DOTS)) as $fileInfo) {
+                if (!$fileInfo->isFile()) { continue; }
+                $filePath = (string) $fileInfo->getPathname();
+                if (!str_ends_with($filePath, '.php')) { continue; }
+                // Skip Identity sub-namespace
+                if (str_contains($filePath, DIRECTORY_SEPARATOR . 'Identity' . DIRECTORY_SEPARATOR)) { continue; }
+                $content = file_get_contents($filePath) ?: '';
+                if (!str_contains($content, 'ValueObjectInterface')) { continue; }
+                $short = basename($filePath, '.php');
+                $fqcn = sprintf('Marvin\\%s\\Domain\\ValueObject\\%s', $bcDir, $short);
+                $result[$short] = $fqcn;
+            }
+        }
+        ksort($result);
+        return $result;
     }
 }
