@@ -23,6 +23,7 @@ doctrine:
             plugin_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\PluginIdType
             zone_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\ZoneIdType
             protocol_status_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\ProtocolStatusIdType
+            protocol_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\ProtocolIdType
     orm:
         auto_generate_proxy_classes: true
         enable_native_lazy_objects: true
