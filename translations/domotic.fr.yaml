@@ -1,5 +1,7 @@
 domotic:
     exceptions:
+        device_not_found: Device introuvable.
+        device_not_found_with_id: Device introuvable avec l'id "%id%".
         capability_composition_not_found: CapabilityComposition introuvable.
         capability_composition_not_found_with_id: CapabilityComposition introuvable avec l'id "%id%".
         capability_state_not_found: CapabilityState introuvable.
@@ -10,8 +12,6 @@ domotic:
         capability_not_found_with_id: Capability introuvable avec l'id "%id%".
         group_not_found: Group introuvable.
         group_not_found_with_id: Group introuvable avec l'id "%id%".
-        device_not_found: Device introuvable.
-        device_not_found_with_id: Device introuvable avec l'id "%id%".
         protocol_not_found: Protocol introuvable.
         protocol_not_found_with_id: Protocol introuvable avec l'id "%id%".
         protocol_status_not_found: ProtocolStatus introuvable.
