@@ -159,13 +159,13 @@ class DddCqrsBundle extends AbstractBundle
                     'command' => [
                         'middleware' => [
                             'messenger.middleware.doctrine_transaction',
-                            'validator',
+                            'messenger.middleware.validation',
                         ]
                     ],
                     'sync.command' => [
                         'middleware' => [
                             'messenger.middleware.doctrine_transaction',
-                            'validator',
+                            'messenger.middleware.validation',
                         ]
                     ],
                     'query' => [],
@@ -173,8 +173,7 @@ class DddCqrsBundle extends AbstractBundle
                         'default_middleware' => 'allow_no_handlers',
                         'middleware' => [
                             'EnderLab\\DddCqrsBundle\\Infrastructure\\Framework\\Symfony\\Messenger\\Middleware\\DomainEventRoutingMiddleware',
-                            'validator',
-                            'send_message'
+                            'messenger.middleware.validation'
                         ]
                     ],
                 ],
