@@ -4,17 +4,17 @@ namespace Marvin\Security\Domain\Model;
 
 use DateMalformedStringException;
 use DateTimeImmutable;
-use Marvin\Security\Domain\ValueObject\Identity\RequestResetPasswordIdType;
+use Marvin\Security\Domain\ValueObject\Identity\RequestResetPasswordId;
 use Marvin\Shared\Domain\ValueObject\CreatedAt;
-use Marvin\Shared\Domain\ValueObject\ExpiresAt;
+use Marvin\Security\Domain\ValueObject\ExpiresAt;
 
 class RequestResetPassword
 {
-    public readonly RequestResetPasswordIdType $id;
+    public readonly RequestResetPasswordId $id;
 
     public private(set) ExpiresAt $expiresAt;
 
-    public private(set) CreatedAt $createdAt;
+    public private(set) bool $used = false;
 
     /**
      * @throws DateMalformedStringException
@@ -22,8 +22,19 @@ class RequestResetPassword
     public function __construct(
         private(set) string $token,
         private(set) User $user,
+        public readonly CreatedAt $createdAt = new CreatedAt(new DateTimeImmutable())
     ) {
+        $this->id = new RequestResetPasswordId();
         $this->expiresAt = new ExpiresAt(new DateTimeImmutable()->modify('+1 day'));
-        $this->createdAt = new CreatedAt(new DateTimeImmutable());
+    }
+
+    public function isUsed(): bool
+    {
+        return $this->used;
+    }
+
+    public function markAsUsed(): void
+    {
+        $this->used = true;
     }
 }

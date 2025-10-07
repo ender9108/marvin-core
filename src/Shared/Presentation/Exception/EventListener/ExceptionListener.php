@@ -1,8 +1,8 @@
 <?php
 
-namespace Marvin\Shared\Infrastructure\Framework\Symfony\EventListener;
+namespace Marvin\Shared\Presentation\Exception\EventListener;
 
-use Marvin\Shared\Infrastructure\Framework\Symfony\Service\ExceptionMessageManager;
+use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;

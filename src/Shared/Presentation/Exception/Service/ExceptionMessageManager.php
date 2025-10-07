@@ -1,13 +1,13 @@
 <?php
 
-namespace Marvin\Shared\Infrastructure\Framework\Symfony\Service;
+namespace Marvin\Shared\Presentation\Exception\Service;
 
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
-use Exception;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 final readonly class ExceptionMessageManager
 {
@@ -17,12 +17,12 @@ final readonly class ExceptionMessageManager
     ) {
     }
 
-    public function cliResponseFormat(Exception $exception): array
+    public function cliResponseFormat(Throwable $exception): array
     {
         return $this->buildBody($exception);
     }
 
-    public function jsonResponseFormat(Exception $exception): JsonResponse
+    public function jsonResponseFormat(Throwable $exception): JsonResponse
     {
         return new JsonResponse(
             $this->buildBody($exception),
@@ -31,7 +31,7 @@ final readonly class ExceptionMessageManager
         );
     }
 
-    private function buildBody(Exception $exception): array
+    private function buildBody(Throwable $exception): array
     {
         $message = $this->translatedMessage($exception);
         $body = [];
@@ -53,7 +53,7 @@ final readonly class ExceptionMessageManager
         return $body;
     }
 
-    private function translatedMessage(Exception $exception): string
+    private function translatedMessage(Throwable $exception): string
     {
         if ($exception instanceof TranslatableExceptionInterface) {
             return $this->translator->trans(
