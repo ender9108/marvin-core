@@ -2,20 +2,20 @@
 
 namespace Marvin\Domotic\Domain\Model;
 
-use Marvin\Domotic\Domain\ValueObject\Identity\CapabilityCompositionId;
-use Marvin\Domotic\Domain\Model\Capability;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Marvin\Domotic\Domain\Model\Capability;
+use Marvin\Domotic\Domain\ValueObject\Identity\CapabilityCompositionId;
 
 final class CapabilityComposition
 {
     public readonly CapabilityCompositionId $id;
 
     /** @var Collection<int, CapabilityAction> */
-    private Collection $capabilityactions;
+    private readonly Collection $capabilityactions;
 
     /** @var Collection<int, CapabilityState> */
-    private Collection $capabilitystates;
+    private readonly Collection $capabilitystates;
 
     public function __construct(
         private(set) Capability $capability

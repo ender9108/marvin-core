@@ -28,7 +28,7 @@ final class Group
         $this->devices = new ArrayCollection();
     }
 
-    public function addDevice(Device $device): static
+    public function addDevice(Device $device): Group
     {
         if (!$this->devices->contains($device)) {
             $this->devices->add($device);
@@ -38,7 +38,7 @@ final class Group
         return $this;
     }
 
-    public function removeDevice(Device $device): static
+    public function removeDevice(Device $device): Group
     {
         if ($this->devices->contains($device)) {
             $this->devices->removeElement($device);

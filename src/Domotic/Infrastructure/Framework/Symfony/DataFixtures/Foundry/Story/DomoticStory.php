@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Domotic\Infrastructure\Foundry\Story;
+namespace App\Domotic\Infrastructure\DataFixtures\Foundry\Story;
 
-use App\Domotic\Infrastructure\Foundry\Factory\CapabilityActionFactory;
-use App\Domotic\Infrastructure\Foundry\Factory\CapabilityCompositionFactory;
-use App\Domotic\Infrastructure\Foundry\Factory\CapabilityFactory;
-use App\Domotic\Infrastructure\Foundry\Factory\CapabilityStateFactory;
-use App\Domotic\Infrastructure\Foundry\Factory\ProtocolStatusFactory;
-use App\Domotic\Infrastructure\Foundry\Factory\ZoneFactory;
+use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\CapabilityActionFactory;
+use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\CapabilityCompositionFactory;
+use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\CapabilityFactory;
+use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\CapabilityStateFactory;
+use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\ProtocolStatusFactory;
+use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\ZoneFactory;
 use Zenstruck\Foundry\Story;
 
 class DomoticStory extends Story
@@ -25,12 +25,12 @@ class DomoticStory extends Story
 
     public function build(): void
     {
-        $this->buildZone();
-        $this->buildCapabilities();
-        $this->buildCapabilityActions();
-        $this->buildCapabilityStates();
-        $this->buildCapabilityCompositions();
-        $this->buildProtocolStatuses();
+        #$this->buildZone();
+        #$this->buildCapabilities();
+        #$this->buildCapabilityActions();
+        #$this->buildCapabilityStates();
+        #$this->buildCapabilityCompositions();
+        #$this->buildProtocolStatuses();
     }
 
     private function buildZone(): void

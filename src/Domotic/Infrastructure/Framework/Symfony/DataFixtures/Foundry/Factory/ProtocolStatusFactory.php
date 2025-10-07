@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Domotic\Infrastructure\Foundry\Factory;
+namespace App\Domotic\Infrastructure\DataFixtures\Foundry\Factory;
 
-use App\Domotic\Domain\Model\ProtocolStatus;
-use App\System\Domain\Model\UserStatus;
+use Marvin\Domotic\Domain\List\ProtocolStatusReference;
+use Marvin\Domotic\Domain\Model\ProtocolStatus;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 class ProtocolStatusFactory extends PersistentProxyObjectFactory
 {
     private static array $datas = [
-        ['label' => 'domotic.protocol.status.enabled', 'reference' => ProtocolStatus::STATUS_ENABLED],
-        ['label' => 'domotic.protocol.status.disabled', 'reference' => ProtocolStatus::STATUS_DISABLED],
+        ['label' => 'domotic.protocol.status.enabled', 'reference' => ProtocolStatusReference::STATUS_ENABLED->value],
+        ['label' => 'domotic.protocol.status.disabled', 'reference' => ProtocolStatusReference::STATUS_DISABLED->value],
     ];
 
     protected function defaults(): array|callable
