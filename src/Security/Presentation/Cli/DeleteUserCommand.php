@@ -6,7 +6,7 @@ use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use Marvin\Security\Application\Command\User\DeleteUser;
 use Marvin\Security\Domain\ValueObject\Identity\UserId;
-use Marvin\Shared\Infrastructure\Framework\Symfony\Service\ExceptionMessageManager;
+use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

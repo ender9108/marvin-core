@@ -4,7 +4,7 @@ namespace Marvin\Shared\Application\Email;
 
 use Marvin\Shared\Domain\ValueObject\Email;
 
-interface EmailDefinition
+interface EmailDefinitionInterface
 {
     public function recipient(): Email;
 

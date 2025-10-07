@@ -5,8 +5,9 @@ namespace Marvin\Security\Presentation\Cli;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use Marvin\Security\Application\Command\User\DisableUser;
+use Marvin\Security\Application\Command\User\LockUser;
 use Marvin\Security\Domain\ValueObject\Identity\UserId;
-use Marvin\Shared\Infrastructure\Framework\Symfony\Service\ExceptionMessageManager;
+use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -19,7 +20,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final readonly class LockUserCommand
 {
     public function __construct(
-        private SyncCommandBusInterface $commandBus,
+        private SyncCommandBusInterface $syncCommandBus,
         private ExceptionMessageManager $exceptionMessageManager,
     ) {
     }
@@ -30,7 +31,7 @@ final readonly class LockUserCommand
         string $id,
     ): int {
         try {
-            $this->commandBus->handle(new DisableUser(new UserId($id)));
+            $this->syncCommandBus->handle(new LockUser(UserId::fromString($id)));
 
             $io->success('User disabled successfully.');
 

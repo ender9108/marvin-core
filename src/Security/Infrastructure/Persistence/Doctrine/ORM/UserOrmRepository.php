@@ -10,14 +10,12 @@ use Doctrine\Persistence\ManagerRegistry;
 use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
 use EnderLab\DddCqrsBundle\Infrastructure\Persistence\Doctrine\ORM\PaginatorOrm;
 use Marvin\Security\Domain\Exception\UserNotFound;
-use Marvin\Security\Domain\List\UserStatusReference;
 use Marvin\Security\Domain\Model\User;
-use Marvin\Security\Domain\Model\UserStatus;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Marvin\Security\Domain\ValueObject\Identity\UserId;
+use Marvin\Security\Domain\ValueObject\UserStatus;
 use Marvin\Security\Infrastructure\Persistence\Doctrine\Cache\UserCacheKeys;
 use Marvin\Shared\Domain\ValueObject\Email;
-use Marvin\Shared\Domain\ValueObject\Reference;
 use Override;
 
 /**
@@ -58,12 +56,11 @@ final class UserOrmRepository extends ServiceEntityRepository implements UserRep
         return $this
             ->createQueryBuilder('u')
             ->select('COUNT(u)')
-            ->innerJoin('u.status', 's', Join::WITH, 's = u.status')
             ->innerJoin('u.type', 't', Join::WITH, 't = u.type')
             ->where('u.id != :id')
             ->setParameter('id', $user->id)
-            ->andWhere('s.reference = :reference')
-            ->setParameter('reference', new Reference(UserStatusReference::STATUS_ENABLED->value))
+            ->andWhere('u.status = :status')
+            ->setParameter('status', new UserStatus(UserStatus::STATUSES['ENABLED']))
             ->andWhere('t = :type')
             ->setParameter('type', $user->type)
             ->getQuery()

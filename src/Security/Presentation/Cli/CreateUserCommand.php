@@ -8,11 +8,12 @@ use Marvin\Security\Application\Command\User\CreateUser;
 use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Lastname;
 use Marvin\Security\Domain\ValueObject\Roles;
+use Marvin\Security\Domain\ValueObject\Timezone;
+use Marvin\Security\Domain\ValueObject\UserType;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Locale;
-use Marvin\Shared\Domain\ValueObject\Reference;
 use Marvin\Shared\Domain\ValueObject\Theme;
-use Marvin\Shared\Infrastructure\Framework\Symfony\Service\ExceptionMessageManager;
+use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -46,6 +47,8 @@ final readonly class CreateUserCommand
         string $theme,
         #[Argument(name: 'type')]
         string $type,
+        #[Argument(name: 'timezone')]
+        string $timezone,
         #[Argument(name: 'password')]
         string $password,
     ): int {
@@ -63,7 +66,8 @@ final readonly class CreateUserCommand
                 $roles,
                 new Locale($locale),
                 new Theme($theme),
-                new Reference($type),
+                new UserType($type),
+                new Timezone($timezone),
                 $password,
             ));
 

@@ -17,13 +17,8 @@
         <embedded name="roles" class="Marvin\Security\Domain\ValueObject\Roles" />
         <embedded name="locale" class="Marvin\Shared\Domain\ValueObject\Locale" />
         <embedded name="theme" class="Marvin\Shared\Domain\ValueObject\Theme" />
-
-        <many-to-one field="status" target-entity="Marvin\Security\Domain\Model\UserStatus">
-            <join-column nullable="false" />
-        </many-to-one>
-        <many-to-one field="type" target-entity="Marvin\Security\Domain\Model\UserType">
-            <join-column nullable="false" />
-        </many-to-one>
+        <embedded name="status" class="Marvin\Security\Domain\ValueObject\UserStatus" />
+        <embedded name="type" class="Marvin\Security\Domain\ValueObject\UserType" />
         <field name="password" length="255" />
         <embedded name="timezone" class="Marvin\Security\Domain\ValueObject\Timezone" />
         <embedded name="createdAt" class="Marvin\Shared\Domain\ValueObject\CreatedAt" />

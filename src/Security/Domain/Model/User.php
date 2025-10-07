@@ -8,13 +8,14 @@ use Marvin\Security\Domain\Event\User\UserDeleted;
 use Marvin\Security\Domain\Exception\InvalidCurrentPassword;
 use Marvin\Security\Domain\Exception\InvalidSamePassword;
 use Marvin\Security\Domain\Exception\InvalidUserStatus;
-use Marvin\Security\Domain\List\UserStatusReference;
 use Marvin\Security\Domain\Service\PasswordHasherInterface;
 use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use Marvin\Security\Domain\ValueObject\Lastname;
 use Marvin\Security\Domain\ValueObject\Roles;
 use Marvin\Security\Domain\ValueObject\Timezone;
+use Marvin\Security\Domain\ValueObject\UserStatus;
+use Marvin\Security\Domain\ValueObject\UserType;
 use Marvin\Shared\Domain\ValueObject\CreatedAt;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Locale;
@@ -91,30 +92,16 @@ class User extends AggregateRoot
         return $this;
     }
 
-    public function enableUser(UserStatus $status): self
+    public function enable(): self
     {
-        if ($status->reference->value !== UserStatusReference::STATUS_ENABLED->value) {
-            throw InvalidUserStatus::withByActionAndReference(
-                'enableUser',
-                $status->reference->value
-            );
-        }
-
-        $this->status = $status;
+        $this->status = UserStatus::enabled();
 
         return $this;
     }
 
-    public function disableUser(UserStatus $status): self
+    public function disable(): self
     {
-        if ($status->reference->value !== UserStatusReference::STATUS_DISABLED->value) {
-            throw InvalidUserStatus::withByActionAndReference(
-                'disableUser',
-                $status->reference->value
-            );
-        }
-
-        $this->status = $status;
+        $this->status = UserStatus::disabled();
 
         return $this;
     }
@@ -122,29 +109,29 @@ class User extends AggregateRoot
     public function delete(): self
     {
         $this->recordThat(new UserDeleted(
-            $this->id->toString(),
-            (string) $this->type->reference,
-            (string) $this->email
+            $this->id,
+            $this->type,
+            $this->email
         ));
 
         return $this;
     }
 
-    public function lockUser(UserStatus $status): self
+    public function lock(): self
     {
-        if ($status->reference->value !== UserStatusReference::STATUS_LOCKED->value) {
-            throw InvalidUserStatus::withByActionAndReference(
-                'lockUser',
-                $status->reference->value
-            );
-        }
-
-        $this->status = $status;
+        $this->status = UserStatus::locked();
 
         return $this;
     }
 
     public function definePassword(string $password, PasswordHasherInterface $passwordHasher): self
+    {
+        $this->password = $passwordHasher->hash($this, $password);
+
+        return $this;
+    }
+
+    public function resetPassword(string $password, PasswordHasherInterface $passwordHasher): self
     {
         $this->password = $passwordHasher->hash($this, $password);
 

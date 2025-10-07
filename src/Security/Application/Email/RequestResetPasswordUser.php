@@ -4,11 +4,11 @@ namespace Marvin\Security\Application\Email;
 
 use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Lastname;
-use Marvin\Shared\Application\Email\EmailDefinition;
+use Marvin\Shared\Application\Email\EmailDefinitionInterface;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Locale;
 
-final readonly class RequestResetPasswordUser implements EmailDefinition
+final readonly class RequestResetPasswordUser implements EmailDefinitionInterface
 {
     public function __construct(
         private Email $recipient,
@@ -36,7 +36,7 @@ final readonly class RequestResetPasswordUser implements EmailDefinition
 
     public function template(): string
     {
-        return 'Mail/request_reset_password.html.twig';
+        return '@security_mail/request_reset_password.html.twig';
     }
 
     public function templateVariables(): array

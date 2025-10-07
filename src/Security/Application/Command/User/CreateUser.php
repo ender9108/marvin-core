@@ -7,6 +7,7 @@ use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Lastname;
 use Marvin\Security\Domain\ValueObject\Roles;
 use Marvin\Security\Domain\ValueObject\Timezone;
+use Marvin\Security\Domain\ValueObject\UserType;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Locale;
 use Marvin\Shared\Domain\ValueObject\Reference;
@@ -21,7 +22,7 @@ final readonly class CreateUser implements SyncCommandInterface
         public Roles $roles,
         public Locale $locale,
         public Theme $theme,
-        public Reference $type,
+        public UserType $type,
         public Timezone $timezone,
         public string $password,
     ) {

@@ -3,14 +3,17 @@
 namespace Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory;
 
 use Marvin\Security\Domain\List\Role;
-use Marvin\Security\Domain\List\UserStatusReference;
-use Marvin\Security\Domain\List\UserTypeReference;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Service\PasswordHasherInterface;
 use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Lastname;
 use Marvin\Security\Domain\ValueObject\Roles;
+use Marvin\Security\Domain\ValueObject\Timezone;
+use Marvin\Security\Domain\ValueObject\UserStatus;
+use Marvin\Security\Domain\ValueObject\UserType;
 use Marvin\Shared\Domain\ValueObject\Email;
+use Marvin\Shared\Domain\ValueObject\Locale;
+use Marvin\Shared\Domain\ValueObject\Theme;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 class UserFactory extends PersistentProxyObjectFactory
@@ -22,8 +25,11 @@ class UserFactory extends PersistentProxyObjectFactory
             'email' => 'marvin.domotic@marvin.test',
             'roles' => [Role::SUPER_ADMIN],
             'password' => 'Test123456789',
-            'status' => UserStatusReference::STATUS_ENABLED->value,
-            'type' => UserTypeReference::TYPE_CLI->value,
+            'status' => UserStatus::STATUSES['ENABLED'],
+            'type' => UserType::TYPES['CLI'],
+            'locale' => 'fr',
+            'theme' => 'dark',
+            'timezone' => 'Europe/Paris',
         ],
         [
             'firstname' => 'Administrator',
@@ -31,8 +37,11 @@ class UserFactory extends PersistentProxyObjectFactory
             'email' => 'administrator@marvin.test',
             'roles' => [Role::SUPER_ADMIN],
             'password' => 'Test123456789',
-            'status' => UserStatusReference::STATUS_ENABLED->value,
-            'type' => UserTypeReference::TYPE_APPLICATION->value,
+            'status' => UserStatus::STATUSES['ENABLED'],
+            'type' => UserType::TYPES['APP'],
+            'locale' => 'fr',
+            'theme' => 'dark',
+            'timezone' => 'Europe/Paris',
         ],
         [
             'firstname' => 'Johnny',
@@ -40,8 +49,11 @@ class UserFactory extends PersistentProxyObjectFactory
             'email' => 'johnny.begood@marvin.test',
             'roles' => [Role::ADMIN],
             'password' => 'Test123456789',
-            'status' => UserStatusReference::STATUS_ENABLED->value,
-            'type' => UserTypeReference::TYPE_APPLICATION->value,
+            'status' => UserStatus::STATUSES['ENABLED'],
+            'type' => UserType::TYPES['APP'],
+            'locale' => 'fr',
+            'theme' => 'dark',
+            'timezone' => 'Europe/Paris',
         ],
         [
             'firstname' => 'Alexandre',
@@ -49,8 +61,11 @@ class UserFactory extends PersistentProxyObjectFactory
             'email' => 'darkender91@gmail.com',
             'roles' => [Role::SUPER_ADMIN],
             'password' => 'Test123456789',
-            'status' => UserStatusReference::STATUS_ENABLED->value,
-            'type' => UserTypeReference::TYPE_APPLICATION->value,
+            'status' => UserStatus::STATUSES['ENABLED'],
+            'type' => UserType::TYPES['APP'],
+            'locale' => 'fr',
+            'theme' => 'dark',
+            'timezone' => 'Europe/Paris',
         ],
         [
             'firstname' => 'John',
@@ -58,8 +73,11 @@ class UserFactory extends PersistentProxyObjectFactory
             'email' => 'john.doe@test.com',
             'roles' => [Role::USER],
             'password' => 'Test123456789',
-            'status' => UserStatusReference::STATUS_ENABLED->value,
-            'type' => UserTypeReference::TYPE_APPLICATION->value,
+            'status' => UserStatus::STATUSES['ENABLED'],
+            'type' => UserType::TYPES['APP'],
+            'locale' => 'fr',
+            'theme' => 'dark',
+            'timezone' => 'Europe/Paris',
         ],
     ];
 
@@ -83,6 +101,11 @@ class UserFactory extends PersistentProxyObjectFactory
                 $parameters['lastname'] = new Lastname($parameters['lastname']);
                 $parameters['email'] = new Email($parameters['email']);
                 $parameters['roles'] = new Roles($parameters['roles']);
+                $parameters['locale'] = new Locale($parameters['locale']);
+                $parameters['theme'] = new Theme($parameters['theme']);
+                $parameters['timezone'] = new Timezone($parameters['timezone']);
+                $parameters['type'] = new UserType($parameters['type']);
+                $parameters['status'] = new UserStatus($parameters['status']);
 
                 return $parameters;
             })

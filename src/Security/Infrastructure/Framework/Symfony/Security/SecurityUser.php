@@ -20,7 +20,7 @@ final readonly class SecurityUser implements JWTUserInterface, PasswordAuthentic
         public Email $email,
         public ?string $password,
         public array $roles,
-        public string $status,
+        public int $status,
     ) {
     }
 
@@ -31,7 +31,7 @@ final readonly class SecurityUser implements JWTUserInterface, PasswordAuthentic
             $user->email,
             (string) $user->password,
             $user->roles->toArray(),
-            $user->status->reference->value
+            $user->status->value
         );
     }
 
