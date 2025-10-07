@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Domotic\Infrastructure\Foundry\Factory;
+namespace App\Domotic\Infrastructure\DataFixtures\Foundry\Factory;
 
-use App\Domotic\Domain\Model\Capability;
-use App\Domotic\Domain\Model\Zone;
+use Marvin\Domotic\Domain\Model\Zone;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 class ZoneFactory extends PersistentProxyObjectFactory
 {
     private static array $datas = [
-        ['label' => 'Home'],
+        ['label' => 'Home', 'area' => 0],
     ];
 
     protected function defaults(): array|callable
