@@ -59,7 +59,8 @@ services:
                 condition: service_started
 
     database:
-        image: postgres:${DB_VERSION-16}-alpine
+        #image: postgres:${DB_VERSION-16}-alpine
+        image: timescale/timescaledb:2.22.1-pg17
         container_name: '${APP_NAME}-database'
         environment:
             POSTGRES_DB: ${DB_NAME:-marvin}
@@ -69,8 +70,11 @@ services:
             - '127.0.0.1:5432:5432'
         volumes:
             - ./docker/database/volume/data:/var/lib/postgresql/data
+            - ./docker/database/config/00-timescale.sql:/docker-entrypoint-initdb.d/00-timescale.sql:ro
+            - ./docker/database/config/10-logs-and-metrics.sql:/docker-entrypoint-initdb.d/10-logs-and-metrics.sql:ro
+            - ./docker/database/config/20-retention-cron.sql:/docker-entrypoint-initdb.d/20-retention-cron.sql:ro
         healthcheck:
-            test: [ "CMD-SHELL", "pg_isready -U ${DB_USER}" ]
+            test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
             interval: 10s
             timeout: 5s
             retries: 10
