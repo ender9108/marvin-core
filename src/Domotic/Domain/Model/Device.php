@@ -23,10 +23,17 @@ final class Device
         private(set) Protocol $protocol,
         private(set) ?Zone $zone = null,
         private(set) ?UpdatedAt $updatedAt = null,
-        public readonly CreatedAt $createdAt = new CreatedAt(new DateTimeImmutable())
+        public readonly CreatedAt $createdAt = new CreatedAt(new DateTimeImmutable()),
     ) {
         $this->id = new DeviceId();
         $this->groups = new ArrayCollection();
+    }
+
+    public function setZone(?Zone $zone): self
+    {
+        $this->zone = $zone;
+
+        return $this;
     }
 
     public function addGroup(Group $group): Device
