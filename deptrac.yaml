@@ -1,72 +1,59 @@
 deptrac:
   paths:
     - src
-    - libs
   exclude_files:
     # Ignore test classes and Symfony fixtures from architecture checks
     - '#^tests/.*#'
-    - '#^libs/.*/tests/.*#'
     - '#src/.*/Infrastructure/Framework/Symfony/DataFixtures/.*#'
-    - '#^libs/tools-bundle/.*#'
   layers:
     - name: Domain
       collectors:
         - type: classLike
           value: 'Marvin\\.+\\Domain\\.*'
         - type: classLike
-          value: 'EnderLab\\.+\\Domain\\.*'
-        - type: classLike
           value: 'Symfony\\Component\\Uid\\.*'
         - type: classLike
-          value: 'EnderLab\\ToolsBundle\\.*'
+          value: 'Symfony\\Component\\Messenger\\Attribute\\.*'
+        - type: classLike
+          value: 'Doctrine\\Common\\Collections\\(Collection|ArrayCollection)'
 
     - name: Application
       collectors:
         - type: classLike
           value: 'Marvin\\.+\\Application\\.*'
         - type: classLike
-          value: 'EnderLab\\.+\\Application\\.*'
-        - type: classLike
-          value: 'Symfony\\Component\\Messenger\\Attribute\\.*'
-            
-
-    #- name: Presentation
-    #  collectors:
-    #    - type: classLike
-    #      value: 'Marvin\\.+\\Presentation\\.*'
-    #    - type: classLike
-    #      value: 'EnderLab\\.+\\Presentation\\.*'
-    #    - type: classLike
-    #      value: 'ApiPlatform\\.*'
-    #    - type: classLike
-    #      value: 'Marvin\\.+\\Infrastructure\\Framework\\Symfony\\Mapper\\.*'
+          value: 'Symfony\\Component\\Validator\\Constraints\\.*'
 
     - name: Infrastructure
       collectors:
         - type: classLike
           value: 'Marvin\\.+\\Infrastructure\\(?!Framework\\Symfony\\).*'
         - type: classLike
-          value: 'EnderLab\\.+\\Infrastructure\\(?!Framework\\Symfony\\).*'
-        - type: classLike
-          value: 'Symfony\\(Contracts|Component|Bundle)\\(?!Messenger\\Attribute\\|Uid\\).*'
+          value: 'Symfony\\(Contracts|Component|Bundle)\\(?!Messenger\\Attribute\\|Uid\\|Validator\\Constraints).*'
         - type: classLike
           value: 'Lexik\\.*'
         - type: classLike
           value: 'Symfonycasts\\.*'
         - type: classLike
-          value: 'Doctrine\\.*'
+          value: 'Doctrine\\(DBAL|ORM|Bundle|Persistence)\\.*'
         - type: classLike
           value: 'Psr\\.*'
         - type: classLike
           value: 'Marvin\\Security\\Presentation\\.*'
-            
+
+    - name: Presentation
+      collectors:
+          - type: classLike
+            value: 'Marvin\\.+\\Presentation\\.*'
+          - type: classLike
+            value: 'ApiPlatform\\.*'
+          - type: classLike
+            value: 'Marvin\\Shared\\Infrastructure\\Framework\\Symfony\\MapperTransformer\\.*'
 
     - name: Framework
       collectors:
         - type: classLike
           value: 'Marvin\\.+\\Infrastructure\\Framework\\Symfony\\.*'
-        - type: classLike
-          value: 'EnderLab\\.+\\Infrastructure\\Framework\\Symfony\\.*'
 
   ruleset:
     # Domain is the innermost layer and should not depend on other project layers
@@ -79,9 +66,7 @@ deptrac:
     # Presentation handles DTOs/Resources/Controllers and may depend on inner layers
     Presentation:
       - Application
-      - Domain
       - Infrastructure
-      - Framework
 
     # Infrastructure implements ports/adapters and can depend on Application and Domain
     Infrastructure:
