@@ -9,7 +9,7 @@ class SystemStory extends Story
 {
     public function build(): void
     {
-        $this->buildPluginStatus();
+        //$this->buildPluginStatus();
     }
 
     public function buildPluginStatus(): void
