@@ -3,11 +3,9 @@
 namespace Marvin\System\Application\CommandHandler;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
-use Marvin\Shared\Domain\ValueObject\Reference;
 use Marvin\System\Application\Command\CreatePlugin;
 use Marvin\System\Domain\Exception\PluginAlreadyExist;
 use Marvin\System\Domain\Exception\PluginStatusNotFound;
-use Marvin\System\Domain\List\PluginStatusReference;
 use Marvin\System\Domain\Model\Plugin;
 use Marvin\System\Domain\Model\PluginStatus;
 use Marvin\System\Domain\Repository\PluginRepositoryInterface;

@@ -1,6 +1,7 @@
 doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
+        schema_filter: "~^(?!(_timescaledb_catalog|_timescaledb_config|_timescaledb_internal|domotic_device_metric|system_log)).*$~"
 
         # IMPORTANT: You MUST configure your server version,
         # either here or in the DATABASE_URL env var (see .env file)
@@ -14,8 +15,6 @@ doctrine:
             updatedAt: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\UpdatedAtType
             login_attempt_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\LoginAttemptIdType
             user_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserIdType
-            user_status_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserStatusIdType
-            user_type_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserTypeIdType
             request_reset_password_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\RequestResetPasswordIdType
             docker_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\DockerIdType
             docker_command_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\DockerCommandIdType

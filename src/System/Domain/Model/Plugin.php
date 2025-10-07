@@ -7,7 +7,8 @@ use Marvin\Shared\Domain\ValueObject\Description;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\Reference;
 use Marvin\System\Domain\ValueObject\Identity\PluginId;
-use Marvin\System\Domain\ValueObject\Metadata;
+use Marvin\Shared\Domain\ValueObject\Metadata;
+use Marvin\System\Domain\ValueObject\PluginStatus;
 use Marvin\System\Domain\ValueObject\Version;
 
 class Plugin extends AggregateRoot
