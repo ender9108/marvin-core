@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Marvin\Domotic\Domain\Model\Capability;
 use Marvin\Domotic\Domain\ValueObject\Identity\CapabilityCompositionId;
 
-final class CapabilityComposition
+class CapabilityComposition
 {
     public readonly CapabilityCompositionId $id;
 
@@ -25,35 +25,35 @@ final class CapabilityComposition
         $this->capabilitystates = new ArrayCollection();
     }
 
-    public function addCapabilityAction(CapabilityAction $capabilityaction): CapabilityComposition
+    public function addCapabilityAction(CapabilityAction $capabilityAction): CapabilityComposition
     {
-        if (!$this->capabilityactions->contains($capabilityaction)) {
-            $this->capabilityactions->add($capabilityaction);
+        if (!$this->capabilityactions->contains($capabilityAction)) {
+            $this->capabilityactions->add($capabilityAction);
         }
 
         return $this;
     }
 
-    public function removeCapabilityAction(CapabilityAction $capabilityaction): CapabilityComposition
+    public function removeCapabilityAction(CapabilityAction $capabilityAction): CapabilityComposition
     {
-        if ($this->capabilityactions->contains($capabilityaction)) {
-            $this->capabilityactions->removeElement($capabilityaction);
+        if ($this->capabilityactions->contains($capabilityAction)) {
+            $this->capabilityactions->removeElement($capabilityAction);
         }
 
         return $this;
     }
 
-    public function addCapabilityState(CapabilityState $capabilitystate): CapabilityComposition
+    public function addCapabilityState(CapabilityState $capabilityState): CapabilityComposition
     {
-        if (!$this->capabilitystates->contains($capabilitystate)) {
-            $this->capabilitystates->add($capabilitystate);
+        if (!$this->capabilitystates->contains($capabilityState)) {
+            $this->capabilitystates->add($capabilityState);
         }
     }
 
-    public function removeCapabilityState(CapabilityState $capabilitystate): CapabilityComposition
+    public function removeCapabilityState(CapabilityState $capabilityState): CapabilityComposition
     {
-        if ($this->capabilitystates->contains($capabilitystate)) {
-            $this->capabilitystates->removeElement($capabilitystate);
+        if ($this->capabilitystates->contains($capabilityState)) {
+            $this->capabilitystates->removeElement($capabilityState);
         }
 
         return $this;

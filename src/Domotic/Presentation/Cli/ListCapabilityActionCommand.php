@@ -4,7 +4,7 @@ namespace Marvin\Domotic\Presentation\Cli;
 
 use EnderLab\DddCqrsBundle\Application\Query\QueryBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
-use Marvin\Domotic\Application\Query\Device\GetCapabilitiesCollection;
+use Marvin\Domotic\Application\Query\Device\GetCapabilityActionCollection;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -13,10 +13,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsCommand(
-    name: 'marvin:domotic:list-capabilities',
-    description: 'List of device capabilities',
+    name: 'marvin:domotic:list-capability-actions',
+    description: 'List of device capability actions',
 )]
-final readonly class ListCapabilitiesCommand
+final readonly class ListCapabilityActionCommand
 {
     public function __construct(
         private QueryBusInterface $queryBus,
@@ -33,7 +33,7 @@ final readonly class ListCapabilitiesCommand
         string $locale = 'fr',
     ): int {
         try {
-            $capabilities = $this->queryBus->handle(new GetCapabilitiesCollection());
+            $capabilities = $this->queryBus->handle(new GetCapabilityActionCollection());
             $headers = ['id', 'label', 'reference'];
             $rows = [];
 

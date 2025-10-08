@@ -4,6 +4,8 @@ namespace App\Domotic\Infrastructure\DataFixtures\Foundry\Factory;
 
 use Marvin\Domotic\Domain\List\CapabilityReference;
 use Marvin\Domotic\Domain\Model\Capability;
+use Marvin\Shared\Domain\ValueObject\Label;
+use Marvin\Shared\Domain\ValueObject\Reference;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 class CapabilityFactory extends PersistentProxyObjectFactory
@@ -48,6 +50,18 @@ class CapabilityFactory extends PersistentProxyObjectFactory
     public static function getDatas(): array
     {
         return self::$datas;
+    }
+
+    #[\Override]
+    protected function initialize(): static
+    {
+        return $this
+            ->beforeInstantiate(function (array $parameters): array {
+                $parameters['label'] = new Label($parameters['label']);
+                $parameters['reference'] = new Reference($parameters['reference']);
+                return $parameters;
+            })
+        ;
     }
 
     public static function class(): string

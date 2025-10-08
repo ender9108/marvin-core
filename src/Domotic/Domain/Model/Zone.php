@@ -11,7 +11,7 @@ use Marvin\Shared\Domain\ValueObject\CreatedAt;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\UpdatedAt;
 
-final class Zone
+class Zone
 {
     public readonly ZoneId $id;
 
@@ -50,7 +50,7 @@ final class Zone
     {
         if (!$this->devices->contains($device)) {
             $this->devices->add($device);
-            $device->setZone($this);
+            $device->changeZone($this);
         }
 
         return $this;
@@ -60,7 +60,7 @@ final class Zone
     {
         if ($this->devices->contains($device)) {
             $this->devices->removeElement($device);
-            $device->setZone(null);
+            $device->changeZone(null);
         }
 
         return $this;

@@ -14,7 +14,7 @@ use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use Marvin\Security\Domain\ValueObject\UserStatus;
-use Marvin\Security\Infrastructure\Persistence\Doctrine\Cache\UserCacheKeys;
+use Marvin\Security\Infrastructure\Persistence\Doctrine\Cache\SecurityCacheKeys;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Override;
 
@@ -104,7 +104,7 @@ final class UserOrmRepository extends ServiceEntityRepository implements UserRep
             ->createQueryBuilder('u')
             ->setCacheable(true)
             ->setCacheMode(ClassMetadata::CACHE_USAGE_NONSTRICT_READ_WRITE)
-            ->setCacheRegion(UserCacheKeys::USER_LIST->value)
+            ->setCacheRegion(SecurityCacheKeys::USER_LIST->value)
         ;
 
         foreach ($criterias as $field => $value) {

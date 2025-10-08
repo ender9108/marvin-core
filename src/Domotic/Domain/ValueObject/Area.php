@@ -14,7 +14,6 @@ final readonly class Area implements ValueObjectInterface
 
     public function __construct(float $label)
     {
-        Assert::notEmpty($label);
         Assert::minLength($label, self::MIN);
 
         $this->value = $label;

@@ -6,14 +6,14 @@ use Marvin\Domotic\Domain\ValueObject\Identity\CapabilityStateId;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\Reference;
 
-final class CapabilityState
+class CapabilityState
 {
     public readonly CapabilityStateId $id;
 
     public function __construct(
         private(set) Label $label,
         private(set) Reference $reference,
-        private(set) array $stateschema
+        private(set) array $stateSchema
     ) {
         $this->id = new CapabilityStateId();
     }

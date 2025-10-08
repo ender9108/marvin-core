@@ -24,10 +24,10 @@ class DomoticStory extends Story
 
     public function build(): void
     {
-        #$this->buildZone();
-        #$this->buildCapabilities();
-        #$this->buildCapabilityActions();
-        #$this->buildCapabilityStates();
+        $this->buildZone();
+        $this->buildCapabilities();
+        $this->buildCapabilityActions();
+        $this->buildCapabilityStates();
         #$this->buildCapabilityCompositions();
     }
 

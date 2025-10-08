@@ -17,19 +17,41 @@ final class Device
     /** @var Collection<int, Group>  */
     public private(set) Collection $groups;
 
+    private Collection $capabilityCompositions;
+
     public function __construct(
         private(set) Label $label,
-        private(set) string $technicalname,
-        private(set) Protocol $protocol,
+        private(set) ?string $technicalName = null,
+        private(set) ?Protocol $protocol = null,
         private(set) ?Zone $zone = null,
         private(set) ?UpdatedAt $updatedAt = null,
         public readonly CreatedAt $createdAt = new CreatedAt(new DateTimeImmutable()),
     ) {
         $this->id = new DeviceId();
         $this->groups = new ArrayCollection();
+        $this->capabilityCompositions = new ArrayCollection();
+
     }
 
-    public function setZone(?Zone $zone): self
+    public function update(
+        ?Label $label = null,
+        ?string $technicalName = null
+    ): Device
+    {
+        $this->label = $label ?? $this->label;
+        $this->technicalName = $technicalName ?? $this->technicalName;
+
+        return $this;
+    }
+
+    public function changeProtocol(?Protocol $protocol): self
+    {
+        $this->protocol = $protocol;
+
+        return $this;
+    }
+
+    public function changeZone(?Zone $zone): self
     {
         $this->zone = $zone;
 
@@ -51,6 +73,24 @@ final class Device
         if ($this->groups->contains($group)) {
             $this->groups->removeElement($group);
             $group->removeDevice($this);
+        }
+
+        return $this;
+    }
+
+    public function addCapabilityComposition(CapabilityComposition $capabilityComposition): Device
+    {
+        if (!$this->capabilityCompositions->contains($capabilityComposition)) {
+            $this->capabilityCompositions->add($capabilityComposition);
+        }
+
+        return $this;
+    }
+
+    public function removeCapabilityComposition(CapabilityComposition $capabilityComposition): Device
+    {
+        if ($this->capabilityCompositions->contains($capabilityComposition)) {
+            $this->capabilityCompositions->removeElement($capabilityComposition);
         }
 
         return $this;

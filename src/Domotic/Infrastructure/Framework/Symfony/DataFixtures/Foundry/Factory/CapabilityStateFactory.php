@@ -6,6 +6,8 @@ use Marvin\Domotic\Domain\List\CapabilityStateAirQualityReference;
 use Marvin\Domotic\Domain\List\CapabilityStateNotifyReference;
 use Marvin\Domotic\Domain\List\CapabilityStateReference;
 use Marvin\Domotic\Domain\Model\CapabilityState;
+use Marvin\Shared\Domain\ValueObject\Label;
+use Marvin\Shared\Domain\ValueObject\Reference;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 class CapabilityStateFactory extends PersistentProxyObjectFactory
@@ -14,12 +16,12 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.on_off',
             'reference' => CapabilityStateReference::ON_OFF->value,
-            'schema' => ['type' => 'bool', ]
+            'stateSchema' => ['type' => 'bool', ]
         ],
         [
             'label' => 'domotic.capability_states.brightness',
             'reference' => CapabilityStateReference::BRIGHTNESS->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'integer',
                 'value' => ['min' => 0, 'max' => 100]
             ]
@@ -27,7 +29,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.color',
             'reference' => CapabilityStateReference::COLOR->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'object',
                 'value' => [
                     'r' => ['min' => 0, 'max' => 255],
@@ -39,7 +41,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.color_temp',
             'reference' => CapabilityStateReference::COLOR_TEMP->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'integer',
                 'value' => ['min' => 150, 'max' => 500],
                 'unit' => 'mired'
@@ -48,7 +50,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.position',
             'reference' => CapabilityStateReference::POSITION->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'integer',
                 'value' => ['min' => 0, 'max' => 100],
                 'unit' => 'percent'
@@ -57,7 +59,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.speed',
             'reference' => CapabilityStateReference::SPEED->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'string',
                 'value' => ['low', 'medium', 'high', 'auto'],
             ]
@@ -65,7 +67,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.temperature',
             'reference' => CapabilityStateReference::TEMPERATURE->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'float',
                 'unit' => ['celcius', 'fahrenheit'],
             ]
@@ -73,7 +75,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.temperature_mode',
             'reference' => CapabilityStateReference::TEMPERATURE_MODE->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'string',
                 'value' => ['off', 'heat', 'cool', 'auto', 'eco']
             ]
@@ -81,27 +83,27 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.locked',
             'reference' => CapabilityStateReference::LOCKED->value,
-            'schema' => ['type' => 'bool', ]
+            'stateSchema' => ['type' => 'bool', ]
         ],
         [
             'label' => 'domotic.capability_states.presence',
             'reference' => CapabilityStateReference::PRESENCE->value,
-            'schema' => ['type' => 'bool', ]
+            'stateSchema' => ['type' => 'bool', ]
         ],
         [
             'label' => 'domotic.capability_states.contact',
             'reference' => CapabilityStateReference::CONTACT->value,
-            'schema' => ['type' => 'bool', ]
+            'stateSchema' => ['type' => 'bool', ]
         ],
         [
             'label' => 'domotic.capability_states.vibration',
             'reference' => CapabilityStateReference::VIBRATION->value,
-            'schema' => ['type' => 'bool', ]
+            'stateSchema' => ['type' => 'bool', ]
         ],
         [
             'label' => 'domotic.capability_states.humidity',
             'reference' => CapabilityStateReference::HUMIDITY->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'float',
                 'unit' => 'percent',
             ]
@@ -109,7 +111,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.illuminance',
             'reference' => CapabilityStateReference::ILLUMINANCE->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'integer',
                 'unit' => 'lux',
             ]
@@ -117,7 +119,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.air_quality',
             'reference' => CapabilityStateReference::AIR_QUALITY->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'string',
                 'value' => [
                     CapabilityStateAirQualityReference::EXCELLENT->value,
@@ -132,37 +134,37 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.pm2_5',
             'reference' => CapabilityStateReference::PM2_5->value,
-            'schema' => ['type' => 'float', ]
+            'stateSchema' => ['type' => 'float', ]
         ],
         [
             'label' => 'domotic.capability_states.pm10',
             'reference' => CapabilityStateReference::PM10->value,
-            'schema' => ['type' => 'float', ]
+            'stateSchema' => ['type' => 'float', ]
         ],
         [
             'label' => 'domotic.capability_states.voc_index',
             'reference' => CapabilityStateReference::VOC_INDEX->value,
-            'schema' => ['type' => 'float', ]
+            'stateSchema' => ['type' => 'float', ]
         ],
         [
             'label' => 'domotic.capability_states.co2',
             'reference' => CapabilityStateReference::CO2->value,
-            'schema' => ['type' => 'integer', ]
+            'stateSchema' => ['type' => 'integer', ]
         ],
         [
             'label' => 'domotic.capability_states.smoke',
             'reference' => CapabilityStateReference::SMOKE->value,
-            'schema' => ['type' => 'bool', ]
+            'stateSchema' => ['type' => 'bool', ]
         ],
         [
             'label' => 'domotic.capability_states.water_leak',
             'reference' => CapabilityStateReference::WATER_LEAK->value,
-            'schema' => ['type' => 'bool', ]
+            'stateSchema' => ['type' => 'bool', ]
         ],
         [
             'label' => 'domotic.capability_states.sound',
             'reference' => CapabilityStateReference::SOUND->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'integer',
                 'unit' => 'dB',
             ]
@@ -170,7 +172,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.power',
             'reference' => CapabilityStateReference::POWER->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'float',
                 'unit' => 'W',
             ]
@@ -178,7 +180,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.energy',
             'reference' => CapabilityStateReference::ENERGY->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'float',
                 'unit' => 'kWh',
             ]
@@ -186,7 +188,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.voltage',
             'reference' => CapabilityStateReference::VOLTAGE->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'float',
                 'unit' => 'V',
             ]
@@ -194,7 +196,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.current',
             'reference' => CapabilityStateReference::CURRENT->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'float',
                 'unit' => 'A',
             ]
@@ -202,7 +204,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.battery',
             'reference' => CapabilityStateReference::BATTERY->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'integer',
                 'unit' => 'percent',
             ]
@@ -210,7 +212,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.last_event',
             'reference' => CapabilityStateReference::LAST_EVENT->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'string',
                 'value' => ['press', 'double', 'long', 'release']
             ]
@@ -218,12 +220,12 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
         [
             'label' => 'domotic.capability_states.scene',
             'reference' => CapabilityStateReference::SCENE->value,
-            'schema' => ['type' => 'string']
+            'stateSchema' => ['type' => 'string']
         ],
         [
             'label' => 'domotic.capability_states.notify',
             'reference' => CapabilityStateReference::NOTIFY->value,
-            'schema' => [
+            'stateSchema' => [
                 'type' => 'string',
                 'value' => [
                     CapabilityStateNotifyReference::ALL->value,
@@ -258,6 +260,18 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
     public static function getDatas(): array
     {
         return self::$datas;
+    }
+
+    #[\Override]
+    protected function initialize(): static
+    {
+        return $this
+            ->beforeInstantiate(function (array $parameters): array {
+                $parameters['label'] = new Label($parameters['label']);
+                $parameters['reference'] = new Reference($parameters['reference']);
+                return $parameters;
+            })
+            ;
     }
 
     public static function class(): string
