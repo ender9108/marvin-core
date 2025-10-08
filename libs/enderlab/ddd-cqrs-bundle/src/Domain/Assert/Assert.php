@@ -35,7 +35,8 @@ class Assert
         if (!\is_string($value)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_string',
-                ['%value%' => static::typeToString($value)]
+                ['%value%' => static::typeToString($value)],
+                'A0001'
             );
         }
     }
@@ -1951,9 +1952,9 @@ class Assert
      * @return void
      * @psalm-pure this method is not supposed to perform side-effects
      */
-    protected static function reportInvalidArgument(string $message, array $parameters = []): void
+    protected static function reportInvalidArgument(string $message, array $parameters = [], string $internalCode = 'E999'): void
     {
-        throw new InvalidArgument($message, $parameters);
+        throw new InvalidArgument($message, $parameters, $internalCode);
     }
 
     private function __construct() {

@@ -11,6 +11,8 @@ use Throwable;
 
 final readonly class ExceptionMessageManager
 {
+    private const string ERROR_LIST_URL = 'https://github.com/ender9108/marvin-core/blob/main/docs/error_code/error_code.md';
+
     public function __construct(
         private ParameterBagInterface $parameters,
         private TranslatorInterface $translator,
@@ -37,15 +39,18 @@ final readonly class ExceptionMessageManager
         $body = [];
 
         if ($exception instanceof TranslatableExceptionInterface) {
+            $parts = explode('.', $exception->translationId());
+            $codeName = '#'.end($parts).'-'.$exception->getInternalCode();
+
             $body = [
-                'type' => $exception->translationId(),
-                'title' => $exception->translationId(),
+                'type' => self::ERROR_LIST_URL.$codeName,
+                'title' => $codeName,
                 'detail' => $message,
             ];
         } else {
             $body = [
-                'type' => $exception->getCode(),
-                'title' => $exception->getMessage(),
+                'type' => self::ERROR_LIST_URL.'#uncknown_error-E999',
+                'title' => '#uncknown_error-E999',
                 'detail' => $message,
             ];
         }
