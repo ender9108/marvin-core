@@ -14,9 +14,7 @@
 
         <embedded name="label" class="Marvin\Shared\Domain\ValueObject\Label" />
         <embedded name="reference" class="Marvin\Shared\Domain\ValueObject\Reference" />
-        <many-to-one field="status" target-entity="Marvin\Domotic\Domain\Model\ProtocolStatus">
-            <join-column nullable="false" />
-        </many-to-one>
+        <embedded name="status" class="Marvin\Domotic\Domain\ValueObject\ProtocolStatus" />
         <embedded name="description" class="Marvin\Shared\Domain\ValueObject\Description" />
         <embedded name="metadata" class="Marvin\SHared\Domain\ValueObject\Metadata" />
         <embedded name="updatedAt" class="Marvin\Shared\Domain\ValueObject\UpdatedAt" />

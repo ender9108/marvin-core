@@ -6,5 +6,4 @@ use RuntimeException;
 
 abstract class DomainException extends RuntimeException
 {
-
 }

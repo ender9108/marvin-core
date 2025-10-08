@@ -6,7 +6,6 @@ use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\CapabilityActionFact
 use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\CapabilityCompositionFactory;
 use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\CapabilityFactory;
 use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\CapabilityStateFactory;
-use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\ProtocolStatusFactory;
 use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\ZoneFactory;
 use Zenstruck\Foundry\Story;
 
@@ -30,7 +29,6 @@ class DomoticStory extends Story
         #$this->buildCapabilityActions();
         #$this->buildCapabilityStates();
         #$this->buildCapabilityCompositions();
-        #$this->buildProtocolStatuses();
     }
 
     private function buildZone(): void
@@ -83,13 +81,6 @@ class DomoticStory extends Story
             }
 
             CapabilityCompositionFactory::createOne($data);
-        }
-    }
-
-    private function buildProtocolStatuses(): void
-    {
-        foreach (ProtocolStatusFactory::getDatas() as $data) {
-            ProtocolStatusFactory::createOne($data);
         }
     }
 }
