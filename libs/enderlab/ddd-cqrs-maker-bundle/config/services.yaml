@@ -25,3 +25,8 @@ services:
             $projectDir: '%kernel.project_dir%'
         tags: ['maker.command']
 
+    EnderLab\DddCqrsMakerBundle\Maker\MakeApplicationCommand:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+        tags: ['maker.command']
+
