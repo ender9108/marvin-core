@@ -5,6 +5,7 @@ namespace Marvin\Domotic\Domain\Model;
 use DateTimeImmutable;
 use EnderLab\ToolsBundle\Service\ListTrait;
 use Marvin\Domotic\Domain\ValueObject\Identity\ProtocolId;
+use Marvin\Domotic\Domain\ValueObject\ProtocolStatus;
 use Marvin\Shared\Domain\ValueObject\CreatedAt;
 use Marvin\Shared\Domain\ValueObject\Description;
 use Marvin\Shared\Domain\ValueObject\Label;
@@ -47,9 +48,11 @@ final class Protocol
 
     public function disable(): void
     {
+        $this->status = ProtocolStatus::disabled();
     }
 
     public function enable(): void
     {
+        $this->status = ProtocolStatus::enabled();
     }
 }

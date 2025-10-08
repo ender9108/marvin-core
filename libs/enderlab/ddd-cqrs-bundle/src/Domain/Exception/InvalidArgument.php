@@ -8,8 +8,9 @@ final class InvalidArgument extends DomainException implements TranslatableExcep
     public function __construct(
         private readonly string $translationId,
         private readonly array $parameters = [],
+        string $code = 'unknown_error',
     ) {
-        parent::__construct($translationId);
+        parent::__construct($translationId, $code);
     }
 
     #[Override]
@@ -27,6 +28,6 @@ final class InvalidArgument extends DomainException implements TranslatableExcep
     #[Override]
     public function translationDomain(): string
     {
-        return 'messages';
+        return 'assert_messages';
     }
 }

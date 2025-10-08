@@ -41,7 +41,7 @@ services:
             dockerfile: ./docker/worker/Dockerfile
         container_name: '${APP_NAME}-worker'
         ports:
-            - '9001:9001'
+            - '127.0.0.1:9001:9001'
         environment:
             UNIX_UID: '${UNIX_UID-1000}'
             UNIX_GID: '${UNIX_GID-1000}'
@@ -60,7 +60,7 @@ services:
 
     database:
         #image: postgres:${DB_VERSION-16}-alpine
-        image: timescale/timescaledb:2.22.1-pg17
+        image: timescale/timescaledb:2.22.1-pg${DB_VERSION-17}
         container_name: '${APP_NAME}-database'
         environment:
             POSTGRES_DB: ${DB_NAME:-marvin}
