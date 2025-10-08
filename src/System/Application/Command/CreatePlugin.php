@@ -5,8 +5,8 @@ namespace Marvin\System\Application\Command;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandInterface;
 use Marvin\Shared\Domain\ValueObject\Description;
 use Marvin\Shared\Domain\ValueObject\Label;
-use Marvin\Shared\Domain\ValueObject\Reference;
 use Marvin\Shared\Domain\ValueObject\Metadata;
+use Marvin\Shared\Domain\ValueObject\Reference;
 use Marvin\System\Domain\ValueObject\Version;
 
 final readonly class CreatePlugin implements SyncCommandInterface

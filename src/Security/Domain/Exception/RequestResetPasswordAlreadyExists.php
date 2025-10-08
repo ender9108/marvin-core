@@ -9,7 +9,8 @@ use Override;
 
 final class RequestResetPasswordAlreadyExists extends DomainException implements TranslatableExceptionInterface
 {
-    public function __construct(string $message) {
+    public function __construct(string $message)
+    {
         parent::__construct($message);
     }
 

@@ -1,3 +1,5 @@
 shared:
     label:
         hello: Bonjour
+        good_day: Bonne journée !
+        name_signature: Marvin

@@ -4,9 +4,9 @@ namespace Marvin\Security\Domain\Model;
 
 use DateMalformedStringException;
 use DateTimeImmutable;
+use Marvin\Security\Domain\ValueObject\ExpiresAt;
 use Marvin\Security\Domain\ValueObject\Identity\RequestResetPasswordId;
 use Marvin\Shared\Domain\ValueObject\CreatedAt;
-use Marvin\Security\Domain\ValueObject\ExpiresAt;
 
 class RequestResetPassword
 {
