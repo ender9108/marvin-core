@@ -17,13 +17,13 @@
         <many-to-one field="protocol" target-entity="Marvin\Domotic\Domain\Model\Protocol">
             <join-column />
         </many-to-one>
-        <many-to-one field="zone" target-entity="Marvin\Domotic\Domain\Model\Zone">
-            <join-column />
-        </many-to-one>
         <many-to-many field="groups" target-entity="Marvin\Domotic\Domain\Model\Group" inversed-by="devices">
             <join-table name="domotic_groups_devices" />
         </many-to-many>
         <embedded name="updatedAt" class="Marvin\Shared\Domain\ValueObject\UpdatedAt" />
         <embedded name="createdAt" class="Marvin\Shared\Domain\ValueObject\CreatedAt" />
+        <many-to-one field="zone" target-entity="Marvin\Domotic\Domain\Model\Zone" inversed-by="devices">
+            <join-column nullable="true" />
+        </many-to-one>
     </entity>
 </doctrine-mapping>

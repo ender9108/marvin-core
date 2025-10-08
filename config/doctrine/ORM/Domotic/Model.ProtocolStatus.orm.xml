@@ -12,8 +12,8 @@
             <generator strategy="NONE" />
         </id>
 
-            <embedded name="label" class="Marvin\Shared\Domain\ValueObject\Label" />
-            <embedded name="reference" class="Marvin\Shared\Domain\ValueObject\Reference" />
-            <embedded name="createdAt" class="Marvin\Shared\Domain\ValueObject\CreatedAt" />
+        <embedded name="label" class="Marvin\Shared\Domain\ValueObject\Label" />
+        <embedded name="reference" class="Marvin\Shared\Domain\ValueObject\Reference" />
+        <embedded name="createdAt" class="Marvin\Shared\Domain\ValueObject\CreatedAt" />
     </entity>
 </doctrine-mapping>

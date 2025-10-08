@@ -19,8 +19,25 @@ security:
         last_user_type: Vous ne pouvez pas supprimer le dernier utilisateur de ce type.
         role_not_exist: Le rôle "%role%" n'existe pas.
         invalid_same_password: Vous ne pouvez pas saisir le même mot de passe que le précédent.
+        request_reset_password_not_found: Demande de réinitialisation de mot de passe introuvable.
+        request_reset_password_not_found_with_id: Demande de réinitialisation de mot de passe introuvable avec l'id "%id%".
+        request_reset_password_not_found_with_token: Demande de réinitialisation de mot de passe introuvable avec le token "%token%".
+        request_reset_password_expired: Demande de réinitialisation de mot de passe expirée.
+        request_reset_password_expired_with_id: Demande de réinitialisation de mot de passe expirée avec l'id "%id%".
+        request_reset_password_expired_with_token: Demande de réinitialisation de mot de passe expirée avec le token "%token%".
+        request_reset_password_already_used: Demande de réinitialisation de mot de passe déjà utilisée.
+        request_reset_password_already_used_with_id: Demande de réinitialisation de mot de passe déjà utilisée avec l'id "%id%".
+        request_reset_password_already_used_with_token: Demande de réinitialisation de mot de passe déjà utilisée avec le token "%token%".
+        request_reset_password_already_exists: Vous avez déjà une demande de réinitialisation de mot de passe en cours.
     email:
-        request_change_password_subject: Réinitialisation de votre mot de passe
+        request_change_password:
+            subject: Réinitialisation de votre mot de passe
+            body: 
+                request: Vous avez effectué une demande de changement de mot de passe.
+                reset_sentence: Merci de cliquer sur le lien ci-dessous.
+                reset_link: Réinitialiser mon mot de passe.
+                use_token: Utilisez ce jeton pour continuer la procédure
+                token: Jeton
     user:
         status:
             enabled: Activé

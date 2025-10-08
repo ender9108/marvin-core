@@ -5,6 +5,7 @@ namespace Marvin\Security\Application\CommandHandler\User;
 use DateMalformedStringException;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Security\Application\Command\User\RequestResetPasswordUser;
+use Marvin\Security\Application\Email\RequestResetPasswordUser as EmailRequestResetPasswordUser;
 use Marvin\Security\Domain\Exception\RequestResetPasswordAlreadyExists;
 use Marvin\Security\Domain\Model\RequestResetPassword;
 use Marvin\Security\Domain\Model\User;
@@ -12,7 +13,6 @@ use Marvin\Security\Domain\Repository\RequestResetPasswordRepositoryInterface;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Marvin\Shared\Application\Email\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Marvin\Security\Application\Email\RequestResetPasswordUser as EmailRequestResetPasswordUser;
 
 #[AsMessageHandler]
 final readonly class RequestResetPasswordUserHandler implements SyncCommandHandlerInterface
