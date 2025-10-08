@@ -52,13 +52,19 @@ final class MakeModel extends AbstractMaker
 
         $bc = $input->getArgument('bounded-context');
         if (!$bc) {
-            $bc = $io->ask('Bounded context name (e.g. Billing)', null, function (?string $v) {
+            $choices = $this->findBoundedContexts($root);
+            $q = new Question('Bounded context name (e.g. Billing)');
+            if (!empty($choices)) {
+                $q->setAutocompleterValues($choices);
+            }
+            $q->setValidator(function (?string $v) {
                 $v = (string) $v;
                 if ('' === trim($v)) {
                     throw new RuntimeException('Bounded context name cannot be empty.');
                 }
                 return $v;
             });
+            $bc = (string) $io->askQuestion($q);
         }
 
         $bcNorm = $this->normalizePascal($bc);
@@ -80,8 +86,11 @@ final class MakeModel extends AbstractMaker
 
         $modelNorm = $this->normalizePascal($model);
 
+        $currentModelFqcn = sprintf('Marvin\\%s\\Domain\\Model\\%s', $bcNorm, $modelNorm);
+
         $fieldSpecs = (array) $input->getOption('fields');
         $fields = [];
+        $inverseOps = [];
         // Discover available ValueObjects (implementing ValueObjectInterface)
         $voMap = $this->findValueObjectClasses($root); // [short => FQCN]
         $voAutocomplete = array_merge(array_keys($voMap), array_values($voMap));
@@ -104,10 +113,16 @@ final class MakeModel extends AbstractMaker
                     break;
                 }
                 $name = $this->normalizeFieldName($name);
-                $q = new Question('Field type', 'string');
-                $q->setAutocompleterValues($allTypes);
+                $q = new Question('Field type (type "relation" to configure an association)', 'string');
+                $q->setAutocompleterValues(array_merge(['relation'], $allTypes));
                 $inputType = (string) $io->askQuestion($q);
                 $inputTypeTrim = trim($inputType);
+                if (strtolower($inputTypeTrim) === 'relation') {
+                    // ask for relation type like make:entity
+                    $rq = new Question('What type of association is this? (ManyToOne, OneToOne, OneToMany, ManyToMany)', 'ManyToOne');
+                    $rq->setAutocompleterValues(['ManyToOne','OneToOne','OneToMany','ManyToMany']);
+                    $inputTypeTrim = (string) $io->askQuestion($rq);
+                }
                 $normShort = $this->normalizePascal($inputTypeTrim);
                 if (isset($voMap[$normShort])) {
                     $type = $voMap[$normShort]; // FQCN of VO
@@ -146,6 +161,18 @@ final class MakeModel extends AbstractMaker
                         $rel['owning'] = true;
                         $rel['inversedBy'] = $io->ask(sprintf('Do you want to add a new field to %s so that you can access/update the %s objects from it? Enter the field name on the target (or leave blank to skip)', $this->shortClass($targetFqcn), $modelNorm), null);
                         $rel['nullableJoin'] = $io->confirm('Is the join column nullable?', true);
+                        if (!empty($rel['inversedBy'])) {
+                            // schedule inverse one-to-many creation on target
+                            $inverseOps[] = [
+                                'kind' => 'one_to_many',
+                                'targetFqcn' => $targetFqcn,
+                                'fieldOnTarget' => (string) $rel['inversedBy'],
+                                'currentModelFqcn' => $currentModelFqcn,
+                                'mappedBy' => $name,
+                                'bcTarget' => $bcNorm,
+                                'modelTargetShort' => $this->shortClass($targetFqcn),
+                            ];
+                        }
                     } elseif ($type === 'OneToOne') {
                         $rel['owning'] = $io->confirm('Is this the owning side?', true);
                         if (!$rel['owning']) {
@@ -229,6 +256,7 @@ final class MakeModel extends AbstractMaker
         $repoPath = sprintf('%s/src/%s/Infrastructure/Persistence/Doctrine/ORM/%sOrmRepository.php', $root, $bcNorm, $modelNorm);
         $xmlDir = sprintf('%s/config/doctrine/ORM/%s', $root, $bcNorm);
         $xmlPath = sprintf('%s/Model.%s.orm.xml', $xmlDir, $modelNorm);
+        $isUpdate = file_exists($modelPath);
 
         $filesystem->mkdir(dirname($modelPath));
         $filesystem->mkdir(dirname($interfacePath));
@@ -379,6 +407,130 @@ final class MakeModel extends AbstractMaker
                 $fieldsBlock = $this->indentLines($fieldsXml, 2);
         $xml = sprintf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<doctrine-mapping xmlns=\"http://doctrine-project.org/schemas/orm/doctrine-mapping\"\n                  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n                  xsi:schemaLocation=\"http://doctrine-project.org/schemas/orm/doctrine-mapping\n                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd\">\n    <entity\n        name=\"%s\"\n        repository-class=\"%s\"\n        table=\"%s\"\n    >\n        <id name=\"id\" type=\"%s\">\n            <generator strategy=\"NONE\" />\n        </id>\n\n%s\n    </entity>\n</doctrine-mapping>\n", $modelFqcn, $repoFqcn, $this->tableName($bcNorm, $modelNorm), $idTypeName, $fieldsBlock);
 
+        // Update mode: if model already exists, append new properties and XML mapping instead of overwriting
+        if (file_exists($modelPath)) {
+            $content = file_get_contents($modelPath) ?: '';
+
+            // Add missing use statements
+            foreach ($useClasses as $fqcn) {
+                if ($fqcn === '') { continue; }
+                if (!str_contains($content, 'use ' . $fqcn . ';')) {
+                    $nsDeclEnd = strpos($content, ";\n");
+                    if ($nsDeclEnd !== false) {
+                        $lastUsePos = strrpos($content, "\nuse ");
+                        if ($lastUsePos !== false) {
+                            $semiPos = strpos($content, ";\n", $lastUsePos);
+                            if ($semiPos !== false) {
+                                $insertPos = $semiPos + 2;
+                                $content = substr($content, 0, $insertPos) . 'use ' . $fqcn . ";\n" . substr($content, $insertPos);
+                            }
+                        } else {
+                            $content = substr($content, 0, $nsDeclEnd + 2) . "\nuse " . $fqcn . ";\n" . substr($content, $nsDeclEnd + 2);
+                        }
+                    }
+                }
+            }
+
+            // Inject new collection properties (if any) before constructor
+            $addProps = [];
+            foreach ($fields as $f) {
+                $type = $f['type'];
+                $rel = $f['relation'] ?? null;
+                if (in_array($type, ['OneToMany','ManyToMany'], true) && is_array($rel)) {
+                    $addProps[] = sprintf('private Collection __DOLLAR__%s;', $f['name']);
+                }
+            }
+            if (!empty($addProps)) {
+                $propsBlock = "\n" . $this->indentLines($addProps) . "\n";
+                $ctorMarker = 'public function __construct(';
+                $posCtor = strpos($content, $ctorMarker);
+                if ($posCtor !== false) {
+                    $content = substr($content, 0, $posCtor) . $propsBlock . substr($content, $posCtor);
+                }
+            }
+
+            // Inject constructor params
+            $marker = 'public function __construct(';
+            $start = strpos($content, $marker);
+            if ($start !== false) {
+                $openParenPos = $start + strlen($marker);
+                $closePattern = "\n    ) {";
+                $end = strpos($content, $closePattern, $openParenPos);
+                if ($end !== false) {
+                    $insertionParams = $this->indentLines($ctorParams, 2);
+                    $existingParams = substr($content, $openParenPos, $end - $openParenPos);
+                    $existingParamsTrim = rtrim($existingParams);
+                    if ($existingParamsTrim !== '' && trim($insertionParams) !== '') {
+                        if (!preg_match('/,\s*$/', $existingParamsTrim)) {
+                            $existingParamsTrim .= ",\n";
+                        } else {
+                            $existingParamsTrim .= "\n";
+                        }
+                    }
+                    $newParamsBlock = $existingParamsTrim . $insertionParams;
+                    $content = substr($content, 0, $openParenPos) . $newParamsBlock . substr($content, $end);
+                }
+            }
+
+            // Inject constructor inits (collection initializations)
+            $ctorBodyStart = strpos($content, $marker);
+            if ($ctorBodyStart !== false) {
+                $openBracePos = strpos($content, ") {", $ctorBodyStart);
+                if ($openBracePos !== false) {
+                    $bodyStart = $openBracePos + 3;
+                    $bodyEnd = strpos($content, "\n    }", $bodyStart);
+                    if ($bodyEnd !== false && !empty($ctorInits)) {
+                        $initBlock = "\n" . implode("\n", array_map(fn($l) => str_replace('__DOLLAR__', '$', $l), $ctorInits)) . "\n";
+                        $content = substr($content, 0, $bodyEnd) . $initBlock . substr($content, $bodyEnd);
+                    }
+                }
+            }
+
+            file_put_contents($modelPath, str_replace('__DOLLAR__', '$', $content));
+
+            // Update XML mapping: append new fields if not present; create file if missing
+            if (file_exists($xmlPath)) {
+                $xmlContent = file_get_contents($xmlPath) ?: '';
+                $toAdd = [];
+                foreach ($fields as $idx => $f) {
+                    $name = (string) $f['name'];
+                    $needleName = 'name="' . $name . '"';
+                    $needleField = 'field="' . $name . '"';
+                    if (str_contains($xmlContent, $needleName) || str_contains($xmlContent, $needleField)) {
+                        continue;
+                    }
+                    $toAdd[] = $fieldsXml[$idx] ?? null;
+                }
+                $toAdd = array_values(array_filter($toAdd));
+                if (!empty($toAdd)) {
+                    $insertion = "\n" . $this->indentLines($toAdd, 2) . "\n";
+                    $endEntityPos = strrpos($xmlContent, "\n    </entity>");
+                    if ($endEntityPos !== false) {
+                        $xmlContent = substr($xmlContent, 0, $endEntityPos) . $insertion . substr($xmlContent, $endEntityPos);
+                        file_put_contents($xmlPath, $xmlContent);
+                    }
+                }
+            } else {
+                // If XML file doesn't exist yet, create a fresh one with the new fields
+                $filesystem->dumpFile($xmlPath, $xml);
+            }
+
+            // Apply inverse side updates on target models (e.g., add OneToMany on Zone when creating ManyToOne here)
+            if (!empty($inverseOps)) {
+                $this->applyInverseOps($inverseOps, $root);
+            }
+
+            // In update mode, stop here: don't try to create other files
+            if ($isUpdate) {
+                $io->success(sprintf('Model %s updated in bounded context %s.', $modelNorm, $bcNorm));
+                $io->writeln(sprintf(' - Model: %s', $modelPath));
+                if (file_exists($xmlPath)) {
+                    $io->writeln(sprintf(' - XML mapping updated/created: %s', $xmlPath));
+                }
+                return;
+            }
+        }
+
         // Build VO Identity class
         $voPath = sprintf('%s/src/%s/Domain/ValueObject/Identity/%sId.php', $root, $bcNorm, $modelNorm);
         $filesystem->mkdir(dirname($voPath));
@@ -404,6 +556,11 @@ final class MakeModel extends AbstractMaker
             }
             $code = str_replace('__DOLLAR__', '$', $code);
             $filesystem->dumpFile($path, $code);
+        }
+
+        // Apply inverse side updates on target models after creating files (for new models too)
+        if (!empty($inverseOps)) {
+            $this->applyInverseOps($inverseOps, $root);
         }
 
         // Update Doctrine config: register custom type and mapping section for the BC if missing
@@ -659,5 +816,158 @@ final class MakeModel extends AbstractMaker
         }
         ksort($result);
         return $result;
+    }
+
+    /**
+     * Return first-level directories under src as bounded contexts.
+     * @return string[]
+     */
+    private function findBoundedContexts(string $root): array
+    {
+        $base = rtrim($root, DIRECTORY_SEPARATOR) . '/src';
+        $out = [];
+        if (!is_dir($base)) { return $out; }
+        foreach (scandir($base) ?: [] as $entry) {
+            if ($entry === '.' || $entry === '..') { continue; }
+            if (is_dir($base . '/' . $entry)) {
+                $out[] = $entry;
+            }
+        }
+        sort($out, SORT_NATURAL);
+        return $out;
+    }
+
+    private function applyInverseOps(array $inverseOps, string $root): void
+    {
+        foreach ($inverseOps as $op) {
+            if (!is_array($op)) { continue; }
+            $kind = $op['kind'] ?? '';
+            if ($kind !== 'one_to_many') { continue; }
+            $targetFqcn = (string) ($op['targetFqcn'] ?? '');
+            $fieldOnTarget = (string) ($op['fieldOnTarget'] ?? '');
+            $currentModelFqcn = (string) ($op['currentModelFqcn'] ?? '');
+            $mappedBy = (string) ($op['mappedBy'] ?? '');
+            if ($targetFqcn === '' || $fieldOnTarget === '' || $currentModelFqcn === '' || $mappedBy === '') { continue; }
+
+            // Parse target BC and model from FQCN: Marvin\\{BC}\\Domain\\Model\\{Model}
+            $parts = explode('\\\\', $targetFqcn);
+            if (count($parts) < 5) { continue; }
+            $bc = $parts[1] ?? '';
+            $modelShort = $parts[4] ?? '';
+            if ($bc === '' || $modelShort === '') { continue; }
+
+            $currentParts = explode('\\', $currentModelFqcn);
+            $currentModelShort = $currentParts[4] ?? '';
+
+            $root = rtrim($root, DIRECTORY_SEPARATOR);
+            $modelPath = sprintf('%s/src/%s/Domain/Model/%s.php', $root, $bc, $modelShort);
+            $xmlPath = sprintf('%s/config/doctrine/ORM/%s/Model.%s.orm.xml', $root, $bc, $modelShort);
+
+            if (file_exists($modelPath)) {
+                $content = file_get_contents($modelPath) ?: '';
+                // Ensure use statements for collections
+                foreach (['Doctrine\\Common\\Collections\\Collection','Doctrine\\Common\\Collections\\ArrayCollection'] as $fqcn) {
+                    if (!str_contains($content, 'use ' . $fqcn . ';')) {
+                        $nsDeclEnd = strpos($content, ";\n");
+                        if ($nsDeclEnd !== false) {
+                            $lastUsePos = strrpos($content, "\nuse ");
+                            if ($lastUsePos !== false) {
+                                $semiPos = strpos($content, ";\n", $lastUsePos);
+                                if ($semiPos !== false) {
+                                    $insertPos = $semiPos + 2;
+                                    $content = substr($content, 0, $insertPos) . 'use ' . $fqcn . ";\n" . substr($content, $insertPos);
+                                }
+                            } else {
+                                $content = substr($content, 0, $nsDeclEnd + 2) . "\nuse " . $fqcn . ";\n" . substr($content, $nsDeclEnd + 2);
+                            }
+                        }
+                    }
+                }
+                // Add property if missing (respect project style: public private(set) Collection)
+                if (!str_contains($content, '$' . $fieldOnTarget . ';')) {
+                    $doc = '/** @var Collection<int, ' . $currentModelShort . '> */';
+                    $propLine = 'public private(set) Collection $' . $fieldOnTarget . ';';
+                    $ctorMarker = 'public function __construct(';
+                    $posCtor = strpos($content, $ctorMarker);
+                    if ($posCtor !== false) {
+                        $propsBlock = "\n" . $this->indentLines([$doc, $propLine]) . "\n";
+                        $content = substr($content, 0, $posCtor) . $propsBlock . substr($content, $posCtor);
+                    }
+                }
+                // Add constructor init
+                $marker = 'public function __construct(';
+                $ctorStart = strpos($content, $marker);
+                if ($ctorStart !== false) {
+                    $openBracePos = strpos($content, ") {", $ctorStart);
+                    if ($openBracePos !== false) {
+                        $bodyStart = $openBracePos + 3;
+                        $bodyEnd = strpos($content, "\n    }", $bodyStart);
+                        if ($bodyEnd !== false) {
+                            $initLine = '        $this->' . $fieldOnTarget . ' = new ArrayCollection();';
+                            if (!str_contains($content, '$this->' . $fieldOnTarget . ' = new ArrayCollection();')) {
+                                $content = substr($content, 0, $bodyEnd) . "\n" . $initLine . "\n" . substr($content, $bodyEnd);
+                            }
+                        }
+                    }
+                }
+                // Add add/remove helpers if missing
+                $addMethod = 'public function add' . $currentModelShort . '(' . $currentModelShort . ' $' . strtolower($currentModelShort) . '): self';
+                $removeMethod = 'public function remove' . $currentModelShort . '(' . $currentModelShort . ' $' . strtolower($currentModelShort) . '): self';
+                if (!str_contains($content, $addMethod)) {
+                    $paramVar = '$' . strtolower($currentModelShort);
+                    $mappedByMethod = 'set' . ucfirst($mappedBy);
+                    $addBody = [
+                        $addMethod,
+                        '{',
+                        '    if (!$this->' . $fieldOnTarget . '->contains(' . $paramVar . ')) {',
+                        '        $this->' . $fieldOnTarget . '->add(' . $paramVar . ');',
+                        '        ' . $paramVar . '->' . $mappedByMethod . '($this);',
+                        '    }',
+                        '',
+                        '    return $this;',
+                        '}',
+                    ];
+                    $insertPos = strrpos($content, "\n}");
+                    if ($insertPos !== false) {
+                        $content = substr($content, 0, $insertPos) . "\n\n" . $this->indentLines($addBody) . "\n" . substr($content, $insertPos);
+                    }
+                }
+                if (!str_contains($content, $removeMethod)) {
+                    $paramVar = '$' . strtolower($currentModelShort);
+                    $mappedByMethod = 'set' . ucfirst($mappedBy);
+                    $removeBody = [
+                        $removeMethod,
+                        '{',
+                        '    if ($this->' . $fieldOnTarget . '->contains(' . $paramVar . ')) {',
+                        '        $this->' . $fieldOnTarget . '->removeElement(' . $paramVar . ');',
+                        '        ' . $paramVar . '->' . $mappedByMethod . '(null);',
+                        '    }',
+                        '',
+                        '    return $this;',
+                        '}',
+                    ];
+                    $insertPos = strrpos($content, "\n}");
+                    if ($insertPos !== false) {
+                        $content = substr($content, 0, $insertPos) . "\n\n" . $this->indentLines($removeBody) . "\n" . substr($content, $insertPos);
+                    }
+                }
+
+                file_put_contents($modelPath, $content);
+            }
+
+            // Update XML mapping if exists
+            if (file_exists($xmlPath)) {
+                $xmlContent = file_get_contents($xmlPath) ?: '';
+                if (!str_contains($xmlContent, 'field="' . $fieldOnTarget . '"')) {
+                    $line = sprintf('<one-to-many field="%s" target-entity="%s" mapped-by="%s" />', $fieldOnTarget, $currentModelFqcn, $mappedBy);
+                    $insertion = "\n" . $this->indentLines([$line], 2) . "\n";
+                    $endEntityPos = strrpos($xmlContent, "\n    </entity>");
+                    if ($endEntityPos !== false) {
+                        $xmlContent = substr($xmlContent, 0, $endEntityPos) . $insertion . substr($xmlContent, $endEntityPos);
+                        file_put_contents($xmlPath, $xmlContent);
+                    }
+                }
+            }
+        }
     }
 }
