@@ -3,6 +3,8 @@
 namespace App\Domotic\Infrastructure\DataFixtures\Foundry\Factory;
 
 use Marvin\Domotic\Domain\Model\Zone;
+use Marvin\Domotic\Domain\ValueObject\Area;
+use Marvin\Shared\Domain\ValueObject\Label;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 class ZoneFactory extends PersistentProxyObjectFactory
@@ -19,6 +21,18 @@ class ZoneFactory extends PersistentProxyObjectFactory
     public static function getDatas(): array
     {
         return self::$datas;
+    }
+
+    #[\Override]
+    protected function initialize(): static
+    {
+        return $this
+            ->beforeInstantiate(function (array $parameters): array {
+                $parameters['label'] = new Label($parameters['label']);
+                $parameters['area'] = new Area($parameters['area']);
+                return $parameters;
+            })
+        ;
     }
 
     public static function class(): string

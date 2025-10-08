@@ -18,3 +18,51 @@ domotic:
         protocol_status_not_found_with_id: ProtocolStatus introuvable avec l'id "%id%".
         zone_not_found: Zone introuvable.
         zone_not_found_with_id: Zone introuvable avec l'id "%id%".
+    capabilities:
+        switchable: Bouton on / off
+        dimmable: Variateur
+        colorable: Couleur
+        coverable: Volet roulant
+        fan: Ventilation
+        thermostat: Thermostat
+        lockable: Verrou
+        presence: Présence
+        contact: Contact
+        vibration: Vibration
+        temperature: Température
+        humidity: Humidité
+        illuminance: Luminosité
+        air_quality: Qualité de l'air
+        smoke: Détecteur de fumée
+        water_leak: Fuite d'eau
+        sound: Son
+        power: Alimentation
+        energy: Energie
+        voltage: Tension
+        current: Courant
+        battery: Batterie
+        button: Bouton
+        scene: Scène
+        notify: Notification
+    capability_actions:
+        turn_on: Allumer
+        turn_off: Eteindre
+        set_level: Niveau
+        set_color: Coleur
+        set_color_temp: Température couleur
+        open: Ouvrir
+        close: Fermer
+        stop: Stop
+        set_position: Position
+        fan_on: Allumer ventillation
+        fan_off: Eteindre ventillation
+        set_speed: Vitesse
+        set_mode: Mode
+        set_target_temperature: Température cible
+        lock: Vérrouiller
+        unlock: Déverrouiller
+        activate_scene: Activer la scène
+        button_press: Presser
+        button_double: Double click
+        button_long: Appuyer longuement
+        button_release: Relacher le bouton

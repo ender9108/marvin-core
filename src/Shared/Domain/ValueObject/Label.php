@@ -8,7 +8,7 @@ use Stringable;
 
 final readonly class Label implements ValueObjectInterface, Stringable
 {
-    private const int MIN = 5;
+    private const int MIN = 2;
     private const int MAX = 255;
 
     public string $value;

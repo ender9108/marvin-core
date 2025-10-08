@@ -7,7 +7,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Marvin\Security\Domain\Model\User;
-use Marvin\Security\Infrastructure\Persistence\Doctrine\Cache\UserCacheKeys;
+use Marvin\Security\Infrastructure\Persistence\Doctrine\Cache\SecurityCacheKeys;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
@@ -37,8 +37,8 @@ final readonly class CacheInvalidationListener
         switch (true) {
             case $entity instanceof User:
                 $cacheKeys = [
-                    UserCacheKeys::USER_ITEM->withId($entity->id),
-                    UserCacheKeys::USER_LIST->value,
+                    SecurityCacheKeys::USER_ITEM->withId($entity->id),
+                    SecurityCacheKeys::USER_LIST->value,
                 ];
                 break;
             default:

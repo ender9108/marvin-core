@@ -13,9 +13,9 @@
         </id>
 
         <embedded name="label" class="Marvin\Shared\Domain\ValueObject\Label" />
-        <field name="technicalname" type="string" length="255" nullable="true" />
+        <field name="technicalName" type="string" length="255" nullable="true" />
         <many-to-one field="protocol" target-entity="Marvin\Domotic\Domain\Model\Protocol">
-            <join-column />
+            <join-column nullable="true" />
         </many-to-one>
         <many-to-many field="groups" target-entity="Marvin\Domotic\Domain\Model\Group" inversed-by="devices">
             <join-table name="domotic_groups_devices" />
@@ -25,5 +25,9 @@
         <many-to-one field="zone" target-entity="Marvin\Domotic\Domain\Model\Zone" inversed-by="devices">
             <join-column nullable="true" />
         </many-to-one>
+        <many-to-many field="capabilityCompositions" target-entity="Marvin\Domotic\Domain\Model\CapabilityComposition">
+            <join-table name="device_capability_composition" />
+        </many-to-many>
+
     </entity>
 </doctrine-mapping>

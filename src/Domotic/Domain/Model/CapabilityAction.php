@@ -6,7 +6,7 @@ use Marvin\Domotic\Domain\ValueObject\Identity\CapabilityActionId;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\Reference;
 
-final class CapabilityAction
+class CapabilityAction
 {
     public readonly CapabilityActionId $id;
 
