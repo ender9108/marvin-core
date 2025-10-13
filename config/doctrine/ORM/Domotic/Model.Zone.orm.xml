@@ -13,10 +13,10 @@
         </id>
 
         <embedded name="label" class="Marvin\Shared\Domain\ValueObject\Label" />
-        <many-to-one field="parentZone" target-entity="Marvin\Domotic\Domain\Model\Zone">
-            <join-column nullable="true" />
-        </many-to-one>
         <embedded name="area" class="Marvin\Domotic\Domain\ValueObject\Area" />
+        <many-to-one field="parentZone" target-entity="Marvin\Domotic\Domain\Model\Zone">
+            <join-column nullable="true" on-delete="SET NULL" />
+        </many-to-one>
         <embedded name="updatedAt" class="Marvin\Shared\Domain\ValueObject\UpdatedAt" />
         <embedded name="createdAt" class="Marvin\Shared\Domain\ValueObject\CreatedAt" />
     </entity>

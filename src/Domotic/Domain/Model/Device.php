@@ -6,9 +6,11 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Marvin\Domotic\Domain\ValueObject\Identity\DeviceId;
+use Marvin\Domotic\Domain\ValueObject\TechnicalName;
 use Marvin\Shared\Domain\ValueObject\CreatedAt;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\UpdatedAt;
+use Marvin\Domotic\Domain\ValueObject\State;
 
 final class Device
 {
@@ -17,15 +19,17 @@ final class Device
     /** @var Collection<int, Group>  */
     public private(set) Collection $groups;
 
+    /** @var Collection<int, CapabilityComposition> */
     private Collection $capabilityCompositions;
 
     public function __construct(
         private(set) Label $label,
-        private(set) ?string $technicalName = null,
+        private(set) ?TechnicalName $technicalName = null,
         private(set) ?Protocol $protocol = null,
         private(set) ?Zone $zone = null,
         private(set) ?UpdatedAt $updatedAt = null,
         public readonly CreatedAt $createdAt = new CreatedAt(new DateTimeImmutable()),
+        private(set) State $state
     ) {
         $this->id = new DeviceId();
         $this->groups = new ArrayCollection();

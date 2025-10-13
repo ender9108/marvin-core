@@ -15,11 +15,6 @@ use Marvin\Shared\Domain\ValueObject\UpdatedAt;
 
 final class Protocol
 {
-    use ListTrait;
-
-    private const int STATUS_ENABLED = 1;
-    private const int STATUS_DISABLED = 0;
-
     public readonly ProtocolId $id;
 
     public function __construct(
@@ -39,20 +34,26 @@ final class Protocol
         ?Reference $reference = null,
         ?Description $description = null,
         ?Metadata $metadata = null
-    ): void {
+    ): self {
         $this->label = $label ?? $this->label;
         $this->reference = $reference ?? $this->reference;
         $this->description = $description ?? $this->description;
         $this->metadata = $metadata ?? $this->metadata;
+
+        return $this;
     }
 
-    public function disable(): void
+    public function disable(): self
     {
         $this->status = ProtocolStatus::disabled();
+
+        return $this;
     }
 
-    public function enable(): void
+    public function enable(): self
     {
         $this->status = ProtocolStatus::enabled();
+
+        return $this;
     }
 }
