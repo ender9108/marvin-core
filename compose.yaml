@@ -46,7 +46,6 @@ services:
             UNIX_UID: '${UNIX_UID-1000}'
             UNIX_GID: '${UNIX_GID-1000}'
         volumes:
-            #- ../enderlab:/enderlab
             - ./:/app
             - ./docker/worker/config/supervisord.conf:/etc/supervisor/supervisord.conf
             - ./docker/worker/config/conf.d:/etc/supervisor/conf.d
@@ -59,7 +58,6 @@ services:
                 condition: service_started
 
     database:
-        #image: postgres:${DB_VERSION-16}-alpine
         image: timescale/timescaledb:2.22.1-pg${DB_VERSION-17}
         container_name: '${APP_NAME}-database'
         environment:
@@ -112,3 +110,20 @@ services:
         ports:
             - "127.0.0.1:1883:1883"
             - "127.0.0.1:9002:9001"
+
+    zigbee2mqtt:
+        container_name: ${APP_NAME}-zigbee2mqtt
+        restart: unless-stopped
+        image: koenkk/zigbee2mqtt
+        user: '${UID-1000}:${GID-1000}'
+        group_add:
+            - dialout
+        volumes:
+            - ./docker/zigbee2mqtt/config:/app/data
+            - /run/udev:/run/udev:ro
+        ports:
+            - "127.0.0.1:8081:8080"
+        devices:
+            - /dev/ttyACM0:/dev/ttyUSB0
+        depends_on:
+            - mqtt_broker
