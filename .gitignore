@@ -13,6 +13,8 @@
 /docker/mosquitto/config/pwfile
 /docker/zigbee2mqtt/config/secret.yaml
 /docker/**/volume
+/docker/**/certs
+/docker/certs
 ###< symfony/framework-bundle ###
 
 .idea
@@ -33,12 +35,6 @@ compose.*.yaml
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
-
-###> symfony/asset-mapper ###
-/public/assets/
-/assets/vendor/
-###< symfony/asset-mapper ###
-
 ###> deptrac/deptrac ###
 /.deptrac.cache
 ###< deptrac/deptrac ###
