@@ -32,4 +32,6 @@ assert:
     expected_directory: 'Le chemin %value% n''est pas un répertoire.'
     file_does_not_exist: 'Le fichier %value% n''existe pas.'
     expected_file: 'Le chemin %value% n''est pas un fichier.'
+    path_not_readable: "Le chemin n'est pas lisible: %value%."
+    path_not_writable: "Le chemin n'est pas inscriptible: %value%."
     
