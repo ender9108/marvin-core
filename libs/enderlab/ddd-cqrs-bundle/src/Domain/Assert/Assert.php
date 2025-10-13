@@ -64,7 +64,8 @@ class Assert
         if (!\is_int($value)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_int',
-                ['%value%' => static::typeToString($value)]
+                ['%value%' => static::typeToString($value)],
+                'A0002'
             );
         }
     }
@@ -83,7 +84,8 @@ class Assert
         if (!(\is_int($value) && $value > 0)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_positive_int',
-                ['%value%' => static::typeToString($value)]
+                ['%value%' => static::typeToString($value)],
+                'A0003'
             );
         }
     }
@@ -102,7 +104,8 @@ class Assert
         if (!\is_float($value)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_float',
-                ['%value%' => static::typeToString($value)]
+                ['%value%' => static::typeToString($value)],
+                'A0004'
             );
         }
     }
@@ -121,7 +124,8 @@ class Assert
         if (!\is_numeric($value)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_numeric',
-                ['%value%' => static::typeToString($value)]
+                ['%value%' => static::typeToString($value)],
+                'A0005'
             );
         }
     }
@@ -140,7 +144,8 @@ class Assert
         if (!\is_int($value) || $value < 0) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_natural',
-                ['%value%' => static::typeToString($value)]
+                ['%value%' => static::typeToString($value)],
+                'A0006'
             );
         }
     }
@@ -159,7 +164,8 @@ class Assert
         if (!\is_bool($value)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_boolean',
-                ['%value%' => static::typeToString($value)]
+                ['%value%' => static::typeToString($value)],
+                'A0007'
             );
         }
     }
@@ -178,7 +184,8 @@ class Assert
         if (!\is_scalar($value)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_scalar',
-                ['%value%' => static::typeToString($value)]
+                ['%value%' => static::typeToString($value)],
+                'A0008'
             );
         }
     }
@@ -197,7 +204,8 @@ class Assert
         if (!\is_object($value)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_object',
-                ['%value%' => static::typeToString($value)]
+                ['%value%' => static::typeToString($value)],
+                'A0009'
             );
         }
     }
@@ -217,7 +225,8 @@ class Assert
         if (!\is_resource($value)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_resource',
-                ['%value%' => static::typeToString($value)]
+                ['%value%' => static::typeToString($value)],
+                'A0010'
             );
         }
 
@@ -227,7 +236,8 @@ class Assert
                 [
                     '%value%' => static::typeToString($value),
                     '%type%'  => $type,
-                ]
+                ],
+                'A0011'
             );
         }
     }
@@ -246,7 +256,8 @@ class Assert
         if (!\is_callable($value)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_callable',
-                ['%value%' => static::typeToString($value)]
+                ['%value%' => static::typeToString($value)],
+                'A0012'
             );
         }
     }
@@ -265,7 +276,8 @@ class Assert
         if (!\is_array($value)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_array',
-                ['%value%' => static::typeToString($value)]
+                ['%value%' => static::typeToString($value)],
+                'A0013'
             );
         }
     }
@@ -284,7 +296,8 @@ class Assert
         if (!\is_array($value) && !($value instanceof ArrayAccess)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_array_access',
-                ['%value%' => static::typeToString($value)]
+                ['%value%' => static::typeToString($value)],
+                'A0014'
             );
         }
     }
@@ -308,7 +321,8 @@ class Assert
         ) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_countable',
-                ['%value%' => static::typeToString($value)]
+                ['%value%' => static::typeToString($value)],
+                'A0015'
             );
         }
     }
@@ -327,7 +341,8 @@ class Assert
         if (!\is_array($value) && !($value instanceof Traversable)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_iterable',
-                ['%value%' => static::typeToString($value)]
+                ['%value%' => static::typeToString($value)],
+                'A0016'
             );
         }
     }
@@ -352,7 +367,8 @@ class Assert
                 [
                     '%value%' => static::typeToString($value),
                     '%class%' => $class,
-                ]
+                ],
+                'A0017'
             );
         }
     }
@@ -377,7 +393,8 @@ class Assert
                 [
                     '%value%' => static::typeToString($value),
                     '%class%' => $class,
-                ]
+                ],
+                'A0018'
             );
         }
     }
@@ -405,7 +422,8 @@ class Assert
             [
                 '%value%' => static::typeToString($value),
                 '%classes%' => \implode(', ', \array_map(array(static::class, 'valueToString'), $classes))
-            ]
+            ],
+            'A0019'
         );
     }
 
@@ -431,7 +449,8 @@ class Assert
                 [
                     '%value%' => static::typeToString($value),
                     '%class%' => $class,
-                ]
+                ],
+                'A0020'
             );
         }
     }
@@ -441,7 +460,8 @@ class Assert
         if (!\in_array($value, DateTimeZone::listIdentifiers(), true)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_valid_timezone',
-                ['%value%' => $value]
+                ['%value%' => $value],
+                'A0021'
             );
         }
     }
@@ -1385,7 +1405,8 @@ class Assert
         if (!\file_exists($value)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.file_does_not_exist',
-                ['%value%' => static::valueToString($value)]
+                ['%value%' => static::valueToString($value)],
+                'A0100'
             );
         }
     }
@@ -1403,7 +1424,8 @@ class Assert
         if (!\is_file($value)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_file',
-                ['%value%' => static::valueToString($value)]
+                ['%value%' => static::valueToString($value)],
+                'A0101'
             );
         }
     }
@@ -1421,7 +1443,8 @@ class Assert
         if (!\is_dir($value)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_directory',
-                ['%value%' => static::valueToString($value)]
+                ['%value%' => static::valueToString($value)],
+                'A0102'
             );
         }
     }
@@ -1435,10 +1458,11 @@ class Assert
     public static function readable($value, $message = '')
     {
         if (!\is_readable($value)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'The path %s is not readable.',
-                static::valueToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.path_not_readable',
+                ['%value%' => static::valueToString($value)],
+                'A0103'
+            );
         }
     }
 
@@ -1451,10 +1475,11 @@ class Assert
     public static function writable($value, $message = '')
     {
         if (!\is_writable($value)) {
-            static::reportInvalidArgument(\sprintf(
-                $message ?: 'The path %s is not writable.',
-                static::valueToString($value)
-            ));
+            static::reportInvalidArgument(
+                $message ?: 'assert.path_not_writable',
+                ['%value%' => static::valueToString($value)],
+                'A0104'
+            );
         }
     }
 
@@ -1627,9 +1652,11 @@ class Assert
     public static function keyNotExists(array $array, int|string $key, string $message = ''): void
     {
         if (isset($array[$key]) || \array_key_exists($key, $array)) {
-            static::reportInvalidArgument($message ?: 'assert.expected_key_not_exist', [
-                '%key%' => static::typeToString($key)
-            ]);
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_key_not_exist',
+                ['%key%' => static::typeToString($key)],
+                'A0201'
+            );
         }
     }
 
@@ -1644,9 +1671,11 @@ class Assert
     public static function validArrayKey(mixed $value, string $message = ''): void
     {
         if (!(\is_int($value) || \is_string($value))) {
-            static::reportInvalidArgument($message ?: 'assert.expected_valid_array_key', [
-                '%value%' => static::typeToString($value)
-            ]);
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_valid_array_key',
+                ['%value%' => static::typeToString($value)],
+                'A0202'
+            );
         }
     }
 
@@ -1676,10 +1705,14 @@ class Assert
     public static function minCount(Countable|array $array, float|int $min, string $message = ''): void
     {
         if (\count($array) < $min) {
-            static::reportInvalidArgument($message ?: 'assert.expected_min_count', [
-                '%count%' => \count($array),
-                '%min%' => $min
-            ]);
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_min_count',
+                [
+                    '%count%' => \count($array),
+                    '%min%' => $min
+                ],
+                'A0203'
+            );
         }
     }
 
@@ -1691,10 +1724,14 @@ class Assert
     public static function maxCount(Countable|array $array, float|int $max, string $message = ''): void
     {
         if (\count($array) > $max) {
-            static::reportInvalidArgument($message ?: 'assert.expected_max_count', [
-                '%count%' => \count($array),
-                '%max%' => $max
-            ]);
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_max_count',
+                [
+                    '%count%' => \count($array),
+                    '%max%' => $max
+                ],
+                'A0204'
+            );
         }
     }
 
@@ -1708,11 +1745,15 @@ class Assert
         $count = \count($array);
 
         if ($count < $min || $count > $max) {
-            static::reportInvalidArgument($message ?: 'assert.expected_count_between', [
-                '%count%' => $count,
-                '%min%' => $min,
-                '%max%' => $max
-            ]);
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_count_between',
+                [
+                    '%count%' => $count,
+                    '%min%' => $min,
+                    '%max%' => $max
+                ],
+                'A0205'
+            );
         }
     }
 
@@ -1724,7 +1765,11 @@ class Assert
     public static function isList(mixed $array, string $message = ''): void
     {
         if (!\is_array($array)) {
-            static::reportInvalidArgument($message ?: 'assert.expected_list', []);
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_list',
+                [],
+                'A0206'
+            );
         }
 
         if ($array === \array_values($array)) {
@@ -1734,7 +1779,11 @@ class Assert
         $nextKey = -1;
         foreach ($array as $k => $v) {
             if ($k !== ++$nextKey) {
-                static::reportInvalidArgument($message ?: 'assert.expected_list', []);
+                static::reportInvalidArgument(
+                    $message ?: 'assert.expected_list',
+                    [],
+                    'A0206'
+                );
             }
         }
     }
@@ -1768,7 +1817,11 @@ class Assert
             !\is_array($array) ||
             \array_keys($array) !== \array_filter(\array_keys($array), '\is_string')
         ) {
-            static::reportInvalidArgument($message ?: 'assert.expected_map', []);
+            static::reportInvalidArgument(
+                $message ?: 'assert.expected_map',
+                [],
+                'A0207'
+            );
         }
     }
 
@@ -1805,7 +1858,8 @@ class Assert
         if (!\preg_match('/^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/', $value)) {
             static::reportInvalidArgument(
                 $message ?: 'assert.expected_uuid',
-                ['%value%' => static::valueToString($value)]
+                ['%value%' => static::valueToString($value)],
+                'A0208'
             );
         }
     }
@@ -1841,7 +1895,8 @@ class Assert
 
         static::reportInvalidArgument(
             $message ?: 'assert.expected_throw',
-            ['class' => $class, 'actual' => $actual]
+            ['%class%' => $class, '%actual%' => $actual],
+            'A0209'
         );
     }
 
@@ -1949,10 +2004,11 @@ class Assert
     /**
      * @param string $message
      * @param array $parameters
+     * @param string $internalCode
      * @return void
      * @psalm-pure this method is not supposed to perform side-effects
      */
-    protected static function reportInvalidArgument(string $message, array $parameters = [], string $internalCode = 'E999'): void
+    protected static function reportInvalidArgument(string $message, array $parameters = [], string $internalCode = 'E9999'): void
     {
         throw new InvalidArgument($message, $parameters, $internalCode);
     }
