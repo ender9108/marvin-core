@@ -15,6 +15,7 @@ final class PluginRequirementMissing extends DomainException implements Translat
         public readonly array $references = [],
     ) {
         parent::__construct($message);
+        $this->code = 'SY0006';
     }
 
     /**

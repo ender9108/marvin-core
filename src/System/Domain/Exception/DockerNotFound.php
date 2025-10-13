@@ -16,6 +16,7 @@ final class DockerNotFound extends DomainException implements TranslatableExcept
         public readonly ?string $id = null,
     ) {
         parent::__construct($message);
+        $this->code = 'SY0002';
     }
 
     public static function withId(DockerId $dockerId): self

@@ -15,6 +15,7 @@ final class PluginInstallationMethodNotAllowed extends DomainException implement
         public readonly ?string $methodName = null,
     ) {
         parent::__construct($message);
+        $this->code = 'SY0004';
     }
 
     public static function withMethodName(string $methodName): self

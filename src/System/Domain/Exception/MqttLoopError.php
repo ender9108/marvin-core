@@ -4,42 +4,38 @@ namespace Marvin\System\Domain\Exception;
 
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
-use Marvin\System\Domain\ValueObject\Identity\PluginId;
 use Override;
 
-final class PluginNotFound extends DomainException implements TranslatableExceptionInterface
+final class MqttLoopError extends DomainException implements TranslatableExceptionInterface
 {
     public function __construct(
         string $message,
-        public readonly ?string $id = null,
+        private readonly string $error
     ) {
         parent::__construct($message);
-        $this->code = 'SY0005';
+        $this->code = 'SY0011';
     }
 
-    public static function withId(PluginId $id): self
+    public static function withError(string $error): self
     {
         return new self(
-            sprintf('Plugin with id %s was not found', $id->toString()),
-            $id->toString(),
+            sprintf('Error mqtt loop %s', $error),
+            $error
         );
     }
 
     #[Override]
     public function translationId(): string
     {
-        if (null !== $this->id) {
-            return 'system.exceptions.plugin_not_found_with_id';
-        }
-        return 'system.exceptions.plugin_not_found';
+        return 'security.exceptions.mqtt_loop_error';
     }
 
     #[Override]
-    /** @return array<string, string|null> */
+    /** @return array<string, string> */
     public function translationParameters(): array
     {
         return [
-            '%id%' => $this->id,
+            '%error%' => $this->error
         ];
     }
 

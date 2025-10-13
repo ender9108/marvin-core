@@ -25,4 +25,18 @@ class Plugin extends AggregateRoot
     ) {
         $this->id = new PluginId();
     }
+
+    public function enable(): self
+    {
+        $this->status = PluginStatus::enabled();
+
+        return $this;
+    }
+
+    public function disable(): self
+    {
+        $this->status = PluginStatus::disabled();
+
+        return $this;
+    }
 }

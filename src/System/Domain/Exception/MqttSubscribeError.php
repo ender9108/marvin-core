@@ -4,42 +4,38 @@ namespace Marvin\System\Domain\Exception;
 
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
-use Marvin\System\Domain\ValueObject\Identity\PluginId;
 use Override;
 
-final class PluginNotFound extends DomainException implements TranslatableExceptionInterface
+final class MqttSubscribeError extends DomainException implements TranslatableExceptionInterface
 {
     public function __construct(
         string $message,
-        public readonly ?string $id = null,
+        private array $topics,
     ) {
         parent::__construct($message);
-        $this->code = 'SY0005';
+        $this->code = 'SY0009';
     }
 
-    public static function withId(PluginId $id): self
+    public static function withTopic(array $topics): self
     {
         return new self(
-            sprintf('Plugin with id %s was not found', $id->toString()),
-            $id->toString(),
+            sprintf('Error while subscribing to topic %s', implode(', ', $topics)),
+            $topics,
         );
     }
 
     #[Override]
     public function translationId(): string
     {
-        if (null !== $this->id) {
-            return 'system.exceptions.plugin_not_found_with_id';
-        }
-        return 'system.exceptions.plugin_not_found';
+        return 'security.exceptions.mqtt_subscribe_error';
     }
 
     #[Override]
-    /** @return array<string, string|null> */
+    /** @return array<string, string> */
     public function translationParameters(): array
     {
         return [
-            '%id%' => $this->id,
+            '%topics%' => implode(', ', $this->topics),
         ];
     }
 
