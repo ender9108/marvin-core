@@ -17,5 +17,10 @@ security:
         docker_not_found_with_id: Docker introuvable avec l'id "%id%".
         docker_command_not_found: Commande docker introuvable.
         docker_command_not_found_with_id: Commande docker introuvable avec l'id "%id%".
+        supervisor_connection_error: Connexion au gestionnaire de worker impossible.
+        supervisor_xml_rpc_fault: Réponse mal formée.
+        mqtt_subscribe_error: Une erreur est survenue lors de l'abonnement au topic(s) "%topics%".
+        mqtt_public_error: 'Une erreur est survenue lors de la publication sur le topic "%topic%" (qos: %qos%, retain: %retain%).'
+        mqtt_loop_error: Erreur lors de la réception d'un message. %error%.
         
             
