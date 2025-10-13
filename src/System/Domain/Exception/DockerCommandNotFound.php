@@ -17,6 +17,7 @@ final class DockerCommandNotFound extends DomainException implements Translatabl
         public readonly ?string $id = null,
     ) {
         parent::__construct($message);
+        $this->code = 'SY0001';
     }
 
     public static function withId(DockerCommandId $dockerCommandId): self

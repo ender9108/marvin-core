@@ -15,6 +15,7 @@ final class PluginUninstallationMethodNotAllowed extends DomainException impleme
         public readonly ?string $methodName = null,
     ) {
         parent::__construct($message);
+        $this->code = 'SY0007';
     }
 
     public static function withMethodName(string $methodName): self

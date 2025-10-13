@@ -15,6 +15,7 @@ final class PluginAlreadyExist extends DomainException implements TranslatableEx
         public readonly ?Reference $reference = null,
     ) {
         parent::__construct($message);
+        $this->code = 'SY0003';
     }
 
     public static function withReference(Reference $reference): self
