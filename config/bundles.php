@@ -21,7 +21,6 @@ return [
     EnderLab\MarvinManagerBundle\MarvinManagerBundle::class => ['all' => true],
     EnderLab\DddCqrsMakerBundle\DddCqrsMakerBundle::class => ['dev' => true],
     EnderLab\ToolsBundle\ToolsBundle::class => ['all' => true],
-    //EnderLab\Zigbee2mqttBundle\Zigbee2mqttBundle::class => ['all' => true],
     Symfonycasts\MicroMapper\SymfonycastsMicroMapperBundle::class => ['all' => true],
     Gesdinet\JWTRefreshTokenBundle\GesdinetJWTRefreshTokenBundle::class => ['all' => true],
 ];
