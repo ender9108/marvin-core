@@ -1,0 +1,35 @@
+permit_join: false
+mqtt:
+  server: '!secret.yaml server'
+  base_topic: zigbee2mqtt2marvin
+  user: '!secret.yaml user'
+  password: '!secret.yaml password'
+  client_id: zigbee_mqtt_marvin
+  version: 5
+advanced:
+  network_key:
+    - 94
+    - 62
+    - 103
+    - 203
+    - 180
+    - 52
+    - 12
+    - 169
+    - 175
+    - 190
+    - 29
+    - 202
+    - 16
+    - 44
+    - 49
+    - 202
+  homeassistant_legacy_entity_attributes: false
+  legacy_api: false
+  legacy_availability_payload: false
+serial:
+  port: /dev/ttyUSB0
+  disable_led: true
+frontend: false
+device_options:
+  legacy: false
