@@ -1,0 +1,4 @@
+parameters:
+    plugin_reference: 'marvin_mcp'
+
+services:
