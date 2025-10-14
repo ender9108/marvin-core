@@ -2,7 +2,7 @@
     "type": "project",
     "name": "enderlab/marvin-core",
     "license": "proprietary",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
         "php": ">=8.3",
@@ -40,6 +40,7 @@
         "symfony/json-streamer": "7.3.*",
         "symfony/lock": "7.3.*",
         "symfony/mailer": "7.3.*",
+        "symfony/mcp-bundle": "dev-main",
         "symfony/mime": "7.3.*",
         "symfony/monolog-bundle": "^3.0",
         "symfony/notifier": "7.3.*",
