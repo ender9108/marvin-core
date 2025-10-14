@@ -2,36 +2,57 @@
 
 namespace Marvin\System\Infrastructure\Framework\Symfony\Service;
 
+use AllowDynamicProperties;
+use Marvin\System\Domain\Exception\MqttConnectionError;
 use Marvin\System\Domain\Exception\MqttLoopError;
 use Marvin\System\Domain\Exception\MqttPublishError;
 use Marvin\System\Domain\Exception\MqttSubscribeError;
+use Marvin\System\Domain\Service\MqttClientInterface;
 use Psr\Log\LoggerInterface;
 use Simps\MQTT\Client;
 use Simps\MQTT\Config\ClientConfig;
 use Simps\MQTT\Protocol\Types;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Throwable;
 
-class MqttClientService
+class MqttClient implements MqttClientInterface
 {
     private Client $client;
     private int $lastPingAt;
     private bool $running = false;
 
+    private string $clientId;
+
     public function __construct(
+        #[Autowire(env: 'MQTT_HOST')]
         private readonly string $host,
+        #[Autowire(env: 'MQTT_PORT')]
         private readonly int $port,
-        private readonly ClientConfig $config,
+        #[Autowire(env: 'MQTT_USER')]
+        private readonly string $user,
+        #[Autowire(env: 'MQTT_PASSWORD')]
+        private readonly string $password,
+        #[Autowire(env: 'MQTT_PROTOCOL_LEVEL')]
+        private readonly int $protocolLevel,
+        #[Autowire(env: 'MQTT_TLS')]
+        private readonly bool $useTls,
+        #[Autowire(env: 'MQTT_CA_FILE')]
+        private readonly string $caPath,
+        #[Autowire(env: 'MQTT_SSL_CERT_FILE')]
+        private readonly string $sslCertFile,
+        #[Autowire(env: 'MQTT_SSL_KEY_FILE')]
+        private readonly string $sslKeyFile,
+        #[Autowire(env: 'MQTT_SSL_VERIFY_PEER')]
+        private readonly bool $verifyPeer,
+        #[Autowire(env: 'MQTT_SSL_ALLOW_SELF_SIGNED')]
+        private readonly bool $sslAllowSelfSigned,
         private readonly LoggerInterface $logger,
     ) {
-        // The underlying Simps client connects to the socket in its constructor.
-        // It requires a Swoole context when using coroutine client type (default).
-        $this->client = new Client($this->host, $this->port, $this->config);
+        $config = $this->buildConfig();
+        $this->client = new Client($this->host, $this->port, $config);
         $this->lastPingAt = time();
     }
 
-    /**
-     * Establish the MQTT connection (sends CONNECT) with optional clean session and will message.
-     */
     public function connect(bool $cleanSession = true, array $will = []): void
     {
         try {
@@ -39,18 +60,15 @@ class MqttClientService
             $this->logger->info('MQTT connected', [
                 'host' => $this->host,
                 'port' => $this->port,
-                'client_id' => $this->config->getClientId(),
+                'client_id' => $this->clientId,
             ]);
             $this->lastPingAt = time();
         } catch (Throwable $e) {
             $this->logger->error('MQTT connect error: ' . $e->getMessage(), ['exception' => $e]);
-            throw $e;
+            throw MqttConnectionError::withError($e->getMessage());
         }
     }
 
-    /**
-     * Subscribe to topics. $topics is an associative array: [topic => qos].
-     */
     public function subscribe(array $topics): void
     {
         try {
@@ -62,10 +80,6 @@ class MqttClientService
         }
     }
 
-    /**
-     * Publish a message.
-     * Returns the response for QoS > 0 according to simps/mqtt Client::publish.
-     */
     public function publish(string $topic, string $payload, int $qos = 0, bool $retain = false): mixed
     {
         try {
@@ -81,11 +95,6 @@ class MqttClientService
         }
     }
 
-    /**
-     * Start a simple receive loop and invoke $onMessage for incoming PUBLISH packets.
-     * The callback signature is: function(array $message): void
-     * Use stop() to break the loop from outside.
-     */
     public function loop(callable $onMessage): void
     {
         $this->running = true;
@@ -132,13 +141,11 @@ class MqttClientService
         }
     }
 
-    /** Stop the receive loop started by loop(). */
     public function stop(): void
     {
         $this->running = false;
     }
 
-    /** Close the connection. */
     public function disconnect(): void
     {
         try {
@@ -153,5 +160,42 @@ class MqttClientService
     public function getClient(): Client
     {
         return $this->client;
+    }
+
+    private function buildConfig(): ClientConfig
+    {
+        $this->clientId = Client::genClientID();
+
+        $config = new ClientConfig();
+        $config->setClientId($this->clientId);
+        $config->setUsername($this->user);
+        $config->setPassword($this->password);
+        $config->setKeepAlive(10);
+        $config->setDelay(3000);
+        $config->setMaxAttempts(5);
+        $config->setProperties([
+            'session_expiry_interval' => 60,
+            'receive_maximum' => 65535,
+            'topic_alias_maximum' => 65535,
+        ]);
+        $config->setProtocolLevel($this->protocolLevel);
+
+        $tlsConfig = [];
+
+        if ($this->useTls) {
+            $tlsConfig = [
+                'ssl_allow_self_signed' => $this->sslAllowSelfSigned,
+                'ssl_verify_peer' => $this->verifyPeer,
+                'ssl_cafile' => $this->caPath,
+                'ssl_key_file' => $this->sslKeyFile,
+                'ssl_cert_file' => $this->sslCertFile,
+            ];
+        }
+
+        $swoolMqttConfig = array_merge(SWOOLE_MQTT_CONFIG, $tlsConfig);
+
+        $config->setSwooleConfig($swoolMqttConfig);
+
+        return $config;
     }
 }

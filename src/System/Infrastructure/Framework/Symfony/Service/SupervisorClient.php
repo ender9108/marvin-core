@@ -4,13 +4,17 @@ namespace Marvin\System\Infrastructure\Framework\Symfony\Service;
 use Marvin\System\Domain\Exception\SupervisorConnectionError;
 use Marvin\System\Domain\Exception\SupervisorXmlRpcFault;
 use Marvin\System\Domain\Service\SupervisorClientInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class SupervisorClient implements SupervisorClientInterface
+readonly class SupervisorClient implements SupervisorClientInterface
 {
     public function __construct(
-        private readonly string $url,
-        private readonly string $username,
-        private readonly string $password,
+        #[Autowire(env: 'SUPERVISOR_URL')]
+        private string $url,
+        #[Autowire(env: 'SUPERVISOR_USER')]
+        private string $username,
+        #[Autowire(env: 'SUPERVISOR_PASS')]
+        private string $password,
     ) {}
 
     private function call(string $method, array $params = []): mixed
