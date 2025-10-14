@@ -7,27 +7,10 @@ use Marvin\Domotic\Domain\List\CapabilityActionReference;
 use Marvin\Domotic\Domain\List\CapabilityReference;
 use Marvin\Domotic\Domain\List\CapabilityStateReference;
 
-/**
- * Convert Zigbee2MQTT "exposes" structures into Marvin Capability compositions (DTO with capability/actions/states).
- *
- * This service takes the exposes structure returned by Zigbee2MQTT for a device
- * (typically from the bridge/definitions content) and returns the list of
- * CapabilityCompositionDescriptor that Marvin can understand for this device.
- *
- * The mapping is heuristic-based and covers the most common features.
- * It can be extended easily by adding rules to mapFeatureToCapabilities().
- */
 class ExposeToCapabilityConverter
 {
-    /**
-     * Convert a full exposes array (as provided by Zigbee2MQTT) to a de-duplicated list of capability compositions.
-     *
-     * @param array<int,array<string,mixed>> $exposes
-     * @return CapabilityCompositionDescriptor[]
-     */
     public function convert(array $exposes): array
     {
-        // Aggregate by capability reference key
         $byCap = [];
 
         foreach ($exposes as $expose) {
@@ -61,12 +44,6 @@ class ExposeToCapabilityConverter
         return $out;
     }
 
-    /**
-     * Extract a flat list of features from a (possibly nested) expose entry.
-     *
-     * @param array<string,mixed> $expose
-     * @return array<int,array<string,mixed>>
-     */
     private function extractAllFeatures(array $expose): array
     {
         $out = [];
@@ -86,12 +63,6 @@ class ExposeToCapabilityConverter
         return $out;
     }
 
-    /**
-     * Heuristic mapping between a single Zigbee2MQTT feature and Marvin capabilities.
-     *
-     * @param array<string,mixed> $feature
-     * @return CapabilityReference[]
-     */
     private function mapFeatureToCapabilities(array $feature): array
     {
         $capabilities = [];
@@ -306,11 +277,6 @@ class ExposeToCapabilityConverter
         };
     }
 
-    /**
-     * @param CapabilityActionReference[] $a
-     * @param CapabilityActionReference[] $b
-     * @return CapabilityActionReference[]
-     */
     private function mergeUniqueActions(array $a, array $b): array
     {
         $out = [];
@@ -320,11 +286,6 @@ class ExposeToCapabilityConverter
         return array_values($out);
     }
 
-    /**
-     * @param CapabilityStateReference[] $a
-     * @param CapabilityStateReference[] $b
-     * @return CapabilityStateReference[]
-     */
     private function mergeUniqueStates(array $a, array $b): array
     {
         $out = [];
@@ -334,18 +295,13 @@ class ExposeToCapabilityConverter
         return array_values($out);
     }
 
-    /**
-     * @param array<int,mixed> $haystack
-     * @param array<int,string> $needles
-     */
     private function hasAny(array $haystack, array $needles): bool
     {
         $haystackLower = array_map(static fn($v) => is_string($v) ? strtolower($v) : $v, $haystack);
-        foreach ($needles as $needle) {
-            if (in_array(strtolower($needle), $haystackLower, true)) {
-                return true;
-            }
-        }
-        return false;
+
+        return array_any(
+            $needles,
+            fn($needle) => in_array(strtolower($needle), $haystackLower, true)
+        );
     }
 }
