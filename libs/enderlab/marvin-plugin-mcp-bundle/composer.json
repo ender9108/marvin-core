@@ -1,0 +1,22 @@
+{
+    "name": "enderlab/marvin-plugin-mcp-bundle",
+    "description": "",
+    "type": "symfony-bundle",
+    "licence": "MIT",
+    "version": "1.0.0",
+    "require": {
+        "enderlab/ddd-bundle": "1.0.*",
+        "symfony/mcp-bundle": "*"
+    },
+    "scripts": {},
+    "autoload": {
+        "psr-4": {
+            "EnderLab\\McpBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EnderLab\\McpBundle\\Tests\\": "tests/"
+        }
+    }
+}
