@@ -8,6 +8,7 @@ use Marvin\Domotic\Domain\Exception\ProtocolNotFound;
 use Marvin\Domotic\Domain\Model\Protocol;
 use Marvin\Domotic\Domain\Repository\ProtocolRepositoryInterface;
 use Marvin\Domotic\Domain\ValueObject\Identity\ProtocolId;
+use Marvin\Shared\Domain\ValueObject\Reference;
 use Override;
 
 /**
@@ -44,6 +45,15 @@ final class ProtocolOrmRepository extends ServiceEntityRepository implements Pro
         $entity = $this->findOneBy(['id' => $id]);
         if (null === $entity) {
             throw ProtocolNotFound::withId($id);
+        }
+        return $entity;
+    }
+
+    public function byReference(Reference $reference): Protocol
+    {
+        $entity = $this->findOneBy(['reference' => $reference->value]);
+        if (null === $entity) {
+            throw ProtocolNotFound::withReference($reference);
         }
         return $entity;
     }
