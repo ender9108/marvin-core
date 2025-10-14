@@ -23,4 +23,5 @@ return [
     EnderLab\ToolsBundle\ToolsBundle::class => ['all' => true],
     Symfonycasts\MicroMapper\SymfonycastsMicroMapperBundle::class => ['all' => true],
     Gesdinet\JWTRefreshTokenBundle\GesdinetJWTRefreshTokenBundle::class => ['all' => true],
+    Symfony\AI\McpBundle\McpBundle::class => ['all' => true],
 ];
