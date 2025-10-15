@@ -2,7 +2,7 @@
 
 namespace Marvin\Domotic\Domain\Repository;
 
-use EnderLab\DddCqrsBundle\Infrastructure\Persistence\Doctrine\ORM\PaginatorOrm;
+use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
 use Marvin\Domotic\Domain\Model\Capability;
 use Marvin\Domotic\Domain\ValueObject\Identity\CapabilityId;
 
@@ -14,5 +14,5 @@ interface CapabilityRepositoryInterface
 
     public function byId(CapabilityId $id): Capability;
 
-    public function collection(array $filters = [], array $orderBy = [], int $page = 0, int $itemsPerPage = 50): PaginatorOrm;
+    public function collection(array $filters = [], array $orderBy = [], int $page = 0, int $itemsPerPage = 50): PaginatorInterface;
 }

@@ -6,11 +6,11 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Marvin\Domotic\Domain\ValueObject\Identity\DeviceId;
+use Marvin\Domotic\Domain\ValueObject\State;
 use Marvin\Domotic\Domain\ValueObject\TechnicalName;
 use Marvin\Shared\Domain\ValueObject\CreatedAt;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\UpdatedAt;
-use Marvin\Domotic\Domain\ValueObject\State;
 
 final class Device
 {
@@ -20,28 +20,30 @@ final class Device
     public private(set) Collection $groups;
 
     /** @var Collection<int, CapabilityComposition> */
-    private Collection $capabilityCompositions;
+    private readonly Collection $capabilityCompositions;
+
+    /** @var Collection<int, DeviceAction> */
+    private readonly Collection $deviceActions;
 
     public function __construct(
         private(set) Label $label,
         private(set) ?TechnicalName $technicalName = null,
         private(set) ?Protocol $protocol = null,
         private(set) ?Zone $zone = null,
+        private(set) ?State $state = null,
         private(set) ?UpdatedAt $updatedAt = null,
         public readonly CreatedAt $createdAt = new CreatedAt(new DateTimeImmutable()),
-        private(set) State $state
     ) {
         $this->id = new DeviceId();
         $this->groups = new ArrayCollection();
         $this->capabilityCompositions = new ArrayCollection();
-
+        $this->deviceActions = new ArrayCollection();
     }
 
     public function update(
         ?Label $label = null,
         ?string $technicalName = null
-    ): Device
-    {
+    ): Device {
         $this->label = $label ?? $this->label;
         $this->technicalName = $technicalName ?? $this->technicalName;
 
@@ -95,6 +97,24 @@ final class Device
     {
         if ($this->capabilityCompositions->contains($capabilityComposition)) {
             $this->capabilityCompositions->removeElement($capabilityComposition);
+        }
+
+        return $this;
+    }
+
+    public function addDeviceAction(DeviceAction $deviceAction): Device
+    {
+        if (!$this->deviceActions->contains($deviceAction)) {
+            $this->deviceActions->add($deviceAction);
+        }
+
+        return $this;
+    }
+
+    public function removeDeviceAction(DeviceAction $deviceAction): Device
+    {
+        if ($this->deviceActions->contains($deviceAction)) {
+            $this->deviceActions->removeElement($deviceAction);
         }
 
         return $this;

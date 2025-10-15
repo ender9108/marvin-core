@@ -9,11 +9,8 @@ use Stringable;
 
 final readonly class State implements ArrayValueObjectInterface
 {
-    public array $value;
-
-    public function __construct(array $state)
+    public function __construct(public array $value)
     {
-        $this->value = $state;
     }
 
     public function equals(State $state): bool

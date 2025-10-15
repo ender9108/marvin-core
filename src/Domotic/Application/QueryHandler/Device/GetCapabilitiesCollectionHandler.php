@@ -4,7 +4,7 @@
 namespace Marvin\Domotic\Application\QueryHandler\Device;
 
 use EnderLab\DddCqrsBundle\Application\Query\QueryHandlerInterface;
-use EnderLab\DddCqrsBundle\Infrastructure\Persistence\Doctrine\ORM\PaginatorOrm;
+use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
 use Marvin\Domotic\Application\Query\Device\GetCapabilitiesCollection;
 use Marvin\Domotic\Domain\Repository\CapabilityRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -17,7 +17,7 @@ final readonly class GetCapabilitiesCollectionHandler implements QueryHandlerInt
     ) {
     }
 
-    public function __invoke(GetCapabilitiesCollection $query): PaginatorOrm
+    public function __invoke(GetCapabilitiesCollection $query): PaginatorInterface
     {
         return $this->capabilityRepository->collection(
             $query->criteria,

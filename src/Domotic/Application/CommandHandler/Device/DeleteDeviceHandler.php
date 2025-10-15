@@ -2,8 +2,8 @@
 
 namespace Marvin\Domotic\Application\CommandHandler\Device;
 
-use Marvin\Domotic\Application\Command\Device\DeleteDevice;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
+use Marvin\Domotic\Application\Command\Device\DeleteDevice;
 use Marvin\Domotic\Domain\Repository\DeviceRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 

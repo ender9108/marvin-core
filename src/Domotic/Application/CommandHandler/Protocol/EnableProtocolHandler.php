@@ -2,8 +2,8 @@
 
 namespace Marvin\Domotic\Application\CommandHandler\Protocol;
 
-use Marvin\Domotic\Application\Command\Protocol\EnableProtocol;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
+use Marvin\Domotic\Application\Command\Protocol\EnableProtocol;
 use Marvin\Domotic\Domain\Model\Protocol;
 use Marvin\Domotic\Domain\Repository\ProtocolRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
