@@ -1,6 +1,6 @@
 <?php
 
-namespace Security;
+namespace Marvin\Tests\Security;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 

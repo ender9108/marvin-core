@@ -92,7 +92,7 @@ final class UserOrmRepository extends ServiceEntityRepository implements UserRep
         return $this->byEmail(new Email($identifier));
     }
 
-    public function getUserCollection(
+    public function collection(
         /** @var array<string, mixed> $criterias */
         array $criterias = [],
         /** @var array<string, string> $orderBy */

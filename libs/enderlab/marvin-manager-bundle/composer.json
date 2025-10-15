@@ -6,7 +6,6 @@
     "version": "1.0.4",
     "require": {
         "enderlab/ddd-cqrs-bundle": "1.*",
-        "enderlab/ddd-cqrs-api-platform-bundle": "1.*",
         "enderlab/tools-bundle": "1.*"
     },
     "autoload": {

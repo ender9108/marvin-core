@@ -6,8 +6,8 @@ use Symfony\Component\Uid\UuidV7;
 
 enum SystemCacheKeys: string
 {
-    case PLUGIN_ITEM = 'plugin_item_%s';
-    case PLUGIN_LIST = 'plugin_list';
+    case ACTION_REQUEST_ITEM = 'action_request_item_%s';
+    case ACTION_REQUEST_LIST = 'action_request_list';
 
     public function withId(UuidV7 $id): string
     {

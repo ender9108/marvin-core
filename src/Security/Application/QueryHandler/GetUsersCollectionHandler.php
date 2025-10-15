@@ -18,7 +18,7 @@ final readonly class GetUsersCollectionHandler implements QueryHandlerInterface
 
     public function __invoke(GetUsersCollection $query): PaginatorInterface
     {
-        return $this->userRepository->getUserCollection(
+        return $this->userRepository->collection(
             $query->criteria,
             $query->orderBy,
             $query->page,
