@@ -6,6 +6,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
+use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
 use EnderLab\DddCqrsBundle\Infrastructure\Persistence\Doctrine\ORM\PaginatorOrm;
 use Marvin\Domotic\Domain\Exception\CapabilityNotFound;
 use Marvin\Domotic\Domain\Model\Capability;
@@ -52,7 +53,7 @@ final class CapabilityOrmRepository extends ServiceEntityRepository implements C
         return $entity;
     }
 
-    public function collection(array $filters = [], array $orderBy = [], int $page = 0, int $itemsPerPage = 50): PaginatorOrm
+    public function collection(array $filters = [], array $orderBy = [], int $page = 0, int $itemsPerPage = 50): PaginatorInterface
     {
         $query = $this
             ->createQueryBuilder('c')

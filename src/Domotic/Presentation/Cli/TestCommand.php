@@ -27,8 +27,6 @@ final readonly class TestCommand
         SymfonyStyle $io,
     ): int {
         try {
-
-
             return Command::SUCCESS;
         } catch (DomainException $de) {
             $io->error($this->exceptionMessageManager->cliResponseFormat($de));

@@ -45,14 +45,11 @@ final readonly class ListCapabilitiesCommand
                 ];
             }
 
-            switch ($format) {
-                case 'json':
-                    $io->writeln(json_encode($rows, JSON_PRETTY_PRINT));
-                    break;
-                case 'table':
-                    $io->table($headers, $rows);
-                    break;
-            }
+            match ($format) {
+                'json' => $io->writeln(json_encode($rows, JSON_PRETTY_PRINT)),
+                'table' => $io->table($headers, $rows),
+                default => Command::SUCCESS,
+            };
 
             return Command::SUCCESS;
         } catch (DomainException $de) {

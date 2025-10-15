@@ -1,5 +1,7 @@
 domotic:
     exceptions:
+        device_action_not_found: DeviceAction introuvable.
+        device_action_not_found_with_id: DeviceAction introuvable avec l'id "%id%".
         device_not_found: Device introuvable.
         device_not_found_with_id: Device introuvable avec l'id "%id%".
         capability_composition_not_found: CapabilityComposition introuvable.

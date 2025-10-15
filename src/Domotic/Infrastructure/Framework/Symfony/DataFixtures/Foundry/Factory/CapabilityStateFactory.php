@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domotic\Infrastructure\DataFixtures\Foundry\Factory;
+namespace Marvin\Domotic\Infrastructure\DataFixtures\Foundry\Factory;
 
 use Marvin\Domotic\Domain\List\CapabilityStateAirQualityReference;
 use Marvin\Domotic\Domain\List\CapabilityStateNotifyReference;
@@ -271,7 +271,7 @@ class CapabilityStateFactory extends PersistentProxyObjectFactory
                 $parameters['reference'] = new Reference($parameters['reference']);
                 return $parameters;
             })
-            ;
+        ;
     }
 
     public static function class(): string

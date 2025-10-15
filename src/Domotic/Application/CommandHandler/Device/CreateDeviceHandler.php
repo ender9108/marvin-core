@@ -2,8 +2,8 @@
 
 namespace Marvin\Domotic\Application\CommandHandler\Device;
 
-use Marvin\Domotic\Application\Command\Device\CreateDevice;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
+use Marvin\Domotic\Application\Command\Device\CreateDevice;
 use Marvin\Domotic\Domain\Model\Device;
 use Marvin\Domotic\Domain\Repository\CapabilityCompositionRepositoryInterface;
 use Marvin\Domotic\Domain\Repository\DeviceRepositoryInterface;

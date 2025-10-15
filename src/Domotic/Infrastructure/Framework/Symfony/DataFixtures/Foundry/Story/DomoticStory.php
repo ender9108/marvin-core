@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domotic\Infrastructure\DataFixtures\Foundry\Story;
+namespace Marvin\Domotic\Infrastructure\DataFixtures\Foundry\Story;
 
 use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\CapabilityActionFactory;
 use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\CapabilityCompositionFactory;
