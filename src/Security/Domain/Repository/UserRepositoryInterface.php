@@ -24,7 +24,7 @@ interface UserRepositoryInterface
 
     public function byIdentifier(string $identifier): ?User;
 
-    public function getUserCollection(
+    public function collection(
         /** @var array<string, mixed> $criterias */
         array $criterias = [],
         /** @var array<string, mixed> $orderBy */

@@ -1,27 +1,36 @@
 security:
     exceptions:
-        plugin_not_found: Plugin introuvable.
-        plugin_not_found_with_id: Plugin introuvable avec l'id "%id%".
-        plugin_already_exist: Ce plugin existe déjà.
-        plugin_already_exist_with_reference: Le plugin avec la référence "%reference%" existe déjà
-        plugin_requirement_missing: Dépendance manquante.
-        plugin_requirement_missing_with_references: 'Les dépendances suivantes sont manquantes: %references%.'
-        plugin_installation_method_not_allowed: Vous ne pouvez pas utiliser cette méthode en mode installation.
-        plugin_installation_method_not_allowed_with_method_name: Vous ne pouvez pas utiliser cette méthode "%method_name%" en mode installation.
-        plugin_uninstallation_method_not_allowed: Vous ne pouvez pas utiliser cette méthode en mode désinstallation.
-        plugin_uninstallation_method_not_allowed_with_method_name: Vous ne pouvez pas utiliser cette méthode "%method_name%" en mode désinstallation.
-        plugin_status_not_found: PluginStatus introuvable.
-        plugin_status_not_found_with_id: PluginStatus introuvable avec l'id "%id%".
-        plugin_status_not_found_with_reference: PluginStatus introuvable avec la référence "%reference%".
-        docker_not_found: Docker introuvable.
-        docker_not_found_with_id: Docker introuvable avec l'id "%id%".
-        docker_command_not_found: Commande docker introuvable.
-        docker_command_not_found_with_id: Commande docker introuvable avec l'id "%id%".
-        supervisor_connection_error: Connexion au gestionnaire de worker impossible.
-        supervisor_xml_rpc_fault: Réponse mal formée.
-        mqtt_subscribe_error: Une erreur est survenue lors de l'abonnement au topic(s) "%topics%".
-        mqtt_public_error: 'Une erreur est survenue lors de la publication sur le topic "%topic%" (qos: %qos%, retain: %retain%).'
-        mqtt_loop_error: 'Erreur lors de la réception d''un message. %error%.'
-        mqtt_connection_error: 'Erreur lors de la connexion au broker MQTT. %error%.'
+        action_request_not_found: ActionRequest introuvable.
+        action_request_not_found_with_id: ActionRequest introuvable avec l'id "%id%".
+        action_request_not_found_with_correlation_id: 'ActionRequest introuvable avec l''id de transaction "%correlationId%".'
+        action_not_allowed: Action non autorisé pour ce containeur.
+        action_not_allowed_with_label_and_action: 'Action %action% non autorisé pour le containeur %containerLabel%.'
+        worker_not_found: Worker introuvable.
+        worker_not_found_with_id: Worker introuvable avec l'id "%id%".
+        container_not_found: Container introuvable.
+        container_not_found_with_id: Container introuvable avec l'id "%id%".
+        #plugin_not_found: Plugin introuvable.
+        #plugin_not_found_with_id: Plugin introuvable avec l'id "%id%".
+        #plugin_already_exist: Ce plugin existe déjà.
+        #plugin_already_exist_with_reference: Le plugin avec la référence "%reference%" existe déjà
+        #plugin_requirement_missing: Dépendance manquante.
+        #plugin_requirement_missing_with_references: 'Les dépendances suivantes sont manquantes: %references%.'
+        #plugin_installation_method_not_allowed: Vous ne pouvez pas utiliser cette méthode en mode installation.
+        #plugin_installation_method_not_allowed_with_method_name: Vous ne pouvez pas utiliser cette méthode "%method_name%" en mode installation.
+        #plugin_uninstallation_method_not_allowed: Vous ne pouvez pas utiliser cette méthode en mode désinstallation.
+        #plugin_uninstallation_method_not_allowed_with_method_name: Vous ne pouvez pas utiliser cette méthode "%method_name%" en mode désinstallation.
+        #plugin_status_not_found: PluginStatus introuvable.
+        #plugin_status_not_found_with_id: PluginStatus introuvable avec l'id "%id%".
+        #plugin_status_not_found_with_reference: PluginStatus introuvable avec la référence "%reference%".
+        #docker_not_found: Docker introuvable.
+        #docker_not_found_with_id: Docker introuvable avec l'id "%id%".
+        #docker_command_not_found: Commande docker introuvable.
+        #docker_command_not_found_with_id: Commande docker introuvable avec l'id "%id%".
+        #supervisor_connection_error: Connexion au gestionnaire de worker impossible.
+        #supervisor_xml_rpc_fault: Réponse mal formée.
+        #mqtt_subscribe_error: Une erreur est survenue lors de l'abonnement au topic(s) "%topics%".
+        #mqtt_public_error: 'Une erreur est survenue lors de la publication sur le topic "%topic%" (qos: %qos%, retain: %retain%).'
+        #mqtt_loop_error: 'Erreur lors de la réception d''un message. %error%.'
+        #mqtt_connection_error: 'Erreur lors de la connexion au broker MQTT. %error%.'
         
             

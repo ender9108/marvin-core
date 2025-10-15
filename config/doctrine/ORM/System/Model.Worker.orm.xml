@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity
+        name="Marvin\System\Domain\Model\Worker"
+        repository-class="Marvin\System\Infrastructure\Persistence\Doctrine\ORM\WorkerOrmRepository"
+        table="system_worker"
+    >
+        <id name="id" type="worker_id">
+            <generator strategy="NONE" />
+        </id>
+
+        <embedded name="label" class="Marvin\Shared\Domain\ValueObject\Label" />
+        <embedded name="processName" class="Marvin\System\Domain\ValueObject\SupervisorProcess" />
+        <field name="command" type="text" />
+        <field name="type" type="string" length="255" />
+        <field name="status" type="string" length="255" nullable="true" />
+        <embedded name="allowedActions" class="Marvin\System\Domain\ValueObject\WorkerAllowedActions" />
+        <field name="numProcs" type="integer" />
+        <field name="priority" type="integer" />
+        <field name="autoStart" type="boolean" />
+        <field name="autoRestart" type="boolean" />
+        <embedded name="metadata" class="Marvin\Shared\Domain\ValueObject\Metadata" />
+        <field name="lastSyncedAt" type="datetime" nullable="true" />
+        <field name="createdAt" type="datetime" />
+        <field name="updatedAt" type="datetime" nullable="true" />
+    </entity>
+</doctrine-mapping>

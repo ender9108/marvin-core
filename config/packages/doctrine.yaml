@@ -16,9 +16,6 @@ doctrine:
             login_attempt_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\LoginAttemptIdType
             user_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserIdType
             request_reset_password_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\RequestResetPasswordIdType
-            docker_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\DockerIdType
-            docker_command_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\DockerCommandIdType
-            plugin_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\PluginIdType
             zone_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\ZoneIdType
             protocol_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\ProtocolIdType
             device_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\DeviceIdType
@@ -27,6 +24,10 @@ doctrine:
             capability_action_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\CapabilityActionIdType
             capability_state_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\CapabilityStateIdType
             capability_composition_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\CapabilityCompositionIdType
+            device_action_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\DeviceActionIdType
+            container_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\ContainerIdType
+            worker_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\WorkerIdType
+            action_request_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\ActionRequestIdType
     orm:
         auto_generate_proxy_classes: true
         enable_native_lazy_objects: true
@@ -47,15 +48,15 @@ doctrine:
                 dir: '%kernel.project_dir%/config/doctrine/ORM/Security'
                 prefix: 'Marvin\Security\Domain'
                 is_bundle: false
-            Marvin\System:
-                type: xml
-                dir: '%kernel.project_dir%/config/doctrine/ORM/System'
-                prefix: 'Marvin\System\Domain'
-                is_bundle: false
             Marvin\Domotic:
                 type: xml
                 dir: '%kernel.project_dir%/config/doctrine/ORM/Domotic'
                 prefix: 'Marvin\Domotic\Domain'
+                is_bundle: false
+            Marvin\System:
+                type: xml
+                dir: '%kernel.project_dir%/config/doctrine/ORM/System'
+                prefix: 'Marvin\System\Domain'
                 is_bundle: false
         controller_resolver:
             auto_mapping: false

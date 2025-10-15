@@ -2,9 +2,9 @@
 
 namespace Marvin\Shared\Domain\ValueObject;
 
+use DateTimeImmutable;
 use DateTimeInterface;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Stringable;
 
 final readonly class UpdatedAt implements DatetimeValueObjectInterface, Stringable
@@ -13,7 +13,7 @@ final readonly class UpdatedAt implements DatetimeValueObjectInterface, Stringab
 
     public DateTimeInterface $value;
 
-    public function __construct(DateTimeInterface $updatedAt)
+    public function __construct(DateTimeInterface $updatedAt = new DateTimeImmutable())
     {
         Assert::dateGreaterThanNow($updatedAt);
 
