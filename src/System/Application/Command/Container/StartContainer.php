@@ -11,6 +11,7 @@ final readonly class StartContainer implements SyncCommandInterface
     public function __construct(
         public ContainerId $containerId,
         public UniqId $correlationId,
+        public int $timeout = 10,
     ) {
     }
 }

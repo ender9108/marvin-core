@@ -7,7 +7,7 @@ use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 
 final readonly class ContainerImage implements ValueObjectInterface
 {
-    private string $value;
+    public string $value;
 
     public function __construct(string $value)
     {

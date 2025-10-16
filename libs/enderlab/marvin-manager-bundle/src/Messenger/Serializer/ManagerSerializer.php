@@ -41,7 +41,7 @@ class ManagerSerializer implements SerializerInterface
         }
 
         $messageClass = match (true) {
-            $messageType === ManagerActionReference::ACTION_START_DOCKER->value => ManagerRequestCommand::class,
+            $messageType === ManagerActionReference::ACTION_START->value => ManagerRequestCommand::class,
         };
 
         $message = new $messageClass($body);

@@ -11,6 +11,7 @@ final readonly class ExecContainerCommand implements SyncCommandInterface
     public function __construct(
         public ContainerId $containerId,
         public UniqId $correlationId,
+        public int $timeout = 10,
         public string $command,
         public array $args = [],
     ) {
