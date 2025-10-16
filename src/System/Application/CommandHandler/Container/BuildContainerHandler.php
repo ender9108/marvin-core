@@ -33,10 +33,10 @@ final readonly class BuildContainerHandler implements SyncCommandHandlerInterfac
 
         $container = $this->containerRepository->byId($command->containerId);
 
-        if (!$container->isActionAllowed(ManagerActionReference::ACTION_BUILD_DOCKER->value)) {
+        if (!$container->isActionAllowed(ManagerActionReference::ACTION_BUILD->value)) {
             throw ActionNotAllowed::withContainerAndAction(
                 $container->label,
-                ManagerActionReference::ACTION_BUILD_DOCKER->value
+                ManagerActionReference::ACTION_BUILD->value
             );
         }
 
@@ -44,7 +44,7 @@ final readonly class BuildContainerHandler implements SyncCommandHandlerInterfac
             $command->correlationId,
             'container',
             $command->containerId->toString(),
-            ManagerActionReference::ACTION_BUILD_DOCKER->value,
+            ManagerActionReference::ACTION_BUILD->value,
             ActionStatus::PENDING,
         );
 
@@ -53,7 +53,7 @@ final readonly class BuildContainerHandler implements SyncCommandHandlerInterfac
         $managerMessage = new ManagerRequestCommand(
             $command->containerId->toString(),
             $command->correlationId->toString(),
-            ManagerActionReference::ACTION_BUILD_DOCKER->value
+            ManagerActionReference::ACTION_BUILD->value
         );
 
         $this->commandBus->dispatch($managerMessage);

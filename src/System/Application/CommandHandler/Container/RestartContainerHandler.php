@@ -33,10 +33,10 @@ final readonly class RestartContainerHandler implements SyncCommandHandlerInterf
 
         $container = $this->containerRepository->byId($command->containerId);
 
-        if (!$container->isActionAllowed(ManagerActionReference::ACTION_RESTART_DOCKER->value)) {
+        if (!$container->isActionAllowed(ManagerActionReference::ACTION_RESTART->value)) {
             throw ActionNotAllowed::withContainerAndAction(
                 $container->label,
-                ManagerActionReference::ACTION_RESTART_DOCKER->value
+                ManagerActionReference::ACTION_RESTART->value
             );
         }
 
@@ -44,7 +44,7 @@ final readonly class RestartContainerHandler implements SyncCommandHandlerInterf
             $command->correlationId,
             'container',
             $command->containerId->toString(),
-            ManagerActionReference::ACTION_RESTART_DOCKER->value,
+            ManagerActionReference::ACTION_RESTART->value,
             ActionStatus::PENDING,
         );
 
@@ -53,7 +53,7 @@ final readonly class RestartContainerHandler implements SyncCommandHandlerInterf
         $managerMessage = new ManagerRequestCommand(
             $command->containerId->toString(),
             $command->correlationId->toString(),
-            ManagerActionReference::ACTION_RESTART_DOCKER->value,
+            ManagerActionReference::ACTION_RESTART->value,
             $command->timeout,
         );
 

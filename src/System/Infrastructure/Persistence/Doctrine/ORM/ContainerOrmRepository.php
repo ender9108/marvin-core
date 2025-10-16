@@ -3,11 +3,16 @@
 namespace Marvin\System\Infrastructure\Persistence\Doctrine\ORM;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
+use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
+use EnderLab\DddCqrsBundle\Infrastructure\Persistence\Doctrine\ORM\PaginatorOrm;
 use Marvin\System\Domain\Exception\ContainerNotFound;
 use Marvin\System\Domain\Model\Container;
 use Marvin\System\Domain\Repository\ContainerRepositoryInterface;
 use Marvin\System\Domain\ValueObject\Identity\ContainerId;
+use Marvin\System\Infrastructure\Persistence\Doctrine\Cache\SystemCacheKeys;
 use Override;
 
 /**
@@ -24,6 +29,7 @@ final class ContainerOrmRepository extends ServiceEntityRepository implements Co
     public function save(Container $model, bool $flush = true): void
     {
         $this->getEntityManager()->persist($model);
+
         if ($flush) {
             $this->getEntityManager()->flush();
         }
@@ -33,6 +39,7 @@ final class ContainerOrmRepository extends ServiceEntityRepository implements Co
     public function remove(Container $model, bool $flush = true): void
     {
         $this->getEntityManager()->remove($model);
+
         if ($flush) {
             $this->getEntityManager()->flush();
         }
@@ -42,9 +49,43 @@ final class ContainerOrmRepository extends ServiceEntityRepository implements Co
     public function byId(ContainerId $id): Container
     {
         $entity = $this->findOneBy(['id' => $id]);
+
         if (null === $entity) {
             throw ContainerNotFound::withId($id);
         }
+
         return $entity;
+    }
+
+    public function collection(array $filters = [], array $orderBy = [], int $page = 0, int $itemsPerPage = 50): PaginatorInterface
+    {
+        $query = $this
+            ->createQueryBuilder('c')
+            ->setCacheable(true)
+            ->setCacheMode(ClassMetadata::CACHE_USAGE_NONSTRICT_READ_WRITE)
+            ->setCacheRegion(SystemCacheKeys::CONTAINER_LIST->value)
+        ;
+
+        if (!empty($filters)) {
+            /*foreach ($filters as $field => $value) {
+                switch ($field) {
+                }
+            }*/
+        }
+
+        if (!empty($orderBy)) {
+            foreach ($orderBy as $field => $direction) {
+                $query->addOrderBy('c.'.$field, $direction);
+            }
+        }
+
+        $query
+            ->setFirstResult(($page - 1) * $itemsPerPage)
+            ->setMaxResults($itemsPerPage)
+        ;
+
+        $paginator = new Paginator($query->getQuery());
+
+        return new PaginatorOrm($paginator);
     }
 }

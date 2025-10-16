@@ -114,18 +114,6 @@ final class ActionRequestOrmRepository extends ServiceEntityRepository implement
         if (!empty($filters)) {
             /*foreach ($filters as $field => $value) {
                 switch ($field) {
-                    case 'label':
-                        $query
-                            ->andWhere('s.label LIKE :label')
-                            ->setParameter('label', '%'.$value.'%')
-                        ;
-                        break;
-                    case 'reference':
-                        $query
-                            ->andWhere('s.reference = :reference')
-                            ->setParameter('reference', $value)
-                        ;
-                        break;
                 }
             }*/
         }

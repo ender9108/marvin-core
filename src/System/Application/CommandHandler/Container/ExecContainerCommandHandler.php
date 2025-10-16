@@ -34,10 +34,10 @@ final readonly class ExecContainerCommandHandler implements SyncCommandHandlerIn
         $container = $this->containerRepository->byId($command->containerId);
 
         // Vérifier que l'action est autorisée
-        if (!$container->isActionAllowed(ManagerActionReference::ACTION_EXECUTE_COMMAND_DOCKER->value)) {
+        if (!$container->isActionAllowed(ManagerActionReference::ACTION_EXEC_CMD->value)) {
             throw ActionNotAllowed::withContainerAndAction(
                 $container->label,
-                ManagerActionReference::ACTION_EXECUTE_COMMAND_DOCKER->value
+                ManagerActionReference::ACTION_EXEC_CMD->value
             );
         }
 
@@ -46,7 +46,7 @@ final readonly class ExecContainerCommandHandler implements SyncCommandHandlerIn
             $command->correlationId,
             'container',
             $command->containerId->toString(),
-            ManagerActionReference::ACTION_EXECUTE_COMMAND_DOCKER->value,
+            ManagerActionReference::ACTION_EXEC_CMD->value,
             ActionStatus::PENDING,
         );
 
@@ -55,7 +55,7 @@ final readonly class ExecContainerCommandHandler implements SyncCommandHandlerIn
         $managerMessage = new ManagerRequestCommand(
             $command->containerId->toString(),
             $command->correlationId->toString(),
-            ManagerActionReference::ACTION_EXECUTE_COMMAND_DOCKER->value,
+            ManagerActionReference::ACTION_EXEC_CMD->value,
             $command->command,
             $command->args
         );

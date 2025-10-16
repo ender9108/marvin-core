@@ -33,10 +33,10 @@ final readonly class StartContainerHandler implements SyncCommandHandlerInterfac
 
         $container = $this->containerRepository->byId($command->containerId);
 
-        if (!$container->isActionAllowed(ManagerActionReference::ACTION_START_DOCKER->value)) {
+        if (!$container->isActionAllowed(ManagerActionReference::ACTION_START->value)) {
             throw ActionNotAllowed::withContainerAndAction(
                 $container->label,
-                ManagerActionReference::ACTION_START_DOCKER->value
+                ManagerActionReference::ACTION_START->value
             );
         }
 
@@ -44,7 +44,7 @@ final readonly class StartContainerHandler implements SyncCommandHandlerInterfac
             $command->correlationId,
             'container',
             $command->containerId->toString(),
-            ManagerActionReference::ACTION_START_DOCKER->value,
+            ManagerActionReference::ACTION_START->value,
             ActionStatus::PENDING,
         );
 
@@ -53,7 +53,8 @@ final readonly class StartContainerHandler implements SyncCommandHandlerInterfac
         $managerMessage = new ManagerRequestCommand(
             $command->containerId->toString(),
             $command->correlationId->toString(),
-            ManagerActionReference::ACTION_START_DOCKER->value
+            ManagerActionReference::ACTION_START->value,
+            $command->timeout,
         );
 
         $this->commandBus->dispatch($managerMessage);

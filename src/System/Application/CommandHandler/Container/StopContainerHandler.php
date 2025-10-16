@@ -33,10 +33,10 @@ final readonly class StopContainerHandler implements SyncCommandHandlerInterface
 
         $container = $this->containerRepository->byId($command->containerId);
 
-        if (!$container->isActionAllowed(ManagerActionReference::ACTION_STOP_DOCKER->value)) {
+        if (!$container->isActionAllowed(ManagerActionReference::ACTION_STOP->value)) {
             throw ActionNotAllowed::withContainerAndAction(
                 $container->label,
-                ManagerActionReference::ACTION_STOP_DOCKER->value
+                ManagerActionReference::ACTION_STOP->value
             );
         }
 
@@ -44,7 +44,7 @@ final readonly class StopContainerHandler implements SyncCommandHandlerInterface
             $command->correlationId,
             'container',
             $command->containerId->toString(),
-            ManagerActionReference::ACTION_STOP_DOCKER->value,
+            ManagerActionReference::ACTION_STOP->value,
             ActionStatus::PENDING,
         );
 
@@ -53,7 +53,7 @@ final readonly class StopContainerHandler implements SyncCommandHandlerInterface
         $managerMessage = new ManagerRequestCommand(
             $command->containerId->toString(),
             $command->correlationId->toString(),
-            ManagerActionReference::ACTION_STOP_DOCKER->value,
+            ManagerActionReference::ACTION_STOP->value,
             $command->timeout
         );
 

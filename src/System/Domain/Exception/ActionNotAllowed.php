@@ -6,6 +6,7 @@ use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\System\Domain\ValueObject\Identity\ActionRequestId;
+use Marvin\System\Domain\ValueObject\Identity\ContainerId;
 use Override;
 
 final class ActionNotAllowed extends DomainException implements TranslatableExceptionInterface
@@ -18,11 +19,11 @@ final class ActionNotAllowed extends DomainException implements TranslatableExce
         parent::__construct($message);
     }
 
-    public static function withContainerAndAction(Label $containerLabel, string $action): self
+    public static function withContainerAndAction(Label|ContainerId $container, string $action): self
     {
         return new self(
-            sprintf('Action %s not allowed for container %s', $action, $containerLabel->value),
-            $containerLabel->value,
+            sprintf('Action %s not allowed for container %s', $action, $container->value),
+            $container->value,
             $action
         );
     }
