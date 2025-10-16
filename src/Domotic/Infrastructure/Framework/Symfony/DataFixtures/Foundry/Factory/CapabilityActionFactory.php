@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvin\Domotic\Infrastructure\DataFixtures\Foundry\Factory;
+namespace Marvin\Domotic\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory;
 
 use Marvin\Domotic\Domain\List\CapabilityActionReference;
 use Marvin\Domotic\Domain\Model\CapabilityAction;

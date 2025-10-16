@@ -19,7 +19,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     name: 'marvin:system:check-timeouts',
     description: 'Check and mark timed out action requests',
 )]
-class CheckActionRequestTimeoutsCommand
+final readonly class CheckActionRequestTimeoutsCommand
 {
     public function __construct(
         private QueryBusInterface $queryBus,
@@ -35,8 +35,7 @@ class CheckActionRequestTimeoutsCommand
         SymfonyStyle $io,
         #[Option(name: 'timeout')]
         int $timeout = 10,
-    ): int
-    {
+    ): int {
         try {
             $query = new GetTimeoutActionRequestCollection($timeout);
             /** @var PaginatorInterface $paginator */

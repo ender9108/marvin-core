@@ -12,7 +12,7 @@ final readonly class ExecContainerCommand implements SyncCommandInterface
         public ContainerId $containerId,
         public UniqId $correlationId,
         public int $timeout = 10,
-        public string $command,
+        public string $command = '',
         public array $args = [],
     ) {
     }

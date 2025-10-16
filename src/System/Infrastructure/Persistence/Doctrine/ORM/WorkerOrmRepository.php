@@ -3,11 +3,16 @@
 namespace Marvin\System\Infrastructure\Persistence\Doctrine\ORM;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
+use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
+use EnderLab\DddCqrsBundle\Infrastructure\Persistence\Doctrine\ORM\PaginatorOrm;
 use Marvin\System\Domain\Exception\WorkerNotFound;
 use Marvin\System\Domain\Model\Worker;
 use Marvin\System\Domain\Repository\WorkerRepositoryInterface;
 use Marvin\System\Domain\ValueObject\Identity\WorkerId;
+use Marvin\System\Infrastructure\Persistence\Doctrine\Cache\SystemCacheKeys;
 use Override;
 
 /**
@@ -46,5 +51,38 @@ final class WorkerOrmRepository extends ServiceEntityRepository implements Worke
             throw WorkerNotFound::withId($id);
         }
         return $entity;
+    }
+
+    #[Override]
+    public function collection(array $filters = [], array $orderBy = [], int $page = 0, int $itemsPerPage = 50): PaginatorInterface
+    {
+        $query = $this
+            ->createQueryBuilder('w')
+            ->setCacheable(true)
+            ->setCacheMode(ClassMetadata::CACHE_USAGE_NONSTRICT_READ_WRITE)
+            ->setCacheRegion(SystemCacheKeys::WORKER_LIST->value)
+        ;
+
+        if (!empty($filters)) {
+            /*foreach ($filters as $field => $value) {
+                switch ($field) {
+                }
+            }*/
+        }
+
+        if (!empty($orderBy)) {
+            foreach ($orderBy as $field => $direction) {
+                $query->addOrderBy('w.'.$field, $direction);
+            }
+        }
+
+        $query
+            ->setFirstResult(($page - 1) * $itemsPerPage)
+            ->setMaxResults($itemsPerPage)
+        ;
+
+        $paginator = new Paginator($query->getQuery());
+
+        return new PaginatorOrm($paginator);
     }
 }

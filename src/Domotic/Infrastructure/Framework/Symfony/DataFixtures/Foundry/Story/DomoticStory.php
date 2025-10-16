@@ -1,12 +1,12 @@
 <?php
 
-namespace Marvin\Domotic\Infrastructure\DataFixtures\Foundry\Story;
+namespace Marvin\Domotic\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Story;
 
-use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\CapabilityActionFactory;
-use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\CapabilityCompositionFactory;
-use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\CapabilityFactory;
-use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\CapabilityStateFactory;
-use App\Domotic\Infrastructure\DataFixtures\Foundry\Factory\ZoneFactory;
+use Marvin\Domotic\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory\CapabilityActionFactory;
+use Marvin\Domotic\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory\CapabilityCompositionFactory;
+use Marvin\Domotic\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory\CapabilityFactory;
+use Marvin\Domotic\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory\CapabilityStateFactory;
+use Marvin\Domotic\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory\ZoneFactory;
 use Zenstruck\Foundry\Story;
 
 class DomoticStory extends Story
@@ -24,10 +24,10 @@ class DomoticStory extends Story
 
     public function build(): void
     {
-        $this->buildZone();
+        /*$this->buildZone();
         $this->buildCapabilities();
         $this->buildCapabilityActions();
-        $this->buildCapabilityStates();
+        $this->buildCapabilityStates();*/
         #$this->buildCapabilityCompositions();
     }
 
