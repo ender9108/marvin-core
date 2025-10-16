@@ -89,7 +89,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Marvin\\Tests\\": "tests/"
+            "MarvinTests\\": "tests/"
         }
     },
     "replace": {

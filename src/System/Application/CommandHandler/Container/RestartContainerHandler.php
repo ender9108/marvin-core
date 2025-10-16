@@ -1,6 +1,6 @@
 <?php
 
-namespace EnderLab\DddCqrsBundle\System\Application\CommandHandler\Container;
+namespace Marvin\System\Application\CommandHandler\Container;
 
 use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;

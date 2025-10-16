@@ -2,10 +2,10 @@
 
 namespace Marvin\Domotic\Infrastructure\Framework\Symfony\DataFixtures;
 
-use App\Domotic\Infrastructure\DataFixtures\Foundry\Story\DomoticStory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Marvin\Domotic\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Story\DomoticStory;
 
 class DomoticFixtures extends Fixture implements OrderedFixtureInterface
 {
