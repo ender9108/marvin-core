@@ -2,11 +2,10 @@
 
 namespace Marvin\Security\Domain\Repository;
 
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
 use Marvin\Security\Domain\Model\User;
-use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use Marvin\Shared\Domain\ValueObject\Email;
+use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 
 interface UserRepositoryInterface
 {

@@ -5,7 +5,7 @@ namespace Marvin\Security\Presentation\Cli;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use Marvin\Security\Application\Command\User\ChangePasswordUser;
-use Marvin\Security\Domain\ValueObject\Identity\UserId;
+use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;

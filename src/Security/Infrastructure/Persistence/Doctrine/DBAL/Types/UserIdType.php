@@ -2,7 +2,7 @@
 
 namespace Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types;
 
-use Marvin\Security\Domain\ValueObject\Identity\UserId;
+use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 use Symfony\Bridge\Doctrine\Types\AbstractUidType;
 
 final class UserIdType extends AbstractUidType

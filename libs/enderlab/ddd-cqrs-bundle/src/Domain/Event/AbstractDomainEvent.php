@@ -12,4 +12,9 @@ abstract readonly class AbstractDomainEvent
     {
         $this->occurredOn = new DateTimeImmutable();
     }
+
+    public function getOccurredAt(): DateTimeImmutable
+    {
+        return $this->occurredOn;
+    }
 }

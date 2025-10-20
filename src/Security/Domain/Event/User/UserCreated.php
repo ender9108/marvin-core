@@ -2,9 +2,10 @@
 
 namespace Marvin\Security\Domain\Event\User;
 
+use DateTimeImmutable;
 use EnderLab\DddCqrsBundle\Domain\Event\AbstractDomainEvent;
 use EnderLab\DddCqrsBundle\Domain\Event\DomainEventInterface;
-use Marvin\Security\Domain\ValueObject\Identity\UserId;
+use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 use Symfony\Component\Messenger\Attribute\AsMessage;
 
 #[AsMessage(transport: 'domain.event')]
@@ -15,7 +16,7 @@ final readonly class UserCreated extends AbstractDomainEvent implements DomainEv
         parent::__construct();
     }
 
-    public static function getRoutingKey(): string
+    public function getEventName(): string
     {
         return '$.security.user.created';
     }

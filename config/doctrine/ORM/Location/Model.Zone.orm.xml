@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity
+        name="Marvin\Location\Domain\Model\Zone"
+        repository-class="Marvin\Location\Infrastructure\Persistence\Doctrine\ORM\ZoneOrmRepository"
+        table="location_zone"
+    >
+        <id name="id" type="zone_id">
+            <generator strategy="NONE" />
+        </id>
+
+        <embedded name="label" class="Marvin\Shared\Domain\ValueObject\Label" />
+        <field name="type" type="string" length="32" />
+        <embedded name="targetTemperature" class="Marvin\Location\Domain\ValueObject\TargetTemperature" />
+        <embedded name="targetPowerConsumption" class="Marvin\Location\Domain\ValueObject\TargetPowerConsumption" />
+        <field name="icon" type="string" length="32" />
+        <field name="parentZoneId" type="string" length="32" />
+        <embedded name="surfaceArea" class="Marvin\Location\Domain\ValueObject\SurfaceArea" />
+        <field name="orientation" type="string" length="32" />
+        <embedded name="color" class="Marvin\Location\Domain\ValueObject\HexaColor" />
+        <embedded name="metadata" class="Marvin\Shared\Domain\ValueObject\Metadata" />
+        <field name="updatedAt" type="datetime" nullable="true" />
+        <field name="createdAt" type="datetime" nullable="false" />
+    </entity>
+</doctrine-mapping>

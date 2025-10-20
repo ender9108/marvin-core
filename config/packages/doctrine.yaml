@@ -16,15 +16,7 @@ doctrine:
             login_attempt_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\LoginAttemptIdType
             user_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserIdType
             request_reset_password_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\RequestResetPasswordIdType
-            zone_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\ZoneIdType
-            protocol_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\ProtocolIdType
-            device_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\DeviceIdType
-            group_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\GroupIdType
-            capability_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\CapabilityIdType
-            capability_action_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\CapabilityActionIdType
-            capability_state_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\CapabilityStateIdType
-            capability_composition_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\CapabilityCompositionIdType
-            device_action_id: Marvin\Domotic\Infrastructure\Persistence\Doctrine\DBAL\Types\DeviceActionIdType
+            zone_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\ZoneIdType
             container_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\ContainerIdType
             worker_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\WorkerIdType
             action_request_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\ActionRequestIdType
@@ -48,15 +40,15 @@ doctrine:
                 dir: '%kernel.project_dir%/config/doctrine/ORM/Security'
                 prefix: 'Marvin\Security\Domain'
                 is_bundle: false
-            Marvin\Domotic:
-                type: xml
-                dir: '%kernel.project_dir%/config/doctrine/ORM/Domotic'
-                prefix: 'Marvin\Domotic\Domain'
-                is_bundle: false
             Marvin\System:
                 type: xml
                 dir: '%kernel.project_dir%/config/doctrine/ORM/System'
                 prefix: 'Marvin\System\Domain'
+                is_bundle: false
+            Marvin\Location:
+                type: xml
+                dir: '%kernel.project_dir%/config/doctrine/ORM/Location'
+                prefix: 'Marvin\Location\Domain'
                 is_bundle: false
         controller_resolver:
             auto_mapping: false

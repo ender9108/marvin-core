@@ -4,8 +4,8 @@ namespace Marvin\Security\Domain\Event\User;
 
 use EnderLab\DddCqrsBundle\Domain\Event\AbstractDomainEvent;
 use EnderLab\DddCqrsBundle\Domain\Event\DomainEventInterface;
-use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use Marvin\Shared\Domain\ValueObject\Email;
+use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 
 final readonly class UserEmailUpdated extends AbstractDomainEvent implements DomainEventInterface
 {
@@ -16,7 +16,7 @@ final readonly class UserEmailUpdated extends AbstractDomainEvent implements Dom
         parent::__construct();
     }
 
-    public static function getRoutingKey(): string
+    public function getEventName(): string
     {
         return '$.security.user.email_updated';
     }

@@ -10,6 +10,7 @@ use Marvin\System\Domain\ValueObject\Identity\WorkerId;
 use Marvin\System\Domain\ValueObject\SupervisorProcess;
 use Marvin\System\Domain\ValueObject\WorkerAllowedActions;
 use Marvin\System\Domain\ValueObject\WorkerStatus;
+use Marvin\System\Domain\ValueObject\WorkerType;
 
 final class Worker
 {
@@ -17,18 +18,14 @@ final class Worker
 
     public function __construct(
         private(set) Label $label,
-        private(set) SupervisorProcess $processName,
+        private(set) WorkerType $type,
         private(set) string $command,
-        private(set) string $type,
         private(set) WorkerAllowedActions $allowedActions,
-        private(set) int $numProcs,
-        private(set) int $priority,
-        private(set) bool $autoStart,
-        private(set) bool $autoRestart,
+        private(set) ?int $numProcs = null,
+        private(set) ?string $uptime = null,
         private(set) ?WorkerStatus $status = null,
         private(set) ?Metadata $metadata = null,
         private(set) ?DateTimeInterface $lastSyncedAt = null,
-        private(set) ?DateTimeInterface $updatedAt = null,
         private(set) DateTimeInterface $createdAt = new DateTimeImmutable(),
     ) {
         $this->id = new WorkerId();

@@ -13,18 +13,14 @@
         </id>
 
         <embedded name="label" class="Marvin\Shared\Domain\ValueObject\Label" />
-        <embedded name="processName" class="Marvin\System\Domain\ValueObject\SupervisorProcess" />
-        <field name="command" type="text" />
         <field name="type" type="string" length="255" />
         <field name="status" type="string" length="255" nullable="true" />
+        <field name="command" type="text" />
+        <field name="numProcs" type="integer" nullable="true" />
+        <field name="uptime" type="string" length="64" nullable="true" />
         <embedded name="allowedActions" class="Marvin\System\Domain\ValueObject\WorkerAllowedActions" />
-        <field name="numProcs" type="integer" />
-        <field name="priority" type="integer" />
-        <field name="autoStart" type="boolean" />
-        <field name="autoRestart" type="boolean" />
         <embedded name="metadata" class="Marvin\Shared\Domain\ValueObject\Metadata" />
         <field name="lastSyncedAt" type="datetime" nullable="true" />
         <field name="createdAt" type="datetime" />
-        <field name="updatedAt" type="datetime" nullable="true" />
     </entity>
 </doctrine-mapping>

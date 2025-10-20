@@ -4,7 +4,7 @@ namespace Marvin\Security\Domain\Event\User;
 
 use EnderLab\DddCqrsBundle\Domain\Event\AbstractDomainEvent;
 use EnderLab\DddCqrsBundle\Domain\Event\DomainEventInterface;
-use Marvin\Security\Domain\ValueObject\Identity\UserId;
+use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 
 final readonly class UserEnabled extends AbstractDomainEvent implements DomainEventInterface
 {
@@ -13,7 +13,7 @@ final readonly class UserEnabled extends AbstractDomainEvent implements DomainEv
         parent::__construct();
     }
 
-    public static function getRoutingKey(): string
+    public function getEventName(): string
     {
         return '$.security.user.enabled';
     }

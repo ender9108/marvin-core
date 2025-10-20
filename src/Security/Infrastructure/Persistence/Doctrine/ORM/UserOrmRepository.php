@@ -12,10 +12,10 @@ use EnderLab\DddCqrsBundle\Infrastructure\Persistence\Doctrine\ORM\PaginatorOrm;
 use Marvin\Security\Domain\Exception\UserNotFound;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
-use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use Marvin\Security\Domain\ValueObject\UserStatus;
 use Marvin\Security\Infrastructure\Persistence\Doctrine\Cache\SecurityCacheKeys;
 use Marvin\Shared\Domain\ValueObject\Email;
+use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 use Override;
 
 /**

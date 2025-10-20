@@ -17,17 +17,17 @@ final class Container
     public readonly ContainerId $id;
 
     public function __construct(
-        private(set) Label $label,
-        private(set) Label $dockerLabel,
-        private(set) ContainerImage $image,
+        private(set) Label $serviceLabel,
         private(set) ContainerType $type,
         private(set) ContainerStatus $status,
         private(set) ContainerAllowedActions $allowedActions,
+        private(set) ?string $containerId = null,
+        private(set) ?string $containerLabel = null,
+        private(set) ?ContainerImage $image = null,
         private(set) array $ports = [],
         private(set) array $volumes = [],
         private(set) ?Metadata $metadata = null,
         private(set) ?DateTimeInterface $lastSyncedAt = null,
-        private(set) ?DateTimeInterface $updatedAt = null,
         private(set) DateTimeInterface $createdAt = new DateTimeImmutable(),
     ) {
         $this->id = new ContainerId();

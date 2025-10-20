@@ -5,8 +5,6 @@ namespace Marvin\Security\Domain\Exception;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
 use Marvin\Security\Domain\ValueObject\Identity\RequestResetPasswordId;
-use Marvin\Security\Domain\ValueObject\Identity\UserId;
-use Marvin\Shared\Domain\ValueObject\Email;
 use Override;
 
 final class RequestResetPasswordNotFound extends DomainException implements TranslatableExceptionInterface

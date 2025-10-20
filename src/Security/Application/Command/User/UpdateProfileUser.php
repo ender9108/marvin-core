@@ -4,10 +4,10 @@ namespace Marvin\Security\Application\Command\User;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandInterface;
 use Marvin\Security\Domain\ValueObject\Firstname;
-use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use Marvin\Security\Domain\ValueObject\Lastname;
 use Marvin\Security\Domain\ValueObject\Roles;
 use Marvin\Security\Domain\ValueObject\Timezone;
+use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 use Marvin\Shared\Domain\ValueObject\Locale;
 use Marvin\Shared\Domain\ValueObject\Theme;
 

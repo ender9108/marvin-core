@@ -4,9 +4,9 @@ namespace Marvin\Security\Domain\Event\User;
 
 use EnderLab\DddCqrsBundle\Domain\Event\AbstractDomainEvent;
 use EnderLab\DddCqrsBundle\Domain\Event\DomainEventInterface;
-use Marvin\Security\Domain\ValueObject\Identity\UserId;
 use Marvin\Security\Domain\ValueObject\UserType;
 use Marvin\Shared\Domain\ValueObject\Email;
+use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 
 final readonly class UserDeleted extends AbstractDomainEvent implements DomainEventInterface
 {
@@ -18,7 +18,7 @@ final readonly class UserDeleted extends AbstractDomainEvent implements DomainEv
         parent::__construct();
     }
 
-    public static function getRoutingKey(): string
+    public function getEventName(): string
     {
         return '$.security.user.deleted';
     }

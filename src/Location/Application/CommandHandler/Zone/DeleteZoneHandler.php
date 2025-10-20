@@ -1,0 +1,44 @@
+<?php
+
+namespace Marvin\Location\Application\CommandHandler\Zone;
+
+use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
+use EnderLab\DddCqrsBundle\Application\Event\DomainEventBusInterface;
+use Marvin\Location\Application\Command\Zone\DeleteZone;
+use Marvin\Location\Domain\Event\Zone\ZoneDeleted;
+use Marvin\Location\Domain\Exception\InvalidZoneHierarchy;
+use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
+use Psr\Log\LoggerInterface;
+
+final readonly class DeleteZoneHandler implements SyncCommandHandlerInterface
+{
+    public function __construct(
+        private ZoneRepositoryInterface $zoneRepository,
+        private DomainEventBusInterface $domainEventBus,
+        private LoggerInterface $logger,
+    ) {}
+
+    public function __invoke(DeleteZone $command): void
+    {
+        $zone = $this->zoneRepository->byId($command->zoneId);
+
+        if ($this->zoneRepository->hasChildren($zone->id)) {
+            $childrenCount = $this->zoneRepository->countChildren($zone->id);
+            throw InvalidZoneHierarchy::cannotDeleteZoneWithChildren(
+                $zone->label,
+                $childrenCount
+            );
+        }
+
+        $this->zoneRepository->remove($zone);
+
+        $this->domainEventBus->dispatch(new ZoneDeleted(
+            zoneId: $zone->id->toString(),
+            label: $zone->label->value,
+            occurredAt: new \DateTimeImmutable()
+        ));
+
+        $this->logger->info('Zone deleted', ['zoneId' => $command->zoneId]);
+    }
+}
+

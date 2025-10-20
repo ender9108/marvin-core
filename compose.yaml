@@ -111,19 +111,19 @@ services:
             - "127.0.0.1:1883:1883"
             - "127.0.0.1:9002:9001"
 
-    zigbee2mqtt:
-        container_name: ${APP_NAME}-zigbee2mqtt
-        restart: unless-stopped
-        image: koenkk/zigbee2mqtt
-        user: '${UID-1000}:${GID-1000}'
-        group_add:
-            - dialout
-        volumes:
-            - ./docker/zigbee2mqtt/config:/app/data
-            - /run/udev:/run/udev:ro
-        ports:
-            - "127.0.0.1:8081:8080"
-        devices:
-            - /dev/ttyACM0:/dev/ttyUSB0
-        depends_on:
-            - mqtt_broker
+    #zigbee2mqtt:
+    #    container_name: ${APP_NAME}-zigbee2mqtt
+    #    restart: unless-stopped
+    #    image: koenkk/zigbee2mqtt
+    #    user: '${UID-1000}:${GID-1000}'
+    #    group_add:
+    #        - dialout
+    #    volumes:
+    #        - ./docker/zigbee2mqtt/config:/app/data
+    #        - /run/udev:/run/udev:ro
+    #    ports:
+    #        - "127.0.0.1:8081:8080"
+    #    devices:
+    #        - /dev/ttyACM0:/dev/ttyUSB0
+    #    depends_on:
+    #        - mqtt_broker

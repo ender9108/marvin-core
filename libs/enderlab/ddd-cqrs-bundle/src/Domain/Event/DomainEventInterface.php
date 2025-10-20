@@ -2,6 +2,8 @@
 
 namespace EnderLab\DddCqrsBundle\Domain\Event;
 
+use DateTimeImmutable;
+
 interface DomainEventInterface
 {
     public const string EVENT_CREATED = 'created';
@@ -14,5 +16,7 @@ interface DomainEventInterface
         self::EVENT_DELETED,
     ];
 
-    public static function getRoutingKey(): string;
+    public function getOccurredAt(): DateTimeImmutable;
+
+    public function getEventName(): string;
 }

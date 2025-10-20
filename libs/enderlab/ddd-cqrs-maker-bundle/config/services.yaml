@@ -7,26 +7,34 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
     
-    EnderLab\DddCqrsMakerBundle\:
-        resource: '../src/'
-
-    EnderLab\DddCqrsMakerBundle\Maker\MakeBoundedContext:
+    EnderLab\DddCqrsMakerBundle\Maker\MakeBoundedContextCommand:
         arguments:
             $projectDir: '%kernel.project_dir%'
-        tags: ['maker.command']
 
-    EnderLab\DddCqrsMakerBundle\Maker\MakeModel:
+    EnderLab\DddCqrsMakerBundle\Maker\MakeApplicationCommandCommand:
         arguments:
             $projectDir: '%kernel.project_dir%'
-        tags: ['maker.command']
-
-    EnderLab\DddCqrsMakerBundle\Maker\MakeValueObject:
+    
+    EnderLab\DddCqrsMakerBundle\Maker\MakeCliCommandCommand:
         arguments:
             $projectDir: '%kernel.project_dir%'
-        tags: ['maker.command']
-
-    EnderLab\DddCqrsMakerBundle\Maker\MakeApplicationCommand:
+    
+    #EnderLab\DddCqrsMakerBundle\Maker\MakeEventHandlerCommand:
+    #    arguments:
+    #        $projectDir: '%kernel.project_dir%'
+    
+    EnderLab\DddCqrsMakerBundle\Maker\MakeFixtureCommand:
         arguments:
             $projectDir: '%kernel.project_dir%'
-        tags: ['maker.command']
-
+    
+    EnderLab\DddCqrsMakerBundle\Maker\MakeModelCommand:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+    
+    #EnderLab\DddCqrsMakerBundle\Maker\MakeQueryCommand:
+    #    arguments:
+    #        $projectDir: '%kernel.project_dir%'
+    
+    #EnderLab\DddCqrsMakerBundle\Maker\MakeValueObjectCommand:
+    #    arguments:
+    #        $projectDir: '%kernel.project_dir%'
