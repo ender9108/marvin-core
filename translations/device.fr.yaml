@@ -1,0 +1,19 @@
+device:
+    exceptions:
+        device_not_found: Module introuvable.
+        device_not_found_with_id: 'Module introuvable avec l''id "%id%".'
+        device_already_in_group: 'Module(s) %device_name% déjà dans le groupe %group_name% (ID: %group_id%).'
+        composite_device_not_allowed_in_group: 'Le module composite %device_name% (ID : %device_id%, stratégie : %strategy%) ne peut pas être ajouté à un groupe. La profondeur maximale est de 1 niveau.'
+        capability_not_supported: Capacité non supportée
+        capability_not_supported_with_capability_type: 'Capacité %capacity% n''est pas supportée.'
+        protocol_not_available: Ce protocole n'est pas disponible.
+        protocol_not_available_with_id: 'Le protocole %id% n''est pas disponible.'
+        protocol_is_disabled: Le protocole %id% est désactivé.
+        composite_not_supported_with_message_type: 'La stratégie NATIVE_ONLY nécessite une prise en charge native, mais le protocole %protocol_type% ne la prend pas en charge.'
+        composite_not_supported_mixed_protocols: Impossible de créer un groupe/une scène natif(ve) avec des protocoles mixtes. Utilisez la stratégie EMULATED_ONLY.
+        composite_not_supported_no_common_protocol: Aucun protocole commun trouvé parmi les périphériques enfants. Groupe/scène natif impossible.
+        composite_not_supported: Stratégie de composition non supportée.
+        invalid_composite_strategy_with_device_id_and_strategy: La stratégie de composition %strategy% est invalide pour le module %device%.
+        invalid_composite_strategy: Stratégie de composition invalide.
+        invalid_virtual_config: Configuration invalide.
+        invalid_virtual_config_with_key_value: La configuration %key%:%value% est invalide.
