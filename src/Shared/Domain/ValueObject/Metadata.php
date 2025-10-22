@@ -7,6 +7,11 @@ final readonly class Metadata implements ArrayValueObjectInterface
     public function __construct(public array $value = []) {
     }
 
+    public static function fromArray(array $value): Metadata
+    {
+        return new self($value);
+    }
+
     public function equals(Metadata $metadata): bool
     {
         return $this->value === $metadata->value;

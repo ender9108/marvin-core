@@ -15,8 +15,4 @@ interface DomainEventInterface
         self::EVENT_UPDATED,
         self::EVENT_DELETED,
     ];
-
-    public function getOccurredAt(): DateTimeImmutable;
-
-    public function getEventName(): string;
 }

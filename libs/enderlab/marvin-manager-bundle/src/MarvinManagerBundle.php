@@ -12,37 +12,43 @@ class MarvinManagerBundle extends AbstractBundle
     {
         $isManager = str_contains($builder->getParameter('kernel.project_dir'), 'marvin-manager');
 
-        if ($isManager) {
-            if ($builder->hasParameter('env(MESSENGER_TRANSPORT_DSN)')) {
-                $builder->prependExtensionConfig('framework', [
-                    'messenger' => [
-                        'transports' => [
-                            'marvin.to.manager' => [
-                                'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
-                                'options' => [
-                                    'auto_setup' => true,
-                                    'exchange' => [
-                                        'name' => 'marvin.to.manager',
-                                        'type' => 'direct',
-                                        'default_publish_routing_key' => 'marvin.to.manager.request'
-                                    ],
-                                    'queues' => [
-                                        'manager.to.marvin.response' => [
-                                            'binding_keys' => 'manager.to.marvin.response'
-                                        ]
-                                    ]
-                                ],
-                                'retry_strategy' => [
-                                    'delay' => 500,
-                                ]
+        if ($builder->hasParameter('env(MESSENGER_TRANSPORT_DSN)')) {
+            $builder->prependExtensionConfig('framework', [
+                'messenger' => [
+                    'transports' => [
+                        'marvin.to.manager' => [
+                            'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
+                            'options' => [
+                                'auto_setup' => $isManager,
+                                'table_name' => 'messenger_marvin_to_manager',
+                                'queue_name' => 'marvin.to.manager',
+                                'use_notify' => true,
                             ],
+                            'retry_strategy' => [
+                                'max_retries' => 3,
+                                'delay' => 500,
+                            ]
                         ],
-                        'routing' => [
-                            'EnderLab\\MarvinManagerBundle\\System\\Infrastructure\\Framework\\Symfony\\Messenger\\ManagerRequestCommand' => 'marvin.to.manager'
-                        ]
+                        'manager.to.marvin' => [
+                            'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
+                            'options' => [
+                                'auto_setup' => $isManager,
+                                'table_name' => 'messenger_manager_to_marvin',
+                                'queue_name' => 'manager.to.marvin',
+                                'use_notify' => true,
+                            ],
+                            'retry_strategy' => [
+                                'max_retries' => 3,
+                                'delay' => 500,
+                            ]
+                        ],
+                    ],
+                    'routing' => [
+                        'EnderLab\\MarvinManagerBundle\\System\\Infrastructure\\Framework\\Symfony\\Messenger\\ManagerRequestCommand' => 'marvin.to.manager',
+                        'EnderLab\\MarvinManagerBundle\\System\\Infrastructure\\Framework\\Symfony\\Messenger\\ManagerResponseCommand' => 'manager.to.marvin',
                     ]
-                ]);
-            }
+                ]
+            ]);
         }
     }
 }

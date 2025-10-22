@@ -21,7 +21,7 @@
         <embedded name="type" class="Marvin\Security\Domain\ValueObject\UserType" />
         <field name="password" length="255" />
         <embedded name="timezone" class="Marvin\Security\Domain\ValueObject\Timezone" />
-        <embedded name="createdAt" class="Marvin\Shared\Domain\ValueObject\CreatedAt" />
-        <embedded name="updatedAt" class="Marvin\Shared\Domain\ValueObject\UpdatedAt" />
+        <field name="updatedAt" type="datetime" nullable="true" />
+        <field name="createdAt" type="datetime" />
     </entity>
 </doctrine-mapping>

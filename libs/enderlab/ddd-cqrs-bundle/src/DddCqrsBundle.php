@@ -69,16 +69,6 @@ class DddCqrsBundle extends AbstractBundle
 
         $builder->setParameter('ddd_cqrs.exchange_name', $config['exchange_name']);
         $builder->setParameter('ddd_cqrs.queue_prefix', $config['queue_prefix']);
-
-        $builder
-            ->registerForAutoconfiguration(DomainEventInterface::class)
-            ->addTag('enderlab.domain_event_routing_keys')
-        ;
-
-        $builder
-            ->registerForAutoconfiguration(DomainEventHandlerInterface::class)
-            ->addTag('enderlab.domain_event_handlers_routing_key')
-        ;
     }
 
     public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
@@ -89,65 +79,55 @@ class DddCqrsBundle extends AbstractBundle
             $builder->prependExtensionConfig('framework', [
                 'messenger' => [
                     'transports' => [
-                        'domain.event.messages' => [
+                        'domain.events' => [
                             'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
                             'options' => [
-                                'exchange' => [
-                                    'name' => self::DEFAULT_EXCHANGE_NAME,
-                                    'type' => 'topic',
-                                ],
-                                'queues' => []
+                                'table_name' => 'messenger_domain_events',
+                                'queue_name' => 'domain.events',
+                                'use_notify' => true,
                             ],
                             'retry_strategy' => [
                                 'max_retries' => 3,
                                 'delay' => 500,
                             ]
                         ],
-                        'query.messages' => 'sync://',
-                        'command.messages' => [
+                        'command' => [
                             'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
                             'options' => [
-                                'exchange' => [
-                                    'name' => 'command.messages',
-                                    'type' => 'topic',
-                                ],
-                                'queues' => ['command' => []]
+                                'table_name' => 'messenger_domain_commands',
+                                'queue_name' => 'command',
+                                'use_notify' => true,
                             ],
                             'retry_strategy' => [
                                 'max_retries' => 3,
                                 'delay' => 500,
                             ]
                         ],
-                        'sync.command.messages' => 'sync://'
+                        'sync.command' => 'sync://',
+                        'query' => 'sync://',
                     ],
                     'default_bus' => 'command',
                     'buses' => [
                         'command' => [
                             'middleware' => [
                                 'messenger.middleware.doctrine_transaction',
-                                'messenger.middleware.validation',
                             ]
                         ],
                         'sync.command' => [
                             'middleware' => [
                                 'messenger.middleware.doctrine_transaction',
-                                'messenger.middleware.validation',
                             ]
                         ],
                         'query' => [],
                         'domain.event' => [
                             'default_middleware' => 'allow_no_handlers',
-                            'middleware' => [
-                                'EnderLab\\DddCqrsBundle\\Infrastructure\\Framework\\Symfony\\Messenger\\Middleware\\DomainEventRoutingMiddleware',
-                                'messenger.middleware.validation'
-                            ]
                         ],
                     ],
                     'routing' => [
-                        'EnderLab\\DddCqrsBundle\\Application\\Query\\QueryInterface' => 'query.messages',
-                        'EnderLab\\DddCqrsBundle\\Application\\Command\\CommandInterface' => 'command.messages',
-                        'EnderLab\\DddCqrsBundle\\Application\\Command\\SyncCommandInterface' => 'sync.command.messages',
-                        'EnderLab\\DddCqrsBundle\\Domain\\Event\\DomainEventInterface' => 'domain.event.messages',
+                        'EnderLab\\DddCqrsBundle\\Application\\Query\\QueryInterface' => 'query',
+                        'EnderLab\\DddCqrsBundle\\Application\\Command\\CommandInterface' => 'command',
+                        'EnderLab\\DddCqrsBundle\\Application\\Command\\SyncCommandInterface' => 'sync.command',
+                        'EnderLab\\DddCqrsBundle\\Domain\\Event\\DomainEventInterface' => 'domain.events',
                     ]
                 ]
             ]);

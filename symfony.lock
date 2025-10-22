@@ -170,6 +170,9 @@
             "tests/bootstrap.php"
         ]
     },
+    "symfony/ai-bundle": {
+        "version": "dev-main"
+    },
     "symfony/console": {
         "version": "7.2",
         "recipe": {

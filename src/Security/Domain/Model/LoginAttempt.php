@@ -3,8 +3,8 @@
 namespace Marvin\Security\Domain\Model;
 
 use DateTimeImmutable;
+use DateTimeInterface;
 use Marvin\Security\Domain\ValueObject\Identity\LoginAttemptId;
-use Marvin\Shared\Domain\ValueObject\CreatedAt;
 
 readonly class LoginAttempt
 {
@@ -12,7 +12,7 @@ readonly class LoginAttempt
 
     private function __construct(
         public User $user,
-        public CreatedAt $createdAt = new CreatedAt(new DateTimeImmutable())
+        public DateTimeInterface $createdAt = new DateTimeImmutable()
     ) {
         $this->id = new LoginAttemptId();
     }

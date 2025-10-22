@@ -1,6 +1,3 @@
-parameters:
-    marvin_manager_cache_timeout: 3600
-
 services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
@@ -8,10 +5,3 @@ services:
 
     EnderLab\MarvinManagerBundle\:
         resource: '../src/'
-        exclude:
-            - '../src/**/Domain/Model/*'
-            - '../src/**/Domain/ValueObject/*'
-
-when@dev:
-    parameters:
-        marvin_manager_cache_timeout: 1

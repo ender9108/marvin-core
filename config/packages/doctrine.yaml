@@ -10,13 +10,14 @@ doctrine:
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
         types:
-            email: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\EmailType
-            createdAt: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\CreatedAtType
-            updatedAt: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\UpdatedAtType
-            login_attempt_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\LoginAttemptIdType
-            user_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\UserIdType
-            request_reset_password_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\RequestResetPasswordIdType
+            device_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\DeviceIdType
+            protocol_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\ProtocolIdType
+            user_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\UserIdType
+            uniq_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\UniqIdType
             zone_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\ZoneIdType
+            email: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\EmailType
+            login_attempt_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\LoginAttemptIdType
+            request_reset_password_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\RequestResetPasswordIdType
             container_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\ContainerIdType
             worker_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\WorkerIdType
             action_request_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\ActionRequestIdType

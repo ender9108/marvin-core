@@ -8,4 +8,4 @@ location:
         zone_cannot_have_children: La zone %name% de type %type% ne peut pas avoir d'enfants.
         zone_circular_reference: 'Impossible de créer une référence circulaire: la zone %name% ne peut pas être son propre parent.'
         zone_parent_not_found: Zone parent avec l'identifiant %parentId% introuvable
-        zone_cannot_delete_zone_with_children: Impossible de supprimer la zone %name% car elle comporte %childrenCount% enfants.
+        zone_cannot_delete_zone_with_device_children: Impossible de supprimer la zone %name% car elle comporte %childrenCount% enfants.

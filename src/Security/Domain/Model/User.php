@@ -3,6 +3,7 @@
 namespace Marvin\Security\Domain\Model;
 
 use DateTimeImmutable;
+use DateTimeInterface;
 use EnderLab\DddCqrsBundle\Domain\Model\AggregateRoot;
 use Marvin\Security\Domain\Event\User\UserDeleted;
 use Marvin\Security\Domain\Exception\InvalidCurrentPassword;
@@ -14,7 +15,6 @@ use Marvin\Security\Domain\ValueObject\Roles;
 use Marvin\Security\Domain\ValueObject\Timezone;
 use Marvin\Security\Domain\ValueObject\UserStatus;
 use Marvin\Security\Domain\ValueObject\UserType;
-use Marvin\Shared\Domain\ValueObject\CreatedAt;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 use Marvin\Shared\Domain\ValueObject\Locale;
@@ -37,7 +37,7 @@ class User extends AggregateRoot
         private(set) Timezone $timezone,
         private(set) ?string $password = null,
         private(set) ?UpdatedAt $updatedAt = null,
-        public readonly CreatedAt $createdAt = new CreatedAt(new DateTimeImmutable())
+        public readonly DateTimeInterface $createdAt = new DateTimeImmutable()
     ) {
         $this->id = new UserId();
     }

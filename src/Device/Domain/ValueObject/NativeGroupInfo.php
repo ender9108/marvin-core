@@ -6,8 +6,8 @@ final readonly class NativeGroupInfo
 {
     public function __construct(
         public string $protocolType, // 'zigbee', 'matter', 'thread', 'zwave', 'wifi'
-        public ?string $protocolId, // ID du protocol dans Protocol Context
         public bool $isSupported, // Le protocole supporte-t-il les groupes natifs ?
+        public ?string $protocolId = null, // ID du protocol dans Protocol Context
         public ?string $nativeGroupId = null, // ID du groupe natif (ex: "1" pour Zigbee)
         public ?string $nativeGroupName = null, // Nom du groupe natif
         public ?array $metadata = null // Infos supplémentaires protocole-specific
@@ -17,8 +17,24 @@ final readonly class NativeGroupInfo
     {
         return new self(
             protocolType: $protocolType,
-            protocolId: null,
-            isSupported: false
+            isSupported: false,
+            protocolId: null
+        );
+    }
+
+    public static function create(
+        string $protocol,
+        string $groupId,
+        string $groupName,
+        ?array $metadata = null
+    ): self {
+        return new self(
+            protocolType: 'zigbee',
+            isSupported: true,
+            protocolId: $protocolId,
+            nativeGroupId: $groupId,
+            nativeGroupName: $groupName,
+            metadata: $metadata
         );
     }
 

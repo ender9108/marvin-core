@@ -33,8 +33,6 @@ services:
         depends_on:
             database:
                 condition: service_healthy
-            rabbitmq:
-                condition: service_healthy
 
     worker:
         build:
@@ -51,8 +49,6 @@ services:
             - ./docker/worker/config/conf.d:/etc/supervisor/conf.d
         depends_on:
             database:
-                condition: service_healthy
-            rabbitmq:
                 condition: service_healthy
             mqtt_broker:
                 condition: service_started
@@ -77,27 +73,27 @@ services:
             timeout: 5s
             retries: 10
     
-    rabbitmq:
-        build:
-            dockerfile: docker/rabbitmq/Dockerfile
-        container_name: '${APP_NAME}-rabbitmq'
-        environment:
-            RABBITMQ_USER: '${RABBITMQ_USER:-marvin}'
-            RABBITMQ_PASSWORD: '${RABBITMQ_PASSWORD:-PasswordChangeMe!}'
-            RABBITMQ_MQTT_USER: '${RABBITMQ_MQTT_USER:-marvin}'
-            RABBITMQ_MQTT_PASSWORD: '${RABBITMQ_MQTT_PASSWORD:-PasswordChangeMe!}'
-        ports:
-            - '127.0.0.1:15672:15672'
-            - '127.0.0.1:5672:5672'
-        volumes:
-            - ./docker/rabbitmq/config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
-            - ./docker/rabbitmq/config/definitions.json:/etc/rabbitmq/definitions.json
-            - ./docker/rabbitmq/volume/data:/var/lib/rabbitmq/mnesia
-        healthcheck:
-            test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
-            interval: 10s
-            timeout: 5s
-            retries: 10
+    #rabbitmq:
+    #    build:
+    #        dockerfile: docker/rabbitmq/Dockerfile
+    #    container_name: '${APP_NAME}-rabbitmq'
+    #    environment:
+    #        RABBITMQ_USER: '${RABBITMQ_USER:-marvin}'
+    #        RABBITMQ_PASSWORD: '${RABBITMQ_PASSWORD:-PasswordChangeMe!}'
+    #        RABBITMQ_MQTT_USER: '${RABBITMQ_MQTT_USER:-marvin}'
+    #        RABBITMQ_MQTT_PASSWORD: '${RABBITMQ_MQTT_PASSWORD:-PasswordChangeMe!}'
+    #    ports:
+    #        - '127.0.0.1:15672:15672'
+    #        - '127.0.0.1:5672:5672'
+    #    volumes:
+    #        - ./docker/rabbitmq/config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    #        - ./docker/rabbitmq/config/definitions.json:/etc/rabbitmq/definitions.json
+    #        - ./docker/rabbitmq/volume/data:/var/lib/rabbitmq/mnesia
+    #    healthcheck:
+    #        test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
+    #        interval: 10s
+    #        timeout: 5s
+    #        retries: 10
 
     mqtt_broker:
         image: eclipse-mosquitto:2

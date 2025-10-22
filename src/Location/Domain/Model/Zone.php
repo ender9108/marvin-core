@@ -2,6 +2,7 @@
 
 namespace Marvin\Location\Domain\Model;
 
+use DateTimeInterface;
 use Marvin\Location\Domain\ValueObject\HexaColor;
 use Marvin\Location\Domain\ValueObject\Orientation;
 use Marvin\Location\Domain\ValueObject\SurfaceArea;
@@ -13,11 +14,9 @@ use DateTimeImmutable;
 use EnderLab\DddCqrsBundle\Domain\Model\AggregateRoot;
 use Marvin\Location\Domain\Event\Zone\ZoneOccupancyChanged;
 use Marvin\Location\Domain\Event\Zone\ZoneTemperatureUpdated;
-use Marvin\Shared\Domain\ValueObject\CreatedAt;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\Metadata;
-use Marvin\Shared\Domain\ValueObject\UpdatedAt;
 
 class Zone extends AggregateRoot
 {
@@ -33,11 +32,11 @@ class Zone extends AggregateRoot
 
     private(set) ?int $consecutiveNoMotionCount = null;
 
-    private(set) ?DateTimeImmutable $lastMetricsUpdate;
+    private(set) ?DateTimeImmutable $lastMetricsUpdate = null;
 
     public function __construct(
         private(set) Label $label,
-        private(set) ZoneType $type,
+        public readonly ZoneType $type,
         private(set) ?TargetTemperature $targetTemperature = null,
         private(set) ?TargetPowerConsumption $targetPowerConsumption = null,
         private(set) ?string $icon = null,
@@ -45,9 +44,9 @@ class Zone extends AggregateRoot
         private(set) ?SurfaceArea $surfaceArea = null,
         private(set) ?Orientation $orientation = null,
         private(set) ?HexaColor $color = null,
-        private(set) ?Metadata $metadata = null,
-        private(set) ?UpdatedAt $updatedAt = null,
-        public readonly CreatedAt $createdAt = new CreatedAt(new DateTimeImmutable()),
+        public readonly ?Metadata $metadata = null,
+        private(set) ?DateTimeInterface $updatedAt = null,
+        public readonly DateTimeInterface $createdAt = new DateTimeImmutable(),
     ) {
         $this->id = new ZoneId();
     }
@@ -57,7 +56,7 @@ class Zone extends AggregateRoot
         $oldTemp = $this->currentTemperature;
         $this->currentTemperature = $temperature !== null ? round($temperature, 1) : null;
         $this->lastMetricsUpdate = new DateTimeImmutable();
-        $this->updatedAt = new UpdatedAt();
+        $this->updatedAt = new DateTimeImmutable();
 
         if ($oldTemp !== null && $temperature !== null && abs($oldTemp - $temperature) >= 0.5) {
             $this->recordThat(new ZoneTemperatureUpdated(
@@ -73,7 +72,7 @@ class Zone extends AggregateRoot
     {
         $this->currentPowerConsumption = round($consumption, 2);
         $this->lastMetricsUpdate = new DateTimeImmutable();
-        $this->updatedAt = new UpdatedAt();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function markAsOccupied(): void
@@ -82,7 +81,7 @@ class Zone extends AggregateRoot
         $this->isOccupied = true;
         $this->consecutiveNoMotionCount = 0;
         $this->lastMetricsUpdate = new DateTimeImmutable();
-        $this->updatedAt = new UpdatedAt();
+        $this->updatedAt = new DateTimeImmutable();
 
         if (!$wasOccupied) {
             $this->recordThat(new ZoneOccupancyChanged(
@@ -106,7 +105,7 @@ class Zone extends AggregateRoot
     private function markAsUnoccupied(): void
     {
         $this->isOccupied = false;
-        $this->updatedAt = new UpdatedAt();
+        $this->updatedAt = new DateTimeImmutable();
 
         $this->recordThat(new ZoneOccupancyChanged(
             zoneId: $this->id,
@@ -154,16 +153,16 @@ class Zone extends AggregateRoot
     {
         $this->label = $label;
 
-        $this->updatedAt = new UpdatedAt();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function updateConfiguration(
         ?SurfaceArea $surfaceArea = null,
         ?Orientation $orientation = null,
-        ?float $targetTemperature = null,
-        ?float $targetPowerConsumption = null,
+        ?TargetTemperature $targetTemperature = null,
+        ?TargetPowerConsumption $targetPowerConsumption = null,
         ?string $icon = null,
-        ?string $color = null,
+        ?HexaColor $color = null,
     ): void {
         if ($surfaceArea !== null) $this->surfaceArea = $surfaceArea;
         if ($orientation !== null) $this->orientation = $orientation;
@@ -172,21 +171,21 @@ class Zone extends AggregateRoot
         if ($icon !== null) $this->icon = $icon;
         if ($color !== null) $this->color = $color;
 
-        $this->updatedAt = new UpdatedAt();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function updatePath(ZonePath $path): void
     {
         $this->path = $path;
 
-        $this->updatedAt = new UpdatedAt();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function moveToParent(?ZoneId $newParentZoneId): void
     {
         $this->parentZoneId = $newParentZoneId;
 
-        $this->updatedAt = new UpdatedAt();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function hasParent(): bool

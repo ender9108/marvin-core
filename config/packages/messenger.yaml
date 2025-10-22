@@ -3,10 +3,11 @@ framework:
         failure_transport: failed
         transports:
             domotic.events:
-                dsn: '%env(MESSENGER_TRANSPORT_DSN)%/domotic.events'
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
-                    queues:
-                        - domotic.events
+                    table_name: messenger_domotic_events
+                    queue_name: domotic.events
+                    use_notify: true
                 retry_strategy:
                     max_retries: 5
                     delay: 1000
@@ -14,13 +15,18 @@ framework:
             domotic.commands:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
-                    exchange:
-                        name: domotic.commands
-                        type: headers
+                    table_name: messenger_domotic_commands
+                    queue_name: domotic.commands
+                    use_notify: true
                 retry_strategy:
                     max_retries: 3
                     delay: 500
-            failed: 'doctrine://default?queue_name=failed'
+            failed:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    table_name: messenger_failed
+                    queue_name: failed
+                    use_notify: true
         routing:
             #Marvin\Domotic\Application\Command\DomoticEvent: domotic.events
             #Marvin\Domotic\Application\Command\DomoticCommand: domotic.commands

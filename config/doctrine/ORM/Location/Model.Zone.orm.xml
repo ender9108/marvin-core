@@ -13,16 +13,22 @@
         </id>
 
         <embedded name="label" class="Marvin\Shared\Domain\ValueObject\Label" />
-        <field name="type" type="string" length="32" />
+        <embedded name="path" class="Marvin\Location\Domain\ValueObject\ZonePath" />
+        <field name="currentTemperature" type="float" precision="5" scale="2" />
+        <field name="currentPowerConsumption" type="float" precision="10" scale="2" />
+        <field name="isOccupied" type="boolean" nullable="true" />
+        <field name="consecutiveNoMotionCount" type="integer" nullable="true" />
+        <field name="type" length="32" />
         <embedded name="targetTemperature" class="Marvin\Location\Domain\ValueObject\TargetTemperature" />
         <embedded name="targetPowerConsumption" class="Marvin\Location\Domain\ValueObject\TargetPowerConsumption" />
-        <field name="icon" type="string" length="32" />
-        <field name="parentZoneId" type="string" length="32" />
+        <field name="icon" length="32" />
+        <field name="parentZoneId" length="32" />
         <embedded name="surfaceArea" class="Marvin\Location\Domain\ValueObject\SurfaceArea" />
-        <field name="orientation" type="string" length="32" />
+        <embedded name="orientation" class="Marvin\Location\Domain\ValueObject\Orientation" />
         <embedded name="color" class="Marvin\Location\Domain\ValueObject\HexaColor" />
         <embedded name="metadata" class="Marvin\Shared\Domain\ValueObject\Metadata" />
+        <field name="lastMetricsUpdate" type="datetime" nullable="true" />
         <field name="updatedAt" type="datetime" nullable="true" />
-        <field name="createdAt" type="datetime" nullable="false" />
+        <field name="createdAt" type="datetime" />
     </entity>
 </doctrine-mapping>

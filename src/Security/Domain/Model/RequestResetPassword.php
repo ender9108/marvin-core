@@ -4,9 +4,9 @@ namespace Marvin\Security\Domain\Model;
 
 use DateMalformedStringException;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Marvin\Security\Domain\ValueObject\ExpiresAt;
 use Marvin\Security\Domain\ValueObject\Identity\RequestResetPasswordId;
-use Marvin\Shared\Domain\ValueObject\CreatedAt;
 
 class RequestResetPassword
 {
@@ -22,7 +22,7 @@ class RequestResetPassword
     public function __construct(
         private(set) string $token,
         private(set) User $user,
-        public readonly CreatedAt $createdAt = new CreatedAt(new DateTimeImmutable())
+        public readonly DateTimeInterface $createdAt = new DateTimeImmutable()
     ) {
         $this->id = new RequestResetPasswordId();
         $this->expiresAt = new ExpiresAt(new DateTimeImmutable()->modify('+1 day'));
