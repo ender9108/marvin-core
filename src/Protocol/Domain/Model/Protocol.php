@@ -9,7 +9,7 @@ use Marvin\Shared\Domain\ValueObject\Metadata;
 
 class Protocol extends AggregateRoot
 {
-    public readonly ProtocolId $id;
+    private(set) ProtocolId $id;
 
     public function __construct(
         private(set) Label $label,

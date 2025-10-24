@@ -2,6 +2,7 @@
 
 namespace Marvin\Location\Application\Command\Zone;
 
+use EnderLab\DddCqrsBundle\Application\Command\CommandInterface;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandInterface;
 use Marvin\Location\Domain\ValueObject\HexaColor;
 use Marvin\Location\Domain\ValueObject\Orientation;

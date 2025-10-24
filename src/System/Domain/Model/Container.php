@@ -14,7 +14,7 @@ use Marvin\System\Domain\ValueObject\Identity\ContainerId;
 
 final class Container
 {
-    public readonly ContainerId $id;
+    private(set) ContainerId $id;
 
     public function __construct(
         private(set) Label $serviceLabel,

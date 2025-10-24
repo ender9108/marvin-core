@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class MoveZoneHandler implements SyncCommandHandlerInterface
+final readonly class MoveZoneHandler
 {
     public function __construct(
         private ZoneRepositoryInterface $zoneRepository,

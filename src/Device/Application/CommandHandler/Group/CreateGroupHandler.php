@@ -21,7 +21,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class CreateGroupHandler implements SyncCommandHandlerInterface
+final readonly class CreateGroupHandler
 {
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository,

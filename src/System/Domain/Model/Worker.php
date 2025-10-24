@@ -14,7 +14,7 @@ use Marvin\System\Domain\ValueObject\WorkerType;
 
 final class Worker
 {
-    public readonly WorkerId $id;
+    private(set) WorkerId $id;
 
     public function __construct(
         private(set) Label $label,

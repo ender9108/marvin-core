@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class ExecuteDeviceActionHandler implements SyncCommandHandlerInterface
+final readonly class ExecuteDeviceActionHandler
 {
     private const int TIMEOUT_PER_DEVICE_MS = 5000; // 5 secondes par device
     private const int FIRST_RESPONSE_WAIT_MS = 100; // 100ms pour first_response

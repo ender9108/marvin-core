@@ -10,7 +10,7 @@ use Marvin\System\Domain\ValueObject\Identity\ActionRequestId;
 
 final class ActionRequest
 {
-    public readonly ActionRequestId $id;
+    private(set) ActionRequestId $id;
 
     public function __construct(
         private(set) UniqId $correlationId,

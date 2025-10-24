@@ -9,7 +9,7 @@ use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class LockUserHandler implements SyncCommandHandlerInterface
+final readonly class LockUserHandler
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,

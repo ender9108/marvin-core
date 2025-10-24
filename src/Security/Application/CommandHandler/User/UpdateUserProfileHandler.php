@@ -8,7 +8,7 @@ use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class UpdateUserProfileHandler implements SyncCommandHandlerInterface
+final readonly class UpdateUserProfileHandler
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,

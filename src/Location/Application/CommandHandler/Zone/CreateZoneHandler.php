@@ -2,7 +2,6 @@
 
 namespace Marvin\Location\Application\CommandHandler\Zone;
 
-use EnderLab\DddCqrsBundle\Application\Command\CommandHandlerInterface;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Location\Application\Command\Zone\CreateZone;
 use Marvin\Location\Domain\Exception\InvalidZoneHierarchy;
@@ -11,12 +10,11 @@ use Marvin\Location\Domain\Model\Zone;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
 use Marvin\Location\Domain\ValueObject\ZonePath;
 use Marvin\Shared\Domain\Service\SluggerInterface;
-use Marvin\Shared\Domain\ValueObject\Label;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class CreateZoneHandler implements SyncCommandHandlerInterface
+final readonly class CreateZoneHandler
 {
     public function __construct(
         private ZoneRepositoryInterface $zoneRepository,

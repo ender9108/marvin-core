@@ -10,8 +10,10 @@ use Marvin\Device\Domain\Event\Group\NativeGroupDeleted;
 use Marvin\Device\Domain\Model\Device;
 use Marvin\Device\Domain\Repository\DeviceRepositoryInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-final readonly class RemoveDeviceFromGroupHandler implements SyncCommandHandlerInterface
+#[AsMessageHandler]
+final readonly class RemoveDeviceFromGroupHandler
 {
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository,

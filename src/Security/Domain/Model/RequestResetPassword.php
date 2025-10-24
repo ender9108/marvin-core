@@ -10,7 +10,7 @@ use Marvin\Security\Domain\ValueObject\Identity\RequestResetPasswordId;
 
 class RequestResetPassword
 {
-    public readonly RequestResetPasswordId $id;
+    private(set) RequestResetPasswordId $id;
 
     public private(set) ExpiresAt $expiresAt;
 

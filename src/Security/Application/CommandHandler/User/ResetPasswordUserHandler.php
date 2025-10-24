@@ -13,7 +13,7 @@ use Marvin\Security\Domain\Service\PasswordHasherInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class ResetPasswordUserHandler implements SyncCommandHandlerInterface
+final readonly class ResetPasswordUserHandler
 {
     public function __construct(
         private RequestResetPasswordRepositoryInterface $resetPasswordRepository,

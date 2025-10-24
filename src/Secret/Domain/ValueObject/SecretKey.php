@@ -21,9 +21,9 @@ final readonly class SecretKey implements ValueObjectInterface, Stringable
         return new self($value);
     }
 
-    public function equals(self $other): bool
+    public function equals(SecretKey $secretKey): bool
     {
-        return $this->value === $other->value;
+        return $this->value === $secretKey->value;
     }
 
     public function __toString(): string

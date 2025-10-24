@@ -9,7 +9,7 @@ use Marvin\Security\Domain\Service\LastUserAdminVerifierInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class DeleteUserHandler implements SyncCommandHandlerInterface
+final readonly class DeleteUserHandler
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,

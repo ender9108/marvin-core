@@ -2,7 +2,6 @@
 
 namespace Marvin\Location\Application\CommandHandler\Zone;
 
-use EnderLab\DddCqrsBundle\Application\Command\CommandHandlerInterface;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Location\Application\Command\Zone\UpdateZone;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
@@ -11,7 +10,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class UpdateZoneHandler implements SyncCommandHandlerInterface
+final readonly class UpdateZoneHandler
 {
     public function __construct(
         private ZoneRepositoryInterface $zoneRepository,

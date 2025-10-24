@@ -18,7 +18,7 @@ class DddCqrsBundle extends AbstractBundle
         $container->import('../config/services.yaml');
 
         $services = $container->services();
-        $services
+        /*$services
             ->instanceof(CommandHandlerInterface::class)
             ->tag('messenger.message_handler', ['bus' => 'commands'])
         ;
@@ -36,7 +36,7 @@ class DddCqrsBundle extends AbstractBundle
         $services
             ->instanceof(DomainEventHandlerInterface::class)
             ->tag('messenger.message_handler', ['bus' => 'domain.events'])
-        ;
+        ;*/
     }
 
     public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void

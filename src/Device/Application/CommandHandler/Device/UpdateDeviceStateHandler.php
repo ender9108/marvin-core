@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class UpdateDeviceStateHandler implements SyncCommandHandlerInterface
+final readonly class UpdateDeviceStateHandler
 {
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository,

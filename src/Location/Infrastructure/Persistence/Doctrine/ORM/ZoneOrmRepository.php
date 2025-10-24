@@ -47,7 +47,7 @@ class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRepositor
     public function byId(ZoneId $id): Zone
     {
         /** @var Zone $zone */
-        $zone = $this->findOneBy(['id' => $id]);
+        $zone = $this->findOneBy(['id' => $id->toString()]);
 
         if (null === $zone) {
             throw ZoneNotFound::withId($id);

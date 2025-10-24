@@ -15,7 +15,7 @@ use Marvin\Shared\Application\Email\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class RequestResetPasswordUserHandler implements SyncCommandHandlerInterface
+final readonly class RequestResetPasswordUserHandler
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,

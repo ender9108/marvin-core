@@ -4,21 +4,11 @@ namespace Marvin\Location\Presentation\Cli;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
-use Marvin\Location\Application\Command\Zone\CreateZone;
 use Marvin\Location\Application\Command\Zone\DeleteZone;
-use Marvin\Location\Application\Command\Zone\MoveZone;
-use Marvin\Location\Domain\ValueObject\HexaColor;
-use Marvin\Location\Domain\ValueObject\Orientation;
-use Marvin\Location\Domain\ValueObject\SurfaceArea;
-use Marvin\Location\Domain\ValueObject\TargetPowerConsumption;
-use Marvin\Location\Domain\ValueObject\TargetTemperature;
-use Marvin\Location\Domain\ValueObject\ZoneType;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
-use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -42,7 +32,7 @@ final readonly class DeleteZoneCommand
         try {
             $command = new DeleteZone(ZoneId::fromString($zoneId));
 
-            $zoneId = $this->syncCommandBus->handle($command);
+            $this->syncCommandBus->handle($command);
             $io->success("Zone deleted: " . $zoneId);
 
             return Command::SUCCESS;

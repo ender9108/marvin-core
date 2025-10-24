@@ -12,7 +12,7 @@ use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class UserLoginAttemptHandler implements SyncCommandHandlerInterface
+final readonly class UserLoginAttemptHandler
 {
     private const int ATTEMPTS_LIMIT = 3;
 

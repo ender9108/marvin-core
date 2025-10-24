@@ -12,7 +12,7 @@ use Marvin\Security\Domain\ValueObject\UserStatus;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class CreateUserHandler implements SyncCommandHandlerInterface
+final readonly class CreateUserHandler
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,

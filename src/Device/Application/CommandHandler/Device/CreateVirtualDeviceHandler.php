@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class CreateVirtualDeviceHandler implements SyncCommandHandlerInterface
+final readonly class CreateVirtualDeviceHandler
 {
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository,

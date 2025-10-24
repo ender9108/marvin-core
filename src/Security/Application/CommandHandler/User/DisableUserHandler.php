@@ -10,7 +10,7 @@ use Marvin\Security\Domain\Service\LastUserAdminVerifierInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class DisableUserHandler implements SyncCommandHandlerInterface
+final readonly class DisableUserHandler
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,

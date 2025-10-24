@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class DeleteDeviceHandler implements SyncCommandHandlerInterface
+final readonly class DeleteDeviceHandler
 {
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository,

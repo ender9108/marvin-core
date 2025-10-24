@@ -9,7 +9,7 @@ use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class ChangeEmailUserHandler implements SyncCommandHandlerInterface
+final readonly class ChangeEmailUserHandler
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,

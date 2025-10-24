@@ -2,17 +2,14 @@
 
 namespace Marvin\Location\Application\CommandHandler\Zone;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
-use EnderLab\DddCqrsBundle\Application\Event\DomainEventBusInterface;
 use Marvin\Location\Application\Command\Zone\DeleteZone;
-use Marvin\Location\Domain\Event\Zone\ZoneDeleted;
 use Marvin\Location\Domain\Exception\InvalidZoneHierarchy;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-final readonly class DeleteZoneHandler implements SyncCommandHandlerInterface
+final readonly class DeleteZoneHandler
 {
     public function __construct(
         private ZoneRepositoryInterface $zoneRepository,
@@ -24,7 +21,7 @@ final readonly class DeleteZoneHandler implements SyncCommandHandlerInterface
     {
         $zone = $this->zoneRepository->byId($command->zoneId);
 
-        if ($zone->hasChildren()) {
+        if ($this->zoneRepository->hasChildren($zone->id)) {
             $childrenCount = $zone->childrens->count();
             $this->logger->info('Cannot delete zone with children', ['zoneId' => $command->zoneId, 'childrenCount' => $childrenCount]);
 

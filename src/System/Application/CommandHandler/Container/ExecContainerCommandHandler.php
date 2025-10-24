@@ -13,8 +13,10 @@ use Marvin\System\Domain\Repository\ActionRequestRepositoryInterface;
 use Marvin\System\Domain\Repository\ContainerRepositoryInterface;
 use Marvin\System\Domain\ValueObject\ActionStatus;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-final readonly class ExecContainerCommandHandler implements SyncCommandHandlerInterface
+#[AsMessageHandler]
+final readonly class ExecContainerCommandHandler
 {
     public function __construct(
         private ContainerRepositoryInterface $containerRepository,

@@ -19,11 +19,10 @@ use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 use Marvin\Shared\Domain\ValueObject\Locale;
 use Marvin\Shared\Domain\ValueObject\Theme;
-use Marvin\Shared\Domain\ValueObject\UpdatedAt;
 
 class User extends AggregateRoot
 {
-    public readonly UserId $id;
+    private(set) UserId $id;
 
     public function __construct(
         private(set) Email $email,
