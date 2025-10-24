@@ -1,3 +1,0 @@
-ddd_cqrs:
-    exchange_name: 'domain.event.exchange'
-    queue_prefix: 'domain.event.'
