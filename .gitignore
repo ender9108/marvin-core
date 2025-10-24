@@ -43,4 +43,4 @@ compose.*.yaml
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###
-.env
+
