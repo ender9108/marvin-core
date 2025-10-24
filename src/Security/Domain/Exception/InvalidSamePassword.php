@@ -7,6 +7,11 @@ use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
 
 class InvalidSamePassword extends DomainException implements TranslatableExceptionInterface
 {
+    public function __construct(string $message) {
+        parent::__construct($message);
+        $this->internalCode = 'S00002';
+    }
+
     public function translationId(): string
     {
         return 'security.exceptions.invalid_same_password';

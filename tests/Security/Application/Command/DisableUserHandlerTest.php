@@ -1,23 +1,23 @@
 <?php
 
-namespace MarvinTests\Security\Application;
+namespace MarvinTests\Security\Application\Command;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
-use Marvin\Security\Application\Command\User\ChangeEmailUser;
+use Marvin\Security\Application\Command\User\DisableUser;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
+use Marvin\Security\Domain\ValueObject\UserStatus;
 use Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory\UserFactory;
-use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-class ChangeEmailUserHandlerTest extends KernelTestCase
+class DisableUserHandlerTest extends KernelTestCase
 {
     use ResetDatabase;
     use Factories;
 
-    public function test_change_email_updates_user_email(): void
+    public function test_disable_user_changes_status(): void
     {
         self::bootKernel();
         $container = static::getContainer();
@@ -28,12 +28,12 @@ class ChangeEmailUserHandlerTest extends KernelTestCase
         $users = $container->get(UserRepositoryInterface::class);
 
         $proxy = UserFactory::createOne([
-            'firstname' => 'Email',
-            'lastname' => 'Changer',
-            'email' => 'old.email@marvin.test',
+            'firstname' => 'Alice',
+            'lastname' => 'Disabled',
+            'email' => 'alice.disabled@marvin.test',
             'roles' => [],
             'password' => 'Test123456789',
-            'status' => 'ENABLED',
+            'status' => UserStatus::STATUSES['ENABLED'],
             'type' => 'APP',
             'locale' => 'fr',
             'theme' => 'dark',
@@ -41,12 +41,10 @@ class ChangeEmailUserHandlerTest extends KernelTestCase
         ]);
 
         $user = $proxy->_real();
-        $id = new UserId($user->id->toString());
-        $newEmail = new Email('new.email@marvin.test');
 
-        $bus->handle(new ChangeEmailUser($id, $newEmail));
+        $bus->handle(new DisableUser($user->id));
 
-        $reloaded = $users->byId($id);
-        self::assertSame($newEmail->value, $reloaded->email->value);
+        $reloaded = $users->byId(new UserId($user->id->toString()));
+        self::assertSame(UserStatus::STATUSES['DISABLED'], $reloaded->status->value);
     }
 }

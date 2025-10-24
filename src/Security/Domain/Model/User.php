@@ -140,13 +140,13 @@ class User extends AggregateRoot
     public function changePassword(string $currentPassword, string $newPassword, PasswordHasherInterface $passwordHasher): self
     {
         if ($this->password === null || !$passwordHasher->verify($this, $currentPassword)) {
-            throw new InvalidCurrentPassword();
+            throw new InvalidCurrentPassword('Invalid current password.');
         }
 
         $newPasswordHash = $passwordHasher->hash($this, $newPassword);
 
         if ($newPasswordHash === $this->password) {
-            throw new InvalidSamePassword();
+            throw new InvalidSamePassword('New password cannot be the same as the current one.');
         }
 
         $this->password = $newPasswordHash;

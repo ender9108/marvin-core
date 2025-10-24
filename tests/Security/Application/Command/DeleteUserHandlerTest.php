@@ -1,23 +1,23 @@
 <?php
 
-namespace MarvinTests\Security\Application;
+namespace MarvinTests\Security\Application\Command;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
-use Marvin\Security\Application\Command\User\LockUser;
+use Marvin\Security\Application\Command\User\DeleteUser;
+use Marvin\Security\Domain\Exception\UserNotFound;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
-use Marvin\Security\Domain\ValueObject\UserStatus;
+use Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory\UserFactory;
 use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
-use Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory\UserFactory;
 
-class LockUserHandlerTest extends KernelTestCase
+class DeleteUserHandlerTest extends KernelTestCase
 {
     use ResetDatabase;
     use Factories;
 
-    public function test_lock_user_changes_status(): void
+    public function test_delete_user_removes_entity(): void
     {
         self::bootKernel();
         $container = static::getContainer();
@@ -28,12 +28,12 @@ class LockUserHandlerTest extends KernelTestCase
         $users = $container->get(UserRepositoryInterface::class);
 
         $proxy = UserFactory::createOne([
-            'firstname' => 'Lock',
-            'lastname' => 'Me',
-            'email' => 'lock.me@marvin.test',
+            'firstname' => 'To',
+            'lastname' => 'Delete',
+            'email' => 'to.delete@marvin.test',
             'roles' => [],
             'password' => 'Test123456789',
-            'status' => UserStatus::STATUSES['ENABLED'],
+            'status' => 'ENABLED',
             'type' => 'APP',
             'locale' => 'fr',
             'theme' => 'dark',
@@ -41,10 +41,11 @@ class LockUserHandlerTest extends KernelTestCase
         ]);
 
         $user = $proxy->_real();
+        $id = new UserId($user->id->toString());
 
-        $bus->handle(new LockUser(new UserId($user->id->toString())));
+        $bus->handle(new DeleteUser($id));
 
-        $reloaded = $users->byId(new UserId($user->id->toString()));
-        self::assertSame(UserStatus::STATUSES['LOCKED'], $reloaded->status->value);
+        $this->expectException(UserNotFound::class);
+        $users->byId($id);
     }
 }

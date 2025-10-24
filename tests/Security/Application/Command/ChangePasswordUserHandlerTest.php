@@ -1,6 +1,6 @@
 <?php
 
-namespace MarvinTests\Security\Application;
+namespace MarvinTests\Security\Application\Command;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use Marvin\Security\Application\Command\User\ChangePasswordUser;

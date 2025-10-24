@@ -1,23 +1,23 @@
 <?php
 
-namespace MarvinTests\Security\Application;
+namespace MarvinTests\Security\Application\Command;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
-use Marvin\Security\Application\Command\User\DeleteUser;
-use Marvin\Security\Domain\Exception\UserNotFound;
+use Marvin\Security\Application\Command\User\EnableUser;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
-use Marvin\Shared\Domain\ValueObject\Identity\UserId;
+use Marvin\Security\Domain\ValueObject\UserStatus;
 use Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory\UserFactory;
+use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-class DeleteUserHandlerTest extends KernelTestCase
+class EnableUserHandlerTest extends KernelTestCase
 {
     use ResetDatabase;
     use Factories;
 
-    public function test_delete_user_removes_entity(): void
+    public function test_enable_user_changes_status(): void
     {
         self::bootKernel();
         $container = static::getContainer();
@@ -28,12 +28,12 @@ class DeleteUserHandlerTest extends KernelTestCase
         $users = $container->get(UserRepositoryInterface::class);
 
         $proxy = UserFactory::createOne([
-            'firstname' => 'To',
-            'lastname' => 'Delete',
-            'email' => 'to.delete@marvin.test',
+            'firstname' => 'Bob',
+            'lastname' => 'Disabled',
+            'email' => 'bob.disabled@marvin.test',
             'roles' => [],
             'password' => 'Test123456789',
-            'status' => 'ENABLED',
+            'status' => UserStatus::STATUSES['DISABLED'],
             'type' => 'APP',
             'locale' => 'fr',
             'theme' => 'dark',
@@ -41,11 +41,10 @@ class DeleteUserHandlerTest extends KernelTestCase
         ]);
 
         $user = $proxy->_real();
-        $id = new UserId($user->id->toString());
 
-        $bus->handle(new DeleteUser($id));
+        $bus->handle(new EnableUser(new UserId($user->id->toString())));
 
-        $this->expectException(UserNotFound::class);
-        $users->byId($id);
+        $reloaded = $users->byId(new UserId($user->id->toString()));
+        self::assertSame(UserStatus::STATUSES['ENABLED'], $reloaded->status->value);
     }
 }
