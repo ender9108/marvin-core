@@ -41,17 +41,29 @@ class CapabilityStateValidation extends DomainException implements TranslatableE
         );
     }
 
-    public static function withMinAndValue(int $min, mixed $value): self {
+    public static function withMinAndValue(int $min, mixed $value): self
+    {
         return new self(
             sprintf('Value %s is below minimum %s', $value, $min),
-            '', $value, null, null, $min, null
+            '',
+            $value,
+            null,
+            null,
+            $min,
+            null
         );
     }
 
-    public static function withMaxAndValue(int $max, mixed $value): self {
+    public static function withMaxAndValue(int $max, mixed $value): self
+    {
         return new self(
             sprintf('Value %s exceeds maximum %s', $value, $max),
-            '', $value, null, null, null, $max
+            '',
+            $value,
+            null,
+            null,
+            null,
+            $max
         );
     }
 

@@ -12,7 +12,7 @@ class DeviceState
 {
     public readonly DeviceStateId $id;
 
-    private(set) ?Device $device = null;
+    public private(set) ?Device $device = null;
 
     public function __construct(
         private(set) Capability $capability,

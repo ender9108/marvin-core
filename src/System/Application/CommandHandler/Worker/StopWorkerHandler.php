@@ -23,6 +23,5 @@ final readonly class StopWorkerHandler implements SyncCommandHandlerInterface
 
     public function __invoke(): void
     {
-
     }
 }

@@ -25,7 +25,7 @@ final readonly class GetZoneHierarchyHandler
 
         $rootZones = $this->zoneRepository->getRootZones();
         return array_map(
-            fn (Zone $zone) => $this->buildHierarchy($zone),
+            $this->buildHierarchy(...),
             $rootZones
         );
     }
@@ -46,7 +46,7 @@ final readonly class GetZoneHierarchyHandler
             'icon' => $zone->icon,
             'color' => $zone->color->value,
             'children' => array_map(
-                fn (Zone $child) => $this->buildHierarchy($child),
+                $this->buildHierarchy(...),
                 $children
             ),
         ];

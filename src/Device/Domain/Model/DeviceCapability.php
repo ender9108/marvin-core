@@ -16,15 +16,15 @@ final class DeviceCapability
 {
     public readonly DeviceCapabilityId $id;
 
-    private(set) ?Device $device = null;
+    public private(set) ?Device $device = null;
 
-    private(set) ?CapabilityCategory $capabilityCategory = null;
+    public private(set) ?CapabilityCategory $capabilityCategory = null;
 
     /** @var Collection<int, CapabilityAction> */
-    private(set) Collection $supportedActions;
+    public private(set) Collection $supportedActions;
 
     /** @var Collection<int, CapabilityState> */
-    private(set) Collection $supportedStates;
+    public private(set) Collection $supportedStates;
 
     public function __construct(
         private(set) Capability $capability,

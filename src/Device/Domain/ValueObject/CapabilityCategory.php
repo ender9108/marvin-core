@@ -31,6 +31,4 @@ enum CapabilityCategory: string implements ValueObjectInterface
     {
         return $this->value;
     }
-
-
 }

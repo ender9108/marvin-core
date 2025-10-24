@@ -54,7 +54,7 @@ class DeviceOrmRepository extends ServiceEntityRepository implements DeviceRepos
 
         // Convertir les strings en DeviceId
         $deviceIdObjects = array_map(
-            fn (string $id) => DeviceId::fromString($id),
+            DeviceId::fromString(...),
             $deviceIds
         );
 

@@ -23,6 +23,5 @@ final readonly class RestartWorkerHandler implements SyncCommandHandlerInterface
 
     public function __invoke(): void
     {
-
     }
 }

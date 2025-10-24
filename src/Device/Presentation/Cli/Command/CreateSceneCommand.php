@@ -66,7 +66,7 @@ final readonly class CreateSceneCommand
             return Command::FAILURE;
         }
 
-        $deviceIds = array_filter(array_map('trim', explode(',', $devices)));
+        $deviceIds = array_filter(array_map(trim(...), explode(',', $devices)));
 
         if (empty($deviceIds)) {
             $io->error('No valid device IDs provided');

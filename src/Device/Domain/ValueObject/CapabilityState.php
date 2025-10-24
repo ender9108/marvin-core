@@ -322,7 +322,7 @@ enum CapabilityState: string implements ValueObjectInterface
 
     public function getDataType(): CapabilityCapabilityStateDataType
     {
-        return match($this) {
+        return match ($this) {
             // Boolean
             self::MOTION_DETECTED,
             self::OCCUPANCY_DETECTED,
@@ -544,7 +544,7 @@ enum CapabilityState: string implements ValueObjectInterface
 
     public function getUnit(): ?string
     {
-        return match($this) {
+        return match ($this) {
             self::BRIGHTNESS, self::SATURATION, self::BATTERY_PERCENTAGE,
             self::POSITION, self::TILT, self::VALVE_POSITION, self::VOLUME,
             self::VOLUME_LEVEL, self::MEDIA_PROGRESS, self::HUMIDITY,
@@ -592,7 +592,7 @@ enum CapabilityState: string implements ValueObjectInterface
 
     public function isReadOnly(): bool
     {
-        return match($this) {
+        return match ($this) {
             // États calculés ou mesurés (lecture seule)
             self::CURRENT_TEMPERATURE,
             self::CURRENT_HUMIDITY,
@@ -711,7 +711,7 @@ enum CapabilityState: string implements ValueObjectInterface
      */
     public static function getStatesForCapability(Capability $capability): array
     {
-        return match($capability) {
+        return match ($capability) {
             // ==========================================
             // ÉCLAIRAGE
             // ==========================================
@@ -1327,7 +1327,7 @@ enum CapabilityState: string implements ValueObjectInterface
 
     public function getConstraints(): StateConstraints
     {
-        return match($this) {
+        return match ($this) {
             // ==========================================
             // ÉCLAIRAGE
             // ==========================================

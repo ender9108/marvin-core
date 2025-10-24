@@ -17,7 +17,8 @@ final readonly class CapabilityStateConstraints implements SpecificationInterfac
         public ?string $pattern = null,
         public ?string $unit = null,
         public ?int $precision = null,
-    ) {}
+    ) {
+    }
 
     public function isSatisfiedBy(mixed $value): bool
     {
@@ -82,7 +83,8 @@ final readonly class CapabilityStateConstraints implements SpecificationInterfac
 
         if ($this->max !== null && $value > $this->max) {
             throw CapabilityStateValidation::withMaxAndValue(
-                $this->max, $value
+                $this->max,
+                $value
             );
         }
     }

@@ -44,7 +44,7 @@ final readonly class CreateGroupHandler implements SyncCommandHandlerInterface
         $grouping = $this->protocolGroupingService->analyzeDevicesForGrouping($devices);
 
         $this->logger->debug('Protocol grouping analysis', [
-            'native_groups' => array_map(fn ($d) => count($d), $grouping['native_groups']),
+            'native_groups' => array_map(count(...), $grouping['native_groups']),
             'individual_devices' => count($grouping['individual_devices']),
         ]);
 

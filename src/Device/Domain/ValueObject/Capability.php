@@ -232,7 +232,7 @@ enum Capability: string implements ValueObjectInterface
 
     public function getCategory(): CapabilityCategory
     {
-        return match($this) {
+        return match ($this) {
             self::SWITCH, self::LIGHT, self::BRIGHTNESS, self::COLOR_TEMPERATURE,
             self::COLOR_CONTROL, self::COLOR_MODE, self::LIGHT_EFFECT
             => CapabilityCategory::LIGHTING,
@@ -296,7 +296,7 @@ enum Capability: string implements ValueObjectInterface
 
     public function isReadOnly(): bool
     {
-        return match($this) {
+        return match ($this) {
             // Capteurs (lecture seule)
             self::TEMPERATURE_MEASUREMENT,
             self::HUMIDITY_MEASUREMENT,
@@ -353,7 +353,7 @@ enum Capability: string implements ValueObjectInterface
      */
     public function isVirtual(): bool
     {
-        return match($this) {
+        return match ($this) {
             self::CURRENT_TIME,
             self::CURRENT_DATE,
             self::CURRENT_DAY_OF_WEEK,
@@ -378,7 +378,7 @@ enum Capability: string implements ValueObjectInterface
      */
     public function isComposite(): bool
     {
-        return match($this) {
+        return match ($this) {
             self::THERMOSTAT,
             self::RGBW_LIGHT,
             self::ENVIRONMENTAL_SENSOR,
@@ -407,7 +407,7 @@ enum Capability: string implements ValueObjectInterface
             return [$this];
         }
 
-        return match($this) {
+        return match ($this) {
             self::THERMOSTAT => [
                 self::THERMOSTAT_MODE,
                 self::THERMOSTAT_HEATING_SETPOINT,

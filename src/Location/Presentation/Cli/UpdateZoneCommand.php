@@ -50,7 +50,6 @@ final readonly class UpdateZoneCommand
         #[Option(name: 'color')]
         ?string $color = null,
     ): int {
-
         try {
             $command = new UpdateZone(
                 ZoneId::fromString($zoneId),

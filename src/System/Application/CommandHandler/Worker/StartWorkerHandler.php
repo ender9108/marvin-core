@@ -23,6 +23,5 @@ final readonly class StartWorkerHandler implements SyncCommandHandlerInterface
 
     public function __invoke(): void
     {
-
     }
 }

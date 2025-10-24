@@ -283,7 +283,7 @@ enum CapabilityAction: string implements ValueObjectInterface
 
     public function requiresParameters(): bool
     {
-        return match($this) {
+        return match ($this) {
             // Actions SANS paramètres
             self::TURN_ON,
             self::TURN_OFF,
@@ -393,7 +393,7 @@ enum CapabilityAction: string implements ValueObjectInterface
      */
     public static function getActionsForCapability(Capability $capability): array
     {
-        return match($capability) {
+        return match ($capability) {
             // ==========================================
             // ÉCLAIRAGE
             // ==========================================
@@ -826,5 +826,4 @@ enum CapabilityAction: string implements ValueObjectInterface
 
         return $capabilities;
     }
-
 }
