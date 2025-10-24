@@ -12,7 +12,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 final readonly class TestWorkerCommand
 {
-    public function __invoke(SymfonyStyle $io): int {
+    public function __invoke(SymfonyStyle $io): int
+    {
         $count = 0;
         $loop = true;
 

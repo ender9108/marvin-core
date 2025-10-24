@@ -2,6 +2,7 @@
 
 namespace Marvin\Shared\Presentation\Exception\Service;
 
+use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,7 +39,10 @@ final readonly class ExceptionMessageManager
         $message = $this->translatedMessage($exception);
         $body = [];
 
-        if ($exception instanceof TranslatableExceptionInterface) {
+        if (
+            $exception instanceof TranslatableExceptionInterface ||
+            $exception instanceof DomainException
+        ) {
             $parts = explode('.', $exception->translationId());
             $codeName = '#'.end($parts).'-'.$exception->getInternalCode();
 
@@ -53,6 +57,10 @@ final readonly class ExceptionMessageManager
                 'title' => '#uncknown_error-E999',
                 'detail' => $message,
             ];
+        }
+
+        if (true === $this->isDebugMode()) {
+            $body['debug'] = $exception->getTraceAsString();
         }
 
         return $body;

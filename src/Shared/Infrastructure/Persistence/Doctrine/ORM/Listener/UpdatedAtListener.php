@@ -9,7 +9,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
-#[AsDoctrineListener(event: Events::preUpdate)]
+//#[AsDoctrineListener(event: Events::preUpdate)]
 final readonly class UpdatedAtListener
 {
     public function __construct(
