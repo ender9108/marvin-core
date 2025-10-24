@@ -8,6 +8,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
 use EnderLab\DddCqrsBundle\Infrastructure\Persistence\Doctrine\ORM\PaginatorOrm;
+use Marvin\Location\Domain\Exception\InvalidZoneHierarchy;
 use Marvin\Location\Domain\Exception\ZoneNotFound;
 use Marvin\Location\Domain\Model\Zone;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
@@ -31,6 +32,13 @@ class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRepositor
 
     public function remove(Zone $zone): void
     {
+        if ($zone->hasChildren()) {
+            throw InvalidZoneHierarchy::cannotDeleteZoneWithChildren(
+                $zone->label,
+                $zone->childrens->count()
+            );
+        }
+
         $this->getEntityManager()->remove($zone);
         $this->getEntityManager()->flush();
     }

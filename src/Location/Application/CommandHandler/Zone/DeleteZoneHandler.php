@@ -24,9 +24,10 @@ final readonly class DeleteZoneHandler implements SyncCommandHandlerInterface
     {
         $zone = $this->zoneRepository->byId($command->zoneId);
 
-        if ($zone->childrens->count() > 0) {
-            $childrenCount = $this->zoneRepository->countChildren($zone->id);
+        if ($zone->hasChildren()) {
+            $childrenCount = $zone->childrens->count();
             $this->logger->info('Cannot delete zone with children', ['zoneId' => $command->zoneId, 'childrenCount' => $childrenCount]);
+
             throw InvalidZoneHierarchy::cannotDeleteZoneWithChildren(
                 $zone->label,
                 $childrenCount

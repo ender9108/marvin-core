@@ -246,7 +246,12 @@ class Zone extends AggregateRoot
         return $this->parent !== null;
     }
 
-    public function isChildOf(Zone $potentialParent): bool
+    public function hasChildren(): bool
+    {
+        return !$this->childrens->isEmpty();
+    }
+
+    public function isChildrenOf(Zone $potentialParent): bool
     {
         return $potentialParent->childrens->contains($this);
     }
