@@ -11,7 +11,7 @@ final class CompositeNotSupported extends DomainException implements Translatabl
         string $message,
         string $code,
         private readonly ?string $protocolType = null,
-        private readonly?string $messageType = null,
+        private readonly ?string $messageType = null,
     ) {
         parent::__construct($message, $code);
     }

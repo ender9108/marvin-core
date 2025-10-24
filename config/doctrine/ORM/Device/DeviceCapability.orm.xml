@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity
+        name="Marvin\Device\Domain\Model\DeviceCapability"
+        repository-class="Marvin\Device\Infrastructure\Persistence\Doctrine\ORM\DeviceCapabilityOrmRepository"
+        table="device_device_capability"
+    >
+        <id name="id" type="device_capability_id" column="id">
+            <generator strategy="NONE"/>
+        </id>
+        <embedded name="capability" class="Marvin\Device\Domain\ValueObject\Capability" />
+        <field name="supportedActions" type="json" />
+        <field name="supportedStates" type="json" />
+        <embedded name="metadata" class="Marvin\Shared\Domain\ValueObject\Metadata" />
+        <embedded name="description" class="Marvin\Shared\Domain\ValueObject\Description" />
+        <field name="updatedAt" type="datetime" nullable="true" />
+        <field name="createdAt" type="datetime" />
+
+        <many-to-one field="device" target-entity="Marvin\Device\Domain\Model\Device" />
+    </entity>
+</doctrine-mapping>

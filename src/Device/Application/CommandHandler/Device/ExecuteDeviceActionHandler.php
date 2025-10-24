@@ -19,15 +19,16 @@ final readonly class ExecuteDeviceActionHandler implements SyncCommandHandlerInt
 
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository,
-        private ProtocolClientInterface $protocolClient,
+        //private ProtocolClientInterface $protocolClient,
         private LoggerInterface $logger,
-    ) {}
+    ) {
+    }
 
     public function __invoke(ExecuteDeviceAction $command): array
     {
         $this->logger->info('Executing device action', [
             'deviceId' => $command->deviceId,
-            'capabilityName' => $command->capabilityName,
+            'capability' => $command->capability,
             'action' => $command->action,
         ]);
 
@@ -47,7 +48,7 @@ final readonly class ExecuteDeviceActionHandler implements SyncCommandHandlerInt
         $result = $this->protocolClient->executeAction(
             protocolId: $device->protocolId->toString(),
             nativeId: $device->getNativeId(),
-            capabilityName: $command->capabilityName,
+            capability: $command->capability,
             action: $command->action,
             parameters: $command->parameters,
             timeout: self::TIMEOUT_PER_DEVICE_MS
@@ -114,7 +115,6 @@ final readonly class ExecuteDeviceActionHandler implements SyncCommandHandlerInt
                 if ($result['success']) {
                     $successCount++;
                 }
-
             } catch (\Throwable $e) {
                 $results[] = [
                     'deviceId' => $device->id->toString(),
@@ -186,8 +186,7 @@ final readonly class ExecuteDeviceActionHandler implements SyncCommandHandlerInt
                     ];
                     break; // On a notre première réponse, on arrête
                 }
-
-            } catch (\Throwable $e) {
+            } catch (\Throwable) {
                 // On ignore les erreurs et continue jusqu'à avoir une réponse valide
                 continue;
             }
@@ -231,7 +230,6 @@ final readonly class ExecuteDeviceActionHandler implements SyncCommandHandlerInt
                     'response' => $result['response'] ?? null,
                     'error' => $result['error'] ?? null,
                 ];
-
             } catch (\Throwable $e) {
                 $results[] = [
                     'deviceId' => $device->id->toString(),
@@ -243,7 +241,7 @@ final readonly class ExecuteDeviceActionHandler implements SyncCommandHandlerInt
             }
         }
 
-        $successCount = count(array_filter($results, fn($r) => $r['success']));
+        $successCount = count(array_filter($results, fn ($r) => $r['success']));
 
         return [
             'success' => $successCount > 0,
@@ -278,7 +276,6 @@ final readonly class ExecuteDeviceActionHandler implements SyncCommandHandlerInt
                 );
 
                 $sentCount++;
-
             } catch (\Throwable $e) {
                 $this->logger->warning('Broadcast failed for device', [
                     'deviceId' => $device->id->toString(),
@@ -303,11 +300,10 @@ final readonly class ExecuteDeviceActionHandler implements SyncCommandHandlerInt
     private function loadChildDevices(Device $composite): array
     {
         $childDeviceIds = array_map(
-            fn($id) => $id->toString(),
+            fn ($id) => $id->toString(),
             $composite->childDeviceIds
         );
 
         return $this->deviceRepository->byIds($childDeviceIds);
     }
 }
-

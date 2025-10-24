@@ -2,54 +2,59 @@
 
 namespace EnderLab\DddCqrsMakerBundle\Maker;
 
-use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Bundle\MakerBundle\ConsoleStyle;
+use Symfony\Bundle\MakerBundle\DependencyBuilder;
+use Symfony\Bundle\MakerBundle\Generator;
+use Symfony\Bundle\MakerBundle\InputConfiguration;
+use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
-#[AsCommand(
-    name: 'make:application-command',
-    description: 'Crée une Command et son CommandHandler',
-)]
-class MakeApplicationCommandCommand extends Command
+class MakeApplicationCommandCommand extends AbstractMaker
 {
     private Filesystem $filesystem;
     private array $parameters = [];
 
     public function __construct(private string $projectDir)
     {
-        parent::__construct();
         $this->filesystem = new Filesystem();
     }
 
-    protected function configure(): void
+    public static function getCommandName(): string
     {
-        $this
+        return 'make:application-command';
+    }
+
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
+    {
+        $command
+            ->setDescription('Crée une Command et son CommandHandler')
             ->addArgument('context', InputArgument::OPTIONAL, 'Nom du bounded context')
             ->addArgument('name', InputArgument::OPTIONAL, 'Nom de la Command');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    public function configureDependencies(DependencyBuilder $dependencies): void
     {
-        $io = new SymfonyStyle($input, $output);
+    }
 
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
+    {
         $io->title('Générateur de Command et CommandHandler');
 
         // 1. Demander le bounded context
         $context = $this->askContext($io, $input);
         if (!$context) {
-            return Command::FAILURE;
+            return;
         }
 
         // 2. Demander le nom de la Command
         $commandName = $this->askCommandName($io, $input);
         if (!$commandName) {
-            return Command::FAILURE;
+            return;
         }
 
         // 3. Sync ou Async
@@ -69,7 +74,7 @@ class MakeApplicationCommandCommand extends Command
         // 7. Confirmer
         if (!$io->confirm('Générer la Command et son Handler ?', true)) {
             $io->warning('Génération annulée');
-            return Command::SUCCESS;
+            return;
         }
 
         // 8. Générer les fichiers
@@ -92,16 +97,12 @@ class MakeApplicationCommandCommand extends Command
                 '- Le Handler sera automatiquement découvert',
                 '- Configure le routing Messenger si besoin',
             ]);
-
-            return Command::SUCCESS;
-
         } catch (\Exception $e) {
             $io->error('Erreur lors de la génération : ' . $e->getMessage());
-            return Command::FAILURE;
         }
     }
 
-    private function askContext(SymfonyStyle $io, InputInterface $input): ?string
+    private function askContext(ConsoleStyle $io, InputInterface $input): ?string
     {
         $context = $input->getArgument('context');
 
@@ -122,7 +123,7 @@ class MakeApplicationCommandCommand extends Command
         return $context;
     }
 
-    private function askCommandName(SymfonyStyle $io, InputInterface $input): ?string
+    private function askCommandName(ConsoleStyle $io, InputInterface $input): ?string
     {
         $name = $input->getArgument('name');
 
@@ -133,7 +134,7 @@ class MakeApplicationCommandCommand extends Command
         return $name;
     }
 
-    private function askParameters(SymfonyStyle $io, string $context): void
+    private function askParameters(ConsoleStyle $io, string $context): void
     {
         $io->note([
             'Définis les paramètres de la Command',
@@ -159,7 +160,7 @@ class MakeApplicationCommandCommand extends Command
         }
     }
 
-    private function askDependencies(SymfonyStyle $io, string $context): array
+    private function askDependencies(ConsoleStyle $io, string $context): array
     {
         $dependencies = [];
 
@@ -248,7 +249,7 @@ PHP;
         string $subFolder,
         bool $isSync,
         array $dependencies,
-        SymfonyStyle $io
+        ConsoleStyle $io
     ): void {
         $dir = $this->projectDir . "/src/{$context}/Application/CommandHandler";
 
@@ -329,7 +330,7 @@ PHP;
         return "    public function __construct(\n" . implode("\n", $params) . "\n    ) {}";
     }
 
-    private function generateHandlerLogic(string $commandName, array $dependencies, SymfonyStyle $io): string
+    private function generateHandlerLogic(string $commandName, array $dependencies, ConsoleStyle $io): string
     {
         $io->writeln('');
         $io->note('Génération de la logique basique du Handler. Tu devras compléter l\'implémentation.');

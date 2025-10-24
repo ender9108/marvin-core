@@ -19,6 +19,7 @@
 
 .idea
 .editorconfig
+.junie
 
 !compose.override.yaml
 !compose.prod.yaml

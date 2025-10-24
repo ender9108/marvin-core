@@ -13,8 +13,9 @@ final readonly class Roles implements ArrayValueObjectInterface, \Stringable
 
     public function __construct(array $roles = [])
     {
-        Assert::notEmpty($roles);
-        Assert::allIsInstanceOf($roles, Role::class);
+        if (!empty($roles)) {
+            Assert::allIsInstanceOf($roles, Role::class);
+        }
 
         $roles[] = Role::USER;
         $this->value = array_unique(\array_map(fn (Role $role) => $role->value, $roles));
@@ -28,12 +29,12 @@ final readonly class Roles implements ArrayValueObjectInterface, \Stringable
 
     public static function admin(): self
     {
-        return new self([Role::USER, Role::ADMIN]);
+        return new self([Role::ADMIN]);
     }
 
     public static function superAdmin(): self
     {
-        return new self([Role::USER, Role::SUPER_ADMIN]);
+        return new self([Role::SUPER_ADMIN]);
     }
 
     public static function user(): self

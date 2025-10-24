@@ -16,7 +16,8 @@ final readonly class WeatherData
         public ?int $cloudCover = null,
         public ?float $uvIndex = null,
         public ?\DateTimeImmutable $timestamp = null
-    ) {}
+    ) {
+    }
 
     public function toArray(): array
     {

@@ -79,7 +79,7 @@ final readonly class CreateSceneCommand
         } catch (ValueError $e) {
             $io->error("Invalid strategy: {$strategy}");
             $io->note('Available strategies: ' . implode(', ', array_map(
-                fn($case) => $case->value,
+                fn ($case) => $case->value,
                 CompositeStrategy::cases()
             )));
             return Command::FAILURE;
@@ -121,7 +121,6 @@ final readonly class CreateSceneCommand
             $io->note("The system will automatically use native protocol groups if all devices share the same protocol.");
 
             return Command::SUCCESS;
-
         } catch (Throwable $e) {
             $io->error("Failed to create group: {$e->getMessage()}");
             return Command::FAILURE;

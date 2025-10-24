@@ -25,7 +25,7 @@ final readonly class MessengerDomainEventBus implements DomainEventBusInterface
             new Envelope($event)
                 ->with(
                     new DispatchAfterCurrentBusStamp(),
-                    new BusNameStamp('domain.event')
+                    new BusNameStamp('domain.events')
                 )
         );
     }

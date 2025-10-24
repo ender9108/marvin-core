@@ -14,7 +14,8 @@ final readonly class OpenWeatherMapService implements WeatherServiceInterface
     public function __construct(
         private readonly HttpClientInterface $httpClient,
         private readonly LoggerInterface $logger
-    ) {}
+    ) {
+    }
 
     public function getCurrentWeather(string $location, string $apiProvider, string $apiKey): WeatherData
     {
@@ -45,7 +46,6 @@ final readonly class OpenWeatherMapService implements WeatherServiceInterface
                 uvIndex: null, // Nécessite un appel séparé à l'API UV
                 timestamp: new \DateTimeImmutable('@' . $data['dt'])
             );
-
         } catch (\Throwable $e) {
             $this->logger->error('Failed to fetch weather data', [
                 'location' => $location,
@@ -91,7 +91,6 @@ final readonly class OpenWeatherMapService implements WeatherServiceInterface
             }
 
             return $forecast;
-
         } catch (\Throwable $e) {
             $this->logger->error('Failed to fetch weather forecast', [
                 'location' => $location,

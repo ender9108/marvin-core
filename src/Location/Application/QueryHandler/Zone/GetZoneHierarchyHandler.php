@@ -8,11 +8,12 @@ use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-class GetZoneHierarchyHandler
+final readonly class GetZoneHierarchyHandler
 {
     public function __construct(
         private ZoneRepositoryInterface $zoneRepository,
-    ) {}
+    ) {
+    }
 
     public function __invoke(GetZoneHierarchy $query): array
     {
@@ -24,7 +25,7 @@ class GetZoneHierarchyHandler
 
         $rootZones = $this->zoneRepository->getRootZones();
         return array_map(
-            fn(Zone $zone) => $this->buildHierarchy($zone),
+            fn (Zone $zone) => $this->buildHierarchy($zone),
             $rootZones
         );
     }
@@ -45,7 +46,7 @@ class GetZoneHierarchyHandler
             'icon' => $zone->icon,
             'color' => $zone->color->value,
             'children' => array_map(
-                fn(Zone $child) => $this->buildHierarchy($child),
+                fn (Zone $child) => $this->buildHierarchy($child),
                 $children
             ),
         ];

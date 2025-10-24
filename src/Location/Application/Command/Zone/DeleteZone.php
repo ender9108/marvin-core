@@ -9,5 +9,6 @@ final readonly class DeleteZone implements SyncCommandInterface
 {
     public function __construct(
         public ZoneId $zoneId,
-    ) {}
+    ) {
+    }
 }

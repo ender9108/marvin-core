@@ -13,7 +13,8 @@ final readonly class GetDeviceCapabilitiesHandler implements QueryHandlerInterfa
 {
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository
-    ) {}
+    ) {
+    }
 
     public function __invoke(GetDeviceCapabilities $query): array
     {
@@ -22,4 +23,3 @@ final readonly class GetDeviceCapabilitiesHandler implements QueryHandlerInterfa
         return $device->capabilities->toArray();
     }
 }
-

@@ -2,18 +2,23 @@
 
 namespace Marvin\Device\Domain\ValueObject;
 
+use Marvin\Shared\Domain\ValueObject\Identity\ProtocolId;
+use Marvin\Shared\Domain\ValueObject\Metadata;
+use Marvin\Shared\Domain\ValueObject\ProtocolType;
+
 final readonly class NativeGroupInfo
 {
     public function __construct(
-        public string $protocolType, // 'zigbee', 'matter', 'thread', 'zwave', 'wifi'
+        public ProtocolType $protocolType, // 'zigbee', 'matter', 'thread', 'zwave', 'network'
         public bool $isSupported, // Le protocole supporte-t-il les groupes natifs ?
-        public ?string $protocolId = null, // ID du protocol dans Protocol Context
+        public ?ProtocolId $protocolId = null, // ID du protocol dans Protocol Context
         public ?string $nativeGroupId = null, // ID du groupe natif (ex: "1" pour Zigbee)
         public ?string $nativeGroupName = null, // Nom du groupe natif
-        public ?array $metadata = null // Infos supplémentaires protocole-specific
-    ) {}
+        public ?Metadata $metadata = null // Infos supplémentaires protocole-specific
+    ) {
+    }
 
-    public static function notSupported(string $protocolType): self
+    public static function notSupported(ProtocolType $protocolType): self
     {
         return new self(
             protocolType: $protocolType,
@@ -23,65 +28,19 @@ final readonly class NativeGroupInfo
     }
 
     public static function create(
-        string $protocol,
-        string $groupId,
-        string $groupName,
-        ?array $metadata = null
+        ProtocolType $protocolType,
+        bool $isSupported,
+        ?ProtocolId $protocolId = null,
+        ?string $nativeGroupId = null,
+        ?string $nativeGroupName = null,
+        ?Metadata $metadata = null
     ): self {
         return new self(
-            protocolType: 'zigbee',
-            isSupported: true,
+            protocolType: $protocolType,
+            isSupported: $isSupported,
             protocolId: $protocolId,
-            nativeGroupId: $groupId,
-            nativeGroupName: $groupName,
-            metadata: $metadata
-        );
-    }
-
-    public static function zigbeeGroup(
-        string $protocolId,
-        string $groupName,
-        int $groupId,
-        ?array $metadata = null
-    ): self {
-        return new self(
-            protocolType: 'zigbee',
-            protocolId: $protocolId,
-            isSupported: true,
-            nativeGroupId: (string) $groupId,
-            nativeGroupName: $groupName,
-            metadata: $metadata
-        );
-    }
-
-    public static function matterGroup(
-        string $protocolId,
-        string $groupName,
-        int $groupId,
-        ?array $metadata = null
-    ): self {
-        return new self(
-            protocolType: 'matter',
-            protocolId: $protocolId,
-            isSupported: true,
-            nativeGroupId: (string) $groupId,
-            nativeGroupName: $groupName,
-            metadata: $metadata
-        );
-    }
-
-    public static function threadGroup(
-        string $protocolId,
-        string $groupName,
-        int $groupId,
-        ?array $metadata = null
-    ): self {
-        return new self(
-            protocolType: 'thread',
-            protocolId: $protocolId,
-            isSupported: true,
-            nativeGroupId: (string) $groupId,
-            nativeGroupName: $groupName,
+            nativeGroupId: $nativeGroupId,
+            nativeGroupName: $nativeGroupName,
             metadata: $metadata
         );
     }
@@ -94,7 +53,7 @@ final readonly class NativeGroupInfo
             'is_supported' => $this->isSupported,
             'native_group_id' => $this->nativeGroupId,
             'native_group_name' => $this->nativeGroupName,
-            'metadata' => $this->metadata,
+            'metadata' => $this->metadata->toArray(),
         ];
     }
 }

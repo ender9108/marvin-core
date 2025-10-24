@@ -8,7 +8,7 @@ final readonly class DeviceActionExecuted extends AbstractDomainEvent
 {
     public function __construct(
         public string $deviceId,
-        public string $capabilityName,
+        public string $capability,
         public string $action,
         public array $params
     ) {

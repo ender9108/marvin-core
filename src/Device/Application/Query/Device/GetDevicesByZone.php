@@ -9,5 +9,6 @@ final readonly class GetDevicesByZone implements QueryInterface
 {
     public function __construct(
         public ZoneId $zoneId
-    ) {}
+    ) {
+    }
 }

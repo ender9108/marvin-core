@@ -12,7 +12,8 @@ final readonly class HttpClientService implements HttpClientServiceInterface
     public function __construct(
         private HttpClientInterface $httpClient,
         private LoggerInterface $logger
-    ) {}
+    ) {
+    }
 
     public function request(string $method, string $url, array $options = []): HttpResponse
     {
@@ -45,7 +46,6 @@ final readonly class HttpClientService implements HttpClientServiceInterface
                 headers: $headers,
                 duration: $duration
             );
-
         } catch (\Throwable $e) {
             $duration = microtime(true) - $startTime;
 
@@ -59,5 +59,4 @@ final readonly class HttpClientService implements HttpClientServiceInterface
             throw new \RuntimeException("HTTP request failed: {$e->getMessage()}", 0, $e);
         }
     }
-
 }

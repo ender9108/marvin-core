@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use EnderLab\DddCqrsBundle\Domain\Model\AggregateRoot;
 use Marvin\Device\Domain\Event\Device\DeviceActionExecuted;
 use Marvin\Device\Domain\Event\Device\DeviceAssignedToZone;
@@ -14,19 +15,26 @@ use Marvin\Device\Domain\Event\Device\DeviceDeleted;
 use Marvin\Device\Domain\Event\Device\DeviceOffline;
 use Marvin\Device\Domain\Event\Device\DeviceOnline;
 use Marvin\Device\Domain\Event\Device\DeviceStateChanged;
+use Marvin\Device\Domain\Exception\CapabilityNotFound;
+use Marvin\Device\Domain\Exception\CapabilityNotSupportedAction;
+use Marvin\Device\Domain\Exception\DeviceCompositeCircularReference;
+use Marvin\Device\Domain\Exception\DeviceMustBeComposite;
+use Marvin\Device\Domain\ValueObject\Capability;
 use Marvin\Device\Domain\ValueObject\CompositeStrategy;
 use Marvin\Device\Domain\ValueObject\CompositeType;
 use Marvin\Device\Domain\ValueObject\DeviceStatus;
 use Marvin\Device\Domain\ValueObject\DeviceType;
 use Marvin\Device\Domain\ValueObject\NativeGroupInfo;
 use Marvin\Device\Domain\ValueObject\NativeSceneInfo;
+use Marvin\Device\Domain\ValueObject\SceneStates;
+use Marvin\Device\Domain\ValueObject\TechnicalName;
+use Marvin\Device\Domain\ValueObject\VirtualDeviceConfig;
 use Marvin\Device\Domain\ValueObject\VirtualDeviceType;
 use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 use Marvin\Shared\Domain\ValueObject\Identity\ProtocolId;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\Metadata;
-
 
 class Device extends AggregateRoot
 {
@@ -35,26 +43,31 @@ class Device extends AggregateRoot
     /**
      * @var Collection<int, DeviceCapability>
      */
-    private(set) Collection $capabilities;
+    public private(set) Collection $capabilities;
 
     /**
      * @var Collection<int, DeviceState>
      */
-    private(set) Collection $states;
+    public private(set) Collection $states;
+
+    /**
+     * @var Collection<int, Device>
+     */
+    public private(set) Collection $childrens;
+
+    public private(set) ?Device $parent = null;
 
     public function __construct(
         private(set) Label $label,
         private(set) DeviceType $type,
         private(set) DeviceStatus $status,
         private(set) ?ProtocolId $protocolId = null,
-        private(set) ?string $physicalAddress = null,
-        private(set) ?VirtualDeviceType $virtualType = null,
-        private(set) array $virtualConfig = [],
-        /** array<int, DeviceId> */
-        private(set) array $childDeviceIds = [],
+        private(set) ?TechnicalName $technicalName = null,
+        private(set) ?VirtualDeviceType $virtualDeviceType = null,
+        private(set) ?VirtualDeviceConfig $virtualDeviceConfig = null,
         private(set) ?NativeGroupInfo $nativeGroupInfo = null,
         private(set) ?NativeSceneInfo $nativeSceneInfo = null,
-        private(set) ?array $sceneStates = null, // Pour les scènes : états par device
+        private(set) ?SceneStates $sceneStates = null, // Pour les scènes : états par device
         private(set) ?CompositeStrategy $compositeStrategy = null,
         private(set) ?ZoneId $zoneId = null,
         private(set) ?string $manufacturer = null,
@@ -67,32 +80,36 @@ class Device extends AggregateRoot
         $this->id = new DeviceId();
         $this->capabilities = new ArrayCollection();
         $this->states = new ArrayCollection();
+        $this->childrens = new ArrayCollection();
     }
-
-    // ============= Factory Methods =============
 
     public static function createPhysical(
         Label $label,
         ProtocolId $protocolId,
-        string $physicalAddress,
+        TechnicalName $technicalName,
         ?string $manufacturer = null,
-        ?string $model = null
+        ?string $model = null,
+        ?string $firmwareVersion = null,
+        ?Metadata $metadata = null
     ): self {
         $device = new self(
             label: $label,
             type: DeviceType::PHYSICAL,
             status: DeviceStatus::OFFLINE,
             protocolId: $protocolId,
-            physicalAddress: $physicalAddress,
+            technicalName: $technicalName,
             manufacturer: $manufacturer,
             model: $model,
+            firmwareVersion: $firmwareVersion,
+            metadata: $metadata,
         );
 
         $device->recordThat(new DeviceCreated(
             deviceId: $device->id->toString(),
             label: $device->label->value,
             type: $device->type->value,
-            protocolId: $device->protocolId->toString()
+            protocolId: $device->protocolId->toString(),
+            zoneId: $device->zoneId?->toString()
         ));
 
         return $device;
@@ -100,22 +117,22 @@ class Device extends AggregateRoot
 
     public static function createVirtual(
         Label $label,
-        VirtualDeviceType $virtualType,
-        array $virtualConfig
+        VirtualDeviceType $virtualDeviceType,
+        VirtualDeviceConfig $virtualDeviceConfig
     ): self {
         $device = new self(
             label: $label,
             type: DeviceType::VIRTUAL,
             status: DeviceStatus::ONLINE,
-            virtualType: $virtualType,
-            virtualConfig: $virtualConfig,
+            virtualDeviceType: $virtualDeviceType,
+            virtualDeviceConfig: $virtualDeviceConfig,
         );
 
         $device->recordThat(new DeviceCreated(
             deviceId: $device->id->toString(),
             label: $device->label->value,
             type: $device->type->value,
-            virtualType: $device->virtualType->value
+            virtualDeviceType: $device->virtualDeviceType->value
         ));
 
         return $device;
@@ -123,23 +140,25 @@ class Device extends AggregateRoot
 
     public static function createGroup(
         Label $label,
-        array $childDeviceIds,
+        /** @var Device[] $childrens */
+        array $childrens,
         CompositeStrategy $strategy = CompositeStrategy::NATIVE_IF_AVAILABLE
     ): self {
         $device = new self(
-            $label,
-            DeviceType::COMPOSITE,
-            DeviceStatus::ONLINE
+            label: $label,
+            type: DeviceType::COMPOSITE,
+            status: DeviceStatus::ONLINE,
+            compositeStrategy: $strategy,
         );
-        $device->childDeviceIds = $childDeviceIds;
-        $device->compositeStrategy = $strategy;
+
+        $device->setChildrens($childrens);
 
         $device->recordThat(new DeviceCreated(
             deviceId: $device->id->toString(),
             label: $label->value,
             type: DeviceType::COMPOSITE->value,
             compositeType: CompositeType::GROUP->value,
-            childCount: count($childDeviceIds)
+            childCount: count($childrens)
         ));
 
         return $device;
@@ -147,33 +166,46 @@ class Device extends AggregateRoot
 
     public static function createScene(
         Label $label,
-        array $sceneStates,
+        array $devicesWithStates,
         CompositeStrategy $strategy = CompositeStrategy::NATIVE_IF_AVAILABLE
     ): self {
         $device = new self(
-            $label,
-            DeviceType::COMPOSITE,
-            DeviceStatus::ONLINE
+            label: $label,
+            type: DeviceType::COMPOSITE,
+            status: DeviceStatus::ONLINE,
+            compositeStrategy: $strategy,
         );
 
-        // Extract childDeviceIds from sceneStates
-        $device->childDeviceIds = array_map(
-            fn($deviceId) => new DeviceId($deviceId),
-            array_keys($sceneStates)
-        );
+        $currentStates = [];
 
-        $device->sceneStates = $sceneStates;
-        $device->compositeStrategy = $strategy;
+        /** @var Device $deviceWithStates */
+        foreach ($devicesWithStates as $deviceWithStates) {
+            Assert::isInstanceOf($deviceWithStates, Device::class);
+
+            $device->addChildren($deviceWithStates);
+            $currentStates[$deviceWithStates->id->toString()] = $deviceWithStates->states->toArray();
+        }
+
+        $device->setSceneStates($currentStates);
 
         $device->recordThat(new DeviceCreated(
             deviceId: $device->id->toString(),
             label: $label->value,
             type: DeviceType::COMPOSITE->value,
             compositeType: CompositeType::SCENE->value,
-            childCount: count($device->childDeviceIds)
+            childCount: count($device->childrens)
         ));
 
         return $device;
+    }
+
+    public function setParent(Device $parent): void
+    {
+        if ($this->id === $parent->id) {
+            throw new DeviceCompositeCircularReference("A device cannot be its own parent");
+        }
+
+        $this->parent = $parent;
     }
 
     public function delete(): void
@@ -184,45 +216,125 @@ class Device extends AggregateRoot
         ));
     }
 
-    public function addCapability(DeviceCapability $capability): void
+    public function addCapability(DeviceCapability $capability): self
     {
         if (!$this->capabilities->contains($capability)) {
             $this->capabilities->add($capability);
         }
+
+        return $this;
     }
 
-    public function updateState(string $capabilityName, mixed $value): void
+    public function removeCapability(DeviceCapability $capability): self
     {
-        $state = $this->getOrCreateState($capabilityName);
+        if (!$this->capabilities->contains($capability)) {
+            $this->capabilities->removeElement($capability);
+            $capability->setDevice(null);
+
+            $state = $this->findStateCapability($capability->name);
+
+            if (null !== $state) {
+                $this->removeState($state);
+            }
+        }
+
+        return $this;
+    }
+
+    public function addState(DeviceState $state): self
+    {
+        if (!$this->states->contains($state)) {
+            $this->states->add($state);
+        }
+
+        return $this;
+    }
+
+    public function removeState(DeviceState $state): self
+    {
+        if (!$this->states->contains($state)) {
+            $this->states->removeElement($state);
+            $state->setDevice(null);
+        }
+
+        return $this;
+    }
+
+    public function setChildrens(array $childrens): void
+    {
+        $this->childrens = new ArrayCollection();
+
+        foreach ($childrens as $children) {
+            $this->addChildren($children);
+        }
+    }
+
+    public function addChildren(Device $device): self
+    {
+        if (!$this->isComposite()) {
+            throw new DeviceMustBeComposite("Only composite devices can have child devices");
+        }
+
+        if ($this->id === $device->id) {
+            throw new DeviceCompositeCircularReference("A device cannot be its own child");
+        }
+
+        if (!$this->childrens->contains($device)) {
+            $this->childrens->add($device);
+        }
+
+        return $this;
+    }
+
+    public function removeChildren(Device $device): self
+    {
+        if (!$this->isComposite()) {
+            throw new DeviceMustBeComposite("Only composite devices can have child devices");
+        }
+
+        if (!$this->childrens->contains($device)) {
+            $this->childrens->removeElement($device);
+        }
+
+        return $this;
+    }
+
+    public function updateState(Capability $capability, mixed $value, ?string $unit = null): void
+    {
+        $state = $this->getOrCreateState($capability);
         $oldValue = $state->value;
 
-        $state->updateValue($value);
+        $state->updateValue($value, $unit);
 
         $this->recordThat(new DeviceStateChanged(
             deviceId: $this->id->toString(),
-            capabilityName: $capabilityName,
+            capability: $capability->value,
             oldValue: $oldValue,
             newValue: $value
         ));
     }
 
-    public function executeAction(string $capabilityName, string $action, array $params = []): void
+    public function executeAction(Capability $capability, string $action, array $params = []): void
     {
-        $capability = $this->findCapability($capabilityName);
+        $deviceCapability = $this->findCapability($capability);
 
-        if (!$capability) {
-            /** @todo */
-            //throw new DomainException("Capability {$capabilityName} not found on device {$this->label}");
+        if (!$deviceCapability) {
+            throw CapabilityNotFound::withCapabilityAndDevice(
+                $capability,
+                $this->label,
+            );
         }
 
-        if (!$capability->supportsAction($action)) {
-            /** @todo */
-            //throw new DomainException("Action {$action} not supported by capability {$capabilityName}");
+        if (!$deviceCapability->supportsAction($action)) {
+            throw CapabilityNotSupportedAction::withCapabilityAndAction(
+                $capability,
+                $action,
+            );
         }
 
         $this->recordThat(new DeviceActionExecuted(
             deviceId: $this->id->toString(),
-            capabilityName: $capabilityName,
+            capability: $capability->value,
             action: $action,
             params: $params
         ));
@@ -272,6 +384,11 @@ class Device extends AggregateRoot
         ));
     }
 
+    public function hasZone(): bool
+    {
+        return $this->zoneId !== null;
+    }
+
     public function unassignFromZone(): void
     {
         if ($this->zoneId !== null) {
@@ -286,79 +403,21 @@ class Device extends AggregateRoot
         }
     }
 
-    public function updateFirmware(string $version): void
+    public function getState(Capability $capability): ?DeviceState
     {
-        $this->firmwareVersion = $version;
-    }
-
-    private function getOrCreateState(string $capabilityName): DeviceState
-    {
+        /** @var DeviceState $state */
         foreach ($this->states as $state) {
-            if ($state->getCapabilityName() === $capabilityName) {
-                return $state;
-            }
-        }
-
-        $newState = new DeviceState($capabilityName);
-        $this->states->add($newState);
-        return $newState;
-    }
-
-    private function findCapability(string $name): ?DeviceCapability
-    {
-        foreach ($this->capabilities as $capability) {
-            if ($capability->getName() === $name) {
-                return $capability;
-            }
-        }
-
-        return null;
-    }
-
-    public function getState(string $capabilityName): ?DeviceState
-    {
-        foreach ($this->states as $state) {
-            if ($state->getCapabilityName() === $capabilityName) {
+            if ($state->capability->equals($capability)) {
                 return $state;
             }
         }
         return null;
-    }
-
-    public function addChildDevice(DeviceId $deviceId): void
-    {
-        if (!$this->isComposite()) {
-            throw new \DomainException("Only composite devices can have child devices");
-        }
-
-        if (!$this->hasChildDevice($deviceId)) {
-            $this->childDeviceIds[] = $deviceId;
-        }
-    }
-
-    public function removeChildDevice(DeviceId $deviceId): void
-    {
-        if (!$this->isComposite()) {
-            /** @todo */
-            //throw new \DomainException("Only composite devices can have child devices");
-        }
-
-        $this->childDeviceIds = array_filter(
-            $this->childDeviceIds,
-            fn($id) => !$id->equals($deviceId)
-        );
-    }
-
-    public function hasChildDevice(DeviceId $deviceId): bool
-    {
-        return array_any($this->childDeviceIds, fn($childId) => $childId->equals($deviceId));
     }
 
     public function setNativeGroupInfo(NativeGroupInfo $info): void
     {
         if (!$this->isComposite()) {
-            /** @todo */
-            //throw new \DomainException("Only composite devices can have native group info");
+            throw new DeviceMustBeComposite("Only composite devices can have native group info");
         }
 
         $this->nativeGroupInfo = $info;
@@ -367,8 +426,7 @@ class Device extends AggregateRoot
     public function setNativeSceneInfo(NativeSceneInfo $info): void
     {
         if (!$this->isComposite()) {
-            /** @todo */
-            //throw new \DomainException("Only composite devices can have native scene info");
+            throw new DeviceMustBeComposite("Only composite devices can have native scene info");
         }
 
         $this->nativeSceneInfo = $info;
@@ -376,8 +434,10 @@ class Device extends AggregateRoot
 
     public function hasNativeSupport(): bool
     {
-        return ($this->nativeGroupInfo !== null && $this->nativeGroupInfo->isSupported)
-            || ($this->nativeSceneInfo !== null && $this->nativeSceneInfo->isSupported);
+        return
+            ($this->nativeGroupInfo !== null && $this->nativeGroupInfo->isSupported) ||
+            ($this->nativeSceneInfo !== null && $this->nativeSceneInfo->isSupported)
+        ;
     }
 
     public function shouldUseNative(): bool
@@ -392,24 +452,28 @@ class Device extends AggregateRoot
         };
     }
 
-    public function setSceneState(string $deviceId, array $state): void
+    public function setSceneState(DeviceId $deviceId, array $state): void
     {
         if (!$this->isComposite()) {
-            // @todo
-            // throw new \DomainException("Only composite devices can have scene states");
+            throw new DeviceMustBeComposite("Only composite devices can have scene states");
         }
 
-        if ($this->sceneStates === null) {
-            $this->sceneStates = [];
+        $previousState = [];
+
+        if (null !== $this->sceneStates) {
+            $previousState = $this->sceneStates->toArray();
         }
 
-        $this->sceneStates[$deviceId] = $state;
+        $this->sceneStates = SceneStates::fromArray(array_merge(
+            $previousState,
+            [$deviceId->toString() => $state]
+        ));
     }
 
     public function setSceneStates(array $states): void
     {
         foreach ($states as $deviceId => $state) {
-            $this->setSceneState($deviceId, $state);
+            $this->setSceneState(DeviceId::fromString($deviceId), $state);
         }
     }
 
@@ -423,6 +487,11 @@ class Device extends AggregateRoot
         return $this->type === DeviceType::VIRTUAL;
     }
 
+    public function isComposite(): bool
+    {
+        return $this->type === DeviceType::COMPOSITE;
+    }
+
     public function isOnline(): bool
     {
         return $this->status === DeviceStatus::ONLINE;
@@ -433,23 +502,52 @@ class Device extends AggregateRoot
         return $this->protocolId !== null;
     }
 
-    public function hasZone(): bool
-    {
-        return $this->zoneId !== null;
-    }
-
     public function isScene(): bool
     {
-        return $this->isComposite() && $this->sceneStates !== null;
+        return
+            $this->isComposite() &&
+            $this->nativeSceneInfo !== null &&
+            $this->sceneStates !== null
+        ;
     }
 
     public function isGroup(): bool
     {
-        return $this->isComposite() && $this->sceneStates === null;
+        return
+            $this->isComposite() &&
+            $this->nativeGroupInfo !== null &&
+            $this->sceneStates === null
+        ;
     }
 
-    public function isComposite(): bool
+    private function getOrCreateState(Capability $capability): DeviceState
     {
-        return $this->type === DeviceType::COMPOSITE;
+        /** @var DeviceState $state */
+        foreach ($this->states as $state) {
+            if ($state->capability->equals($capability)) {
+                return $state;
+            }
+        }
+
+        $newState = new DeviceState($capability);
+        $this->states->add($newState);
+
+        return $newState;
+    }
+
+    private function findCapability(Capability $capability): ?DeviceCapability
+    {
+        $capabilityFound = $this->capabilities->filter(
+            fn (DeviceCapability $deviceCapability) => $deviceCapability->capability->equals($capability)
+        )->first();
+
+        return false === $capabilityFound ? null : $capabilityFound;
+    }
+
+    private function findStateCapability(Capability $capability): ?DeviceState
+    {
+        $stateFound = $this->states->filter(fn (DeviceState $state) => $state->capability->equals($capability))->first();
+
+        return false === $stateFound ? null : $stateFound;
     }
 }

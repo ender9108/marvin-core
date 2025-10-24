@@ -15,7 +15,8 @@ final readonly class StoreSceneCurrentStateHandler implements SyncCommandHandler
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository,
         private LoggerInterface $logger,
-    ) {}
+    ) {
+    }
 
     public function __invoke(StoreSceneCurrentState $command): void
     {
@@ -30,7 +31,7 @@ final readonly class StoreSceneCurrentStateHandler implements SyncCommandHandler
         $deviceIds = $scene->childDeviceIds;
         /** @var Device[] $devices */
         $devices = $this->deviceRepository->byIds(
-            array_map(fn($id) => $id->toString(), $deviceIds)
+            array_map(fn ($id) => $id->toString(), $deviceIds)
         );
 
         // Construire les nouveaux états
@@ -45,12 +46,12 @@ final readonly class StoreSceneCurrentStateHandler implements SyncCommandHandler
                 $deviceStates = [];
 
                 foreach ($device->capabilities as $capability) {
-                    $capabilityName = $capability->name;
+                    $capabilityName = $capability->capability;
                     $capabilityStates = [];
 
                     // Récupérer tous les états supportés par cette capability
                     foreach ($capability->supportedStates as $stateName) {
-                        $currentValue = $device->getState($capabilityName, $stateName);
+                        $currentValue = $device->getState($capabilityName);
 
                         if ($currentValue !== null) {
                             $capabilityStates[$stateName] = $currentValue;
@@ -58,7 +59,7 @@ final readonly class StoreSceneCurrentStateHandler implements SyncCommandHandler
                     }
 
                     if (!empty($capabilityStates)) {
-                        $deviceStates[$capabilityName] = $capabilityStates;
+                        $deviceStates[$capabilityName->value] = $capabilityStates;
                     }
                 }
 
@@ -67,7 +68,6 @@ final readonly class StoreSceneCurrentStateHandler implements SyncCommandHandler
                 } else {
                     $devicesNotResponding[] = $device->label->value;
                 }
-
             } catch (\Throwable $e) {
                 $this->logger->warning('Failed to capture device state', [
                     'deviceId' => $deviceId,

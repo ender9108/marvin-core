@@ -16,7 +16,7 @@ final readonly class HexaColor implements ValueObjectInterface
         $this->value = $value;
     }
 
-    public static function fromFloat(float $value): self
+    public static function fromString(string $value): self
     {
         return new self($value);
     }

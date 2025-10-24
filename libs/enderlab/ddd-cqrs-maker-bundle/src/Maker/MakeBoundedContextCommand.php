@@ -2,19 +2,17 @@
 
 namespace EnderLab\DddCqrsMakerBundle\Maker;
 
-use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Bundle\MakerBundle\ConsoleStyle;
+use Symfony\Bundle\MakerBundle\DependencyBuilder;
+use Symfony\Bundle\MakerBundle\Generator;
+use Symfony\Bundle\MakerBundle\InputConfiguration;
+use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 
-#[AsCommand(
-    name: 'make:bounded-context',
-    description: 'Crée toute l\'arborescence d\'un bounded context DDD',
-)]
-class MakeBoundedContextCommand extends Command
+class MakeBoundedContextCommand extends AbstractMaker
 {
     private Filesystem $filesystem;
 
@@ -50,20 +48,27 @@ class MakeBoundedContextCommand extends Command
 
     public function __construct(private readonly string $projectDir)
     {
-        parent::__construct();
         $this->filesystem = new Filesystem();
     }
 
-    protected function configure(): void
+    public static function getCommandName(): string
     {
-        $this
+        return 'make:bounded-context';
+    }
+
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
+    {
+        $command
+            ->setDescription('Crée toute l\'arborescence d\'un bounded context DDD')
             ->addArgument('name', InputArgument::OPTIONAL, 'Nom du bounded context');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    public function configureDependencies(DependencyBuilder $dependencies): void
     {
-        $io = new SymfonyStyle($input, $output);
+    }
 
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
+    {
         $io->title('Générateur de Bounded Context DDD');
 
         $contextName = $input->getArgument('name');
@@ -74,7 +79,7 @@ class MakeBoundedContextCommand extends Command
 
         if (!$contextName) {
             $io->error('Le nom du bounded context est requis');
-            return Command::FAILURE;
+            return;
         }
 
         $contextDir = $this->projectDir . "/src/{$contextName}";
@@ -82,41 +87,37 @@ class MakeBoundedContextCommand extends Command
         if (is_dir($contextDir)) {
             if (!$io->confirm("Le context {$contextName} existe déjà. Continuer quand même ?", false)) {
                 $io->warning('Génération annulée');
-                return Command::SUCCESS;
+                return;
             }
         }
 
         if (!$io->confirm("Créer le bounded context '{$contextName}' avec toute son arborescence ?", true)) {
             $io->warning('Génération annulée');
-            return Command::SUCCESS;
+            return;
         }
 
         try {
             $this->createDirectories($contextName, $io);
             $this->createGitKeepFiles($contextName);
-            $this->createReadmeFile($contextName);
             $this->createDoctrineConfigDirectory($contextName);
 
-            $io->success([
-                "Bounded context '{$contextName}' créé avec succès !",
-                '',
-                'Arborescence créée :',
-                "- src/{$contextName}/Application/",
-                "- src/{$contextName}/Domain/",
-                "- src/{$contextName}/Infrastructure/",
-                "- src/{$contextName}/Presentation/",
-                "- config/doctrine/{$contextName}/",
+            $io->success("Bounded context '{$contextName}' créé avec succès !");
+
+            $io->writeln('');
+            $io->writeln('<info>Arborescence créée :</info>');
+            $io->listing([
+                "src/{$contextName}/Application/",
+                "src/{$contextName}/Domain/",
+                "src/{$contextName}/Infrastructure/",
+                "src/{$contextName}/Presentation/",
+                "config/doctrine/{$contextName}/",
             ]);
-
-            return Command::SUCCESS;
-
         } catch (\Exception $e) {
             $io->error('Erreur lors de la génération : ' . $e->getMessage());
-            return Command::FAILURE;
         }
     }
 
-    private function createDirectories(string $contextName, SymfonyStyle $io): void
+    private function createDirectories(string $contextName, ConsoleStyle $io): void
     {
         $io->section('Création des répertoires...');
 
@@ -140,37 +141,6 @@ class MakeBoundedContextCommand extends Command
             $gitKeepFile = $fullPath . '/.gitkeep';
             $this->filesystem->touch($gitKeepFile);
         }
-    }
-
-    private function createReadmeFile(string $contextName): void
-    {
-        $content = <<<MD
-# Bounded Context: {$contextName}
-
-## Description
-
-Ce bounded context gère [décrire la responsabilité du context].
-
-## Usage
-
-\`\`\`bash
-# Créer un Model
-php bin/console make:model {$contextName} [ModelName]
-
-# Créer une Command
-php bin/console make:application-command {$contextName} [CommandName]
-
-# Créer une Query
-php bin/console make:query {$contextName} [QueryName]
-
-# Créer un ValueObject
-php bin/console make:value-object {$contextName} [ValueObjectName]
-\`\`\`
-
-MD;
-
-        $file = $this->projectDir . "/src/{$contextName}/README.md";
-        $this->filesystem->dumpFile($file, $content);
     }
 
     private function createDoctrineConfigDirectory(string $contextName): void

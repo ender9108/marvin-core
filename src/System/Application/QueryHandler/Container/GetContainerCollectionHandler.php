@@ -19,7 +19,7 @@ final readonly class GetContainerCollectionHandler implements QueryHandlerInterf
     public function __invoke(GetContainerCollection $query): PaginatorInterface
     {
         return $this->containerRepository->collection(
-            $query->criteria,
+            $query->filters,
             $query->orderBy,
             $query->page,
             $query->itemsPerPage

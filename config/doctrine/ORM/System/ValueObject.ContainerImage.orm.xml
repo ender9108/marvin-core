@@ -5,6 +5,6 @@
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
 >
     <embeddable name="Marvin\System\Domain\ValueObject\ContainerImage">
-        <field name="value" />
+        <field name="value" length="255" />
     </embeddable>
 </doctrine-mapping>

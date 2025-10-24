@@ -14,7 +14,8 @@ final readonly class DeleteDeviceHandler implements SyncCommandHandlerInterface
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository,
         private LoggerInterface $logger
-    ) {}
+    ) {
+    }
 
     public function __invoke(DeleteDevice $command): void
     {
@@ -35,4 +36,3 @@ final readonly class DeleteDeviceHandler implements SyncCommandHandlerInterface
         ]);
     }
 }
-

@@ -2,7 +2,6 @@
 
 namespace Marvin\Protocol\Domain\Repository;
 
-
 use Marvin\Protocol\Domain\Model\Protocol;
 use Marvin\Shared\Domain\ValueObject\Identity\ProtocolId;
 

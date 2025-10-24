@@ -2,64 +2,66 @@
 
 namespace Marvin\Location\Application\CommandHandler\Zone;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
-use Marvin\Location\Domain\ValueObject\ZonePath;
 use EnderLab\DddCqrsBundle\Application\Command\CommandHandlerInterface;
+use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Location\Application\Command\Zone\CreateZone;
 use Marvin\Location\Domain\Exception\InvalidZoneHierarchy;
 use Marvin\Location\Domain\Exception\ZoneAlreadyExists;
 use Marvin\Location\Domain\Model\Zone;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
+use Marvin\Location\Domain\ValueObject\ZonePath;
+use Marvin\Shared\Domain\Service\SluggerInterface;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+#[AsMessageHandler]
 final readonly class CreateZoneHandler implements SyncCommandHandlerInterface
 {
     public function __construct(
         private ZoneRepositoryInterface $zoneRepository,
+        private SluggerInterface $slugger,
         private LoggerInterface $logger,
-    ) {}
+    ) {
+    }
 
     public function __invoke(CreateZone $command): string
     {
-        if ($this->zoneRepository->byLabel($command->label) !== null) {
+        if ($this->zoneRepository->bySlug($command->label->value) !== null) {
             throw ZoneAlreadyExists::withLabel($command->label);
         }
 
-        $parentZoneId = null;
         $parentZone = null;
 
         if ($command->parentZoneId !== null) {
-            $parentZone = $this->zoneRepository->find($command->parentZoneId);
-            if ($parentZone === null) {
-                throw InvalidZoneHierarchy::parentNotFound($command->parentZoneId);
-            }
-            if (!$parentZone->getType()->canHaveChildren()) {
+            $parentZone = $this->zoneRepository->byId($command->parentZoneId);
+
+            if (!$parentZone->type->canHaveChildren()) {
                 throw InvalidZoneHierarchy::cannotHaveChildren(
-                    $parentZone->label->value,
-                    $parentZone->getType()->value
+                    $parentZone->label,
+                    $parentZone->type
                 );
             }
-            $parentZoneId = $parentZone->getId();
         }
 
         $zone = new Zone(
-            label: new Label($command->label),
             type: $command->type,
             targetTemperature: $command->targetTemperature,
             targetPowerConsumption: $command->targetPowerConsumption,
             icon: $command->icon,
-            parentZoneId: $parentZoneId,
             surfaceArea: $command->surfaceArea,
             orientation: $command->orientation,
             color: $command->color,
             metadata: $command->metadata,
         );
 
+        $zone->updateLabel($command->label, $this->slugger);
+
         if ($parentZone !== null) {
-            $zonePath = $parentZone->getPath()->append($command->label);
+            $zone->moveToParent($parentZone);
+            $zonePath = $parentZone->path->append($zone->slug);
         } else {
-            $zonePath = new ZonePath($command->label);
+            $zonePath = new ZonePath($zone->slug);
         }
 
         $zone->updatePath($zonePath);
@@ -70,4 +72,3 @@ final readonly class CreateZoneHandler implements SyncCommandHandlerInterface
         return $zone->id->toString();
     }
 }
-

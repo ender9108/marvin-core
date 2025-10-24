@@ -9,5 +9,6 @@ final readonly class DeleteDevice implements SyncCommandInterface
 {
     public function __construct(
         public DeviceId $deviceId
-    ) {}
+    ) {
+    }
 }

@@ -12,11 +12,11 @@ final readonly class GetGroupsCollectionHandler implements QueryHandlerInterface
 {
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository
-    ) {}
+    ) {
+    }
 
     public function __invoke(GetGroupsCollection $query): array
     {
         return $this->deviceRepository->getGroups();
     }
 }
-

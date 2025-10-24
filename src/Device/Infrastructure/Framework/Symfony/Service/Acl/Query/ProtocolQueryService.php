@@ -12,8 +12,9 @@ final class ProtocolQueryService implements ProtocolQueryServiceInterface
     private array $localCache = [];
 
     public function __construct(
-        private readonly ProtocolRepositoryInterface $protocolRepository
-    ) {}
+        //private readonly ProtocolRepositoryInterface $protocolRepository
+    ) {
+    }
 
     public function getProtocolInfo(ProtocolId $protocolId): ?ProtocolInfo
     {
@@ -50,4 +51,3 @@ final class ProtocolQueryService implements ProtocolQueryServiceInterface
         return $info?->type;
     }
 }
-

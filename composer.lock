@@ -2960,25 +2960,28 @@
         },
         {
             "name": "nelmio/cors-bundle",
-            "version": "2.5.0",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioCorsBundle.git",
-                "reference": "3a526fe025cd20e04a6a11370cf5ab28dbb5a544"
+                "reference": "530217472204881cacd3671909f634b960c7b948"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioCorsBundle/zipball/3a526fe025cd20e04a6a11370cf5ab28dbb5a544",
-                "reference": "3a526fe025cd20e04a6a11370cf5ab28dbb5a544",
+                "url": "https://api.github.com/repos/nelmio/NelmioCorsBundle/zipball/530217472204881cacd3671909f634b960c7b948",
+                "reference": "530217472204881cacd3671909f634b960c7b948",
                 "shasum": ""
             },
             "require": {
                 "psr/log": "^1.0 || ^2.0 || ^3.0",
-                "symfony/framework-bundle": "^5.4 || ^6.0 || ^7.0"
+                "symfony/framework-bundle": "^5.4 || ^6.0 || ^7.0 || ^8.0"
             },
             "require-dev": {
-                "mockery/mockery": "^1.3.6",
-                "symfony/phpunit-bridge": "^5.4 || ^6.0 || ^7.0"
+                "phpstan/phpstan": "^1.11.5",
+                "phpstan/phpstan-deprecation-rules": "^1.2.0",
+                "phpstan/phpstan-phpunit": "^1.4",
+                "phpstan/phpstan-symfony": "^1.4.4",
+                "phpunit/phpunit": "^8"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -3016,9 +3019,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nelmio/NelmioCorsBundle/issues",
-                "source": "https://github.com/nelmio/NelmioCorsBundle/tree/2.5.0"
+                "source": "https://github.com/nelmio/NelmioCorsBundle/tree/2.6.0"
             },
-            "time": "2024-06-24T21:25:28+00:00"
+            "time": "2025-10-23T06:57:22+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -3800,12 +3803,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ai-agent.git",
-                "reference": "93e24c36fd2691997db7a9bdb5a76c7e51189cb1"
+                "reference": "20b2030e4ff75b471c80e0606e913ca5154e6bab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ai-agent/zipball/93e24c36fd2691997db7a9bdb5a76c7e51189cb1",
-                "reference": "93e24c36fd2691997db7a9bdb5a76c7e51189cb1",
+                "url": "https://api.github.com/repos/symfony/ai-agent/zipball/20b2030e4ff75b471c80e0606e913ca5154e6bab",
+                "reference": "20b2030e4ff75b471c80e0606e913ca5154e6bab",
                 "shasum": ""
             },
             "require": {
@@ -3890,7 +3893,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-10-20T19:00:27+00:00"
+            "time": "2025-10-23T17:38:41+00:00"
         },
         {
             "name": "symfony/ai-bundle",
@@ -3898,12 +3901,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ai-bundle.git",
-                "reference": "de3f552e174dc3598944bc0d1d0446d397fc21d3"
+                "reference": "532050152754dbad37866083342d3306b6b725a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ai-bundle/zipball/de3f552e174dc3598944bc0d1d0446d397fc21d3",
-                "reference": "de3f552e174dc3598944bc0d1d0446d397fc21d3",
+                "url": "https://api.github.com/repos/symfony/ai-bundle/zipball/532050152754dbad37866083342d3306b6b725a1",
+                "reference": "532050152754dbad37866083342d3306b6b725a1",
                 "shasum": ""
             },
             "require": {
@@ -3977,7 +3980,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-10-20T19:15:47+00:00"
+            "time": "2025-10-23T18:49:47+00:00"
         },
         {
             "name": "symfony/ai-chat",
@@ -3985,12 +3988,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ai-chat.git",
-                "reference": "2e8f06e30db673e2c90e05941ee6af73dd3f316f"
+                "reference": "eba7127b6947bebec480e3cb9e06ea07d2a63942"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ai-chat/zipball/2e8f06e30db673e2c90e05941ee6af73dd3f316f",
-                "reference": "2e8f06e30db673e2c90e05941ee6af73dd3f316f",
+                "url": "https://api.github.com/repos/symfony/ai-chat/zipball/eba7127b6947bebec480e3cb9e06ea07d2a63942",
+                "reference": "eba7127b6947bebec480e3cb9e06ea07d2a63942",
                 "shasum": ""
             },
             "require": {
@@ -4066,7 +4069,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-10-20T19:15:47+00:00"
+            "time": "2025-10-23T18:49:47+00:00"
         },
         {
             "name": "symfony/ai-platform",
@@ -4074,12 +4077,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ai-platform.git",
-                "reference": "56291bd2297fa51dea75ce8151c4b5308213ae0a"
+                "reference": "8abfd58e0d9a53d41448e3a4dadeb0a029e020ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ai-platform/zipball/56291bd2297fa51dea75ce8151c4b5308213ae0a",
-                "reference": "56291bd2297fa51dea75ce8151c4b5308213ae0a",
+                "url": "https://api.github.com/repos/symfony/ai-platform/zipball/8abfd58e0d9a53d41448e3a4dadeb0a029e020ab",
+                "reference": "8abfd58e0d9a53d41448e3a4dadeb0a029e020ab",
                 "shasum": ""
             },
             "require": {
@@ -4189,7 +4192,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-10-20T19:00:27+00:00"
+            "time": "2025-10-23T18:42:44+00:00"
         },
         {
             "name": "symfony/ai-store",
@@ -11872,16 +11875,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.2.3",
+            "version": "2.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "d27f976a332a87b5d03553c2e6f04adbe5da034f"
+                "reference": "fb9418af7777dfb1c87a536dc58398b5b07c74b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/d27f976a332a87b5d03553c2e6f04adbe5da034f",
-                "reference": "d27f976a332a87b5d03553c2e6f04adbe5da034f",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/fb9418af7777dfb1c87a536dc58398b5b07c74b9",
+                "reference": "fb9418af7777dfb1c87a536dc58398b5b07c74b9",
                 "shasum": ""
             },
             "require": {
@@ -11920,7 +11923,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.2.3"
+                "source": "https://github.com/rectorphp/rector/tree/2.2.5"
             },
             "funding": [
                 {
@@ -11928,7 +11931,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-11T21:50:23+00:00"
+            "time": "2025-10-23T11:22:37+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -13735,16 +13738,16 @@
         },
         {
             "name": "zenstruck/foundry",
-            "version": "v2.7.6",
+            "version": "v2.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zenstruck/foundry.git",
-                "reference": "f0917cc57675169428805fb3d15a022841b88810"
+                "reference": "90ba647ef705757644db81dabfa6ad0152d2f39a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/f0917cc57675169428805fb3d15a022841b88810",
-                "reference": "f0917cc57675169428805fb3d15a022841b88810",
+                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/90ba647ef705757644db81dabfa6ad0152d2f39a",
+                "reference": "90ba647ef705757644db81dabfa6ad0152d2f39a",
                 "shasum": ""
             },
             "require": {
@@ -13839,7 +13842,7 @@
             ],
             "support": {
                 "issues": "https://github.com/zenstruck/foundry/issues",
-                "source": "https://github.com/zenstruck/foundry/tree/v2.7.6"
+                "source": "https://github.com/zenstruck/foundry/tree/v2.7.7"
             },
             "funding": [
                 {
@@ -13851,7 +13854,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-20T16:46:25+00:00"
+            "time": "2025-10-23T06:51:50+00:00"
         }
     ],
     "aliases": [],

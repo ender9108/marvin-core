@@ -64,16 +64,36 @@ final class WorkerOrmRepository extends ServiceEntityRepository implements Worke
         ;
 
         if (!empty($filters)) {
-            /*foreach ($filters as $field => $value) {
+            foreach ($filters as $field => $value) {
                 switch ($field) {
+                    case 'type':
+                        $query
+                            ->andWhere('w.type = :type')
+                            ->setParameter('type', $value)
+                        ;
+                        break;
+                    case 'status':
+                        $query
+                            ->andWhere('w.status = :status')
+                            ->setParameter('status', $value)
+                        ;
+                        break;
+                    case 'label':
+                        $query
+                            ->andWhere('w.label.value LIKE :label')
+                            ->setParameter('label', '%'.$value.'%')
+                        ;
+                        break;
                 }
-            }*/
+            }
         }
 
         if (!empty($orderBy)) {
             foreach ($orderBy as $field => $direction) {
                 $query->addOrderBy('w.'.$field, $direction);
             }
+        } else {
+            $query->addOrderBy('w.id', 'ASC');
         }
 
         $query

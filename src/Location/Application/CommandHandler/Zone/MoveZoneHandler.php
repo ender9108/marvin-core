@@ -3,19 +3,22 @@
 namespace Marvin\Location\Application\CommandHandler\Zone;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
-use Marvin\Location\Domain\ValueObject\ZonePath;
 use Marvin\Location\Application\Command\Zone\MoveZone;
 use Marvin\Location\Domain\Exception\InvalidZoneHierarchy;
 use Marvin\Location\Domain\Model\Zone;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
+use Marvin\Location\Domain\ValueObject\ZonePath;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+#[AsMessageHandler]
 final readonly class MoveZoneHandler implements SyncCommandHandlerInterface
 {
     public function __construct(
         private ZoneRepositoryInterface $zoneRepository,
         private LoggerInterface $logger,
-    ) {}
+    ) {
+    }
 
     public function __invoke(MoveZone $command): string
     {
@@ -26,9 +29,9 @@ final readonly class MoveZoneHandler implements SyncCommandHandlerInterface
         }
 
         $newParentZone = null;
-        $newParentZoneId = null;
 
         if ($command->newParentZoneId !== null) {
+            /** @var Zone $newParentZone */
             $newParentZone = $this->zoneRepository->byId($command->newParentZoneId);
 
             if (!$newParentZone->type->canHaveChildren()) {
@@ -38,19 +41,14 @@ final readonly class MoveZoneHandler implements SyncCommandHandlerInterface
                 );
             }
 
-            /** @var Zone[] $descendants */
-            $descendants = $this->zoneRepository->getDescendants($zone->id);
-
-            foreach ($descendants as $descendant) {
-                if ($descendant->id->equals($command->newParentZoneId)) {
+            foreach ($zone->childrens as $children) {
+                if ($children->id->equals($command->newParentZoneId)) {
                     throw InvalidZoneHierarchy::circularReference($zone->label);
                 }
             }
-
-            $newParentZoneId = $newParentZone->id;
         }
 
-        $zone->moveToParent($newParentZoneId);
+        $zone->moveToParent($newParentZone);
 
         if ($newParentZone !== null) {
             $newPath = $newParentZone->path->append($zone->label);
@@ -65,4 +63,3 @@ final readonly class MoveZoneHandler implements SyncCommandHandlerInterface
         return $command->zoneId;
     }
 }
-

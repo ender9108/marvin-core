@@ -13,7 +13,8 @@ final readonly class ZoneCreated implements DomainEventInterface
         public string $type,
         public ?string $parentZoneId,
         public DateTimeImmutable $occurredAt = new DateTimeImmutable(),
-    ) {}
+    ) {
+    }
 
     public function getOccurredAt(): DateTimeImmutable
     {

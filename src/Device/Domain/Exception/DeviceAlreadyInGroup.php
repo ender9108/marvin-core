@@ -41,16 +41,16 @@ final class DeviceAlreadyInGroup extends DomainException implements Translatable
     public static function withDevices(array $devices, array $existingGroups): self
     {
         $deviceNames = array_map(
-            fn(Device $d) => $d->label->value,
+            fn (Device $d) => $d->label->value,
             $devices
         );
         $groupNames = array_map(
-            fn(Device $d) => $d->label->value,
+            fn (Device $d) => $d->label->value,
             $devices
         );
 
         $infos = array_map(
-            fn(Device $device) => [
+            fn (Device $device) => [
                 'deviceName' => $device->label->value,
                 'deviceId' => $device->id->toString(),
                 'groupName' => '@todo',
@@ -77,11 +77,11 @@ final class DeviceAlreadyInGroup extends DomainException implements Translatable
     public function translationParameters(): array
     {
         $deviceNames = array_map(
-            fn(array $deviceInfos) => $deviceInfos['deviceName'] ?? 'unknown',
+            fn (array $deviceInfos) => $deviceInfos['deviceName'] ?? 'unknown',
             $this->infos
         );
         $deviceIds = array_map(
-            fn(array $deviceInfos) => $deviceInfos['deviceId'] ?? 'unknown',
+            fn (array $deviceInfos) => $deviceInfos['deviceId'] ?? 'unknown',
             $this->infos
         );
 

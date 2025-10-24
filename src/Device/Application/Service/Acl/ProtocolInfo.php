@@ -13,5 +13,6 @@ final readonly class ProtocolInfo
         public bool $isEnabled,
         public ?string $status = null,
         public ?array $metadata = null
-    ) {}
+    ) {
+    }
 }

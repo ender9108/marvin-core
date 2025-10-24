@@ -5,7 +5,7 @@ namespace Marvin\Location\Infrastructure\Framework\Symfony\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Story\LocationStory;
+use Marvin\Location\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Story\LocationStory;
 
 class LocationFixtures extends Fixture implements OrderedFixtureInterface
 {

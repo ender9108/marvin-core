@@ -2,7 +2,6 @@
 
 namespace Marvin\Location\Infrastructure\Persistence\Doctrine\ORM;
 
-use Marvin\Location\Domain\ValueObject\ZoneType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -12,6 +11,7 @@ use EnderLab\DddCqrsBundle\Infrastructure\Persistence\Doctrine\ORM\PaginatorOrm;
 use Marvin\Location\Domain\Exception\ZoneNotFound;
 use Marvin\Location\Domain\Model\Zone;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
+use Marvin\Location\Domain\ValueObject\ZoneType;
 use Marvin\Location\Infrastructure\Persistence\Doctrine\Cache\LocationCacheKeys;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Marvin\Shared\Domain\ValueObject\Label;
@@ -48,12 +48,23 @@ class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRepositor
         return $zone;
     }
 
-    public function byLabel(Label $label): Zone
+    public function byLabel(Label $label): ?Zone
     {
         return $this
             ->createQueryBuilder('z')
-            ->where('z.name.value = :name')
-            ->setParameter('name', $label)
+            ->where('z.label.value = :label')
+            ->setParameter('label', $label)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function bySlug(string $slug): ?Zone
+    {
+        return $this
+            ->createQueryBuilder('z')
+            ->where('z.slug = :slug')
+            ->setParameter('slug', $slug)
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -70,12 +81,14 @@ class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRepositor
 
     public function byType(ZoneType $type): array
     {
-        return $this->createQueryBuilder('z')
+        return $this
+            ->createQueryBuilder('z')
             ->where('z.type = :type')
             ->setParameter('type', $type)
-            ->orderBy('z.name.value', 'ASC')
+            ->orderBy('z.label.value', 'ASC')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     public function byParentZoneId(?ZoneId $parentZoneId): array
@@ -83,15 +96,15 @@ class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRepositor
         $qb = $this->createQueryBuilder('z');
 
         if ($parentZoneId === null) {
-            $qb->where('z.parentZoneId IS NULL');
+            $qb->where('z.parent IS NULL');
         } else {
             $qb
-                ->where('z.parentZoneId = :parentZoneId')
+                ->where('z.parent = :parentZoneId')
                 ->setParameter('parentZoneId', $parentZoneId)
             ;
         }
 
-        return $qb->orderBy('z.name.value', 'ASC')
+        return $qb->orderBy('z.label.value', 'ASC')
             ->getQuery()
             ->getResult()
         ;
@@ -111,7 +124,7 @@ class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRepositor
     {
         return (int) $this->createQueryBuilder('z')
             ->select('COUNT(z.id)')
-            ->where('z.parentZoneId = :zoneId')
+            ->where('z.parent = :zoneId')
             ->setParameter('zoneId', $zoneId)
             ->getQuery()
             ->getSingleScalarResult();
@@ -151,20 +164,31 @@ class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRepositor
             ->setCacheRegion(LocationCacheKeys::ZONE_LIST->value)
         ;
 
-        /*if (!empty($filters)) {
+        if (!empty($filters)) {
             foreach ($filters as $field => $value) {
                 switch ($field) {
-
+                    case 'type':
+                        $query
+                            ->andWhere('z.type = :type')
+                            ->setParameter('type', $value)
+                        ;
+                        break;
+                    case 'parent':
+                        $query
+                            ->andWhere('z.parent = :parent')
+                            ->setParameter('parent', $value)
+                        ;
+                        break;
                 }
             }
-        }*/
+        }
 
         if (!empty($orderBy)) {
             foreach ($orderBy as $field => $direction) {
                 $query->addOrderBy('z.'.$field, $direction);
             }
         } else {
-            $query->orderBy('z.name', 'ASC');
+            $query->orderBy('z.label.value', 'ASC');
         }
 
         $query

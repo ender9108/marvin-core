@@ -14,7 +14,8 @@ final readonly class AssignDeviceToZoneHandler implements SyncCommandHandlerInte
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository,
         private LoggerInterface $logger
-    ) {}
+    ) {
+    }
 
     public function __invoke(AssignDeviceToZone $command): void
     {

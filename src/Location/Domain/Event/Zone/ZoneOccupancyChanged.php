@@ -11,7 +11,8 @@ final readonly class ZoneOccupancyChanged implements DomainEventInterface
         public string $zoneId,
         public bool $isOccupied,
         public DateTimeImmutable $occurredAt = new DateTimeImmutable(),
-    ) {}
+    ) {
+    }
 
     public function getOccurredAt(): DateTimeImmutable
     {

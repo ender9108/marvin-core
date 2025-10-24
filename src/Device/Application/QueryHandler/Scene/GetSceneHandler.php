@@ -15,11 +15,11 @@ final readonly class GetSceneHandler implements QueryHandlerInterface
 {
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository
-    ) {}
+    ) {
+    }
 
     public function __invoke(GetScene $query): Device
     {
         return $this->deviceRepository->getSceneById($query->sceneId);
     }
 }
-

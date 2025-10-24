@@ -6,10 +6,10 @@ use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Device\Application\Command\Group\CreateGroup;
 use Marvin\Device\Domain\Exception\CompositeDeviceNotAllowedInGroup;
 use Marvin\Device\Domain\Exception\DeviceAlreadyInGroup;
+use Marvin\Device\Domain\Model\Device;
 use Marvin\Device\Domain\Repository\DeviceRepositoryInterface;
 use Marvin\Device\Domain\Service\ProtocolGroupingServiceInterface;
 use Marvin\Device\Domain\ValueObject\CompositeStrategy;
-use Marvin\Device\Domain\Model\Device;
 use Marvin\Device\Domain\ValueObject\DeviceStatus;
 use Marvin\Device\Domain\ValueObject\DeviceType;
 use Marvin\Device\Domain\ValueObject\NativeGroupInfo;
@@ -27,7 +27,8 @@ final readonly class CreateGroupHandler implements SyncCommandHandlerInterface
         private DeviceRepositoryInterface $deviceRepository,
         private ProtocolGroupingServiceInterface $protocolGroupingService,
         private LoggerInterface $logger,
-    ) {}
+    ) {
+    }
 
     public function __invoke(CreateGroup $command): void
     {
@@ -43,7 +44,7 @@ final readonly class CreateGroupHandler implements SyncCommandHandlerInterface
         $grouping = $this->protocolGroupingService->analyzeDevicesForGrouping($devices);
 
         $this->logger->debug('Protocol grouping analysis', [
-            'native_groups' => array_map(fn($d) => count($d), $grouping['native_groups']),
+            'native_groups' => array_map(fn ($d) => count($d), $grouping['native_groups']),
             'individual_devices' => count($grouping['individual_devices']),
         ]);
 
@@ -206,4 +207,3 @@ final readonly class CreateGroupHandler implements SyncCommandHandlerInterface
         return $composite;
     }
 }
-

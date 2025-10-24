@@ -2,51 +2,56 @@
 
 namespace EnderLab\DddCqrsMakerBundle\Maker;
 
-use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Bundle\MakerBundle\ConsoleStyle;
+use Symfony\Bundle\MakerBundle\DependencyBuilder;
+use Symfony\Bundle\MakerBundle\Generator;
+use Symfony\Bundle\MakerBundle\InputConfiguration;
+use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
-#[AsCommand(
-    name: 'make:fixture',
-    description: 'Crée une DataFixture avec Foundry Factory',
-)]
-class MakeFixtureCommand extends Command
+class MakeFixtureCommand extends AbstractMaker
 {
     private Filesystem $filesystem;
 
     public function __construct(private readonly string $projectDir)
     {
-        parent::__construct();
         $this->filesystem = new Filesystem();
     }
 
-    protected function configure(): void
+    public static function getCommandName(): string
     {
-        $this
+        return 'make:fixture';
+    }
+
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
+    {
+        $command
+            ->setDescription('Crée une DataFixture avec Foundry Factory')
             ->addArgument('context', InputArgument::OPTIONAL, 'Nom du bounded context')
             ->addArgument('model', InputArgument::OPTIONAL, 'Nom du model');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    public function configureDependencies(DependencyBuilder $dependencies): void
     {
-        $io = new SymfonyStyle($input, $output);
+    }
 
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
+    {
         $io->title('Générateur de Fixture & Factory Foundry');
 
         $context = $this->askContext($io, $input);
         if (!$context) {
-            return Command::FAILURE;
+            return;
         }
 
         $modelName = $this->askModelName($io, $input);
         if (!$modelName) {
-            return Command::FAILURE;
+            return;
         }
 
         $io->section('Configuration de la Factory');
@@ -60,7 +65,7 @@ class MakeFixtureCommand extends Command
 
         if (!$io->confirm('Générer la Factory et la Fixture ?', true)) {
             $io->warning('Génération annulée');
-            return Command::SUCCESS;
+            return;
         }
 
         try {
@@ -85,16 +90,12 @@ class MakeFixtureCommand extends Command
                 "// Charger les fixtures",
                 "php bin/console doctrine:fixtures:load",
             ]);
-
-            return Command::SUCCESS;
-
         } catch (\Exception $e) {
             $io->error('Erreur lors de la génération : ' . $e->getMessage());
-            return Command::FAILURE;
         }
     }
 
-    private function askContext(SymfonyStyle $io, InputInterface $input): ?string
+    private function askContext(ConsoleStyle $io, InputInterface $input): ?string
     {
         $context = $input->getArgument('context');
 
@@ -112,7 +113,7 @@ class MakeFixtureCommand extends Command
         return $context;
     }
 
-    private function askModelName(SymfonyStyle $io, InputInterface $input): ?string
+    private function askModelName(ConsoleStyle $io, InputInterface $input): ?string
     {
         $modelName = $input->getArgument('model');
 
@@ -123,7 +124,7 @@ class MakeFixtureCommand extends Command
         return $modelName;
     }
 
-    private function askNamedStates(SymfonyStyle $io): array
+    private function askNamedStates(ConsoleStyle $io): array
     {
         $states = [];
 

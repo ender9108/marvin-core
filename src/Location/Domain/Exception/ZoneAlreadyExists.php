@@ -9,15 +9,17 @@ final class ZoneAlreadyExists extends DomainException implements TranslatableExc
 {
     public function __construct(
         string $message,
+        string $code,
         public readonly ?string $label = null,
     ) {
-        parent::__construct($message);
+        parent::__construct($message, $code);
     }
 
     public static function withLabel(string $label): self
     {
         return new self(
             sprintf('Zone with name %s already exists', $label),
+            'Z00005',
             $label,
         );
     }

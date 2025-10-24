@@ -5,17 +5,17 @@ namespace Marvin\System\Presentation\Cli;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
-use EnderLab\MarvinManagerBundle\Reference\ManagerActionReference;
+use EnderLab\MarvinManagerBundle\Reference\ManagerContainerActionReference;
 use Marvin\Shared\Domain\ValueObject\Identity\UniqId;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
 use Marvin\System\Application\Command\Container\BuildContainer;
 use Marvin\System\Application\Command\Container\ExecContainerCommand;
+use Marvin\System\Application\Command\Container\RestartAllContainer;
 use Marvin\System\Application\Command\Container\RestartContainer;
 use Marvin\System\Application\Command\Container\StartContainer;
 use Marvin\System\Application\Command\Container\StopContainer;
 use Marvin\System\Domain\Exception\ActionNotAllowed;
 use Marvin\System\Domain\ValueObject\Identity\ContainerId;
-use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
@@ -47,16 +47,17 @@ final readonly class SendContainerCommand
         int $timeout = 10,
     ): int {
         try {
-            Assert::inArray($action, ManagerActionReference::values());
+            Assert::inArray($action, ManagerContainerActionReference::values());
 
             $containerId = new ContainerId($id);
             $correlationId = new UniqId();
             $command = match ($action) {
-                ManagerActionReference::ACTION_START->value => new StartContainer($containerId, $correlationId, $timeout),
-                ManagerActionReference::ACTION_STOP->value => new StopContainer($containerId, $correlationId, $timeout),
-                ManagerActionReference::ACTION_RESTART->value => new RestartContainer($containerId, $correlationId, $timeout),
-                ManagerActionReference::ACTION_BUILD->value => new BuildContainer($containerId, $correlationId, $timeout),
-                ManagerActionReference::ACTION_EXEC_CMD->value => new ExecContainerCommand(
+                ManagerContainerActionReference::ACTION_START->value => new StartContainer($containerId, $correlationId, $timeout),
+                ManagerContainerActionReference::ACTION_STOP->value => new StopContainer($containerId, $correlationId, $timeout),
+                ManagerContainerActionReference::ACTION_RESTART->value => new RestartContainer($containerId, $correlationId, $timeout),
+                ManagerContainerActionReference::ACTION_RESTART_ALL->value => new RestartAllContainer($containerId, $correlationId, $timeout),
+                ManagerContainerActionReference::ACTION_BUILD->value => new BuildContainer($containerId, $correlationId, $timeout),
+                ManagerContainerActionReference::ACTION_EXEC_CMD->value => new ExecContainerCommand(
                     $containerId,
                     $correlationId,
                     $timeout,

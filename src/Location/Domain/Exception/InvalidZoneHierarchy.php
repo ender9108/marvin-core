@@ -2,9 +2,9 @@
 
 namespace Marvin\Location\Domain\Exception;
 
-use Marvin\Location\Domain\ValueObject\ZoneType;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
+use Marvin\Location\Domain\ValueObject\ZoneType;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Marvin\Shared\Domain\ValueObject\Label;
 
@@ -12,18 +12,20 @@ final class InvalidZoneHierarchy extends DomainException implements Translatable
 {
     public function __construct(
         string $message,
+        string $code,
         public readonly ?string $label = null,
         public readonly ?string $type = null,
         public readonly ?string $parentId = null,
         public readonly ?int $childrenCount = null,
     ) {
-        parent::__construct($message);
+        parent::__construct($message, $code);
     }
 
     public static function cannotHaveChildren(Label $label, ZoneType $type): self
     {
         return new self(
             sprintf('Zone %s of type %s cannot have children', $label, $type->value),
+            'Z00001',
             $label,
             $type->name,
         );
@@ -33,6 +35,7 @@ final class InvalidZoneHierarchy extends DomainException implements Translatable
     {
         return new self(
             sprintf('Cannot create circular reference: zone % cannot be its own parent', $label),
+            'Z00002',
             $label
         );
     }
@@ -41,6 +44,7 @@ final class InvalidZoneHierarchy extends DomainException implements Translatable
     {
         return new self(
             sprintf('Parent zone with id %s not found', $parentId),
+            'Z00003',
             null,
             null,
             $parentId,
@@ -51,6 +55,7 @@ final class InvalidZoneHierarchy extends DomainException implements Translatable
     {
         return new self(
             sprintf('Cannot delete zone %s because it has %d children', $label, $childrenCount),
+            'Z00004',
             $label,
             null,
             null,

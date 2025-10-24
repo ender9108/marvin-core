@@ -9,5 +9,6 @@ final readonly class GetZoneHierarchy implements QueryInterface
 {
     public function __construct(
         public ?ZoneId $rootZoneId = null,
-    ) {}
+    ) {
+    }
 }

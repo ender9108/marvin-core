@@ -2,7 +2,14 @@
 
 namespace Marvin\Location\Domain\Model;
 
+use DateTimeImmutable;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use EnderLab\DddCqrsBundle\Domain\Model\AggregateRoot;
+use Marvin\Location\Domain\Event\Zone\ZoneDeleted;
+use Marvin\Location\Domain\Event\Zone\ZoneOccupancyChanged;
+use Marvin\Location\Domain\Event\Zone\ZoneTemperatureUpdated;
 use Marvin\Location\Domain\ValueObject\HexaColor;
 use Marvin\Location\Domain\ValueObject\Orientation;
 use Marvin\Location\Domain\ValueObject\SurfaceArea;
@@ -10,10 +17,7 @@ use Marvin\Location\Domain\ValueObject\TargetPowerConsumption;
 use Marvin\Location\Domain\ValueObject\TargetTemperature;
 use Marvin\Location\Domain\ValueObject\ZonePath;
 use Marvin\Location\Domain\ValueObject\ZoneType;
-use DateTimeImmutable;
-use EnderLab\DddCqrsBundle\Domain\Model\AggregateRoot;
-use Marvin\Location\Domain\Event\Zone\ZoneOccupancyChanged;
-use Marvin\Location\Domain\Event\Zone\ZoneTemperatureUpdated;
+use Marvin\Shared\Domain\Service\SluggerInterface;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\Metadata;
@@ -32,23 +36,38 @@ class Zone extends AggregateRoot
 
     private(set) ?int $consecutiveNoMotionCount = null;
 
-    private(set) ?DateTimeImmutable $lastMetricsUpdate = null;
+    private(set) ?DateTimeInterface $lastMetricsUpdate = null;
+
+    private(set) Collection $childrens;
+
+    private(set) ?Zone $parent = null;
+
+    private(set) ?Label $label = null;
+
+    private(set) ?string $slug = null;
 
     public function __construct(
-        private(set) Label $label,
         public readonly ZoneType $type,
         private(set) ?TargetTemperature $targetTemperature = null,
         private(set) ?TargetPowerConsumption $targetPowerConsumption = null,
         private(set) ?string $icon = null,
-        private(set) ?ZoneId $parentZoneId = null,
         private(set) ?SurfaceArea $surfaceArea = null,
         private(set) ?Orientation $orientation = null,
         private(set) ?HexaColor $color = null,
         public readonly ?Metadata $metadata = null,
-        private(set) ?DateTimeInterface $updatedAt = null,
+        public ?DateTimeInterface $updatedAt = null,
         public readonly DateTimeInterface $createdAt = new DateTimeImmutable(),
     ) {
         $this->id = new ZoneId();
+        $this->childrens = new ArrayCollection();
+    }
+
+    public function delete(): void
+    {
+        $this->recordThat(new ZoneDeleted(
+            $this->id->toString(),
+            $this->label->value,
+        ));
     }
 
     public function updateAverageTemperature(?float $temperature): void
@@ -56,7 +75,6 @@ class Zone extends AggregateRoot
         $oldTemp = $this->currentTemperature;
         $this->currentTemperature = $temperature !== null ? round($temperature, 1) : null;
         $this->lastMetricsUpdate = new DateTimeImmutable();
-        $this->updatedAt = new DateTimeImmutable();
 
         if ($oldTemp !== null && $temperature !== null && abs($oldTemp - $temperature) >= 0.5) {
             $this->recordThat(new ZoneTemperatureUpdated(
@@ -72,7 +90,6 @@ class Zone extends AggregateRoot
     {
         $this->currentPowerConsumption = round($consumption, 2);
         $this->lastMetricsUpdate = new DateTimeImmutable();
-        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function markAsOccupied(): void
@@ -81,7 +98,6 @@ class Zone extends AggregateRoot
         $this->isOccupied = true;
         $this->consecutiveNoMotionCount = 0;
         $this->lastMetricsUpdate = new DateTimeImmutable();
-        $this->updatedAt = new DateTimeImmutable();
 
         if (!$wasOccupied) {
             $this->recordThat(new ZoneOccupancyChanged(
@@ -105,7 +121,6 @@ class Zone extends AggregateRoot
     private function markAsUnoccupied(): void
     {
         $this->isOccupied = false;
-        $this->updatedAt = new DateTimeImmutable();
 
         $this->recordThat(new ZoneOccupancyChanged(
             zoneId: $this->id,
@@ -149,11 +164,17 @@ class Zone extends AggregateRoot
         return $this->currentTemperature > $this->targetTemperature + 0.5;
     }
 
-    public function updateLabel(Label $label): void
+    public function updateLabel(Label $label, ?SluggerInterface $slugger = null): void
     {
+        $oldLabel = $this->label?->value;
         $this->label = $label;
 
-        $this->updatedAt = new DateTimeImmutable();
+        if (
+            $slugger !== null &&
+            $oldLabel !== $label->value
+        ) {
+            $this->slug = $slugger->slugify($label->value);
+        }
     }
 
     public function updateConfiguration(
@@ -164,37 +185,69 @@ class Zone extends AggregateRoot
         ?string $icon = null,
         ?HexaColor $color = null,
     ): void {
-        if ($surfaceArea !== null) $this->surfaceArea = $surfaceArea;
-        if ($orientation !== null) $this->orientation = $orientation;
-        if ($targetTemperature !== null) $this->targetTemperature = $targetTemperature;
-        if ($targetPowerConsumption !== null) $this->targetPowerConsumption = $targetPowerConsumption;
-        if ($icon !== null) $this->icon = $icon;
-        if ($color !== null) $this->color = $color;
-
-        $this->updatedAt = new DateTimeImmutable();
+        if ($surfaceArea !== null) {
+            $this->surfaceArea = $surfaceArea;
+        }
+        if ($orientation !== null) {
+            $this->orientation = $orientation;
+        }
+        if ($targetTemperature !== null) {
+            $this->targetTemperature = $targetTemperature;
+        }
+        if ($targetPowerConsumption !== null) {
+            $this->targetPowerConsumption = $targetPowerConsumption;
+        }
+        if ($icon !== null) {
+            $this->icon = $icon;
+        }
+        if ($color !== null) {
+            $this->color = $color;
+        }
     }
 
     public function updatePath(ZonePath $path): void
     {
         $this->path = $path;
-
-        $this->updatedAt = new DateTimeImmutable();
     }
 
-    public function moveToParent(?ZoneId $newParentZoneId): void
+    public function moveToParent(?Zone $parentZone = null): self
     {
-        $this->parentZoneId = $newParentZoneId;
+        if (null === $parentZone) {
+            $parentZone->removeChildren($this);
+        }
 
-        $this->updatedAt = new DateTimeImmutable();
+        $this->parent = $parentZone;
+
+        $this->updatePath($parentZone->path->append($this->slug));
+
+        return $this;
+    }
+
+    public function addChildren(Zone $children): self
+    {
+        if (!$this->childrens->contains($children)) {
+            $this->childrens->add($children);
+            $children->moveToParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChildren(Zone $children): self
+    {
+        if ($this->childrens->contains($children)) {
+            $this->childrens->removeElement($children);
+            $children->moveToParent(null);
+        }
     }
 
     public function hasParent(): bool
     {
-        return $this->parentZoneId !== null;
+        return $this->parent !== null;
     }
 
-    public function isChildOf(ZoneId $potentialParentId): bool
+    public function isChildOf(Zone $potentialParent): bool
     {
-        return $this->parentZoneId !== null && $this->parentZoneId->equals($potentialParentId);
+        return $potentialParent->childrens->contains($this);
     }
 }

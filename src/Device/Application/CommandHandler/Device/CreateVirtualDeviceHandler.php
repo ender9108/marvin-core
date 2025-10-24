@@ -10,9 +10,9 @@ use Marvin\Device\Domain\Exception\InvalidVirtualConfig;
 use Marvin\Device\Domain\Model\Device;
 use Marvin\Device\Domain\Model\DeviceCapability;
 use Marvin\Device\Domain\Repository\DeviceRepositoryInterface;
-use Marvin\Device\Domain\ValueObject\CapabilityType;
+use Marvin\Device\Domain\ValueObject\VirtualDeviceConfig;
 use Marvin\Device\Domain\ValueObject\VirtualDeviceType;
-use Marvin\Shared\Domain\ValueObject\Description;
+use Marvin\Shared\Domain\Application;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Psr\Log\LoggerInterface;
@@ -24,42 +24,29 @@ final readonly class CreateVirtualDeviceHandler implements SyncCommandHandlerInt
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository,
         private LoggerInterface $logger
-    ) {}
+    ) {
+    }
 
     public function __invoke(CreateVirtualDevice $command): Device
     {
         $this->logger->info('Creating virtual device', [
             'label' => $command->label,
-            'virtualType' => $command->virtualType,
+            'virtualType' => $command->virtualDeviceType->value,
         ]);
 
-        $virtualType = $command->virtualType;
+        $this->validateVirtualConfig($command->virtualDeviceType, $command->virtualDeviceConfig);
 
-        // Valider la configuration selon le type
-        $this->validateVirtualConfig($virtualType, $command->virtualConfig);
-
-        // Créer le device virtuel
         $device = Device::createVirtual(
             label: new Label($command->label),
-            virtualType: $virtualType,
-            virtualConfig: $command->virtualConfig
+            virtualDeviceType: $command->virtualDeviceType,
+            virtualDeviceConfig: $command->virtualDeviceConfig
         );
 
-        // Ajouter les capabilities
-        foreach ($command->capabilities as $capabilityData) {
-            $capability = new DeviceCapability(
-                label: new Label($capabilityData['label']),
-                type: CapabilityType::from($capabilityData['type']),
-                supportedActions: $capabilityData['actions'] ?? [],
-                supportedStates: $capabilityData['states'] ?? [],
-                description: isset($capabilityData['description'])
-                    ? new Description($capabilityData['description'])
-                    : null
-            );
+        /** @var DeviceCapability $capability */
+        foreach ($command->capabilities as $capability) {
             $device->addCapability($capability);
         }
 
-        // Assigner à une zone si spécifié
         if ($command->zoneId !== null) {
             $device->assignToZone(new ZoneId($command->zoneId));
         }
@@ -69,13 +56,13 @@ final readonly class CreateVirtualDeviceHandler implements SyncCommandHandlerInt
         $this->logger->info('Virtual device created', [
             'deviceId' => $device->id->toString(),
             'name' => $device->label->value,
-            'virtualType' => $virtualType->value,
+            'virtualType' => $command->virtualDeviceType->value,
         ]);
 
         return $device;
     }
 
-    private function validateVirtualConfig(VirtualDeviceType $type, array $config): void
+    private function validateVirtualConfig(VirtualDeviceType $type, VirtualDeviceConfig $config): void
     {
         // Validation spécifique selon le type
         match ($type) {
@@ -87,34 +74,36 @@ final readonly class CreateVirtualDeviceHandler implements SyncCommandHandlerInt
         };
     }
 
-    private function validateWeatherConfig(array $config): void
+    private function validateWeatherConfig(VirtualDeviceConfig $config): void
     {
-        Assert::keyExists($config, 'api_provider');
-        Assert::keyExists($config, 'location');
-        Assert::inArray($config['api_provider'], ['openweathermap', 'weatherapi', 'meteofrance']);
+        Assert::true(
+            $config->has('api_provider') &&
+            $config->has('location')
+        );
+        Assert::inArray($config->get('api_provider'), Application::APP_WEATHER_PRIVIDER_AVAILABLES);
     }
 
-    private function validateTimeConfig(array $config): void
+    private function validateTimeConfig(VirtualDeviceConfig $config): void
     {
-        Assert::keyExists($config, 'timezone');
-        Assert::inArray($config['timezone'], DateTimeZone::listIdentifiers());
+        Assert::true($config->has('timezone'));
+        Assert::inArray($config->get('timezone'), DateTimeZone::listIdentifiers());
     }
 
-    private function validateHttpConfig(array $config): void
+    private function validateHttpConfig(VirtualDeviceConfig $config): void
     {
-        Assert::keyExists($config, 'url');
+        Assert::true($config->has('url'));
 
-        if (!filter_var($config['url'], FILTER_VALIDATE_URL)) {
-            throw InvalidVirtualConfig::invalidValue('url', $config['url']);
+        if (!filter_var($config->get('url'), FILTER_VALIDATE_URL)) {
+            throw InvalidVirtualConfig::invalidValue('url', $config->get('url'));
         }
 
-        Assert::keyExists($config, 'method');
-        Assert::inArray($config['method'], ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']);
+        Assert::true($config->has('method'));
+        Assert::inArray($config->get('method'), ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']);
     }
 
-    private function validateVariableConfig(array $config): void
+    private function validateVariableConfig(VirtualDeviceConfig $config): void
     {
-        Assert::keyExists($config, 'type');
-        Assert::inArray($config['type'], ['string', 'number', 'boolean', 'json']);
+        Assert::true($config->has('type'));
+        Assert::inArray($config->get('type'), ['string', 'number', 'boolean', 'json']);
     }
 }

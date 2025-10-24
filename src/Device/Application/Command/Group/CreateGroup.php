@@ -17,5 +17,6 @@ final readonly class CreateGroup implements SyncCommandInterface
         public array $deviceIds,
         public ?ZoneId $zoneId = null,
         public ?Metadata $metadata = null,
-    ) {}
+    ) {
+    }
 }

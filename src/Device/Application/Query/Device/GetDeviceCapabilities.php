@@ -9,5 +9,6 @@ final readonly class GetDeviceCapabilities implements QueryInterface
 {
     public function __construct(
         public DeviceId $deviceId
-    ) {}
+    ) {
+    }
 }

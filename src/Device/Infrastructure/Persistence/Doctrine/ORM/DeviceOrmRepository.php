@@ -54,7 +54,7 @@ class DeviceOrmRepository extends ServiceEntityRepository implements DeviceRepos
 
         // Convertir les strings en DeviceId
         $deviceIdObjects = array_map(
-            fn(string $id) => DeviceId::fromString($id),
+            fn (string $id) => DeviceId::fromString($id),
             $deviceIds
         );
 
@@ -156,7 +156,7 @@ class DeviceOrmRepository extends ServiceEntityRepository implements DeviceRepos
 
         // Récupérer ses children
         $childIds = array_map(
-            fn(DeviceId $id) => $id->toString(),
+            fn (DeviceId $id) => $id->toString(),
             $composite->getChildDeviceIds()
         );
 

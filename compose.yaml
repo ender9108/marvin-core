@@ -14,12 +14,11 @@ services:
             MERCURE_JWT_SECRET: '${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}'
             SYMFONY_VERSION: '${SYMFONY_VERSION:-}'
             STABILITY: '${STABILITY:-stable}'
-            UNIX_UID: '${UID-1000}'
-            UNIX_GID: '${GID-1000}'
+            UNIX_UID: '${UID:-1000}'
+            UNIX_GID: '${GID:-1000}'
         volumes:
-            - './:/app'
-            - './docker/frankenphp/volume/caddy/data:/data:rw'
-            - './docker/frankenphp/volume/caddy/config:/config:rw'
+            - ./:/app
+            - caddy_datas:/data:rw
         ports:
             - target: 80
               published: '${HTTP_PORT:-8000}'
@@ -37,18 +36,22 @@ services:
     worker:
         build:
             dockerfile: ./docker/worker/Dockerfile
+            args:
+                UNIX_UID: '${UID:-1000}'
+                UNIX_GID: '${GID:-1000}'
         container_name: '${APP_NAME}-worker'
         ports:
             - '127.0.0.1:9001:9001'
         environment:
-            UNIX_UID: '${UNIX_UID-1000}'
-            UNIX_GID: '${UNIX_GID-1000}'
+            UNIX_UID: '${UID:-1000}'
+            UNIX_GID: '${GID:-1000}'
         volumes:
             - ./:/app
-            - ./docker/worker/config/supervisord.conf:/etc/supervisor/supervisord.conf
             - ./docker/worker/config/conf.d:/etc/supervisor/conf.d
         depends_on:
             database:
+                condition: service_healthy
+            php:
                 condition: service_healthy
             mqtt_broker:
                 condition: service_started
@@ -63,37 +66,12 @@ services:
         ports:
             - '127.0.0.1:5432:5432'
         volumes:
-            - ./docker/database/volume/data:/var/lib/postgresql/data
-            - ./docker/database/config/00-timescale.sql:/docker-entrypoint-initdb.d/00-timescale.sql:ro
-            - ./docker/database/config/10-logs-and-metrics.sql:/docker-entrypoint-initdb.d/10-logs-and-metrics.sql:ro
-            - ./docker/database/config/20-retention-cron.sql:/docker-entrypoint-initdb.d/20-retention-cron.sql:ro
+            - database_datas:/var/lib/postgresql/data
         healthcheck:
             test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
             interval: 10s
             timeout: 5s
             retries: 10
-    
-    #rabbitmq:
-    #    build:
-    #        dockerfile: docker/rabbitmq/Dockerfile
-    #    container_name: '${APP_NAME}-rabbitmq'
-    #    environment:
-    #        RABBITMQ_USER: '${RABBITMQ_USER:-marvin}'
-    #        RABBITMQ_PASSWORD: '${RABBITMQ_PASSWORD:-PasswordChangeMe!}'
-    #        RABBITMQ_MQTT_USER: '${RABBITMQ_MQTT_USER:-marvin}'
-    #        RABBITMQ_MQTT_PASSWORD: '${RABBITMQ_MQTT_PASSWORD:-PasswordChangeMe!}'
-    #    ports:
-    #        - '127.0.0.1:15672:15672'
-    #        - '127.0.0.1:5672:5672'
-    #    volumes:
-    #        - ./docker/rabbitmq/config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
-    #        - ./docker/rabbitmq/config/definitions.json:/etc/rabbitmq/definitions.json
-    #        - ./docker/rabbitmq/volume/data:/var/lib/rabbitmq/mnesia
-    #    healthcheck:
-    #        test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
-    #        interval: 10s
-    #        timeout: 5s
-    #        retries: 10
 
     mqtt_broker:
         image: eclipse-mosquitto:2
@@ -101,17 +79,21 @@ services:
         restart: unless-stopped
         volumes:
             - ./docker/mqtt_broker/config:/mosquitto/config
-            - ./docker/mqtt_broker/volume/data:/mosquitto/data
-            - ./docker/mqtt_broker/volume/log:/mosquitto/log
+            - mqtt_broker_datas:/mosquitto/data
+            - mqtt_broker_logs:/mosquitto/log
         ports:
             - "127.0.0.1:1883:1883"
             - "127.0.0.1:9002:9001"
 
     #zigbee2mqtt:
+    #    build:
+    #        dockerfile: ./docker/zigbee2mqtt/Dockerfile
     #    container_name: ${APP_NAME}-zigbee2mqtt
     #    restart: unless-stopped
-    #    image: koenkk/zigbee2mqtt
-    #    user: '${UID-1000}:${GID-1000}'
+    #    #image: koenkk/zigbee2mqtt
+    #    environment:
+    #        UNIX_UID: '${UID:-1000}'
+    #        UNIX_GID: '${GID:-1000}'
     #    group_add:
     #        - dialout
     #    volumes:
@@ -123,3 +105,9 @@ services:
     #        - /dev/ttyACM0:/dev/ttyUSB0
     #    depends_on:
     #        - mqtt_broker
+
+volumes:
+    database_datas: {}
+    mqtt_broker_datas: {}
+    mqtt_broker_logs: {}
+    caddy_datas: {}

@@ -13,5 +13,6 @@ final readonly class UpdateGroupMembers implements SyncCommandInterface
         public array $deviceIdsToAdd = [],
         /** array<int, DeviceId> */
         public array $deviceIdsToRemove = []
-    ) {}
+    ) {
+    }
 }

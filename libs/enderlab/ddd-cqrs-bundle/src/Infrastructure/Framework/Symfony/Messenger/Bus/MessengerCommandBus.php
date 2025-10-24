@@ -21,7 +21,7 @@ final readonly class MessengerCommandBus implements CommandBusInterface
     {
         $this->messageBus->dispatch(
             $command,
-            [new BusNameStamp('command')]
+            [new BusNameStamp('commands')]
         );
     }
 }

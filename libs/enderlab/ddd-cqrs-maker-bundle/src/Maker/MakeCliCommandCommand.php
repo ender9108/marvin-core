@@ -2,51 +2,57 @@
 
 namespace EnderLab\DddCqrsMakerBundle\Maker;
 
-use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Bundle\MakerBundle\ConsoleStyle;
+use Symfony\Bundle\MakerBundle\DependencyBuilder;
+use Symfony\Bundle\MakerBundle\Generator;
+use Symfony\Bundle\MakerBundle\InputConfiguration;
+use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
-#[AsCommand(
-    name: 'make:cli-command',
-    description: 'Crée une commande Symfony CLI qui utilise Commands/Queries',
-)]
-class MakeCliCommandCommand extends Command
+class MakeCliCommandCommand extends AbstractMaker
 {
     private Filesystem $filesystem;
 
     public function __construct(private readonly string $projectDir)
     {
-        parent::__construct();
         $this->filesystem = new Filesystem();
     }
 
-    protected function configure(): void
+    public static function getCommandName(): string
     {
-        $this
+        return 'make:cli-command';
+    }
+
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
+    {
+        $command
+            ->setDescription('Crée une commande Symfony CLI qui utilise Commands/Queries')
             ->addArgument('context', InputArgument::OPTIONAL, 'Nom du bounded context')
             ->addArgument('name', InputArgument::OPTIONAL, 'Nom de la commande');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    public function configureDependencies(DependencyBuilder $dependencies): void
     {
-        $io = new SymfonyStyle($input, $output);
+    }
+
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
+    {
 
         $io->title('Générateur de Commande CLI Symfony');
 
         $context = $this->askContext($io, $input);
         if (!$context) {
-            return Command::FAILURE;
+            return;
         }
 
         $commandName = $this->askCommandName($io, $input);
         if (!$commandName) {
-            return Command::FAILURE;
+            return;
         }
 
         $io->section('Configuration de la commande');
@@ -88,7 +94,7 @@ class MakeCliCommandCommand extends Command
 
         if (!$io->confirm('Générer la commande CLI ?', true)) {
             $io->warning('Génération annulée');
-            return Command::SUCCESS;
+            return;
         }
 
         try {
@@ -114,15 +120,15 @@ class MakeCliCommandCommand extends Command
                 "php bin/console {$commandSignature}",
             ]);
 
-            return Command::SUCCESS;
+            return;
 
         } catch (\Exception $e) {
             $io->error('Erreur lors de la génération : ' . $e->getMessage());
-            return Command::FAILURE;
+            return;
         }
     }
 
-    private function askContext(SymfonyStyle $io, InputInterface $input): ?string
+    private function askContext(ConsoleStyle $io, InputInterface $input): ?string
     {
         $context = $input->getArgument('context');
 
@@ -140,7 +146,7 @@ class MakeCliCommandCommand extends Command
         return $context;
     }
 
-    private function askCommandName(SymfonyStyle $io, InputInterface $input): ?string
+    private function askCommandName(ConsoleStyle $io, InputInterface $input): ?string
     {
         $name = $input->getArgument('name');
 
@@ -151,7 +157,7 @@ class MakeCliCommandCommand extends Command
         return $name;
     }
 
-    private function askArguments(SymfonyStyle $io): array
+    private function askArguments(ConsoleStyle $io): array
     {
         $arguments = [];
 
@@ -179,7 +185,7 @@ class MakeCliCommandCommand extends Command
         return $arguments;
     }
 
-    private function askOptions(SymfonyStyle $io): array
+    private function askOptions(ConsoleStyle $io): array
     {
         $options = [];
 
@@ -257,7 +263,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Style\ConsoleStyle;
 {$useStatements}
 
 #[AsCommand(
@@ -275,13 +281,13 @@ class {$commandName}Command extends Command
 
     protected function execute(InputInterface \$input, OutputInterface \$output): int
     {
-        \$io = new SymfonyStyle(\$input, \$output);
+        \$io = new ConsoleStyle(\$input, \$output);
 
         \$io->title('{$description}');
 
 {$executeLogic}
 
-        return Command::SUCCESS;
+        return;
     }
 }
 

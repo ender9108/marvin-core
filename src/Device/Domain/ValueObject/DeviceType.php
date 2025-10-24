@@ -12,4 +12,3 @@ enum DeviceType: string
     case VIRTUAL = 'virtual';
     case COMPOSITE = 'composite';
 }
-

@@ -12,7 +12,8 @@ final readonly class ZoneTemperatureUpdated implements DomainEventInterface
         public float $oldTemperature,
         public float $newTemperature,
         public DateTimeImmutable $occurredAt = new DateTimeImmutable(),
-    ) {}
+    ) {
+    }
 
     public function getOccurredAt(): DateTimeImmutable
     {
@@ -29,4 +30,3 @@ final readonly class ZoneTemperatureUpdated implements DomainEventInterface
         return round($this->newTemperature - $this->oldTemperature, 1);
     }
 }
-

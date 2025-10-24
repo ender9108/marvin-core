@@ -14,25 +14,26 @@ final readonly class UpdateDeviceStateHandler implements SyncCommandHandlerInter
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository,
         private LoggerInterface $logger
-    ) {}
+    ) {
+    }
 
     public function __invoke(UpdateDeviceState $command): void
     {
         $this->logger->debug('Updating device state', [
             'deviceId' => $command->deviceId,
-            'capabilityName' => $command->capabilityName,
+            'capability' => $command->capability->value,
             'value' => $command->value,
         ]);
 
         $device = $this->deviceRepository->byId($command->deviceId);
 
-        $device->updateState($command->capabilityName, $command->value);
+        $device->updateState($command->capability, $command->value, $command->unit);
 
         $this->deviceRepository->save($device);
 
         $this->logger->info('Device state updated', [
             'deviceId' => $device->id->toString(),
-            'capabilityName' => $command->capabilityName,
+            'capability' => $command->capability,
         ]);
     }
 }

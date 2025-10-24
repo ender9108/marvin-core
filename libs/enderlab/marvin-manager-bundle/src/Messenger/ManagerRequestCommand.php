@@ -17,13 +17,10 @@ final readonly class ManagerRequestCommand implements CommandInterface
         #[NotBlank]
         #[Choice(choices: [
             ManagerContainerActionReference::ACTION_START->value,
-            ManagerContainerActionReference::ACTION_START_ALL->value,
             ManagerContainerActionReference::ACTION_STOP->value,
-            ManagerContainerActionReference::ACTION_STOP_ALL->value,
             ManagerContainerActionReference::ACTION_RESTART->value,
             ManagerContainerActionReference::ACTION_RESTART_ALL->value,
             ManagerContainerActionReference::ACTION_BUILD->value,
-            ManagerContainerActionReference::ACTION_BUILD_ALL->value,
             ManagerContainerActionReference::ACTION_EXEC_CMD->value,
             ManagerWorkerActionReference::ACTION_START->value,
             ManagerWorkerActionReference::ACTION_STOP->value,

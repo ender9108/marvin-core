@@ -6,6 +6,7 @@ use EnderLab\DddCqrsBundle\Application\Query\QueryInterface;
 
 final readonly class GetScenesCollection implements QueryInterface
 {
-    public function __construct() {
+    public function __construct()
+    {
     }
 }

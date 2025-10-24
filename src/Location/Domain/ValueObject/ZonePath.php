@@ -16,7 +16,7 @@ final readonly class ZonePath implements ValueObjectInterface
         Assert::notEmpty($value);
         Assert::regex($value, '/^[a-z0-9_-]+(\/[a-z0-9_-]+)*$/i');
 
-        $this->value = $value;
+        $this->value = strtolower($value);
         $this->segments = explode('/', $value);
     }
 

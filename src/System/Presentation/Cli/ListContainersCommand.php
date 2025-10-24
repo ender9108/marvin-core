@@ -41,16 +41,20 @@ final readonly class ListContainersCommand
             foreach ($containers->getIterator() as $container) {
                 $rows[] = [
                     $container->id->toString(),
-                    $container->label->value,
-                    $container->status->value,
+                    $container->containerLabel,
+                    $container->serviceLabel,
                     $container->type->value,
+                    $container->status->value,
                     $container->image->value,
                     implode(', ', $container->allowedActions->value),
                     $container->lastSyncedAt?->format('Y-m-d H:i'),
                 ];
             }
 
-            $io->table(['Id', 'Name', 'Status', 'Type', 'Image', 'Allowed actions', 'Synced at'], $rows);
+            $io->table(
+                ['Id', 'Container name', 'Service name', 'Type', 'Status', 'Image', 'Allowed actions', 'Synced at'],
+                $rows
+            );
 
             return Command::SUCCESS;
         } catch (DomainException $de) {

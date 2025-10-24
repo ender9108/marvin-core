@@ -9,7 +9,8 @@ final readonly class HttpResponse
         public string $body,
         public array $headers,
         public float $duration
-    ) {}
+    ) {
+    }
 
     public function isSuccess(): bool
     {
@@ -26,5 +27,4 @@ final readonly class HttpResponse
             'success' => $this->isSuccess(),
         ];
     }
-
 }

@@ -11,5 +11,6 @@ final readonly class AssignDeviceToZone implements SyncCommandInterface
     public function __construct(
         public DeviceId $deviceId,
         public ?ZoneId $zoneId = null // null => unassign
-    ) {}
+    ) {
+    }
 }

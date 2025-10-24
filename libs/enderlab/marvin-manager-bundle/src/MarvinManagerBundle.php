@@ -8,18 +8,29 @@ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 class MarvinManagerBundle extends AbstractBundle
 {
+    public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
+    {
+        $container->import('../config/services.yaml');
+    }
+
     public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
     {
-        $isManager = str_contains($builder->getParameter('kernel.project_dir'), 'marvin-manager');
+        $isCore =
+            $builder->hasParameter('is_marvin_core') &&
+            true === $builder->getParameter('is_marvin_core')
+        ;
 
-        if ($builder->hasParameter('env(MESSENGER_TRANSPORT_DSN)')) {
+        /*if (
+            $builder->hasParameter('env(MESSENGER_TRANSPORT_DSN)') &&
+            true === $isCore
+        ) {*/
             $builder->prependExtensionConfig('framework', [
                 'messenger' => [
                     'transports' => [
                         'marvin.to.manager' => [
                             'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
                             'options' => [
-                                'auto_setup' => $isManager,
+                                'auto_setup' => false,
                                 'table_name' => 'messenger_marvin_to_manager',
                                 'queue_name' => 'marvin.to.manager',
                                 'use_notify' => true,
@@ -32,7 +43,7 @@ class MarvinManagerBundle extends AbstractBundle
                         'manager.to.marvin' => [
                             'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
                             'options' => [
-                                'auto_setup' => $isManager,
+                                'auto_setup' => false,
                                 'table_name' => 'messenger_manager_to_marvin',
                                 'queue_name' => 'manager.to.marvin',
                                 'use_notify' => true,
@@ -44,11 +55,10 @@ class MarvinManagerBundle extends AbstractBundle
                         ],
                     ],
                     'routing' => [
-                        'EnderLab\\MarvinManagerBundle\\System\\Infrastructure\\Framework\\Symfony\\Messenger\\ManagerRequestCommand' => 'marvin.to.manager',
-                        'EnderLab\\MarvinManagerBundle\\System\\Infrastructure\\Framework\\Symfony\\Messenger\\ManagerResponseCommand' => 'manager.to.marvin',
+                        'EnderLab\\MarvinManagerBundle\\Messenger\\ManagerResponseCommand' => 'manager.to.marvin',
                     ]
                 ]
             ]);
         }
-    }
+    //}
 }

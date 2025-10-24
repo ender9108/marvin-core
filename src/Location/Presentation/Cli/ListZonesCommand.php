@@ -4,8 +4,8 @@ namespace Marvin\Location\Presentation\Cli;
 
 use EnderLab\DddCqrsBundle\Application\Query\QueryBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
+use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
 use Marvin\Location\Application\Query\Zone\GetZonesCollection;
-use Marvin\Location\Domain\Model\Zone;
 use Marvin\Location\Domain\ValueObject\ZoneType;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
@@ -21,7 +21,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final readonly class ListZonesCommand
 {
     public function __construct(
-        private readonly QueryBusInterface $queryBus,
+        private QueryBusInterface $queryBus,
         private ExceptionMessageManager $exceptionMessageManager,
     ) {
     }
@@ -29,18 +29,23 @@ final readonly class ListZonesCommand
     public function __invoke(
         SymfonyStyle $io,
         #[Option(name: 'type')]
-        string $type,
+        ?string $type = null,
         #[Option(name: 'parent')]
-        string $parent,
-    ): int
-    {
+        ?string $parent = null,
+        #[Option(name: 'page')]
+        int $page = 1,
+        #[Option(name: 'items-per-page')]
+        int $itemsPerPage = 25,
+    ): int {
         try {
             $query = new GetZonesCollection(
-                type: ZoneType::from($type),
-                parentZoneId: new ZoneId($parent),
+                type: null !== $type ? ZoneType::from($type) : null,
+                parentZoneId: null !== $parent ? new ZoneId($parent) : null,
+                page: $page,
+                itemsPerPage: $itemsPerPage,
             );
 
-            /** @var Zone[] $zones */
+            /** @var PaginatorInterface $zones */
             $zones = $this->queryBus->handle($query);
 
             if (empty($zones)) {

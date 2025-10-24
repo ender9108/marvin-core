@@ -15,7 +15,8 @@ final readonly class ProtocolDisabledHandler implements DomainEventHandlerInterf
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository,
         private LoggerInterface $logger
-    ) {}
+    ) {
+    }
 
     public function __invoke(ProtocolDisabled $event): void
     {
@@ -37,4 +38,3 @@ final readonly class ProtocolDisabledHandler implements DomainEventHandlerInterf
         ]);
     }
 }
-

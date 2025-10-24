@@ -18,6 +18,11 @@ final readonly class GetWorkerCollectionHandler implements QueryHandlerInterface
 
     public function __invoke(GetWorkerCollection $query): PaginatorInterface
     {
-        //return $this->workerRepository->($query->id);
+        return $this->workerRepository->collection(
+            $query->filters,
+            $query->orderBy,
+            $query->page,
+            $query->itemsPerPage
+        );
     }
 }

@@ -12,11 +12,11 @@ final readonly class GetDevicesByZoneHandler implements QueryHandlerInterface
 {
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository
-    ) {}
+    ) {
+    }
 
     public function __invoke(GetDevicesByZone $query): array
     {
         return $this->deviceRepository->byZoneId($query->zoneId);
     }
 }
-

@@ -13,7 +13,8 @@ final readonly class GetZoneHandler implements QueryHandlerInterface
 {
     public function __construct(
         private ZoneRepositoryInterface $zoneRepository,
-    ) {}
+    ) {
+    }
 
     public function __invoke(GetZone $query): Zone
     {

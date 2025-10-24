@@ -2,13 +2,67 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
-                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-
-    <entity name="Marvin\Device\Domain\Model\Device" table="device_device">
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity
+        name="Marvin\Device\Domain\Model\Device"
+        repository-class="Marvin\Device\Infrastructure\Persistence\Doctrine\ORM\DeviceOrmRepository"
+        table="device_device"
+    >
         <id name="id" type="device_id" column="id">
             <generator strategy="NONE"/>
         </id>
+        <embedded name="label" class="Marvin\Shared\Domain\ValueObject\Label" />
+        <embedded name="type" class="Marvin\Device\Domain\ValueObject\DeviceType" />
+        <embedded name="status" class="Marvin\Device\Domain\ValueObject\DeviceStatus" />
+        <field name="protocol_id" type="protocol_id" nullable="true" />
+        <embedded name="technicalName" class="Marvin\Device\Domain\ValueObject\TechnicalName" />
+        <field name="virtualDeviceType" nullable="true" enum-type="Marvin\Device\Domain\ValueObject\VirtualDeviceType" />
+        <embedded name="virtualDeviceConfig" class="Marvin\Device\Domain\ValueObject\VirtualDeviceConfig" />
+        <field name="nativeGroupInfo" type="native_group_info" nullable="true" />
+        <field name="nativeSceneInfo" type="native_scene_info" nullable="true" />
+        <embedded name="sceneStates" class="Marvin\Device\Domain\ValueObject\SceneStates" />
+        <field name="compositeStrategy" nullable="true" />
+        <field name="zoneId" type="zone_id" nullable="true" />
+        <field name="manufacturer" nullable="true" />
+        <field name="model" nullable="true" />
+        <field name="firmwareVersion" nullable="true" />
+        <embedded name="metadata" class="Marvin\Shared\Domain\ValueObject\Metadata" />
+        <field name="updatedAt" type="datetime" nullable="true" />
+        <field name="createdAt" type="datetime" />
 
+        <one-to-many
+            field="capabilities"
+            target-entity="Marvin\Device\Domain\Model\DeviceCapability"
+            mapped-by="device"
+        >
+            <cascade>
+                <cascade-persist />
+                <cascade-remove />
+            </cascade>
+        </one-to-many>
+
+        <one-to-many
+            field="states"
+            target-entity="Marvin\Device\Domain\Model\DeviceState"
+            mapped-by="device"
+        >
+            <cascade>
+                <cascade-persist />
+                <cascade-remove />
+            </cascade>
+        </one-to-many>
+
+        <one-to-many
+            field="childrens"
+            target-entity="Marvin\Device\Domain\Model\Device"
+            mapped-by="parent"
+        >
+            <cascade>
+                <cascade-persist />
+                <cascade-remove />
+            </cascade>
+        </one-to-many>
+
+        <many-to-one field="parent" target-entity="Marvin\Device\Domain\Model\Device" />
     </entity>
-
 </doctrine-mapping>

@@ -13,22 +13,35 @@
         </id>
 
         <embedded name="label" class="Marvin\Shared\Domain\ValueObject\Label" />
+        <field name="slug" length="255" />
         <embedded name="path" class="Marvin\Location\Domain\ValueObject\ZonePath" />
-        <field name="currentTemperature" type="float" precision="5" scale="2" />
-        <field name="currentPowerConsumption" type="float" precision="10" scale="2" />
+        <field name="currentTemperature" type="float" precision="5" scale="2" nullable="true" />
+        <field name="currentPowerConsumption" type="float" precision="10" scale="2" nullable="true" />
         <field name="isOccupied" type="boolean" nullable="true" />
         <field name="consecutiveNoMotionCount" type="integer" nullable="true" />
         <field name="type" length="32" />
         <embedded name="targetTemperature" class="Marvin\Location\Domain\ValueObject\TargetTemperature" />
         <embedded name="targetPowerConsumption" class="Marvin\Location\Domain\ValueObject\TargetPowerConsumption" />
-        <field name="icon" length="32" />
-        <field name="parentZoneId" length="32" />
+        <field name="icon" length="32" nullable="true" />
         <embedded name="surfaceArea" class="Marvin\Location\Domain\ValueObject\SurfaceArea" />
-        <embedded name="orientation" class="Marvin\Location\Domain\ValueObject\Orientation" />
+        <field name="orientation" length="32" nullable="true" enum-type="Marvin\Location\Domain\ValueObject\Orientation" />
         <embedded name="color" class="Marvin\Location\Domain\ValueObject\HexaColor" />
         <embedded name="metadata" class="Marvin\Shared\Domain\ValueObject\Metadata" />
         <field name="lastMetricsUpdate" type="datetime" nullable="true" />
         <field name="updatedAt" type="datetime" nullable="true" />
         <field name="createdAt" type="datetime" />
+
+        <one-to-many
+            field="childrens"
+            target-entity="Marvin\Location\Domain\Model\Zone"
+            mapped-by="parent"
+        >
+            <cascade>
+                <cascade-persist />
+                <cascade-remove />
+            </cascade>
+        </one-to-many>
+
+        <many-to-one field="parent" target-entity="Marvin\Location\Domain\Model\Zone" />
     </entity>
 </doctrine-mapping>

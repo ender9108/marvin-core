@@ -12,11 +12,12 @@ final readonly class SunTimes
         public DateTimeImmutable $sunset,
         public DateTimeImmutable $solarNoon,
         public int $dayLengthSeconds
-    ) {}
+    ) {
+    }
 
-    public function isDay(DateTimeImmutable $time = null): bool
+    public function isDay(?DateTimeImmutable $time = null): bool
     {
-        $time = $time ?? new DateTimeImmutable();
+        $time ??= new DateTimeImmutable();
         return $time >= $this->sunrise && $time <= $this->sunset;
     }
 
@@ -36,4 +37,3 @@ final readonly class SunTimes
         ];
     }
 }
-

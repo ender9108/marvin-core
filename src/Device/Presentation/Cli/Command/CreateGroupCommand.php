@@ -81,7 +81,7 @@ final readonly class CreateGroupCommand
         } catch (ValueError $e) {
             $io->error("Invalid strategy: {$strategy}");
             $io->note('Available strategies: ' . implode(', ', array_map(
-                fn($case) => $case->value,
+                fn ($case) => $case->value,
                 CompositeStrategy::cases()
             )));
 

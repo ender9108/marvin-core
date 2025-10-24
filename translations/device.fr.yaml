@@ -3,9 +3,13 @@ device:
         device_not_found: Module introuvable.
         device_not_found_with_id: 'Module introuvable avec l''id "%id%".'
         device_already_in_group: 'Module(s) %device_name% déjà dans le groupe %group_name% (ID: %group_id%).'
+        device_must_be_composite: Pour ajouter des modules enfant, le module parent doit être de type composite.
+        device_composite_circular_reference: Un module ne peut pas être son propre enfant.
         composite_device_not_allowed_in_group: 'Le module composite %device_name% (ID : %device_id%, stratégie : %strategy%) ne peut pas être ajouté à un groupe. La profondeur maximale est de 1 niveau.'
         capability_not_supported: Capacité non supportée
         capability_not_supported_with_capability_type: 'Capacité %capacity% n''est pas supportée.'
+        capability_not_found: Capacité introuvable.
+        capability_not_found_with_capability_name_and_device_label: Capacité %capability_name% introuvable pour le module %device_label%.
         protocol_not_available: Ce protocole n'est pas disponible.
         protocol_not_available_with_id: 'Le protocole %id% n''est pas disponible.'
         protocol_is_disabled: Le protocole %id% est désactivé.
@@ -17,3 +21,9 @@ device:
         invalid_composite_strategy: Stratégie de composition invalide.
         invalid_virtual_config: Configuration invalide.
         invalid_virtual_config_with_key_value: La configuration %key%:%value% est invalide.
+        capability_state_validation_type: 'Type invalide : attendu %data_type%, obtenu %debug_type%'
+        capability_state_validation_min: 'La valeur %value% est inférieure au minimum %min%'
+        capability_state_validation_max: 'La valeur %value% dépasse le maximum %max%'
+        capability_state_validation: 'La valeur n''est pas valide.'
+    capabilities:
+        

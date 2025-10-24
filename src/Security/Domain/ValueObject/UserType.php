@@ -21,7 +21,7 @@ final readonly class UserType implements ValueObjectInterface, \Stringable
 
         if (is_string($type)) {
             Assert::keyExists(self::TYPES, $type);
-            $status = self::TYPES[$type];
+            $type = self::TYPES[$type];
         } else {
             Assert::inArray($type, self::TYPES);
         }

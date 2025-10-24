@@ -6,6 +6,7 @@ use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use Marvin\Device\Application\Command\Device\UpdateDeviceState;
 use Marvin\Device\Application\Service\VirtualDevice\Weather\WeatherServiceInterface;
 use Marvin\Device\Domain\Repository\DeviceRepositoryInterface;
+use Marvin\Device\Domain\ValueObject\Capability;
 use Marvin\Device\Domain\ValueObject\VirtualDeviceType;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -47,30 +48,30 @@ final readonly class WeatherUpdateWorker
                 // Mettre à jour les états du device
                 $this->syncCommandBus->handle(new UpdateDeviceState(
                     deviceId: $device->getId()->toString(),
-                    capabilityName: 'temperature',
+                    capability: Capability::TEMPERATURE_MEASUREMENT,
                     value: $weatherData->temperature,
                     unit: '°C'
                 ));
 
                 $this->syncCommandBus->handle(new UpdateDeviceState(
                     deviceId: $device->getId()->toString(),
-                    capabilityName: 'humidity',
+                    capability: Capability::HUMIDITY_MEASUREMENT,
                     value: $weatherData->humidity,
                     unit: '%'
                 ));
 
                 $this->syncCommandBus->handle(new UpdateDeviceState(
                     deviceId: $device->getId()->toString(),
-                    capabilityName: 'pressure',
+                    capability: Capability::PRESSURE_MEASUREMENT,
                     value: $weatherData->pressure,
                     unit: 'hPa'
                 ));
 
-                $this->syncCommandBus->handle(new UpdateDeviceState(
+                /*$this->syncCommandBus->handle(new UpdateDeviceState(
                     deviceId: $device->getId()->toString(),
-                    capabilityName: 'condition',
+                    capability: 'condition',
                     value: $weatherData->condition
-                ));
+                ));*/
 
                 $device->markOnline();
                 $this->deviceRepository->save($device);
@@ -80,7 +81,6 @@ final readonly class WeatherUpdateWorker
                     $device->getName()->toString(),
                     $weatherData->temperature
                 ));
-
             } catch (\Throwable $e) {
                 $this->logger->error('Failed to update weather device', [
                     'deviceId' => $device->getId()->toString(),

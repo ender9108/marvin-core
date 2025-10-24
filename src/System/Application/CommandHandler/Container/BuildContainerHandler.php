@@ -5,7 +5,7 @@ namespace Marvin\System\Application\CommandHandler\Container;
 use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestCommand;
-use EnderLab\MarvinManagerBundle\Reference\ManagerActionReference;
+use EnderLab\MarvinManagerBundle\Reference\ManagerContainerActionReference;
 use Marvin\System\Application\Command\Container\BuildContainer;
 use Marvin\System\Domain\Exception\ActionNotAllowed;
 use Marvin\System\Domain\Model\ActionRequest;
@@ -33,10 +33,10 @@ final readonly class BuildContainerHandler implements SyncCommandHandlerInterfac
 
         $container = $this->containerRepository->byId($command->containerId);
 
-        if (!$container->isActionAllowed(ManagerActionReference::ACTION_BUILD->value)) {
+        if (!$container->isActionAllowed(ManagerContainerActionReference::ACTION_BUILD->value)) {
             throw ActionNotAllowed::withContainerAndAction(
-                $container->label,
-                ManagerActionReference::ACTION_BUILD->value
+                $container->serviceLabel,
+                ManagerContainerActionReference::ACTION_BUILD->value
             );
         }
 
@@ -44,7 +44,7 @@ final readonly class BuildContainerHandler implements SyncCommandHandlerInterfac
             $command->correlationId,
             'container',
             $command->containerId->toString(),
-            ManagerActionReference::ACTION_BUILD->value,
+            ManagerContainerActionReference::ACTION_BUILD->value,
             ActionStatus::PENDING,
         );
 
@@ -53,7 +53,7 @@ final readonly class BuildContainerHandler implements SyncCommandHandlerInterfac
         $managerMessage = new ManagerRequestCommand(
             $command->containerId->toString(),
             $command->correlationId->toString(),
-            ManagerActionReference::ACTION_BUILD->value
+            ManagerContainerActionReference::ACTION_BUILD->value
         );
 
         $this->commandBus->dispatch($managerMessage);

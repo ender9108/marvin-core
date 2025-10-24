@@ -11,7 +11,8 @@ final readonly class ZoneDeleted implements DomainEventInterface
         public string $zoneId,
         public string $label,
         public DateTimeImmutable $occurredAt = new DateTimeImmutable(),
-    ) {}
+    ) {
+    }
 
     public function getOccurredAt(): DateTimeImmutable
     {
@@ -23,4 +24,3 @@ final readonly class ZoneDeleted implements DomainEventInterface
         return 'location.zone.deleted';
     }
 }
-

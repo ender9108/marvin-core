@@ -63,4 +63,3 @@ enum Orientation: string implements ValueObjectInterface
         };
     }
 }
-

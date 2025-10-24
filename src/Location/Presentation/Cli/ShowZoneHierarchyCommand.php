@@ -27,10 +27,12 @@ final readonly class ShowZoneHierarchyCommand
     public function __invoke(
         SymfonyStyle $io,
         #[Option(name: 'root-zone-id')]
-        string $rootZoneId,
+        ?string $rootZoneId = null,
     ): int {
         try {
-            $query = new GetZoneHierarchy(rootZoneId: new ZoneId($rootZoneId));
+            $query = new GetZoneHierarchy(
+                rootZoneId: null !== $rootZoneId ? ZoneId::fromString($rootZoneId) : null
+            );
             $hierarchy = $this->queryBus->handle($query);
 
             if (empty($hierarchy)) {
@@ -66,10 +68,20 @@ final readonly class ShowZoneHierarchyCommand
 
         $icon = $node['icon'] ?? '';
         $temp = $node['currentTemperature'] ? round($node['currentTemperature'], 1) . '°C' : '';
-        $occupied = $node['isOccupied'] ? ' 👤' : '';
+        $occupied = $node['isOccupied'] ? '✓' : '✗';
         $power = $node['currentPowerConsumption'] ? round($node['currentPowerConsumption'], 0) . 'W' : '';
 
-        $info = trim("{$temp} {$occupied} {$power}");
+        $info = '';
+
+        if (!empty($temp)) {
+            $info .= $temp;
+        }
+
+        $info .= (!empty($info) ? ' | ' : '').$occupied;
+
+        if (!empty($power)) {
+            $info .= (!empty($info) ? ' | ' : '').$power;
+        }
 
         $io->writeln(sprintf(
             '%s%s<info>%s %s</info> [%s] %s',
@@ -78,7 +90,7 @@ final readonly class ShowZoneHierarchyCommand
             $icon,
             $node['name'],
             $node['type'],
-            $info ? "({$info})" : ''
+            $info ? "[{$info}]" : ''
         ));
 
         foreach ($node['children'] as $child) {

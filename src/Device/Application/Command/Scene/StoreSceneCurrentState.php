@@ -9,5 +9,6 @@ final readonly class StoreSceneCurrentState implements SyncCommandInterface
 {
     public function __construct(
         public DeviceId $sceneId
-    ) {}
+    ) {
+    }
 }

@@ -20,7 +20,7 @@ final readonly class ListScenesCommand
     ) {
     }
 
-    protected function execute(SymfonyStyle $io): int
+    public function __invoke(SymfonyStyle $io): int
     {
         $scenes = $this->queryBus->handle(new GetScenesCollection());
 

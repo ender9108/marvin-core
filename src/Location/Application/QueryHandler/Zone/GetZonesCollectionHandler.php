@@ -13,20 +13,21 @@ final readonly class GetZonesCollectionHandler implements QueryHandlerInterface
 {
     public function __construct(
         private ZoneRepositoryInterface $zoneRepository,
-    ) {}
+    ) {
+    }
 
     public function __invoke(GetZonesCollection $query): PaginatorInterface
     {
-        $criterias = [];
+        $filters = [];
 
         if ($query->type !== null) {
-            $criterias['type'] = $query->type;
+            $filters['type'] = $query->type;
         }
 
         if ($query->parentZoneId !== null) {
-            $criterias['parentZoneId'] = $query->parentZoneId;
+            $filters['parent'] = $query->parentZoneId;
         }
 
-        return $this->zoneRepository->collection($criterias, $query->orderBy, $query->page, $query->itemsPerPage);
+        return $this->zoneRepository->collection($filters, $query->orderBy, $query->page, $query->itemsPerPage);
     }
 }

@@ -46,7 +46,7 @@ final class ProtocolGroupingService implements ProtocolGroupingServiceInterface
 
     public function generateNativeGroupName(string $protocol, string $parentGroupName): string
     {
-        $slug = strtolower(preg_replace('/[^a-zA-Z0-9]+/', '_', $parentGroupName));
+        $slug = strtolower((string) preg_replace('/[^a-zA-Z0-9]+/', '_', $parentGroupName));
         return sprintf('groupe_%s_%s', $slug, $protocol);
     }
 
@@ -99,10 +99,10 @@ final class ProtocolGroupingService implements ProtocolGroupingServiceInterface
         // Ex: si reference commence par "0x" → probablement Zigbee
         if ($device->getReference()) {
             $ref = $device->getReference()->toString();
-            if (str_starts_with($ref, '0x')) {
+            if (str_starts_with((string) $ref, '0x')) {
                 return 'zigbee';
             }
-            if (preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $ref)) {
+            if (preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', (string) $ref)) {
                 return 'wifi';
             }
         }
@@ -118,4 +118,3 @@ final class ProtocolGroupingService implements ProtocolGroupingServiceInterface
         return $this->supportsNativeGroups($protocol) && count($devices) >= self::MIN_DEVICES_FOR_NATIVE_GROUP;
     }
 }
-

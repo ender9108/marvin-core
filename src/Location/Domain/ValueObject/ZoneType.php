@@ -12,6 +12,7 @@ enum ZoneType: string implements ValueObjectInterface
     use EnumToArrayTrait;
 
     case BUILDING = 'building';
+    case FLOOR = 'floor';
     case ROOM = 'room';
     case OUTDOOR = 'outdoor';
 
@@ -23,6 +24,11 @@ enum ZoneType: string implements ValueObjectInterface
     public function isBuilding(): bool
     {
         return $this === self::BUILDING;
+    }
+
+    public function isFloor(): bool
+    {
+        return $this === self::FLOOR;
     }
 
     public function isRoom(): bool
@@ -37,7 +43,6 @@ enum ZoneType: string implements ValueObjectInterface
 
     public function canHaveChildren(): bool
     {
-        return $this === self::BUILDING;
+        return $this === self::BUILDING || $this === self::FLOOR;
     }
 }
-

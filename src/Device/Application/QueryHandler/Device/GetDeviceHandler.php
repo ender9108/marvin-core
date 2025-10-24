@@ -13,11 +13,11 @@ final readonly class GetDeviceHandler implements QueryHandlerInterface
 {
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository
-    ) {}
+    ) {
+    }
 
     public function __invoke(GetDevice $query): Device
     {
         return $this->deviceRepository->byId($query->deviceId);
     }
 }
-

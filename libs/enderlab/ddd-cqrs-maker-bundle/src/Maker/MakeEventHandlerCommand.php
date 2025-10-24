@@ -2,51 +2,57 @@
 
 namespace Enderlab\DddCqrsMakerBundle\Maker;
 
-use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Bundle\MakerBundle\ConsoleStyle;
+use Symfony\Bundle\MakerBundle\DependencyBuilder;
+use Symfony\Bundle\MakerBundle\Generator;
+use Symfony\Bundle\MakerBundle\InputConfiguration;
+use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
-#[AsCommand(
-    name: 'make:event-handler',
-    description: 'Crée un EventHandler pour un événement de domaine',
-)]
-class MakeEventHandlerCommand extends Command
+class MakeEventHandlerCommand extends AbstractMaker
 {
     private Filesystem $filesystem;
 
     public function __construct(private readonly string $projectDir)
     {
-        parent::__construct();
         $this->filesystem = new Filesystem();
     }
 
-    protected function configure(): void
+    public static function getCommandName(): string
     {
-        $this
+        return 'make:event-handler';
+    }
+
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
+    {
+        $command
+            ->setDescription('Crée un EventHandler pour un événement de domaine')
             ->addArgument('context', InputArgument::OPTIONAL, 'Nom du bounded context')
             ->addArgument('event', InputArgument::OPTIONAL, 'Nom de l\'événement');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    public function configureDependencies(DependencyBuilder $dependencies): void
     {
-        $io = new SymfonyStyle($input, $output);
+    }
+
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
+    {
 
         $io->title('Générateur d\'EventHandler');
 
         $context = $this->askContext($io, $input);
         if (!$context) {
-            return Command::FAILURE;
+            return;
         }
 
         $eventName = $this->askEventName($io, $input);
         if (!$eventName) {
-            return Command::FAILURE;
+            return;
         }
 
         $sourceContext = $io->ask('Context source de l\'événement (laisser vide si même context)', $context);
@@ -57,7 +63,7 @@ class MakeEventHandlerCommand extends Command
 
         if (!$io->confirm('Générer l\'EventHandler ?', true)) {
             $io->warning('Génération annulée');
-            return Command::SUCCESS;
+            return;
         }
 
         try {
@@ -71,15 +77,15 @@ class MakeEventHandlerCommand extends Command
                 "Fichier créé : {$handlerClass}",
             ]);
 
-            return Command::SUCCESS;
+            return;
 
         } catch (\Exception $e) {
             $io->error('Erreur lors de la génération : ' . $e->getMessage());
-            return Command::FAILURE;
+            return;
         }
     }
 
-    private function askContext(SymfonyStyle $io, InputInterface $input): ?string
+    private function askContext(ConsoleStyle $io, InputInterface $input): ?string
     {
         $context = $input->getArgument('context');
 
@@ -97,7 +103,7 @@ class MakeEventHandlerCommand extends Command
         return $context;
     }
 
-    private function askEventName(SymfonyStyle $io, InputInterface $input): ?string
+    private function askEventName(ConsoleStyle $io, InputInterface $input): ?string
     {
         $eventName = $input->getArgument('event');
 
@@ -108,7 +114,7 @@ class MakeEventHandlerCommand extends Command
         return $eventName;
     }
 
-    private function askDependencies(SymfonyStyle $io): array
+    private function askDependencies(ConsoleStyle $io): array
     {
         $dependencies = [];
 

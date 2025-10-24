@@ -10,5 +10,6 @@ final readonly class MoveZone implements SyncCommandInterface
     public function __construct(
         public ZoneId $zoneId,
         public ?ZoneId $newParentZoneId,
-    ) {}
+    ) {
+    }
 }

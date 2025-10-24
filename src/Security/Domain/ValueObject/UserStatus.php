@@ -19,9 +19,8 @@ final readonly class UserStatus implements ValueObjectInterface
 
     public function __construct(string|int $status)
     {
-        Assert::notEmpty($status);
-
         if (is_string($status)) {
+            Assert::notEmpty($status);
             Assert::keyExists(self::STATUSES, $status);
             $status = self::STATUSES[$status];
         } else {

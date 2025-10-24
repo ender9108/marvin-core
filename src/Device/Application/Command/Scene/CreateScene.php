@@ -17,5 +17,6 @@ final readonly class CreateScene implements SyncCommandInterface
         public ?ZoneId $zoneId = null,
         public array $capabilities = [],
         public ?Metadata $metadata = null
-    ) {}
+    ) {
+    }
 }

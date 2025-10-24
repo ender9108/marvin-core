@@ -9,5 +9,6 @@ final readonly class GetZone implements QueryInterface
 {
     public function __construct(
         public ZoneId $zoneId,
-    ) {}
+    ) {
+    }
 }

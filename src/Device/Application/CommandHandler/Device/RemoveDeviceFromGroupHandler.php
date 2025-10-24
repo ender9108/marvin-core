@@ -17,7 +17,8 @@ final readonly class RemoveDeviceFromGroupHandler implements SyncCommandHandlerI
         private DeviceRepositoryInterface $deviceRepository,
         private DomainEventBusInterface $eventBus,
         private LoggerInterface $logger,
-    ) {}
+    ) {
+    }
 
     public function __invoke(RemoveDeviceFromGroup $command): void
     {
@@ -74,7 +75,7 @@ final readonly class RemoveDeviceFromGroupHandler implements SyncCommandHandlerI
             ));
 
             // Supprimer le composite de la BDD
-            $this->deviceRepository->delete($parentComposite);
+            $this->deviceRepository->remove($parentComposite);
         } else {
             // Sauvegarder le composite (même si vide, on le garde)
             $this->deviceRepository->save($parentComposite);
@@ -86,7 +87,7 @@ final readonly class RemoveDeviceFromGroupHandler implements SyncCommandHandlerI
 
         // 6. Dispatch event
         $this->eventBus->dispatch(new DeviceRemovedFromGroup(
-            groupId: $group->getId(),
+            groupId: $group->id,
             groupName: $group->getName()->toString(),
             deviceId: $device->getId(),
             deviceName: $device->getName()->toString(),
@@ -108,14 +109,15 @@ final readonly class RemoveDeviceFromGroupHandler implements SyncCommandHandlerI
     private function findDeviceParentComposite(Device $device, Device $group): ?Device
     {
         // Cas 1: Le device est enfant direct du groupe
-        if ($group->getChildren()->contains($device)) {
+        if ($group->childrenDevices->contains($device->id)) {
             return $group;
         }
 
         // Cas 2: Le device est dans un native_group enfant
-        foreach ($group->getChildren() as $child) {
-            if ($child->isNativeGroup() && $child->getChildren()->contains($device)) {
-                return $child;
+        /** @var Device $children */
+        foreach ($group->childrenDevices as $children) {
+            if ($children->isNativeGroup() && $children->childrenDevices->contains($device->id)) {
+                return $children;
             }
         }
 

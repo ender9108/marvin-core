@@ -8,7 +8,7 @@ final readonly class DeviceStateChanged extends AbstractDomainEvent
 {
     public function __construct(
         public string $deviceId,
-        public string $capabilityName,
+        public string $capability,
         public mixed $oldValue,
         public mixed $newValue
     ) {

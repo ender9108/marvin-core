@@ -20,7 +20,7 @@ final readonly class ListGroupsCommand
     ) {
     }
 
-    protected function execute(SymfonyStyle $io): int
+    public function __invoke(SymfonyStyle $io): int
     {
         $groups = $this->queryBus->handle(new GetGroupsCollection());
 

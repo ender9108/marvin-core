@@ -67,10 +67,28 @@ final class ContainerOrmRepository extends ServiceEntityRepository implements Co
         ;
 
         if (!empty($filters)) {
-            /*foreach ($filters as $field => $value) {
+            foreach ($filters as $field => $value) {
                 switch ($field) {
+                    case 'label':
+                        $query
+                            ->andWhere('c.label LIKE :label')
+                            ->setParameter('label', '%'.$value.'%')
+                        ;
+                        break;
+                    case 'type':
+                        $query
+                            ->andWhere('c.type = :type')
+                            ->setParameter('type', $value)
+                        ;
+                        break;
+                    case 'status':
+                        $query
+                            ->andWhere('c.status = :status')
+                            ->setParameter('status', $value)
+                        ;
+                        break;
                 }
-            }*/
+            }
         }
 
         if (!empty($orderBy)) {

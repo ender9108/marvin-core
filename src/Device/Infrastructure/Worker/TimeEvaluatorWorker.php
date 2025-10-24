@@ -6,6 +6,7 @@ use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use Marvin\Device\Application\Command\Device\UpdateDeviceState;
 use Marvin\Device\Application\Service\VirtualDevice\Time\TimeServiceInterface;
 use Marvin\Device\Domain\Repository\DeviceRepositoryInterface;
+use Marvin\Device\Domain\ValueObject\Capability;
 use Marvin\Device\Domain\ValueObject\VirtualDeviceType;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -40,25 +41,24 @@ final readonly class TimeEvaluatorWorker
 
                 $this->syncCommandBus->handle(new UpdateDeviceState(
                     deviceId: $device->getId()->toString(),
-                    capabilityName: 'current_time',
+                    capability: Capability::CURRENT_TIME,
                     value: $currentTime->format('H:i:s')
                 ));
 
                 $this->syncCommandBus->handle(new UpdateDeviceState(
                     deviceId: $device->getId()->toString(),
-                    capabilityName: 'current_date',
+                    capability: Capability::CURRENT_DATE,
                     value: $currentTime->format('Y-m-d')
                 ));
 
                 $this->syncCommandBus->handle(new UpdateDeviceState(
                     deviceId: $device->getId()->toString(),
-                    capabilityName: 'day_of_week',
+                    capability: Capability::CURRENT_DAY_OF_WEEK,
                     value: $currentTime->format('l')
                 ));
 
                 $device->markOnline();
                 $this->deviceRepository->save($device);
-
             } catch (\Throwable $e) {
                 $this->logger->error('Failed to update time trigger device', [
                     'deviceId' => $device->getId()->toString(),
@@ -81,25 +81,24 @@ final readonly class TimeEvaluatorWorker
 
                 $this->syncCommandBus->handle(new UpdateDeviceState(
                     deviceId: $device->getId()->toString(),
-                    capabilityName: 'sunrise_time',
+                    capability: Capability::SUNRISE_TIME,
                     value: $sunTimes->sunrise->format('H:i:s')
                 ));
 
                 $this->syncCommandBus->handle(new UpdateDeviceState(
                     deviceId: $device->getId()->toString(),
-                    capabilityName: 'sunset_time',
+                    capability: Capability::SUNSET_TIME,
                     value: $sunTimes->sunset->format('H:i:s')
                 ));
 
                 $this->syncCommandBus->handle(new UpdateDeviceState(
                     deviceId: $device->getId()->toString(),
-                    capabilityName: 'is_day',
+                    capability: Capability::IS_DAY,
                     value: $sunTimes->isDay()
                 ));
 
                 $device->markOnline();
                 $this->deviceRepository->save($device);
-
             } catch (\Throwable $e) {
                 $this->logger->error('Failed to update sun trigger device', [
                     'deviceId' => $device->getId()->toString(),

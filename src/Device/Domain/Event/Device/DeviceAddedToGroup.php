@@ -15,4 +15,3 @@ final readonly class DeviceAddedToGroup extends AbstractDomainEvent
         parent::__construct();
     }
 }
-

@@ -8,13 +8,16 @@ use Marvin\Location\Application\Command\Zone\UpdateZone;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+#[AsMessageHandler]
 final readonly class UpdateZoneHandler implements SyncCommandHandlerInterface
 {
     public function __construct(
         private ZoneRepositoryInterface $zoneRepository,
         private LoggerInterface $logger,
-    ) {}
+    ) {
+    }
 
     public function __invoke(UpdateZone $command): string
     {

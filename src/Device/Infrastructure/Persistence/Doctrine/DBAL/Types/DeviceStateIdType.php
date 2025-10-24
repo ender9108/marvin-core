@@ -10,16 +10,19 @@ final class DeviceStateIdType extends GuidType
 {
     public const string NAME = 'device_state_id';
 
+    #[\Override]
     public function getName(): string
     {
         return self::NAME;
     }
 
+    #[\Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
         return $value?->toString();
     }
 
+    #[\Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): ?DeviceStateId
     {
         if ($value === null) {
@@ -27,10 +30,5 @@ final class DeviceStateIdType extends GuidType
         }
 
         return DeviceStateId::fromString($value);
-    }
-
-    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
-    {
-        return true;
     }
 }

@@ -15,7 +15,8 @@ final readonly class ProtocolDeletedHandler implements DomainEventHandlerInterfa
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository,
         private LoggerInterface $logger
-    ) {}
+    ) {
+    }
 
     public function __invoke(ProtocolDeleted $event): void
     {

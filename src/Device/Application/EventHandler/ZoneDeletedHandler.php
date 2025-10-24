@@ -13,7 +13,8 @@ final readonly class ZoneDeletedHandler implements DomainEventHandlerInterface
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository,
         private LoggerInterface $logger
-    ) {}
+    ) {
+    }
 
     public function __invoke(ZoneDeleted $event): void
     {
@@ -34,5 +35,4 @@ final readonly class ZoneDeletedHandler implements DomainEventHandlerInterface
             'affectedDevices' => count($devices),
         ]);
     }
-
 }

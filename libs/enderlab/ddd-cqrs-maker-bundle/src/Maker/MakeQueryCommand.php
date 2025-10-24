@@ -2,54 +2,59 @@
 
 namespace Enderlab\DddCqrsMakerBundle\Maker;
 
-use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Bundle\MakerBundle\ConsoleStyle;
+use Symfony\Bundle\MakerBundle\DependencyBuilder;
+use Symfony\Bundle\MakerBundle\Generator;
+use Symfony\Bundle\MakerBundle\InputConfiguration;
+use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
-#[AsCommand(
-    name: 'make:query',
-    description: 'Crée une Query et son QueryHandler',
-)]
-class MakeQueryCommand extends Command
+class MakeQueryCommand extends AbstractMaker
 {
     private Filesystem $filesystem;
     private array $parameters = [];
 
     public function __construct(private readonly string $projectDir)
     {
-        parent::__construct();
         $this->filesystem = new Filesystem();
     }
 
-    protected function configure(): void
+    public static function getCommandName(): string
     {
-        $this
+        return 'make:query';
+    }
+
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
+    {
+        $command
+            ->setDescription('Crée une Query et son QueryHandler')
             ->addArgument('context', InputArgument::OPTIONAL, 'Nom du bounded context')
             ->addArgument('name', InputArgument::OPTIONAL, 'Nom de la Query');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    public function configureDependencies(DependencyBuilder $dependencies): void
     {
-        $io = new SymfonyStyle($input, $output);
+    }
 
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
+    {
         $io->title('Générateur de Query et QueryHandler');
 
         // 1. Demander le bounded context
         $context = $this->askContext($io, $input);
         if (!$context) {
-            return Command::FAILURE;
+            return;
         }
 
         // 2. Demander le nom de la Query
         $queryName = $this->askQueryName($io, $input);
         if (!$queryName) {
-            return Command::FAILURE;
+            return;
         }
 
         // 3. Sous-dossier optionnel
@@ -69,7 +74,7 @@ class MakeQueryCommand extends Command
         // 7. Confirmer
         if (!$io->confirm('Générer la Query et son QueryHandler ?', true)) {
             $io->warning('Génération annulée');
-            return Command::SUCCESS;
+            return;
         }
 
         // 8. Générer les fichiers
@@ -92,16 +97,12 @@ class MakeQueryCommand extends Command
                 "- Type de retour : {$returnType}",
                 '- Le QueryHandler sera automatiquement découvert',
             ]);
-
-            return Command::SUCCESS;
-
         } catch (\Exception $e) {
             $io->error('Erreur lors de la génération : ' . $e->getMessage());
-            return Command::FAILURE;
         }
     }
 
-    private function askContext(SymfonyStyle $io, InputInterface $input): ?string
+    private function askContext(ConsoleStyle $io, InputInterface $input): ?string
     {
         $context = $input->getArgument('context');
 
@@ -122,7 +123,7 @@ class MakeQueryCommand extends Command
         return $context;
     }
 
-    private function askQueryName(SymfonyStyle $io, InputInterface $input): ?string
+    private function askQueryName(ConsoleStyle $io, InputInterface $input): ?string
     {
         $name = $input->getArgument('name');
 
@@ -133,7 +134,7 @@ class MakeQueryCommand extends Command
         return $name;
     }
 
-    private function askParameters(SymfonyStyle $io, string $context): void
+    private function askParameters(ConsoleStyle $io, string $context): void
     {
         $io->note([
             'Définis les paramètres de la Query',
@@ -168,7 +169,7 @@ class MakeQueryCommand extends Command
         }
     }
 
-    private function askDependencies(SymfonyStyle $io, string $context): array
+    private function askDependencies(ConsoleStyle $io, string $context): array
     {
         $dependencies = [];
 
@@ -256,7 +257,7 @@ PHP;
         string $subFolder,
         string $returnType,
         array $dependencies,
-        SymfonyStyle $io
+        ConsoleStyle $io
     ): void {
         $dir = $this->projectDir . "/src/{$context}/Application/QueryHandler";
 
@@ -353,7 +354,7 @@ PHP;
         string $queryName,
         string $returnType,
         array $dependencies,
-        SymfonyStyle $io
+        ConsoleStyle $io
     ): string {
         $io->writeln('');
         $io->note('Génération de la logique basique du QueryHandler selon le pattern détecté.');

@@ -17,8 +17,9 @@ final class DomainEventDispatcher
     /** @var DomainEventInterface[] */
     private array $eventsToDispatch = [];
 
-    public function __construct(private readonly DomainEventBusInterface $domainEventBus)
-    {
+    public function __construct(
+        private readonly DomainEventBusInterface $domainEventBus
+    ) {
     }
 
     public function onFlush(OnFlushEventArgs $args): void
