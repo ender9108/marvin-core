@@ -17,4 +17,11 @@ final readonly class ProtocolDeleted extends AbstractDomainEvent implements Doma
     {
         return '$.protocol.protocol.deleted';
     }
+
+    public function toArray(): array
+    {
+        return [
+            'protocol_id' => $this->protocolId,
+        ];
+    }
 }

@@ -18,4 +18,12 @@ final readonly class ProtocolDisabled extends AbstractDomainEvent implements Dom
     {
         return '$.protocol.protocol.disabled';
     }
+
+    public function toArray(): array
+    {
+        return [
+            'protocol_id' => $this->protocolId,
+            'protocol_name' => $this->protocolName,
+        ];
+    }
 }
