@@ -1,4 +1,4 @@
-FROM php:8.4.5RC1-cli-bookworm
+FROM php:8.4.14-cli-trixie
 
 ARG UNIX_UID=1000
 ARG UNIX_GID=1000
