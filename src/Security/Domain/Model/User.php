@@ -22,7 +22,7 @@ use Marvin\Shared\Domain\ValueObject\Theme;
 
 class User extends AggregateRoot
 {
-    private(set) UserId $id;
+    public private(set) UserId $id;
 
     public function __construct(
         private(set) Email $email,

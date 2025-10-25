@@ -20,4 +20,11 @@ final readonly class UserCreated extends AbstractDomainEvent implements DomainEv
     {
         return '$.security.user.created';
     }
+
+    public function toArray(): array
+    {
+        return [
+            'user_id' => $this->id->toString(),
+        ];
+    }
 }
