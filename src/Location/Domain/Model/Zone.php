@@ -24,27 +24,27 @@ use Marvin\Shared\Domain\ValueObject\Metadata;
 
 class Zone extends AggregateRoot
 {
-    private(set) ZoneId $id;
+    public private(set) ZoneId $id;
 
-    private(set) ?ZonePath $path = null;
+    public private(set) ?ZonePath $path = null;
 
-    private(set) ?float $currentTemperature = null;
+    public private(set) ?float $currentTemperature = null;
 
-    private(set) ?float $currentPowerConsumption = null;
+    public private(set) ?float $currentPowerConsumption = null;
 
-    private(set) ?bool $isOccupied = null;
+    public private(set) ?bool $isOccupied = null;
 
-    private(set) ?int $consecutiveNoMotionCount = null;
+    public private(set) ?int $consecutiveNoMotionCount = null;
 
-    private(set) ?DateTimeInterface $lastMetricsUpdate = null;
+    public private(set) ?DateTimeInterface $lastMetricsUpdate = null;
 
-    private(set) Collection $childrens;
+    public private(set) Collection $childrens;
 
-    private(set) ?Zone $parent = null;
+    public private(set) ?Zone $parent = null;
 
-    private(set) ?Label $label = null;
+    public private(set) ?Label $label = null;
 
-    private(set) ?string $slug = null;
+    public private(set) ?string $slug = null;
 
     public function __construct(
         public readonly ZoneType $type,

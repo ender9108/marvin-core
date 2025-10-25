@@ -17,7 +17,7 @@ use Marvin\Location\Infrastructure\Persistence\Doctrine\Cache\LocationCacheKeys;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Marvin\Shared\Domain\ValueObject\Label;
 
-class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRepositoryInterface
+final class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
