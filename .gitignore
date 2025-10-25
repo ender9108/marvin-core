@@ -4,6 +4,7 @@
 /.env.*.local
 /.env.dev
 /.env.test
+/.env
 /.deptrac.cache
 /config/secrets/prod/prod.decrypt.private.php
 /config/secrets/dev/dev.decrypt.private.php
@@ -43,4 +44,4 @@ compose.*.yaml
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###
-
+.env
