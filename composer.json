@@ -12,6 +12,7 @@
         "ext-intl": "*",
         "ext-simplexml": "*",
         "ext-swoole": "*",
+        "ext-openssl": "*",
         "api-platform/doctrine-orm": "*",
         "api-platform/json-api": "^4.0",
         "api-platform/jsonld": "^4.0",
@@ -118,7 +119,8 @@
             "./vendor/bin/ecs check --fix",
             "bin/console lint:yaml config --parse-tags",
             "bin/console lint:container",
-            "./vendor/bin/rector"
+            "./vendor/bin/rector",
+            "./vendor/bin/phpunit"
         ],
         "marvin:deptrac": [
             "./vendor/bin/deptrac --config-file=deptrac.yaml analyze"
