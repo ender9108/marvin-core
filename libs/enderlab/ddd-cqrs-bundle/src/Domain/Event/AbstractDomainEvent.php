@@ -12,4 +12,6 @@ abstract readonly class AbstractDomainEvent implements DomainEventInterface
     {
         $this->occurredOn = new DateTimeImmutable();
     }
+
+    abstract public function toArray(): array;
 }
