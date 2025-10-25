@@ -14,4 +14,14 @@ final readonly class GroupDeleted extends AbstractDomainEvent
     ) {
         parent::__construct();
     }
+
+    public function toArray(): array
+    {
+        return [
+            'group_id' => $this->groupId,
+            'group_name' => $this->groupName,
+            'total_devices_freed' => $this->totalDevicesFreed,
+            'native_groups_deleted' => $this->nativeGroupsDeleted,
+        ];
+    }
 }

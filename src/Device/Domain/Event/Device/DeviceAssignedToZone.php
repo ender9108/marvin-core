@@ -13,4 +13,13 @@ final readonly class DeviceAssignedToZone extends AbstractDomainEvent
     ) {
         parent::__construct();
     }
+
+    public function toArray(): array
+    {
+        return [
+            'device_id' => $this->deviceId,
+            'zone_id' => $this->zoneId,
+            'previous_zone_id' => $this->previousZoneId,
+        ];
+    }
 }

@@ -18,4 +18,18 @@ final readonly class DeviceCreated extends AbstractDomainEvent
     ) {
         parent::__construct();
     }
+
+    public function toArray(): array
+    {
+        return [
+            'device_id' => $this->deviceId,
+            'label' => $this->label,
+            'type' => $this->type,
+            'protocol_id' => $this->protocolId,
+            'zone_id' => $this->zoneId,
+            'virtual_device_type' => $this->virtualDeviceType,
+            'composite_type' => $this->compositeType,
+            'child_count' => $this->childCount,
+        ];
+    }
 }

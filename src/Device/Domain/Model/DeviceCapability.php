@@ -14,7 +14,7 @@ use Marvin\Shared\Domain\ValueObject\Metadata;
 
 final class DeviceCapability
 {
-    private(set) DeviceCapabilityId $id;
+    public private(set) DeviceCapabilityId $id;
 
     public private(set) ?Device $device = null;
 

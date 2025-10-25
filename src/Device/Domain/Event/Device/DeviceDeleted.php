@@ -12,4 +12,12 @@ final readonly class DeviceDeleted extends AbstractDomainEvent
     ) {
         parent::__construct();
     }
+
+    public function toArray(): array
+    {
+        return [
+            'device_id' => $this->deviceId,
+            'name' => $this->name,
+        ];
+    }
 }

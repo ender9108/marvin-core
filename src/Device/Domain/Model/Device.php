@@ -38,7 +38,7 @@ use Marvin\Shared\Domain\ValueObject\Metadata;
 
 class Device extends AggregateRoot
 {
-    private(set) DeviceId $id;
+    public private(set) DeviceId $id;
 
     /**
      * @var Collection<int, DeviceCapability>

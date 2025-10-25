@@ -12,4 +12,12 @@ final readonly class DeviceOnline extends AbstractDomainEvent
     ) {
         parent::__construct();
     }
+
+    public function toArray(): array
+    {
+        return [
+            'device_id' => $this->deviceId,
+            'label' => $this->label,
+        ];
+    }
 }

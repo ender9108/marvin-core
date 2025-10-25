@@ -13,4 +13,13 @@ final readonly class SceneActivated extends AbstractDomainEvent
     ) {
         parent::__construct();
     }
+
+    public function toArray(): array
+    {
+        return [
+            'scene_id' => $this->sceneId,
+            'label' => $this->label,
+            'used_native' => $this->usedNative,
+        ];
+    }
 }

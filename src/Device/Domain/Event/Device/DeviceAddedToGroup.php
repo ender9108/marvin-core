@@ -14,4 +14,14 @@ final readonly class DeviceAddedToGroup extends AbstractDomainEvent
     ) {
         parent::__construct();
     }
+
+    public function toArray(): array
+    {
+        return [
+            'group_id' => $this->groupId,
+            'group_name' => $this->groupName,
+            'device_id' => $this->deviceId,
+            'device_name' => $this->deviceName,
+        ];
+    }
 }

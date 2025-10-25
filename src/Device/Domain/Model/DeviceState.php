@@ -10,7 +10,7 @@ use Marvin\Device\Domain\ValueObject\Identity\DeviceStateId;
 
 class DeviceState
 {
-    private(set) DeviceStateId $id;
+    public private(set) DeviceStateId $id;
 
     public private(set) ?Device $device = null;
 

@@ -15,4 +15,15 @@ final readonly class GroupActionExecuted extends AbstractDomainEvent
     ) {
         parent::__construct();
     }
+
+    public function toArray(): array
+    {
+        return [
+            'group_id' => $this->groupId,
+            'action' => $this->action,
+            'used_native' => $this->usedNative,
+            'success_count' => $this->successCount,
+            'failure_count' => $this->failureCount,
+        ];
+    }
 }

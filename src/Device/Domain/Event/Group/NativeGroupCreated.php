@@ -16,4 +16,16 @@ final readonly class NativeGroupCreated extends AbstractDomainEvent
     ) {
         parent::__construct();
     }
+
+    public function toArray(): array
+    {
+        return [
+            'composite_id' => $this->compositeId,
+            'protocol' => $this->protocol,
+            'native_group_id' => $this->nativeGroupId,
+            'native_group_friendly_name' => $this->nativeGroupFriendlyName,
+            'parent_group_id' => $this->parentGroupId,
+            'device_ids' => $this->deviceIds,
+        ];
+    }
 }

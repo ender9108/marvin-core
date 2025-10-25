@@ -14,4 +14,14 @@ final readonly class GroupCreated extends AbstractDomainEvent
     ) {
         parent::__construct();
     }
+
+    public function toArray(): array
+    {
+        return [
+            'group_id' => $this->groupId,
+            'name' => $this->name,
+            'device_ids' => $this->childDeviceIds,
+            'has_native_support' => $this->hasNativeSupport,
+        ];
+    }
 }

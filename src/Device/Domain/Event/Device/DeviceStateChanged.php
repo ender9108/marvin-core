@@ -14,4 +14,14 @@ final readonly class DeviceStateChanged extends AbstractDomainEvent
     ) {
         parent::__construct();
     }
+
+    public function toArray(): array
+    {
+        return [
+            'device_id' => $this->deviceId,
+            'capability' => $this->capability,
+            'old_value' => $this->oldValue,
+            'new_value' => $this->newValue,
+        ];
+    }
 }

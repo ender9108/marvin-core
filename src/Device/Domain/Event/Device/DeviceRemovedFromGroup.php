@@ -16,4 +16,16 @@ final readonly class DeviceRemovedFromGroup extends AbstractDomainEvent
     ) {
         parent::__construct();
     }
+
+    public function toArray(): array
+    {
+        return [
+            'group_id' => $this->groupId,
+            'group_name' => $this->groupName,
+            'device_id' => $this->deviceId,
+            'device_name' => $this->deviceName,
+            'was_in_native_group' => $this->wasInNativeGroup,
+            'native_group_protocol' => $this->nativeGroupProtocol,
+        ];
+    }
 }

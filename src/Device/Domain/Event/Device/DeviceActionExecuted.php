@@ -14,4 +14,14 @@ final readonly class DeviceActionExecuted extends AbstractDomainEvent
     ) {
         parent::__construct();
     }
+
+    public function toArray(): array
+    {
+        return [
+            'device_id' => $this->deviceId,
+            'capability' => $this->capability,
+            'action' => $this->action,
+            'params' => $this->params,
+        ];
+    }
 }
