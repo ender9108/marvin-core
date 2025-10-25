@@ -17,4 +17,11 @@ final readonly class UserDisabled extends AbstractDomainEvent implements DomainE
     {
         return '$.security.user.disabled';
     }
+
+    public function toArray(): array
+    {
+        return [
+            'user_id' => $this->id->toString(),
+        ];
+    }
 }

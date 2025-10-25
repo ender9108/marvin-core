@@ -20,4 +20,12 @@ final readonly class UserEmailUpdated extends AbstractDomainEvent implements Dom
     {
         return '$.security.user.email_updated';
     }
+
+    public function toArray(): array
+    {
+        return [
+            'user_id' => $this->id->toString(),
+            'new_email' => (string) $this->newEmail,
+        ];
+    }
 }

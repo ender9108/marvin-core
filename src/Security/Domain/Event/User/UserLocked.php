@@ -17,4 +17,11 @@ final readonly class UserLocked extends AbstractDomainEvent implements DomainEve
     {
         return '$.security.user.locked';
     }
+
+    public function toArray(): array
+    {
+        return [
+            'user_id' => $this->id->toString(),
+        ];
+    }
 }

@@ -22,4 +22,13 @@ final readonly class UserDeleted extends AbstractDomainEvent implements DomainEv
     {
         return '$.security.user.deleted';
     }
+
+    public function toArray(): array
+    {
+        return [
+            'user_id' => $this->id->toString(),
+            'type' => $this->type->value,
+            'email' => (string) $this->email,
+        ];
+    }
 }

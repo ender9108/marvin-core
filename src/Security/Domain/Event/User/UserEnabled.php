@@ -17,4 +17,11 @@ final readonly class UserEnabled extends AbstractDomainEvent implements DomainEv
     {
         return '$.security.user.enabled';
     }
+
+    public function toArray(): array
+    {
+        return [
+            'user_id' => $this->id->toString(),
+        ];
+    }
 }
