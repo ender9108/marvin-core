@@ -1015,9 +1015,9 @@ class Email
 Toujours implémenter une méthode `equals()` pour comparer deux value objects.
 
 ```php
-public function equals(Email $email): bool
+public function equals(ValueObjectInterface $other): bool
 {
-    return $this->value === $email->value;
+    return $this->value === $other->value;
 }
 ```
 

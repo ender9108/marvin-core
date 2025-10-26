@@ -23,9 +23,9 @@ final readonly class Email implements ValueObjectInterface, Stringable
         $this->value = $email;
     }
 
-    public function equals(Email $email): bool
+    public function equals(ValueObjectInterface $other): bool
     {
-        return $this->value === $email->value;
+        return $this->value === $other->value;
     }
 
     #[Override]

@@ -3,6 +3,7 @@
 namespace Marvin\Security\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
+use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Marvin\Security\Domain\List\Role;
 use Marvin\Shared\Domain\ValueObject\ArrayValueObjectInterface;
 use Override;
@@ -82,5 +83,10 @@ final readonly class Roles implements ArrayValueObjectInterface, \Stringable
     public function isSuperAdmin(): bool
     {
         return $this->contains(Role::SUPER_ADMIN->value);
+    }
+
+    public function equals(ValueObjectInterface $other): bool
+    {
+        return $this->value === $other->value;
     }
 }

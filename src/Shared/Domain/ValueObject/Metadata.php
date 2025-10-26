@@ -2,6 +2,8 @@
 
 namespace Marvin\Shared\Domain\ValueObject;
 
+use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
+
 final readonly class Metadata implements ArrayValueObjectInterface
 {
     public function __construct(public array $value = [])
@@ -13,9 +15,9 @@ final readonly class Metadata implements ArrayValueObjectInterface
         return new self($value);
     }
 
-    public function equals(Metadata $metadata): bool
+    public function equals(ValueObjectInterface $other): bool
     {
-        return $this->value === $metadata->value;
+        return $this->value === $other->value;
     }
 
     public function toArray(): array

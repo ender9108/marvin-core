@@ -29,9 +29,9 @@ final readonly class UserType implements ValueObjectInterface, \Stringable
         $this->value = $type;
     }
 
-    public function equals(UserType $type): bool
+    public function equals(ValueObjectInterface $other): bool
     {
-        return $this->value === $type->value;
+        return $this->value === $other->value;
     }
 
     public function __toString(): string

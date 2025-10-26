@@ -5,7 +5,7 @@ namespace Marvin\Secret\Domain\Exception;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
 
-final class Encryption extends DomainException implements TranslatableExceptionInterface
+final class EncryptionError extends DomainException implements TranslatableExceptionInterface
 {
     public function __construct(
         string $message,

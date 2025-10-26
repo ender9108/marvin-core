@@ -104,7 +104,7 @@ class Device extends AggregateRoot
             metadata: $metadata,
         );
 
-        $device->recordThat(new DeviceCreated(
+        $device->recordEvent(new DeviceCreated(
             deviceId: $device->id->toString(),
             label: $device->label->value,
             type: $device->type->value,
@@ -128,7 +128,7 @@ class Device extends AggregateRoot
             virtualDeviceConfig: $virtualDeviceConfig,
         );
 
-        $device->recordThat(new DeviceCreated(
+        $device->recordEvent(new DeviceCreated(
             deviceId: $device->id->toString(),
             label: $device->label->value,
             type: $device->type->value,
@@ -153,7 +153,7 @@ class Device extends AggregateRoot
 
         $device->setChildrens($childrens);
 
-        $device->recordThat(new DeviceCreated(
+        $device->recordEvent(new DeviceCreated(
             deviceId: $device->id->toString(),
             label: $label->value,
             type: DeviceType::COMPOSITE->value,
@@ -188,7 +188,7 @@ class Device extends AggregateRoot
 
         $device->setSceneStates($currentStates);
 
-        $device->recordThat(new DeviceCreated(
+        $device->recordEvent(new DeviceCreated(
             deviceId: $device->id->toString(),
             label: $label->value,
             type: DeviceType::COMPOSITE->value,
@@ -210,7 +210,7 @@ class Device extends AggregateRoot
 
     public function delete(): void
     {
-        $this->recordThat(new DeviceDeleted(
+        $this->recordEvent(new DeviceDeleted(
             deviceId: $this->id->toString(),
             name: $this->label->value,
         ));
@@ -306,7 +306,7 @@ class Device extends AggregateRoot
 
         $state->updateValue($value, $unit);
 
-        $this->recordThat(new DeviceStateChanged(
+        $this->recordEvent(new DeviceStateChanged(
             deviceId: $this->id->toString(),
             capability: $capability->value,
             oldValue: $oldValue,
@@ -332,7 +332,7 @@ class Device extends AggregateRoot
             );
         }
 
-        $this->recordThat(new DeviceActionExecuted(
+        $this->recordEvent(new DeviceActionExecuted(
             deviceId: $this->id->toString(),
             capability: $capability->value,
             action: $action,
@@ -345,7 +345,7 @@ class Device extends AggregateRoot
         if ($this->status !== DeviceStatus::ONLINE) {
             $this->status = DeviceStatus::ONLINE;
 
-            $this->recordThat(new DeviceOnline(
+            $this->recordEvent(new DeviceOnline(
                 deviceId: $this->id->toString(),
                 label: $this->label
             ));
@@ -357,7 +357,7 @@ class Device extends AggregateRoot
         if ($this->status !== DeviceStatus::OFFLINE) {
             $this->status = DeviceStatus::OFFLINE;
 
-            $this->recordThat(new DeviceOffline(
+            $this->recordEvent(new DeviceOffline(
                 deviceId: $this->id->toString(),
                 label: $this->label->value
             ));
@@ -377,7 +377,7 @@ class Device extends AggregateRoot
         $oldZoneId = $this->zoneId?->toString();
         $this->zoneId = $zoneId;
 
-        $this->recordThat(new DeviceAssignedToZone(
+        $this->recordEvent(new DeviceAssignedToZone(
             deviceId: $this->id->toString(),
             zoneId: $zoneId->toString(),
             previousZoneId: $oldZoneId
@@ -395,7 +395,7 @@ class Device extends AggregateRoot
             $oldZoneId = $this->zoneId->toString();
             $this->zoneId = null;
 
-            $this->recordThat(new DeviceAssignedToZone(
+            $this->recordEvent(new DeviceAssignedToZone(
                 deviceId: $this->id->toString(),
                 zoneId: null,
                 previousZoneId: $oldZoneId

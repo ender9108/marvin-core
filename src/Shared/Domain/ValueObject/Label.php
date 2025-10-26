@@ -26,9 +26,9 @@ final readonly class Label implements ValueObjectInterface, Stringable
         return new self($label);
     }
 
-    public function equals(Label $label): bool
+    public function equals(ValueObjectInterface $other): bool
     {
-        return $this->value === $label->value;
+        return $this->value === $other->value;
     }
 
     public function __toString(): string

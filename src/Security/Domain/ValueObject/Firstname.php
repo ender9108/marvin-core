@@ -21,9 +21,9 @@ final readonly class Firstname implements ValueObjectInterface, Stringable
         $this->value = $firstname;
     }
 
-    public function equals(Firstname $firstname): bool
+    public function equals(ValueObjectInterface $other): bool
     {
-        return $this->value === $firstname->value;
+        return $this->value === $other->value;
     }
 
     public function __toString(): string

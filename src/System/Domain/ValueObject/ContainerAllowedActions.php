@@ -3,7 +3,8 @@
 namespace Marvin\System\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\MarvinManagerBundle\Reference\ManagerActionReference;
+use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
+use EnderLab\MarvinManagerBundle\Reference\ManagerContainerActionReference;
 use Marvin\Shared\Domain\ValueObject\ArrayValueObjectInterface;
 
 final readonly class ContainerAllowedActions implements ArrayValueObjectInterface
@@ -13,12 +14,12 @@ final readonly class ContainerAllowedActions implements ArrayValueObjectInterfac
     public function __construct(array $value = [])
     {
         Assert::notEmpty($value);
-        Assert::allInArray($value, ManagerActionReference::values());
+        Assert::allInArray($value, ManagerContainerActionReference::values());
 
         $this->value = $value;
     }
 
-    public function equals(ArrayValueObjectInterface $other): bool
+    public function equals(ValueObjectInterface $other): bool
     {
         return $other instanceof self && $this->value === $other->value;
     }

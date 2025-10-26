@@ -26,6 +26,14 @@ final readonly class RotateSecretHandler
     {
         $secret = $this->secretRepository->byKey($command->key);
 
+        // Si external et pas de nouvelle valeur → erreur
+        if ($secret->rotationPolicy->getManagement()->isExternal() && $command->newValue === null) {
+            /** @todo */
+            /*throw new \InvalidArgumentException(
+                "Cannot auto-generate value for external secret '{$command->key}'. Please provide a new value."
+            );*/
+        }
+
         // Générer ou utiliser la nouvelle valeur
         $plainValue = $command->newValue ?? $this->passwordGenerator->generate();
         $newValue = SecretValue::fromPlainText($plainValue, $this->encryption);
@@ -36,6 +44,7 @@ final readonly class RotateSecretHandler
 
         $this->logger->info('Secret rotated successfully', [
             'secret_key' => $command->key,
+            'managed' => $secret->rotationPolicy->getManagement()->value,
         ]);
     }
 }

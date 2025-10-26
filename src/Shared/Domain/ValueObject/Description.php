@@ -21,9 +21,9 @@ final readonly class Description implements ValueObjectInterface, Stringable
         $this->value = $description;
     }
 
-    public function equals(Description $description): bool
+    public function equals(ValueObjectInterface $other): bool
     {
-        return $this->value === $description->value;
+        return $this->value === $other->value;
     }
 
     public function __toString(): string

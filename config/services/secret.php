@@ -1,5 +1,10 @@
 <?php
+
+use Marvin\Secret\Infrastructure\Service\Acl\SecretQueryService;
+use Marvin\Shared\Application\Acl\SecretQueryServiceInterface;
+use Marvin\Shared\Infrastructure\Cache\CacheableSecretQueryService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
@@ -17,5 +22,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             dirname(__DIR__, 2).'/src/Secret/Domain/Model/*',
             dirname(__DIR__, 2).'/src/Secret/Domain/ValueObject/*',
         ])
+    ;
+
+    $services
+        ->set(SecretQueryService::class)
+        ->autowire()
+        ->public(false)
+    ;
+
+    $services
+        ->set(SecretQueryServiceInterface::class, CacheableSecretQueryService::class)
+        ->arg('$decorated', service(SecretQueryService::class))
+        ->arg('$cache', service('cache.app'))
+        ->public(true)
     ;
 };

@@ -4,6 +4,7 @@ namespace Marvin\Security\Domain\ValueObject;
 
 use DateTimeInterface;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
+use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Marvin\Shared\Domain\ValueObject\DatetimeValueObjectInterface;
 use Stringable;
 
@@ -20,9 +21,9 @@ final readonly class ExpiresAt implements DatetimeValueObjectInterface, Stringab
         $this->value = $createdAt;
     }
 
-    public function equals(ExpiresAt $createdAt): bool
+    public function equals(ValueObjectInterface $other): bool
     {
-        return $this->value === $createdAt->value;
+        return $this->value === $other->value;
     }
 
     public function __toString(): string

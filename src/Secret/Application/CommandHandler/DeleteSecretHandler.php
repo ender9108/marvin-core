@@ -18,6 +18,8 @@ final readonly class DeleteSecretHandler implements SyncCommandHandlerInterface
     public function __invoke(DeleteSecret $command): void
     {
         $secret = $this->secretRepository->byKey($command->key);
+        $secret->delete();
+
         $this->secretRepository->remove($secret);
     }
 }

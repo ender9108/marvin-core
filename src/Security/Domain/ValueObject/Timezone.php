@@ -18,9 +18,9 @@ final readonly class Timezone implements ValueObjectInterface, Stringable
         $this->value = $timezone;
     }
 
-    public function equals(Timezone $timezone): bool
+    public function equals(ValueObjectInterface $other): bool
     {
-        return $this->value === $timezone->value;
+        return $this->value === $other->value;
     }
 
     public function __toString(): string

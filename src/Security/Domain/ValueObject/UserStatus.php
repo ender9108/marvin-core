@@ -30,9 +30,9 @@ final readonly class UserStatus implements ValueObjectInterface
         $this->value = $status;
     }
 
-    public function equals(UserStatus $status): bool
+    public function equals(ValueObjectInterface $other): bool
     {
-        return $this->value === $status->value;
+        return $this->value === $other->value;
     }
 
     public function isDisabled(): bool

@@ -21,9 +21,9 @@ final readonly class Reference implements ValueObjectInterface, Stringable
         $this->value = $reference;
     }
 
-    public function equals(Reference $reference): bool
+    public function equals(ValueObjectInterface $other): bool
     {
-        return $this->value === $reference->value;
+        return $this->value === $other->value;
     }
 
     public function __toString(): string

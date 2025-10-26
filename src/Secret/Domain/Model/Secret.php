@@ -2,16 +2,20 @@
 
 namespace Marvin\Secret\Domain\Model;
 
+use DateMalformedStringException;
 use DateTimeImmutable;
 use DateTimeInterface;
 use EnderLab\DddCqrsBundle\Domain\Model\AggregateRoot;
+use Marvin\Secret\Domain\Event\SecretCreated;
+use Marvin\Secret\Domain\Event\SecretDeleted;
+use Marvin\Secret\Domain\Event\SecretRotated;
+use Marvin\Secret\Domain\Event\SecretUpdated;
 use Marvin\Secret\Domain\ValueObject\Identity\SecretId;
 use Marvin\Secret\Domain\ValueObject\RotationPolicy;
 use Marvin\Secret\Domain\ValueObject\SecretCategory;
 use Marvin\Secret\Domain\ValueObject\SecretKey;
 use Marvin\Secret\Domain\ValueObject\SecretScope;
 use Marvin\Secret\Domain\ValueObject\SecretValue;
-use Marvin\Shared\Domain\ValueObject\Identity\UniqId;
 use Marvin\Shared\Domain\ValueObject\Metadata;
 
 class Secret extends AggregateRoot
@@ -31,6 +35,17 @@ class Secret extends AggregateRoot
         public readonly DateTimeInterface $createdAt = new DateTimeImmutable(),
     ) {
         $this->id = new SecretId();
+
+        $this->recordEvent(
+            new SecretCreated(
+                secretId: $this->id->toString(),
+                key: $this->key->value,
+                scope: $this->scope->value,
+                category: $this->category->value,
+                autoRotate: $this->rotationPolicy->isAutoRotate(),
+                rotationIntervalDays: $this->rotationPolicy->getRotationIntervalDays(),
+            )
+        );
     }
 
     public static function create(
@@ -59,18 +74,51 @@ class Secret extends AggregateRoot
     public function updateValue(SecretValue $newValue): void
     {
         $this->value = $newValue;
-        $this->updatedAt = new DateTimeImmutable();
+
+        $this->recordEvent(
+            new SecretUpdated(
+                secretId: $this->id->toString(),
+                key: $this->key->value,
+                scope: $this->scope->value,
+                category: $this->category->value,
+                valueChanged: true,
+            )
+        );
     }
 
     public function rotate(SecretValue $newValue): void
     {
-        // Garde l'ancienne valeur dans metadata pour période de transition
+        $previousValueHash = hash('sha256', $this->value->getEncrypted());
+
+        // Garder l'ancienne valeur dans metadata pour période de transition
         $this->metadata['previous_value'] = $this->value->getEncrypted();
         $this->metadata['previous_value_rotated_at'] = new DateTimeImmutable()->format('c');
 
-        // Rotation simple: met à jour la valeur et les timestamps
         $this->value = $newValue;
         $this->lastRotatedAt = new DateTimeImmutable();
+
+        $this->recordEvent(
+            new SecretRotated(
+                secretId: $this->id->toString(),
+                key: $this->key->value,
+                scope: $this->scope->value,
+                category: $this->category->value,
+                automatic: true,
+                previousValueHash: $previousValueHash,
+            )
+        );
+    }
+
+    public function delete(): void
+    {
+        $this->recordEvent(
+            new SecretDeleted(
+                secretId: $this->id->toString(),
+                key: $this->key->value,
+                scope: $this->scope->value,
+                category: $this->category->value,
+            )
+        );
     }
 
     public function isExpired(): bool
@@ -83,7 +131,7 @@ class Secret extends AggregateRoot
     }
 
     /**
-     * @throws \DateMalformedStringException
+     * @throws DateMalformedStringException
      */
     public function needsRotation(): bool
     {

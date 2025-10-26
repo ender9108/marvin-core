@@ -22,9 +22,9 @@ final readonly class Theme implements ValueObjectInterface, Stringable
         $this->value = $theme;
     }
 
-    public function equals(Theme $theme): bool
+    public function equals(ValueObjectInterface $other): bool
     {
-        return $this->value === $theme->value;
+        return $this->value === $other->value;
     }
 
     public function __toString(): string

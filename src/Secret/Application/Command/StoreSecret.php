@@ -16,6 +16,7 @@ final readonly class StoreSecret implements SyncCommandInterface
         public string $plainTextValue,
         public SecretScope $scope = SecretScope::GLOBAL,
         public SecretCategory $category = SecretCategory::INFRASTRUCTURE,
+        public bool $managed = false,
         public int $rotationIntervalDays = 0,
         public bool $autoRotate = false,
         public ?string $rotationCommand = null,

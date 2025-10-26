@@ -24,9 +24,9 @@ final readonly class ProtocolType implements ValueObjectInterface, Stringable
         return new self($value);
     }
 
-    public function equals(ProtocolType $protocolType): bool
+    public function equals(ValueObjectInterface $other): bool
     {
-        return $this->value === $protocolType->value;
+        return $this->value === $other->value;
     }
 
     public function __toString(): string

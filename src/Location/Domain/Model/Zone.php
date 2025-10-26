@@ -64,7 +64,7 @@ class Zone extends AggregateRoot
 
     public function delete(): void
     {
-        $this->recordThat(new ZoneDeleted(
+        $this->recordEvent(new ZoneDeleted(
             $this->id->toString(),
             $this->label->value,
         ));
@@ -77,7 +77,7 @@ class Zone extends AggregateRoot
         $this->lastMetricsUpdate = new DateTimeImmutable();
 
         if ($oldTemp !== null && $temperature !== null && abs($oldTemp - $temperature) >= 0.5) {
-            $this->recordThat(new ZoneTemperatureUpdated(
+            $this->recordEvent(new ZoneTemperatureUpdated(
                 zoneId: $this->id,
                 oldTemperature: $oldTemp,
                 newTemperature: $temperature,
@@ -100,7 +100,7 @@ class Zone extends AggregateRoot
         $this->lastMetricsUpdate = new DateTimeImmutable();
 
         if (!$wasOccupied) {
-            $this->recordThat(new ZoneOccupancyChanged(
+            $this->recordEvent(new ZoneOccupancyChanged(
                 zoneId: $this->id,
                 isOccupied: true,
                 occurredAt: new DateTimeImmutable()
@@ -122,7 +122,7 @@ class Zone extends AggregateRoot
     {
         $this->isOccupied = false;
 
-        $this->recordThat(new ZoneOccupancyChanged(
+        $this->recordEvent(new ZoneOccupancyChanged(
             zoneId: $this->id,
             isOccupied: false,
             occurredAt: new DateTimeImmutable()

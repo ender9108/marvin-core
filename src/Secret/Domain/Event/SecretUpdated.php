@@ -16,7 +16,8 @@ final readonly class SecretUpdated extends AbstractDomainEvent
         parent::__construct();
     }
 
-    public function toArray(): array {
+    public function toArray(): array
+    {
         return [
             'secret_id' => $this->secretId,
             'key' => $this->key,

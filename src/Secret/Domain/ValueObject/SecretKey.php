@@ -8,15 +8,19 @@ use Stringable;
 
 final readonly class SecretKey implements ValueObjectInterface, Stringable
 {
-    public function __construct(public string $value)
+    public string $value;
+
+    public function __construct(string $value)
     {
         Assert::notEmpty($value);
         Assert::regex($value, '/^[a-zA-Z0-9_.:-]{3,128}$/');
+
+        $this->value = $value;
     }
 
     public function equals(ValueObjectInterface $other): bool
     {
-        return $other instanceof self && $this->value === $other->value;
+        return $this->value === $other->value;
     }
 
     public function __toString(): string

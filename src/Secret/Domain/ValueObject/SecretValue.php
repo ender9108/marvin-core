@@ -48,4 +48,9 @@ final readonly class SecretValue implements ValueObjectInterface, Stringable
     {
         return '***ENCRYPTED***';
     }
+
+    public function equals(ValueObjectInterface $other): bool
+    {
+        return $this->value === $other->value;
+    }
 }

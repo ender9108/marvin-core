@@ -2,6 +2,7 @@
 
 namespace Marvin\Secret\Domain\Repository;
 
+use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
 use Marvin\Secret\Domain\Model\Secret;
 use Marvin\Secret\Domain\ValueObject\Identity\SecretId;
 use Marvin\Secret\Domain\ValueObject\SecretCategory;
@@ -30,4 +31,13 @@ interface SecretRepositoryInterface
     public function getExpired(): array;
 
     public function exists(SecretKey $key): bool;
+
+    public function collection(
+        /** @var array<string, mixed> $criterias */
+        array $criterias = [],
+        /** @var array<string, mixed> $orderBy */
+        array $orderBy = [],
+        int $page = 0,
+        int $itemsPerPage = 20
+    ): PaginatorInterface;
 }

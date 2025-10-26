@@ -53,18 +53,22 @@ final readonly class SecretRotationService
      */
     public function rotateSecret(Secret $secret): void
     {
-        // 1. Générer nouvelle valeur
+        if (!$secret->rotationPolicy->getManagement()->isManaged()) {
+            /*
+             * @todo
+                throw new \InvalidArgumentException(
+                    'Cannot auto-rotate external secret'
+                );
+             */
+        }
+
+        // Générer nouvelle valeur
         $newPassword = $this->passwordGenerator->generate();
         $newValue = SecretValue::fromPlainText($newPassword, $this->encryption);
 
-        // 2. Mettre à jour le secret
+        // Mettre à jour le secret
         $secret->rotate($newValue);
         $this->secretRepository->save($secret);
-
-        // 3. Exécuter commande post-rotation si définie
-        if ($command = $secret->rotationPolicy->getRotationCommand()) {
-            $this->executeRotationCommand($command, $secret);
-        }
     }
 
     /**
@@ -73,24 +77,5 @@ final readonly class SecretRotationService
     public function findSecretsNeedingRotation(): array
     {
         return $this->secretRepository->getNeedingRotation();
-    }
-
-    private function executeRotationCommand(string $command, Secret $secret): void
-    {
-        $this->logger->info('Executing rotation command', [
-            'command' => $command,
-            'secret_key' => $secret->key->value,
-        ]);
-
-        $process = Process::fromShellCommandline($command);
-        $process->setTimeout(300); // 5 minutes max
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            /** @todo */
-            throw new \RuntimeException(
-                sprintf('Rotation command failed: %s', $process->getErrorOutput())
-            );
-        }
     }
 }

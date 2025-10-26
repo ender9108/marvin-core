@@ -84,4 +84,9 @@ enum WorkerStatus: string implements ValueObjectInterface
             self::UNKNOWN => '?',
         };
     }
+
+    public function equals(ValueObjectInterface $other): bool
+    {
+        return $this->value === $other->value;
+    }
 }

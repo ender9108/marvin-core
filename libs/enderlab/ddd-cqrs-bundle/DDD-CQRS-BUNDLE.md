@@ -227,7 +227,7 @@ abstract class AggregateRoot
 {
     private array $recordedEvents = [];
     
-    public function recordThat(DomainEventInterface $event): void
+    public function recordEvent(DomainEventInterface $event): void
     {
         $this->recordedEvents[] = $event;
     }
@@ -247,14 +247,14 @@ final class User extends AggregateRoot
 {
     public function delete(): self
     {
-        $this->recordThat(new UserDeleted($this->id));
+        $this->recordEvent(new UserDeleted($this->id));
         return $this;
     }
 }
 ```
 
 **Pattern:**
-- Les événements sont enregistrés avec `recordThat()`
+- Les événements sont enregistrés avec `recordEvent()`
 - Les événements sont collectés automatiquement par `DomainEventDispatcher`
 - Les événements sont dispatché après le `flush()` Doctrine
 
@@ -636,7 +636,7 @@ final class User extends AggregateRoot
         $oldEmail = $this->email;
         $this->email = $newEmail;
         
-        $this->recordThat(new UserEmailChanged(
+        $this->recordEvent(new UserEmailChanged(
             $this->id,
             $oldEmail,
             $newEmail
@@ -900,7 +900,7 @@ Si vous migrez depuis une version custom ou un autre bundle CQRS:
 1. Remplacer les interfaces de bus par celles de ce bundle
 2. Adapter les handlers pour utiliser `#[AsMessageHandler]`
 3. Étendre `AggregateRoot` pour les agrégats
-4. Utiliser `recordThat()` pour les événements de domaine
+4. Utiliser `recordEvent()` pour les événements de domaine
 5. Configurer Messenger selon vos besoins (sync/async)
 
 ---

@@ -3,12 +3,16 @@
 namespace Marvin\Secret\Infrastructure\Service;
 
 use Marvin\Secret\Domain\Service\EncryptionServiceInterface;
+use SensitiveParameter;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final readonly class AES256EncryptionService implements EncryptionServiceInterface
 {
     private const string CIPHER_METHOD = 'aes-256-gcm';
 
     public function __construct(
+        #[SensitiveParameter]
+        #[Autowire(env: 'SECRET_MASTER_KEY')]
         private string $masterKey,
     ) {
         if (strlen($this->masterKey) !== 32) {

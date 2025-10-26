@@ -106,7 +106,7 @@ class User extends AggregateRoot
 
     public function delete(): self
     {
-        $this->recordThat(new UserDeleted(
+        $this->recordEvent(new UserDeleted(
             $this->id,
             $this->type,
             $this->email

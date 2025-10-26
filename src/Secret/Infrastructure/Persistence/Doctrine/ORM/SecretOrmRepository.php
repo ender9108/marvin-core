@@ -4,7 +4,11 @@ namespace Marvin\Secret\Infrastructure\Persistence\Doctrine\ORM;
 
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
+use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
+use EnderLab\DddCqrsBundle\Infrastructure\Persistence\Doctrine\ORM\PaginatorOrm;
 use Marvin\Secret\Domain\Exception\SecretNotFound;
 use Marvin\Secret\Domain\Model\Secret;
 use Marvin\Secret\Domain\Repository\SecretRepositoryInterface;
@@ -12,6 +16,8 @@ use Marvin\Secret\Domain\ValueObject\Identity\SecretId;
 use Marvin\Secret\Domain\ValueObject\SecretCategory;
 use Marvin\Secret\Domain\ValueObject\SecretKey;
 use Marvin\Secret\Domain\ValueObject\SecretScope;
+use Marvin\Secret\Infrastructure\Persistence\Doctrine\Cache\SecretCacheKeys;
+use Marvin\Security\Infrastructure\Persistence\Doctrine\Cache\SecurityCacheKeys;
 
 final class SecretOrmRepository extends ServiceEntityRepository implements SecretRepositoryInterface
 {
@@ -104,5 +110,36 @@ final class SecretOrmRepository extends ServiceEntityRepository implements Secre
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function collection(
+        /** @var array<string, mixed> $criterias */
+        array $criterias = [],
+        /** @var array<string, string> $orderBy */
+        array $orderBy = [],
+        int $page = 0,
+        int $itemsPerPage = 50
+    ): PaginatorInterface {
+        $query = $this
+            ->createQueryBuilder('s')
+            ->setCacheable(true)
+            ->setCacheMode(ClassMetadata::CACHE_USAGE_NONSTRICT_READ_WRITE)
+            ->setCacheRegion(SecretCacheKeys::SECRET_LIST->value)
+        ;
+
+        /*foreach ($criterias as $field => $value) {
+            // @todo
+        }*/
+
+        foreach ($orderBy as $field => $direction) {
+            $query->addOrderBy('s.' . $field, $direction);
+        }
+
+        $query->setFirstResult(($page - 1) * $itemsPerPage);
+        $query->setMaxResults($itemsPerPage);
+
+        $paginator = new Paginator($query->getQuery());
+
+        return new PaginatorOrm($paginator);
     }
 }

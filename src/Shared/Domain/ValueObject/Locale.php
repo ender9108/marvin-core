@@ -22,9 +22,9 @@ final readonly class Locale implements ValueObjectInterface, Stringable
         $this->value = $locale;
     }
 
-    public function equals(Locale $locale): bool
+    public function equals(ValueObjectInterface $other): bool
     {
-        return $this->value === $locale->value;
+        return $this->value === $other->value;
     }
 
     public function __toString(): string

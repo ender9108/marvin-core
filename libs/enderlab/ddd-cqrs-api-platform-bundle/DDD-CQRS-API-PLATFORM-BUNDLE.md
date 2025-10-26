@@ -279,13 +279,13 @@ final class User extends AggregateRoot
     {
         // Logique métier pour mise à jour
         if ($this->email !== $previous->email) {
-            $this->recordThat(new UserEmailChanged(...));
+            $this->recordEvent(new UserEmailChanged(...));
         }
     }
     
     public function delete(): void
     {
-        $this->recordThat(new UserDeleted($this->id));
+        $this->recordEvent(new UserDeleted($this->id));
     }
 }
 ```
@@ -694,7 +694,7 @@ final class Device extends AggregateRoot
     public function update(Device $previous): void
     {
         if (!$this->name->equals($previous->name)) {
-            $this->recordThat(new DeviceNameChanged($this->id, $this->name));
+            $this->recordEvent(new DeviceNameChanged($this->id, $this->name));
         }
     }
 }

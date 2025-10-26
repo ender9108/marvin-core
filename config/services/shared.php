@@ -32,4 +32,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             dirname(__DIR__, 2).'/src/Shared/Domain/ValueObject/*',
         ])
     ;
+
+
 };

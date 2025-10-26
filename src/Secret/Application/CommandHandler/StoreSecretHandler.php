@@ -29,11 +29,11 @@ final readonly class StoreSecretHandler
 
         $value = SecretValue::fromPlainText($command->plainTextValue, $this->encryption);
 
-        $rotationPolicy = RotationPolicy::create(
-            $command->rotationIntervalDays,
-            $command->autoRotate,
-            $command->rotationCommand,
-        );
+        $rotationPolicy = $command->managed
+            ? ($command->autoRotate
+                ? RotationPolicy::managed($command->rotationIntervalDays, $command->rotationCommand)
+                : RotationPolicy::managedNoRotation())
+            : RotationPolicy::external($command->rotationIntervalDays);
 
         $secret = Secret::create(
             key: $command->key,
