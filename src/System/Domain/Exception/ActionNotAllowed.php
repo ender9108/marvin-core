@@ -13,16 +13,18 @@ final class ActionNotAllowed extends DomainException implements TranslatableExce
 {
     public function __construct(
         string $message,
+        string $code,
         public readonly ?string $containerLabel = null,
         public readonly ?string $action = null,
     ) {
-        parent::__construct($message);
+        parent::__construct($message, $code);
     }
 
     public static function withContainerAndAction(Label|ContainerId $container, string $action): self
     {
         return new self(
             sprintf('Action %s not allowed for container %s', $action, $container->value),
+            'SM0001',
             $container->value,
             $action
         );

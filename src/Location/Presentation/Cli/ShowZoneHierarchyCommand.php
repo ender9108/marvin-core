@@ -3,7 +3,7 @@
 namespace Marvin\Location\Presentation\Cli;
 
 use EnderLab\DddCqrsBundle\Application\Query\QueryBusInterface;
-use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
+use Exception;
 use Marvin\Location\Application\Query\Zone\GetZoneHierarchy;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
@@ -51,12 +51,9 @@ final readonly class ShowZoneHierarchyCommand
             }
 
             return Command::SUCCESS;
-        } catch (DomainException $de) {
-            $io->error($this->exceptionMessageManager->cliResponseFormat($de));
+        } catch (Exception $e) {
+            $io->error($this->exceptionMessageManager->cliResponseFormat($e));
 
-            return Command::FAILURE;
-        } catch (\Exception $e) {
-            $io->error("Failed: {$e->getMessage()}");
             return Command::FAILURE;
         }
     }

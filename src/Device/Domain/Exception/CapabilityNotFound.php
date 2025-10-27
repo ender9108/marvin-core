@@ -24,7 +24,7 @@ class CapabilityNotFound extends DomainException implements TranslatableExceptio
     ): self {
         return new self(
             sprintf('Capability %s not found on device %s', $capability->value, $deviceLabel->value),
-            'D00013',
+            'DE00013',
             $capability->value,
             $deviceLabel->value,
         );

@@ -3,7 +3,7 @@
 namespace Marvin\Security\Presentation\Cli;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
-use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
+use Exception;
 use Marvin\Security\Application\Command\User\CreateUser;
 use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Lastname;
@@ -74,9 +74,8 @@ final readonly class CreateUserCommand
             $io->success(sprintf('User %s created successfully.', $email));
 
             return Command::SUCCESS;
-        } catch (DomainException $de) {
-            $message = $this->exceptionMessageManager->cliResponseFormat($de);
-            $io->error($message);
+        } catch (Exception $e) {
+            $io->error($this->exceptionMessageManager->cliResponseFormat($e));
 
             return Command::FAILURE;
         }

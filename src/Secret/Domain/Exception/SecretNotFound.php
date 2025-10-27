@@ -22,7 +22,7 @@ final class SecretNotFound extends DomainException implements TranslatableExcept
     {
         return new self(
             sprintf('Secret with key "%s" not found', $key->value),
-            'S0001',
+            'ST0001',
             null,
             $key->value
         );
@@ -32,7 +32,7 @@ final class SecretNotFound extends DomainException implements TranslatableExcept
     {
         return new self(
             sprintf('Secret with id "%s" not found', $id->toString()),
-            'S0002',
+            'ST0002',
             $id->toString(),
             null
         );

@@ -9,7 +9,7 @@ enum SecretCategory: string implements ValueObjectInterface
 {
     use EnumToArrayTrait;
 
-    case WIFI = 'wifi';
+    case NETWORK = 'network';
     case API_KEY = 'api_key';
     case CERTIFICATE = 'certificate';
     case INFRASTRUCTURE = 'infrastructure';

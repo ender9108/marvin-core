@@ -3,7 +3,7 @@
 namespace Marvin\Security\Presentation\Cli;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
-use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
+use Exception;
 use Marvin\Security\Application\Command\User\ChangeEmailUser;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Identity\UserId;
@@ -41,8 +41,8 @@ final readonly class ChangeEmailUserCommand
             $io->success('Update user email successfully.');
 
             return Command::SUCCESS;
-        } catch (DomainException $de) {
-            $io->error($this->exceptionMessageManager->cliResponseFormat($de));
+        } catch (Exception $e) {
+            $io->error($this->exceptionMessageManager->cliResponseFormat($e));
 
             return Command::FAILURE;
         }

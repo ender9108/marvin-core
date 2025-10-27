@@ -12,16 +12,18 @@ final class ActionRequestNotFound extends DomainException implements Translatabl
 {
     public function __construct(
         string $message,
+        string $code,
         public readonly ?string $id = null,
         public readonly ?string $correlationId = null,
     ) {
-        parent::__construct($message);
+        parent::__construct($message, $code);
     }
 
     public static function withId(ActionRequestId $id): self
     {
         return new self(
             sprintf('ActionRequest with id %s was not found', $id->toString()),
+            'SM0002',
             $id->toString(),
         );
     }
@@ -30,6 +32,7 @@ final class ActionRequestNotFound extends DomainException implements Translatabl
     {
         return new self(
             sprintf('ActionRequest with correlation id %s was not found', $correlationId->toString()),
+            'SM0003',
             null,
             $correlationId->toString(),
         );

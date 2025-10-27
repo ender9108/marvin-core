@@ -3,7 +3,7 @@
 namespace Marvin\Location\Presentation\Cli;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
-use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
+use Exception;
 use Marvin\Location\Application\Command\Zone\CreateZone;
 use Marvin\Location\Domain\ValueObject\HexaColor;
 use Marvin\Location\Domain\ValueObject\Orientation;
@@ -70,12 +70,9 @@ final readonly class CreateZoneCommand
             $io->success("Zone created: " . $zoneId);
 
             return Command::SUCCESS;
-        } catch (DomainException $de) {
-            $io->error($this->exceptionMessageManager->cliResponseFormat($de));
+        } catch (Exception $e) {
+            $io->error($this->exceptionMessageManager->cliResponseFormat($e));
 
-            return Command::FAILURE;
-        } catch (\Exception $e) {
-            $io->error("Failed: {$e->getMessage()}");
             return Command::FAILURE;
         }
     }

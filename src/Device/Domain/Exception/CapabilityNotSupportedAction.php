@@ -21,7 +21,7 @@ class CapabilityNotSupportedAction extends DomainException implements Translatab
     {
         return new self(
             sprintf('The capability %s does not supported action %s', $capability->value, $action),
-            'D00014',
+            'DE00014',
             $capability->value,
             $action
         );

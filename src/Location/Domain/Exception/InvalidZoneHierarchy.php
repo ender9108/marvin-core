@@ -25,7 +25,7 @@ final class InvalidZoneHierarchy extends DomainException implements Translatable
     {
         return new self(
             sprintf('Zone %s of type %s cannot have children', $label, $type->value),
-            'Z00001',
+            'LO00001',
             $label,
             $type->name,
         );
@@ -35,7 +35,7 @@ final class InvalidZoneHierarchy extends DomainException implements Translatable
     {
         return new self(
             sprintf('Cannot create circular reference: zone % cannot be its own parent', $label),
-            'Z00002',
+            'LO00002',
             $label
         );
     }
@@ -44,7 +44,7 @@ final class InvalidZoneHierarchy extends DomainException implements Translatable
     {
         return new self(
             sprintf('Parent zone with id %s not found', $parentId),
-            'Z00003',
+            'LO00003',
             null,
             null,
             $parentId,
@@ -55,7 +55,7 @@ final class InvalidZoneHierarchy extends DomainException implements Translatable
     {
         return new self(
             sprintf('Cannot delete zone %s because it has %d children', $label, $childrenCount),
-            'Z00004',
+            'LO00004',
             $label,
             null,
             null,

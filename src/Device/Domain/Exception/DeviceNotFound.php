@@ -21,7 +21,7 @@ class DeviceNotFound extends DomainException implements TranslatableExceptionInt
     {
         return new self(
             sprintf('The device %d is not found', $id->toString()),
-            'D00005',
+            'DE00005',
             $id->toString(),
         );
     }

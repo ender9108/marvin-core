@@ -3,18 +3,18 @@
 namespace Marvin\Device\Presentation\Cli\Command;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
+use Exception;
 use Marvin\Device\Application\Command\Group\CreateGroup;
 use Marvin\Device\Domain\ValueObject\CompositeStrategy;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Marvin\Shared\Domain\ValueObject\Label;
+use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use ValueError;
-
-;
 
 #[AsCommand(
     name: 'marvin:device:create-group',
@@ -48,7 +48,8 @@ HELP
 final readonly class CreateGroupCommand
 {
     public function __construct(
-        private SyncCommandBusInterface $syncCommandBus
+        private SyncCommandBusInterface $syncCommandBus,
+        private ExceptionMessageManager $exceptionMessageManager,
     ) {
     }
 
@@ -63,59 +64,59 @@ final readonly class CreateGroupCommand
         #[Option(name: 'zone')]
         ?string $zoneId = null,
     ): int {
-        if (!$devices) {
-            $io->error('You must provide at least one device via --devices option');
-            return Command::FAILURE;
-        }
-
-        $deviceIds = array_filter(array_map(trim(...), explode(',', $devices)));
-
-        if (empty($deviceIds)) {
-            $io->error('No valid device IDs provided');
-            return Command::FAILURE;
-        }
-
-        // Valider la stratégie
         try {
-            $strategy = CompositeStrategy::from($strategy);
-        } catch (ValueError $e) {
-            $io->error("Invalid strategy: {$strategy}");
-            $io->note('Available strategies: ' . implode(', ', array_map(
-                fn ($case) => $case->value,
-                CompositeStrategy::cases()
-            )));
+            if (!$devices) {
+                $io->error('You must provide at least one device via --devices option');
+                return Command::FAILURE;
+            }
 
-            return Command::FAILURE;
-        }
+            $deviceIds = array_filter(array_map(trim(...), explode(',', $devices)));
 
-        $io->section('Creating device group');
-        $io->table(
-            ['Property', 'Value'],
-            [
-                ['Label', $label],
-                ['Devices', count($deviceIds)],
-                ['Strategy', $strategy->value],
-                ['Zone', $zoneId ?? 'None'],
-            ]
-        );
+            if (empty($deviceIds)) {
+                $io->error('No valid device IDs provided');
+                return Command::FAILURE;
+            }
 
-        // Capabilities par défaut pour un groupe de lumières
-        $capabilities = [
-            [
-                'name' => 'light',
-                'type' => 'dimmable_light',
-                'actions' => ['turn_on', 'turn_off', 'set_brightness', 'toggle'],
-                'states' => ['state', 'brightness'],
-            ]
-        ];
+            // Valider la stratégie
+            try {
+                $strategy = CompositeStrategy::from($strategy);
+            } catch (ValueError $e) {
+                $io->error("Invalid strategy: {$strategy}");
+                $io->note('Available strategies: ' . implode(', ', array_map(
+                        fn ($case) => $case->value,
+                        CompositeStrategy::cases()
+                    )));
 
-        try {
+                return Command::FAILURE;
+            }
+
+            $io->section('Creating device group');
+            $io->table(
+                ['Property', 'Value'],
+                [
+                    ['Label', $label],
+                    ['Devices', count($deviceIds)],
+                    ['Strategy', $strategy->value],
+                    ['Zone', $zoneId ?? 'None'],
+                ]
+            );
+
+            // Capabilities par défaut pour un groupe de lumières
+            $capabilities = [
+                [
+                    'name' => 'light',
+                    'type' => 'dimmable_light',
+                    'actions' => ['turn_on', 'turn_off', 'set_brightness', 'toggle'],
+                    'states' => ['state', 'brightness'],
+                ]
+            ];
+
             $command = new CreateGroup(
-                label: new Label($label),
-                childDeviceIds: $deviceIds,
-                strategy: $strategy,
+                groupName: new Label($label),
+                deviceIds: $deviceIds,
+                //strategy: $strategy,
                 zoneId: new ZoneId($zoneId),
-                capabilities: $capabilities
+                //capabilities: $capabilities
             );
 
             $this->syncCommandBus->handle($command);
@@ -124,8 +125,8 @@ final readonly class CreateGroupCommand
             $io->note("The system will automatically use native protocol groups if all devices share the same protocol.");
 
             return Command::SUCCESS;
-        } catch (\Throwable $e) {
-            $io->error("Failed to create group: {$e->getMessage()}");
+        } catch (Exception $e) {
+            $io->error($this->exceptionMessageManager->cliResponseFormat($e));
             return Command::FAILURE;
         }
     }

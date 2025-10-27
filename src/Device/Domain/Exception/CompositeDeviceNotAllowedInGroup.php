@@ -27,7 +27,7 @@ final class CompositeDeviceNotAllowedInGroup extends DomainException implements 
                 $device->label->value,
                 $device->compositeStrategy?->value ?? 'unknown',
             ),
-            'D00011',
+            'DE00011',
             $device->id->toString(),
             $device->label->value,
             $device->compositeStrategy?->value ?? 'unknown',

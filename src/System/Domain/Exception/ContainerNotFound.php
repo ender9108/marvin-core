@@ -11,15 +11,17 @@ final class ContainerNotFound extends DomainException implements TranslatableExc
 {
     public function __construct(
         string $message,
+        string $code,
         public readonly ?string $id = null,
     ) {
-        parent::__construct($message);
+        parent::__construct($message, $code);
     }
 
     public static function withId(ContainerId $id): self
     {
         return new self(
             sprintf('Container with id %s was not found', $id->toString()),
+            'SM0004',
             $id->toString(),
         );
     }

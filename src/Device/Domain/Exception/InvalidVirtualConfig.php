@@ -20,7 +20,7 @@ class InvalidVirtualConfig extends DomainException implements TranslatableExcept
     {
         return new self(
             sprintf('Invalid value for key %s: %s', $key, $value),
-            'D00009',
+            'DE00009',
             $key,
             $value
         );

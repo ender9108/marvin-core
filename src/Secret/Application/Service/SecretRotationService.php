@@ -21,8 +21,6 @@ final readonly class SecretRotationService
     }
 
     /**
-     * Tourne tous les secrets qui nécessitent une rotation
-     *
      * @return string[] Liste des clés tournées
      */
     public function rotateExpiredSecrets(): array
@@ -49,9 +47,6 @@ final readonly class SecretRotationService
         return $rotated;
     }
 
-    /**
-     * Tourne un secret spécifique
-     */
     public function rotateSecret(Secret $secret): void
     {
         if (!$secret->rotationPolicy->getManagement()->isManaged()) {

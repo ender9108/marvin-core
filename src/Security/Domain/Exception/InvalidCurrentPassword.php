@@ -10,7 +10,7 @@ class InvalidCurrentPassword extends DomainException implements TranslatableExce
     public function __construct(string $message)
     {
         parent::__construct($message);
-        $this->internalCode = 'S00001';
+        $this->internalCode = 'SY0001';
     }
 
     public function translationId(): string

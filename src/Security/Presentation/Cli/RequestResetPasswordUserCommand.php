@@ -3,7 +3,7 @@
 namespace Marvin\Security\Presentation\Cli;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
-use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
+use Exception;
 use Marvin\Security\Application\Command\User\RequestResetPasswordUser;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
@@ -35,8 +35,8 @@ final readonly class RequestResetPasswordUserCommand
             $io->success('Request reset password successfully.');
 
             return Command::SUCCESS;
-        } catch (DomainException $de) {
-            $io->error($this->exceptionMessageManager->cliResponseFormat($de));
+        } catch (Exception $e) {
+            $io->error($this->exceptionMessageManager->cliResponseFormat($e));
 
             return Command::FAILURE;
         }

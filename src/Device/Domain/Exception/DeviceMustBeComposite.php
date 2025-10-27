@@ -12,7 +12,7 @@ class DeviceMustBeComposite extends DomainException implements TranslatableExcep
     public function __construct(
         string $message,
     ) {
-        parent::__construct($message, 'D00012');
+        parent::__construct($message, 'DE00012');
     }
 
     public function translationId(): string

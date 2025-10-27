@@ -20,7 +20,7 @@ final class CompositeNotSupported extends DomainException implements Translatabl
     {
         return new self(
             sprintf('Strategy NATIVE_ONLY requires native support, but protocol %s does not support it.', $protocolType),
-            'D00002',
+            'DE00002',
             $protocolType
         );
     }
@@ -29,7 +29,7 @@ final class CompositeNotSupported extends DomainException implements Translatabl
     {
         return new self(
             'Cannot create native group/scene with mixed protocols. Use EMULATED_ONLY strategy.',
-            'D00003',
+            'DE00003',
             null,
             'mixed_protocols'
         );
@@ -39,7 +39,7 @@ final class CompositeNotSupported extends DomainException implements Translatabl
     {
         return new self(
             'No common protocol found among child devices. Native group/scene not possible.',
-            'D00004',
+            'DE00004',
             null,
             'no_common_protocol'
         );

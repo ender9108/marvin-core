@@ -2,9 +2,9 @@
 
 namespace Marvin\Secret\Application\Query;
 
-use Marvin\Secret\Domain\ValueObject\SecretKey;
+use EnderLab\DddCqrsBundle\Application\Query\QueryInterface;
 
-final readonly class GetSecretCollection
+final readonly class GetSecretCollection implements QueryInterface
 {
     public function __construct(
         /** @param array<string, string> $filters */

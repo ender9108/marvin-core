@@ -19,7 +19,7 @@ final class ZoneAlreadyExists extends DomainException implements TranslatableExc
     {
         return new self(
             sprintf('Zone with name %s already exists', $label),
-            'Z00005',
+            'LO00005',
             $label,
         );
     }

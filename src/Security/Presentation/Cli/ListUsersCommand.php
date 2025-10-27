@@ -3,8 +3,8 @@
 namespace Marvin\Security\Presentation\Cli;
 
 use EnderLab\DddCqrsBundle\Application\Query\QueryBusInterface;
-use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
+use Exception;
 use Marvin\Security\Application\Query\GetUsersCollection;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
@@ -68,12 +68,9 @@ final readonly class ListUsersCommand
 
             $io->success(sprintf('Found %d zone(s).', count($users)));
             return Command::SUCCESS;
-        } catch (DomainException $de) {
-            $io->error($this->exceptionMessageManager->cliResponseFormat($de));
+        } catch (Exception $e) {
+            $io->error($this->exceptionMessageManager->cliResponseFormat($e));
 
-            return Command::FAILURE;
-        } catch (\Exception $e) {
-            $io->error("Failed: {$e->getMessage()}");
             return Command::FAILURE;
         }
     }

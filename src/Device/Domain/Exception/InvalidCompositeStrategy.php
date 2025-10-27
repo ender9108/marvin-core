@@ -20,7 +20,7 @@ final class InvalidCompositeStrategy extends DomainException implements Translat
     {
         return new self(
             sprintf('Invalid composite strategy %s for device %s', $strategy, $deviceId),
-            'D00008',
+            'DE00008',
         );
     }
 

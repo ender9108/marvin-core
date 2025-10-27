@@ -10,7 +10,7 @@ class InvalidSamePassword extends DomainException implements TranslatableExcepti
     public function __construct(string $message)
     {
         parent::__construct($message);
-        $this->internalCode = 'S00002';
+        $this->internalCode = 'SY0002';
     }
 
     public function translationId(): string

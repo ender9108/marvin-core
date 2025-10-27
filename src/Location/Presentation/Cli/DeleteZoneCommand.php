@@ -3,7 +3,7 @@
 namespace Marvin\Location\Presentation\Cli;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
-use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
+use Exception;
 use Marvin\Location\Application\Command\Zone\DeleteZone;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
@@ -36,12 +36,9 @@ final readonly class DeleteZoneCommand
             $io->success("Zone deleted: " . $zoneId);
 
             return Command::SUCCESS;
-        } catch (DomainException $de) {
-            $io->error($this->exceptionMessageManager->cliResponseFormat($de));
+        } catch (Exception $e) {
+            $io->error($this->exceptionMessageManager->cliResponseFormat($e));
 
-            return Command::FAILURE;
-        } catch (\Exception $e) {
-            $io->error("Failed: {$e->getMessage()}");
             return Command::FAILURE;
         }
     }

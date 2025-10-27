@@ -21,7 +21,7 @@ class RotationError extends DomainException implements TranslatableExceptionInte
     public static function negativeInterval(): self {
         return new self(
             'The rotation interval cannot be negative',
-            'S0006',
+            'ST0006',
             true
         );
     }
@@ -29,7 +29,7 @@ class RotationError extends DomainException implements TranslatableExceptionInte
     public static function requireIntervalDayGtZero(): self {
         return new self(
             'Auto-rotate requires a rotation interval > 0',
-            'S0007',
+            'ST0007',
             false,
             true
         );
@@ -38,7 +38,7 @@ class RotationError extends DomainException implements TranslatableExceptionInte
     public static function onlyAllowForManaged(): self {
         return new self(
             'Auto-rotation is only allowed for managed secrets',
-            'S0008',
+            'ST0008',
             false,
             false,
             true

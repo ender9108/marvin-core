@@ -3,8 +3,8 @@
 namespace Marvin\Location\Presentation\Cli;
 
 use EnderLab\DddCqrsBundle\Application\Query\QueryBusInterface;
-use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
+use Exception;
 use Marvin\Location\Application\Query\Zone\GetZonesCollection;
 use Marvin\Location\Domain\ValueObject\ZoneType;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
@@ -75,12 +75,9 @@ final readonly class ListZonesCommand
 
             $io->success(sprintf('Found %d zone(s).', count($zones)));
             return Command::SUCCESS;
-        } catch (DomainException $de) {
-            $io->error($this->exceptionMessageManager->cliResponseFormat($de));
+        } catch (Exception $e) {
+            $io->error($this->exceptionMessageManager->cliResponseFormat($e));
 
-            return Command::FAILURE;
-        } catch (\Exception $e) {
-            $io->error("Failed: {$e->getMessage()}");
             return Command::FAILURE;
         }
     }

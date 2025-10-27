@@ -21,7 +21,7 @@ final class ZoneNotFound extends DomainException implements TranslatableExceptio
     {
         return new self(
             sprintf('Zone with id %s was not found', $id->toString()),
-            'Z00006',
+            'LO00006',
             $id->toString(),
         );
     }

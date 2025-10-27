@@ -23,7 +23,7 @@ final class EncryptionError extends DomainException implements TranslatableExcep
     {
         return new self(
             'The master key length must be 32 characters',
-            'S0009',
+            'ST0009',
             true
         );
     }
@@ -32,7 +32,7 @@ final class EncryptionError extends DomainException implements TranslatableExcep
     {
         return new self(
             'Iv length error. Expected 16 bytes, got false',
-            'S0010',
+            'ST0010',
             false,
             true
         );
@@ -42,7 +42,7 @@ final class EncryptionError extends DomainException implements TranslatableExcep
     {
         return new self(
             'Cipher text error.',
-            'S0011',
+            'ST0011',
             false,
             false,
             true
@@ -53,7 +53,7 @@ final class EncryptionError extends DomainException implements TranslatableExcep
     {
         return new self(
             'Base 64 decode failed.',
-            'S0012',
+            'ST0012',
             false,
             false,
             false,
@@ -65,7 +65,7 @@ final class EncryptionError extends DomainException implements TranslatableExcep
     {
         return new self(
             'Open SSL decrypt failed.',
-            'S0013',
+            'ST0013',
             false,
             false,
             false,

@@ -21,7 +21,7 @@ class ProtocolNotAvailable extends DomainException implements TranslatableExcept
     {
         return new self(
             sprintf('The protocol %d is not available', $protocolId->toString()),
-            'D00006',
+            'DE00006',
             $protocolId->toString(),
         );
     }
@@ -30,7 +30,7 @@ class ProtocolNotAvailable extends DomainException implements TranslatableExcept
     {
         return new self(
             sprintf('The protocol %d is not enabled', $protocolId->toString()),
-            'D00007',
+            'DE00007',
             $protocolId->toString(),
             true
         );

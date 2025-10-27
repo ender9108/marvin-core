@@ -21,7 +21,7 @@ class CapabilityNotSupported extends DomainException implements TranslatableExce
     {
         return new self(
             sprintf('The capability %s is not supported', $capability->value),
-            'D00001',
+            'DE00001',
             $capability->value,
         );
     }

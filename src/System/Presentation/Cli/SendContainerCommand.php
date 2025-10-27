@@ -4,8 +4,8 @@ namespace Marvin\System\Presentation\Cli;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\MarvinManagerBundle\Reference\ManagerContainerActionReference;
+use Exception;
 use Marvin\Shared\Domain\ValueObject\Identity\UniqId;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
 use Marvin\System\Application\Command\Container\BuildContainer;
@@ -72,8 +72,8 @@ final readonly class SendContainerCommand
             $io->success(sprintf('Command %s sent to container %s successfully.', $action, $id));
 
             return Command::SUCCESS;
-        } catch (DomainException $de) {
-            $io->error($this->exceptionMessageManager->cliResponseFormat($de));
+        } catch (Exception $e) {
+            $io->error($this->exceptionMessageManager->cliResponseFormat($e));
 
             return Command::FAILURE;
         }

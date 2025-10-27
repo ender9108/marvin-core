@@ -12,7 +12,7 @@ use Marvin\Shared\Domain\ValueObject\Metadata;
 final readonly class CreateGroup implements SyncCommandInterface
 {
     public function __construct(
-        public string $groupName,
+        public Label $groupName,
         /** @var DeviceId[] $deviceIds */
         public array $deviceIds,
         public ?ZoneId $zoneId = null,

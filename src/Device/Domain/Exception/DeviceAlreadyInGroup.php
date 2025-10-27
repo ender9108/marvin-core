@@ -26,7 +26,7 @@ final class DeviceAlreadyInGroup extends DomainException implements Translatable
                 $existingGroup->label->value,
                 $existingGroup->id->toString(),
             ),
-            'D00010',
+            'DE00010',
             [
                 [
                     'deviceName' => $device->label->value,
@@ -64,7 +64,7 @@ final class DeviceAlreadyInGroup extends DomainException implements Translatable
                 'Devices [%s] are already in groups and cannot be added',
                 implode(', ', $deviceNames),
             ),
-            'D00010',
+            'DE00010',
             $infos
         );
     }

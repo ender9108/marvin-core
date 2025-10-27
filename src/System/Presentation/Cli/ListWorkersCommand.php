@@ -3,13 +3,10 @@
 namespace Marvin\System\Presentation\Cli;
 
 use EnderLab\DddCqrsBundle\Application\Query\QueryBusInterface;
-use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
 use Exception;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
-use Marvin\System\Application\Query\Container\GetContainerCollection;
 use Marvin\System\Application\Query\Worker\GetWorkerCollection;
-use Marvin\System\Domain\Model\Container;
 use Marvin\System\Domain\Model\Worker;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -27,9 +24,6 @@ final readonly class ListWorkersCommand
     ) {
     }
 
-    /**
-     * @throws Exception
-     */
     public function __invoke(
         SymfonyStyle $io
     ): int {
@@ -70,8 +64,8 @@ final readonly class ListWorkersCommand
             );
 
             return Command::SUCCESS;
-        } catch (DomainException $de) {
-            $io->error($this->exceptionMessageManager->cliResponseFormat($de));
+        } catch (Exception $e) {
+            $io->error($this->exceptionMessageManager->cliResponseFormat($e));
 
             return Command::FAILURE;
         }

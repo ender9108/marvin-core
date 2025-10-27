@@ -3,7 +3,6 @@
 namespace Marvin\System\Presentation\Cli;
 
 use EnderLab\DddCqrsBundle\Application\Query\QueryBusInterface;
-use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
 use Exception;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
@@ -62,8 +61,8 @@ final readonly class CheckActionRequestTimeoutsCommand
             $io->success(sprintf('Marked %d action requests as timeout', $paginator->count()));
 
             return Command::SUCCESS;
-        } catch (DomainException $de) {
-            $io->error($this->exceptionMessageManager->cliResponseFormat($de));
+        } catch (Exception $e) {
+            $io->error($this->exceptionMessageManager->cliResponseFormat($e));
 
             return Command::FAILURE;
         }
