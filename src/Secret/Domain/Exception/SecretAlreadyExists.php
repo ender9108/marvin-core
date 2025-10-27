@@ -52,7 +52,10 @@ final class SecretAlreadyExists extends DomainException implements TranslatableE
 
     public function translationParameters(): array
     {
-        return [];
+        return [
+            '%id%' => $this->id,
+            '%key%' => $this->key,
+        ];
     }
 
     public function translationDomain(): string
