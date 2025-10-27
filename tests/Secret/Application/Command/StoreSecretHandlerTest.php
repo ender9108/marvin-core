@@ -34,7 +34,7 @@ final class StoreSecretHandlerTest extends KernelTestCase
 
         $bus->handle(new StoreSecret(
             key: $key,
-            value: $value,
+            plainTextValue: $value,
             scope: SecretScope::GLOBAL,
             category: SecretCategory::INFRASTRUCTURE,
         ));

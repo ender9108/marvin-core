@@ -33,7 +33,7 @@ final class UpdateSecretHandlerTest extends KernelTestCase
         $key = new SecretKey('db.password');
         $bus->handle(new StoreSecret(
             key: $key,
-            value: SecretValue::fromPlainText('init-pass', $crypto),
+            plainTextValue: SecretValue::fromPlainText('init-pass', $crypto),
             scope: SecretScope::GLOBAL,
             category: SecretCategory::INFRASTRUCTURE,
         ));

@@ -33,7 +33,7 @@ final class DeleteSecretHandlerTest extends KernelTestCase
         $key = new SecretKey('api.token');
         $bus->handle(new StoreSecret(
             key: $key,
-            value: SecretValue::fromPlainText('init-token', $crypto),
+            plainTextValue: SecretValue::fromPlainText('init-token', $crypto),
             scope: SecretScope::GLOBAL,
             category: SecretCategory::INFRASTRUCTURE,
         ));

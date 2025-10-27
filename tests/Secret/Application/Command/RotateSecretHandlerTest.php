@@ -33,7 +33,7 @@ final class RotateSecretHandlerTest extends KernelTestCase
         $key = new SecretKey('wifi.psk');
         $bus->handle(new StoreSecret(
             key: $key,
-            value: SecretValue::fromPlainText('old-wifi-pass', $crypto),
+            plainTextValue: SecretValue::fromPlainText('old-wifi-pass', $crypto),
             scope: SecretScope::GLOBAL,
             category: SecretCategory::INFRASTRUCTURE,
         ));
