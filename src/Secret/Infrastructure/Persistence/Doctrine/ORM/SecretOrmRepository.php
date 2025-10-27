@@ -127,9 +127,34 @@ final class SecretOrmRepository extends ServiceEntityRepository implements Secre
             ->setCacheRegion(SecretCacheKeys::SECRET_LIST->value)
         ;
 
-        /*foreach ($criterias as $field => $value) {
-            // @todo
-        }*/
+        foreach ($criterias as $field => $value) {
+            switch ($field) {
+                case 'key':
+                    $query
+                        ->andWhere('s.key.value = :key')
+                        ->setParameter('key', $value)
+                    ;
+                    break;
+                case 'scope':
+                    $query
+                        ->andWhere('s.scope = :scope')
+                        ->setParameter('scope', $value)
+                    ;
+                    break;
+                case 'category':
+                    $query
+                        ->andWhere('s.category = :category')
+                        ->setParameter('category', $value)
+                    ;
+                    break;
+                case 'managed':
+                    $query
+                        ->andWhere('s.rotationPolicy.autoRotate = :managed')
+                        ->setParameter('managed', $value)
+                    ;
+                    break;
+            }
+        }
 
         foreach ($orderBy as $field => $direction) {
             $query->addOrderBy('s.' . $field, $direction);

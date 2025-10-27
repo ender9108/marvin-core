@@ -7,6 +7,7 @@ use Marvin\Secret\Application\Command\DeleteSecret;
 use Marvin\Secret\Application\Command\RotateSecret;
 use Marvin\Secret\Application\Command\StoreSecret;
 use Marvin\Secret\Application\Command\UpdateSecret;
+use Marvin\Secret\Domain\Exception\AutoGenerateError;
 use Marvin\Secret\Domain\Exception\SecretNotFound;
 use Marvin\Secret\Domain\Repository\SecretRepositoryInterface;
 use Marvin\Secret\Domain\ValueObject\RotationPolicy;
@@ -104,12 +105,7 @@ final readonly class SecretManagementService implements SecretManagementServiceI
         }
 
         if ($secret->rotationPolicy->getManagement()->isExternal() && $newValue === null) {
-            /*
-             * @todo
-            throw new \InvalidArgumentException(
-                "Cannot auto-generate value for external secret '{$key}'. Please provide a new value."
-            );
-            */
+            throw AutoGenerateError::withKey($secretKey);
         }
 
         $this->logger->info('Rotating secret via ACL', [

@@ -2,6 +2,7 @@
 
 namespace Marvin\Secret\Application\Service;
 
+use Marvin\Secret\Domain\Exception\AutoGenerateError;
 use Marvin\Secret\Domain\Model\Secret;
 use Marvin\Secret\Domain\Repository\SecretRepositoryInterface;
 use Marvin\Secret\Domain\Service\EncryptionServiceInterface;
@@ -54,12 +55,7 @@ final readonly class SecretRotationService
     public function rotateSecret(Secret $secret): void
     {
         if (!$secret->rotationPolicy->getManagement()->isManaged()) {
-            /*
-             * @todo
-                throw new \InvalidArgumentException(
-                    'Cannot auto-rotate external secret'
-                );
-             */
+            throw AutoGenerateError::withKey($secret->key);
         }
 
         // Générer nouvelle valeur

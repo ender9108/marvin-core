@@ -35,7 +35,7 @@ class User extends AggregateRoot
         private(set) UserType $type,
         private(set) Timezone $timezone,
         private(set) ?string $password = null,
-        private(set) ?UpdatedAt $updatedAt = null,
+        private(set) ?DateTimeInterface $updatedAt = null,
         public readonly DateTimeInterface $createdAt = new DateTimeImmutable()
     ) {
         $this->id = new UserId();

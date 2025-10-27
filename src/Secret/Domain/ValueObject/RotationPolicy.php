@@ -4,6 +4,7 @@ namespace Marvin\Secret\Domain\ValueObject;
 
 use DateMalformedStringException;
 use DateTimeImmutable;
+use Marvin\Secret\Domain\Exception\RotationError;
 
 final readonly class RotationPolicy
 {
@@ -14,32 +15,15 @@ final readonly class RotationPolicy
         private ?string $rotationCommand = null,
     ) {
         if ($rotationIntervalDays < 0) {
-            /** @todo */
-            //throw new \InvalidArgumentException('Rotation interval cannot be negative');
+            throw RotationError::negativeInterval();
         }
 
-        if ($autoRotate && $rotationIntervalDays === 0) {
-            /** @todo */
-            //throw new \InvalidArgumentException('Auto-rotate requires a rotation interval > 0');
+        if (true === $autoRotate && $rotationIntervalDays === 0) {
+            throw RotationError::requireIntervalDayGtZero();
         }
 
         if ($autoRotate && !$management->canAutoRotate()) {
-            /** @todo */
-            /*throw new \InvalidArgumentException(
-                'Auto-rotation is only allowed for managed secrets'
-            );*/
-        }
-
-        if ($rotationIntervalDays < 0) {
-            /** @todo */
-            //throw new \InvalidArgumentException('Rotation interval cannot be negative');
-        }
-
-        if ($autoRotate && $rotationIntervalDays === 0) {
-            /** @todo */
-            /*throw new \InvalidArgumentException(
-                'Auto-rotate requires a rotation interval > 0'
-            );*/
+            throw RotationError::onlyAllowForManaged();
         }
     }
 

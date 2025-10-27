@@ -2,6 +2,7 @@
 
 namespace Marvin\Secret\Infrastructure\Service;
 
+use Marvin\Secret\Domain\Exception\EncryptionError;
 use Marvin\Secret\Domain\Service\EncryptionServiceInterface;
 use SensitiveParameter;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -16,8 +17,7 @@ final readonly class AES256EncryptionService implements EncryptionServiceInterfa
         private string $masterKey,
     ) {
         if (strlen($this->masterKey) !== 32) {
-            /** @todo */
-            throw new \InvalidArgumentException('Master key must be 32 bytes (256 bits)');
+            throw EncryptionError::masterKeyLength();
         }
     }
 
@@ -26,8 +26,7 @@ final readonly class AES256EncryptionService implements EncryptionServiceInterfa
         // Générer un IV aléatoire pour chaque encryption
         $ivLength = openssl_cipher_iv_length(self::CIPHER_METHOD);
         if ($ivLength === false) {
-            /** @todo */
-            // throw Encryption::encryptionFailed();
+            throw EncryptionError::ivLength();
         }
 
         $iv = openssl_random_pseudo_bytes($ivLength);
@@ -43,8 +42,7 @@ final readonly class AES256EncryptionService implements EncryptionServiceInterfa
         );
 
         if ($cipherText === false) {
-            /** @todo */
-            // throw Encryption::encryptionFailed();
+            throw EncryptionError::cipherText();
         }
 
         // Format: base64(iv + tag + ciphertext)
@@ -56,14 +54,12 @@ final readonly class AES256EncryptionService implements EncryptionServiceInterfa
         $data = base64_decode($encryptedData, true);
 
         if ($data === false) {
-            /** @todo */
-            // throw Encryption::decryptionFailed();
+            throw EncryptionError::decryptionFailedBase64Decode();
         }
 
         $ivLength = openssl_cipher_iv_length(self::CIPHER_METHOD);
         if ($ivLength === false) {
-            /** @todo */
-            // throw Encryption::decryptionFailed();
+            throw EncryptionError::ivLength();
         }
 
         $tagLength = 16; // GCM tag is always 16 bytes
@@ -82,8 +78,7 @@ final readonly class AES256EncryptionService implements EncryptionServiceInterfa
         );
 
         if ($plainText === false) {
-            /** @todo */
-            //throw Encryption::decryptionFailed();
+            throw EncryptionError::decryptionFailedOpenSsl();
         }
 
         return $plainText;

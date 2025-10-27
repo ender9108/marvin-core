@@ -108,7 +108,38 @@ final class UserOrmRepository extends ServiceEntityRepository implements UserRep
         ;
 
         foreach ($criterias as $field => $value) {
-            // @todo
+            switch ($field) {
+                case 'email':
+                    $query
+                        ->andWhere('u.email = :email')
+                        ->setParameter('email', $value)
+                    ;
+                    break;
+                case 'firstname':
+                    $query
+                        ->andWhere('u.firstname = :firstname')
+                        ->setParameter('firstname', $value)
+                    ;
+                    break;
+                case 'lastname':
+                    $query
+                        ->andWhere('u.lastname = :lastname')
+                        ->setParameter('lastname', $value)
+                    ;
+                    break;
+                case 'status':
+                    $query
+                        ->andWhere('u.status = :status')
+                        ->setParameter('status', $value)
+                    ;
+                    break;
+                case 'type':
+                    $query
+                        ->andWhere('u.type = :type')
+                        ->setParameter('type', $value)
+                    ;
+                    break;
+            }
         }
 
         foreach ($orderBy as $field => $direction) {

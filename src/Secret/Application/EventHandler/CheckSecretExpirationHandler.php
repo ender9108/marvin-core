@@ -24,7 +24,7 @@ final readonly class CheckSecretExpirationHandler
 
         /*
          * @todo
-         * Quand contexte notification créé => sendNotification
+         * When context notification exist => sendNotification
          */
     }
 }

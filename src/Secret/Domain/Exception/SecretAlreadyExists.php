@@ -22,7 +22,7 @@ final class SecretAlreadyExists extends DomainException implements TranslatableE
     {
         return new self(
             sprintf('Secret with id "%s" already exists', $id->toString()),
-            'S0003',
+            'S0004',
             $id->toString()
         );
     }
@@ -31,7 +31,7 @@ final class SecretAlreadyExists extends DomainException implements TranslatableE
     {
         return new self(
             sprintf('Secret with key "%s" already exists', $key->value),
-            'S0002',
+            'S0003',
             null,
             $key->value
         );
