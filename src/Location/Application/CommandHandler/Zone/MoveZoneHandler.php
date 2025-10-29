@@ -2,12 +2,10 @@
 
 namespace Marvin\Location\Application\CommandHandler\Zone;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Location\Application\Command\Zone\MoveZone;
 use Marvin\Location\Domain\Exception\InvalidZoneHierarchy;
 use Marvin\Location\Domain\Model\Zone;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
-use Marvin\Location\Domain\ValueObject\ZonePath;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -49,14 +47,6 @@ final readonly class MoveZoneHandler
         }
 
         $zone->move($newParentZone);
-
-        if ($newParentZone !== null) {
-            $newPath = $newParentZone->path->append($zone->zoneName);
-        } else {
-            $newPath = new ZonePath($zone->zoneName);
-        }
-
-        $zone->updatePath($newPath);
         $this->zoneRepository->save($zone);
         $this->logger->info('Zone moved', ['zoneId' => $command->zoneId]);
 

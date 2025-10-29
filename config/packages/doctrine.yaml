@@ -11,6 +11,7 @@ doctrine:
         use_savepoints: true
         types:
             device_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\DeviceIdType
+            plugin_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\PluginIdType
             protocol_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\ProtocolIdType
             user_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\UserIdType
             uniq_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\UniqIdType
@@ -20,8 +21,8 @@ doctrine:
             device_state_id: Marvin\Device\Infrastructure\Persistence\Doctrine\DBAL\Types\DeviceStateIdType
             native_group_info: Marvin\Device\Infrastructure\Persistence\Doctrine\DBAL\Types\NativeGroupInfoType
             native_scene_info: Marvin\Device\Infrastructure\Persistence\Doctrine\DBAL\Types\NativeSceneInfoType
-            login_attempt_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\LoginAttemptIdType
             secret_id: Marvin\Secret\Infrastructure\Persistence\Doctrine\DBAL\Types\SecretIdType
+            login_attempt_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\LoginAttemptIdType
             request_reset_password_id: Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types\RequestResetPasswordIdType
             container_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\ContainerIdType
             worker_id: Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types\WorkerIdType
@@ -41,16 +42,16 @@ doctrine:
             #    dir: '%kernel.project_dir%/config/doctrine/ORM/Device'
             #    prefix: 'Marvin\Device\Domain'
             #    is_bundle: false
-            #Marvin\Location:
-            #    type: xml
-            #    dir: '%kernel.project_dir%/config/doctrine/ORM/Location'
-            #    prefix: 'Marvin\Location\Domain'
-            #    is_bundle: false
-            #Marvin\Secret:
-            #    type: xml
-            #    dir: '%kernel.project_dir%/config/doctrine/ORM/Secret'
-            #    prefix: 'Marvin\Secret\Domain'
-            #    is_bundle: false
+            Marvin\Location:
+                type: xml
+                dir: '%kernel.project_dir%/config/doctrine/ORM/Location'
+                prefix: 'Marvin\Location\Domain'
+                is_bundle: false
+            Marvin\Secret:
+                type: xml
+                dir: '%kernel.project_dir%/config/doctrine/ORM/Secret'
+                prefix: 'Marvin\Secret\Domain'
+                is_bundle: false
             Marvin\Security:
                 type: xml
                 dir: '%kernel.project_dir%/config/doctrine/ORM/Security'
@@ -61,11 +62,11 @@ doctrine:
                 dir: '%kernel.project_dir%/config/doctrine/ORM/Shared'
                 prefix: 'Marvin\Shared\Domain'
                 is_bundle: false
-            #Marvin\System:
-            #    type: xml
-            #    dir: '%kernel.project_dir%/config/doctrine/ORM/System'
-            #    prefix: 'Marvin\System\Domain'
-            #    is_bundle: false
+            Marvin\System:
+                type: xml
+                dir: '%kernel.project_dir%/config/doctrine/ORM/System'
+                prefix: 'Marvin\System\Domain'
+                is_bundle: false
         controller_resolver:
             auto_mapping: false
 when@test:

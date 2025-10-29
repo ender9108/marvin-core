@@ -22,6 +22,7 @@ final readonly class ZoneOccupancyChanged extends AbstractDomainEvent
             'zone_name' => $this->zoneName,
             'is_occupied' => $this->isOccupied,
             'triggered_by_device_id' => $this->triggeredByDeviceId,
+            'occurred_at' => $this->occurredOn->format('c'),
         ];
     }
 }

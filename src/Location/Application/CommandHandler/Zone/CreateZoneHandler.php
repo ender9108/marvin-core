@@ -2,13 +2,11 @@
 
 namespace Marvin\Location\Application\CommandHandler\Zone;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Location\Application\Command\Zone\CreateZone;
 use Marvin\Location\Domain\Exception\InvalidZoneHierarchy;
 use Marvin\Location\Domain\Exception\ZoneAlreadyExists;
 use Marvin\Location\Domain\Model\Zone;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
-use Marvin\Location\Domain\ValueObject\ZonePath;
 use Marvin\Shared\Domain\Service\SluggerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -59,12 +57,7 @@ final readonly class CreateZoneHandler
 
         if ($parentZone !== null) {
             $zone->move($parentZone);
-            $zonePath = $parentZone->path->append($zone->zoneName->value);
-        } else {
-            $zonePath = new ZonePath($zone->zoneName->value);
         }
-
-        $zone->updatePath($zonePath);
 
         $this->zoneRepository->save($zone);
         $this->logger->info('Zone created', ['zoneId' => $zone->id->toString()]);

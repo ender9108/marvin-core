@@ -24,6 +24,7 @@ final readonly class ZoneAverageHumidityCalculated extends AbstractDomainEvent
             'average_humidity' => $this->averageHumidity,
             'target_humidity' => $this->targetHumidity,
             'active_sensors_count' => $this->activeSensorsCount,
+            'occurred_at' => $this->occurredOn->format('c'),
         ];
     }
 }

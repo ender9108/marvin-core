@@ -17,10 +17,10 @@ use Marvin\Location\Domain\ValueObject\PowerConsumption;
 use Marvin\Location\Domain\ValueObject\SurfaceArea;
 use Marvin\Location\Domain\ValueObject\Temperature;
 use Marvin\Location\Domain\ValueObject\ZoneName;
-use Marvin\Location\Domain\ValueObject\ZonePath;
 use Marvin\Location\Domain\ValueObject\ZoneType;
 use Marvin\Shared\Domain\Event\Location\ZoneAverageHumidityCalculated;
 use Marvin\Shared\Domain\Event\Location\ZoneAverageTemperatureCalculated;
+use Marvin\Shared\Domain\Event\Location\ZonePowerConsumptionUpdated;
 use Marvin\Shared\Domain\Event\Location\ZoneSlugUpdated;
 use Marvin\Shared\Domain\Service\SluggerInterface;
 use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
@@ -29,34 +29,33 @@ use Marvin\Shared\Domain\ValueObject\Metadata;
 
 class Zone extends AggregateRoot
 {
-    public ZoneId $id;
-    public private(set) ?string $slug = null;
-    public private(set) ?ZonePath $path = null;
+    private(set) ?string $slug = null;
 
     /* *************** Metrics *************** */
-    public private(set) ?Temperature $currentTemperature = null;
-    public private(set) ?PowerConsumption $currentPowerConsumption = null;
-    public private(set) ?Humidity $currentHumidity = null;
-    public private(set) bool $isOccupied = false;
-    public private(set) int $noMotionCounter = 0;
-    public private(set) int $activeSensorsCount = 0;
-    public private(set) ?DateTimeInterface $lastMetricsUpdate = null;
+    private(set) ?Temperature $currentTemperature = null;
+    private(set) ?PowerConsumption $currentPowerConsumption = null;
+    private(set) ?Humidity $currentHumidity = null;
+    private(set) bool $isOccupied = false;
+    private(set) int $noMotionCounter = 0;
+    private(set) int $activeSensorsCount = 0;
+    private(set) ?DateTimeInterface $lastMetricsUpdate = null;
 
     /* *************** Devices *************** */
-    public private(set) Collection $deviceIds;
+    private(set) Collection $deviceIds;
     /** @var array<string, float> [deviceId => temperature] */
-    public private(set) array $deviceTemperatures = [];
+    private(set) array $deviceTemperatures = [];
     /** @va(set)r array<string, float> [deviceId => humidity] */
-    public private(set) array $deviceHumidities = [];
+    private(set) array $deviceHumidities = [];
     /** @va(set)r array<string, float> [deviceId => power] */
-    public private(set) array $devicePowerConsumptions = [];
+    private(set) array $devicePowerConsumptions = [];
 
-    public private(set) Collection $childrens;
-    public private(set) ?Zone $parent = null;
+    private(set) Collection $childrens;
+    private(set) ?Zone $parent = null;
 
     public function __construct(
-        public readonly ZoneName $zoneName,
+        private(set) ZoneName $zoneName,
         public readonly ZoneType $type,
+        private(set) ?ZoneId $id = null,
         private(set) ?Temperature $targetTemperature = null,
         private(set) ?PowerConsumption $targetPowerConsumption = null,
         private(set) ?Humidity $targetHumidity = null,
@@ -68,8 +67,9 @@ class Zone extends AggregateRoot
         public ?DateTimeInterface $updatedAt = null,
         public readonly DateTimeInterface $createdAt = new DateTimeImmutable(),
     ) {
-        $this->id = new ZoneId();
+        $this->id = $this->id ?? new ZoneId();
         $this->childrens = new ArrayCollection();
+        $this->deviceIds = new ArrayCollection();
 
         $this->recordEvent(new ZoneCreated(
             $this->id->toString(),
@@ -227,15 +227,14 @@ class Zone extends AggregateRoot
         $total = array_sum($this->devicePowerConsumptions);
         $this->currentPowerConsumption = PowerConsumption::fromWatts($total);
 
-        /*if ($oldPowerConsumption !== $this->currentPowerConsumption) {
-            $this->recordEvent(new ZoneAverageHumidityCalculated(
+        if ($oldPowerConsumption !== $this->currentPowerConsumption) {
+            $this->recordEvent(new ZonePowerConsumptionUpdated(
                 zoneId: $this->id->toString(),
                 zoneName: $this->zoneName->value,
-                averageHumidity: $this->currentHumidity->toPercentage(),
-                targetHumidity: $this->targetHumidity?->toPercentage(),
+                totalPowerConsumption: $this->currentPowerConsumption->toWatts(),
                 activeSensorsCount: $this->activeSensorsCount,
             ));
-        }*/
+        }
     }
 
     private function recalculateAggregatedMetrics(): void
@@ -243,16 +242,19 @@ class Zone extends AggregateRoot
         $this->recalculateAverageTemperature();
         $this->recalculateAverageHumidity();
         $this->recalculateTotalPowerConsumption();
+
     }
 
 
-    public function markAsOccupied(): void
+    public function markAsOccupied(): self
     {
         $this->isOccupied = true;
         $this->noMotionCounter = 0;
+
+        return $this;
     }
 
-    public function incrementNoMotionCount(): void
+    public function incrementNoMotionCount(): self
     {
         $this->noMotionCounter++;
 
@@ -260,6 +262,8 @@ class Zone extends AggregateRoot
         if ($this->noMotionCounter >= 3) {
             $this->isOccupied = false;
         }
+
+        return $this;
     }
 
 
@@ -334,7 +338,7 @@ class Zone extends AggregateRoot
         return $this->currentHumidity->difference($this->targetHumidity) > $maxDeltaPercentage;
     }
 
-    public function updateSlug(SluggerInterface $slugger): void
+    public function updateSlug(SluggerInterface $slugger): self
     {
         $oldSlug = $this->slug;
         $this->slug = $slugger->slugify($this->zoneName->value);
@@ -346,6 +350,20 @@ class Zone extends AggregateRoot
                 $this->slug,
             ));
         }
+
+        return $this;
+    }
+
+    public function updateName(ZoneName $zoneName, SluggerInterface $slugger): self
+    {
+        $oldZoneName = $this->zoneName;
+        $this->zoneName = $zoneName;
+
+        if ($oldZoneName !== $this->zoneName) {
+            $this->updateSlug($slugger);
+        }
+
+        return $this;
     }
 
     public function updateConfiguration(
@@ -357,7 +375,7 @@ class Zone extends AggregateRoot
         ?string $icon = null,
         ?HexaColor $color = null,
         ?Metadata $metadata = null,
-    ): void {
+    ): self {
         $this->surfaceArea = $surfaceArea;
         $this->orientation = $orientation;
         $this->targetTemperature = $targetTemperature;
@@ -376,11 +394,8 @@ class Zone extends AggregateRoot
             targetPowerConsumption: $this->targetPowerConsumption?->value,
             targetHumidity: $this->targetHumidity?->value
         ));
-    }
 
-    public function updatePath(ZonePath $path): void
-    {
-        $this->path = $path;
+        return $this;
     }
 
     public function move(?Zone $parentZone = null): self
@@ -388,7 +403,6 @@ class Zone extends AggregateRoot
         $parentZone?->removeChildren($this);
 
         $this->parent = $parentZone;
-        $this->updatePath($parentZone->path->append($this->slug));
 
         return $this;
     }
@@ -409,6 +423,8 @@ class Zone extends AggregateRoot
             $this->childrens->removeElement($children);
             $children->move(null);
         }
+
+        return $this;
     }
 
     public function hasParent(): bool

@@ -14,7 +14,6 @@
 
         <embedded name="zoneName" class="Marvin\Location\Domain\ValueObject\ZoneName" />
         <field name="slug" length="255" />
-        <embedded name="path" class="Marvin\Location\Domain\ValueObject\ZonePath" />
         <field name="icon" nullable="true" length="50" />
 
         <embedded name="currentTemperature" class="Marvin\Location\Domain\ValueObject\Temperature" />
@@ -25,7 +24,7 @@
         <field name="activeSensorsCount" type="integer" />
         <field name="lastMetricsUpdate" type="datetime" nullable="true" />
 
-        <field name="deviceIds" type="array_simple" />
+        <field name="deviceIds" type="simple_array" nullable="true" />
         <field name="deviceTemperatures" type="json" />
         <field name="deviceHumidities" type="json" />
         <field name="devicePowerConsumptions" type="json" />

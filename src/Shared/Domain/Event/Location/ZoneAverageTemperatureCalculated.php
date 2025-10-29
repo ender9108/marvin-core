@@ -24,6 +24,7 @@ final readonly class ZoneAverageTemperatureCalculated extends AbstractDomainEven
             'average_temperature' => $this->averageTemperature,
             'target_temperature' => $this->targetTemperature,
             'active_sensors_count' => $this->activeSensorsCount,
+            'occurred_at' => $this->occurredOn->format('c'),
         ];
     }
 }

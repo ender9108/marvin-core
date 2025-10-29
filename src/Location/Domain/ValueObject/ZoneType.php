@@ -17,7 +17,7 @@ enum ZoneType: string
 
     public function equals(self $other): bool
     {
-        return $other instanceof self && $this->value === $other->value;
+        return $this->value === $other->value;
     }
 
     public function isBuilding(): bool

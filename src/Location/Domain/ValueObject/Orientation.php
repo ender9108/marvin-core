@@ -4,7 +4,7 @@ namespace Marvin\Location\Domain\ValueObject;
 
 use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
 
-enum Orientation: string implements Stringable
+enum Orientation: string
 {
     use EnumToArrayTrait;
 

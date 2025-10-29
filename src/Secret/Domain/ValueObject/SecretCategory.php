@@ -4,7 +4,7 @@ namespace Marvin\Secret\Domain\ValueObject;
 
 use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
 
-enum SecretCategory: string implements Stringable
+enum SecretCategory: string
 {
     use EnumToArrayTrait;
 

@@ -4,7 +4,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
 >
-    <embeddable name="Marvin\Location\Domain\ValueObject\TargetPowerConsumption">
+    <embeddable name="Marvin\Location\Domain\ValueObject\PowerConsumption">
         <field name="value" type="float" nullable="true" precision="10" scale="2" />
     </embeddable>
 </doctrine-mapping>

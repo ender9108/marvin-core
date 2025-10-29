@@ -10,7 +10,7 @@ final readonly class ZonePowerConsumptionUpdated extends AbstractDomainEvent
         public string $zoneId,
         public string $zoneName,
         public float $totalPowerConsumption,
-        public int $devicesCount,
+        public int $activeSensorsCount,
     ) {
         parent::__construct();
     }
@@ -21,7 +21,7 @@ final readonly class ZonePowerConsumptionUpdated extends AbstractDomainEvent
             'zone_id' => $this->zoneId,
             'zone_name' => $this->zoneName,
             'total_power_consumption' => $this->totalPowerConsumption,
-            'devices_count' => $this->devicesCount,
+            'active_sensors_count' => $this->activeSensorsCount,
             'occurred_at' => $this->occurredOn->format('c'),
         ];
     }

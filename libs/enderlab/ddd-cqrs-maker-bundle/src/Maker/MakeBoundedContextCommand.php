@@ -110,7 +110,7 @@ class MakeBoundedContextCommand extends AbstractMaker
                 "src/{$contextName}/Domain/",
                 "src/{$contextName}/Infrastructure/",
                 "src/{$contextName}/Presentation/",
-                "config/doctrine/{$contextName}/",
+                "config/doctrine/ORM/{$contextName}/",
             ]);
         } catch (\Exception $e) {
             $io->error('Erreur lors de la génération : ' . $e->getMessage());
@@ -145,7 +145,7 @@ class MakeBoundedContextCommand extends AbstractMaker
 
     private function createDoctrineConfigDirectory(string $contextName): void
     {
-        $dir = $this->projectDir . "/config/doctrine/{$contextName}";
+        $dir = $this->projectDir . "/config/doctrine/ORM/{$contextName}";
         $this->filesystem->mkdir($dir);
 
         $gitKeepFile = $dir . '/.gitkeep';
