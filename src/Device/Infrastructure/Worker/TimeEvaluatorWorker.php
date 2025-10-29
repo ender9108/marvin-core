@@ -2,6 +2,8 @@
 
 namespace Marvin\Device\Infrastructure\Worker;
 
+use Throwable;
+use DateTimeImmutable;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use Marvin\Device\Application\Command\Device\UpdateDeviceState;
 use Marvin\Device\Application\Service\VirtualDevice\Time\TimeServiceInterface;
@@ -59,7 +61,7 @@ final readonly class TimeEvaluatorWorker
 
                 $device->markOnline();
                 $this->deviceRepository->save($device);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $this->logger->error('Failed to update time trigger device', [
                     'deviceId' => $device->getId()->toString(),
                     'error' => $e->getMessage(),
@@ -76,7 +78,7 @@ final readonly class TimeEvaluatorWorker
                 $latitude = $config['latitude'];
                 $longitude = $config['longitude'];
 
-                $currentTime = new \DateTimeImmutable();
+                $currentTime = new DateTimeImmutable();
                 $sunTimes = $this->timeService->getSunTimes($latitude, $longitude, $currentTime);
 
                 $this->syncCommandBus->handle(new UpdateDeviceState(
@@ -99,7 +101,7 @@ final readonly class TimeEvaluatorWorker
 
                 $device->markOnline();
                 $this->deviceRepository->save($device);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $this->logger->error('Failed to update sun trigger device', [
                     'deviceId' => $device->getId()->toString(),
                     'error' => $e->getMessage(),

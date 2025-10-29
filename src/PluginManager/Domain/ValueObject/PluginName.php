@@ -2,9 +2,10 @@
 
 namespace Marvin\PluginManager\Domain\ValueObject;
 
+use Stringable;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 
-final readonly class PluginName implements \Stringable
+final readonly class PluginName implements Stringable
 {
     public string $value;
 

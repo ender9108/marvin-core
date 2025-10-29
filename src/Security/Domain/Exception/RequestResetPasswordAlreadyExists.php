@@ -4,7 +4,6 @@ namespace Marvin\Security\Domain\Exception;
 
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
-use Marvin\Security\Domain\ValueObject\Identity\RequestResetPasswordId;
 use Override;
 
 final class RequestResetPasswordAlreadyExists extends DomainException implements TranslatableExceptionInterface

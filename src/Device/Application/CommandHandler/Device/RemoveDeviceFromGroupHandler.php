@@ -2,7 +2,6 @@
 
 namespace Marvin\Device\Application\CommandHandler\Device;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use EnderLab\DddCqrsBundle\Application\Event\DomainEventBusInterface;
 use Marvin\Device\Application\Command\Device\RemoveDeviceFromGroup;
 use Marvin\Device\Domain\Event\Device\DeviceRemovedFromGroup;

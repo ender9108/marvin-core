@@ -10,4 +10,6 @@ return RectorConfig::configure()
         __DIR__ . '/tests',
     ])
     ->withPhpSets(php84: true)
-    ->withTypeCoverageLevel(0);
+    ->withTypeCoverageLevel(0)
+    ->withImportNames(removeUnusedImports: true)
+;

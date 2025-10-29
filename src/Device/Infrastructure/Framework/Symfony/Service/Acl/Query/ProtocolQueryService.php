@@ -4,7 +4,6 @@ namespace Marvin\Device\Infrastructure\Framework\Symfony\Service\Acl\Query;
 
 use Marvin\Device\Application\Service\Acl\ProtocolInfo;
 use Marvin\Device\Application\Service\Acl\ProtocolQueryServiceInterface;
-use Marvin\Protocol\Domain\Repository\ProtocolRepositoryInterface;
 use Marvin\Shared\Domain\ValueObject\Identity\ProtocolId;
 
 final class ProtocolQueryService implements ProtocolQueryServiceInterface

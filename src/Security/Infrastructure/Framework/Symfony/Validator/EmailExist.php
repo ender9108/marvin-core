@@ -2,9 +2,10 @@
 
 namespace Marvin\Security\Infrastructure\Framework\Symfony\Validator;
 
+use Attribute;
 use Symfony\Component\Validator\Constraint;
 
-#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 class EmailExist extends Constraint
 {
     public string $message = 'The mail "{{ value }}" exist.';

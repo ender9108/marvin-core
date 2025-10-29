@@ -2,7 +2,7 @@
 
 namespace Marvin\Device\Application\CommandHandler\Scene;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
+use Throwable;
 use Marvin\Device\Application\Command\Scene\StoreSceneCurrentState;
 use Marvin\Device\Domain\Model\Device;
 use Marvin\Device\Domain\Repository\DeviceRepositoryInterface;
@@ -68,7 +68,7 @@ final readonly class StoreSceneCurrentStateHandler
                 } else {
                     $devicesNotResponding[] = $device->label->value;
                 }
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $this->logger->warning('Failed to capture device state', [
                     'deviceId' => $deviceId,
                     'deviceName' => $device->label->value,

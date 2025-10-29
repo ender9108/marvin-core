@@ -2,6 +2,7 @@
 
 namespace Marvin\Shared\Application\Acl;
 
+use DateTimeImmutable;
 use DateMalformedStringException;
 
 final readonly class SecretInfo
@@ -12,9 +13,9 @@ final readonly class SecretInfo
         public string $category,
         public bool $autoRotate,
         public int $rotationIntervalDays,
-        public ?\DateTimeImmutable $lastRotatedAt,
-        public ?\DateTimeImmutable $expiresAt,
-        public \DateTimeImmutable $createdAt,
+        public ?DateTimeImmutable $lastRotatedAt,
+        public ?DateTimeImmutable $expiresAt,
+        public DateTimeImmutable $createdAt,
     ) {
     }
 
@@ -24,7 +25,7 @@ final readonly class SecretInfo
             return false;
         }
 
-        return $this->expiresAt < new \DateTimeImmutable();
+        return $this->expiresAt < new DateTimeImmutable();
     }
 
     /**
@@ -37,7 +38,7 @@ final readonly class SecretInfo
         }
 
         $nextRotation = $this->lastRotatedAt->modify("+{$this->rotationIntervalDays} days");
-        return $nextRotation <= new \DateTimeImmutable();
+        return $nextRotation <= new DateTimeImmutable();
     }
 
     public function toArray(): array

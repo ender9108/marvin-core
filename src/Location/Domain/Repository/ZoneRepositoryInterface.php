@@ -4,7 +4,6 @@ namespace Marvin\Location\Domain\Repository;
 
 use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
 use Marvin\Location\Domain\Model\Zone;
-use Marvin\Location\Domain\ValueObject\ZoneName;
 use Marvin\Location\Domain\ValueObject\ZoneType;
 use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;

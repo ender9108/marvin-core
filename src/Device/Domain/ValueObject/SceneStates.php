@@ -3,7 +3,6 @@
 namespace Marvin\Device\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use Marvin\Shared\Domain\ValueObject\ArrayValueObjectInterface;
 use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 
 final readonly class SceneStates

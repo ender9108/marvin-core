@@ -5,7 +5,6 @@ namespace Marvin\Device\Domain\Exception;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
 use Marvin\Device\Domain\ValueObject\Capability;
-use Marvin\Device\Domain\ValueObject\CapabilityType;
 
 class CapabilityNotSupported extends DomainException implements TranslatableExceptionInterface
 {

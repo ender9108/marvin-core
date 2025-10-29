@@ -2,7 +2,6 @@
 
 namespace Marvin\Location\Domain\Event\Zone;
 
-use DateTimeImmutable;
 use EnderLab\DddCqrsBundle\Domain\Event\AbstractDomainEvent;
 
 final readonly class ZoneDeleted extends AbstractDomainEvent

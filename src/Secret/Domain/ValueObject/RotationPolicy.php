@@ -2,6 +2,7 @@
 
 namespace Marvin\Secret\Domain\ValueObject;
 
+use DateTimeInterface;
 use DateMalformedStringException;
 use DateTimeImmutable;
 use Marvin\Secret\Domain\Exception\RotationError;
@@ -69,7 +70,7 @@ final readonly class RotationPolicy
     /**
      * @throws DateMalformedStringException
      */
-    public function shouldRotate(\DateTimeInterface $lastRotatedAt): bool
+    public function shouldRotate(DateTimeInterface $lastRotatedAt): bool
     {
         if (!$this->autoRotate || $this->rotationIntervalDays === 0) {
             return false;

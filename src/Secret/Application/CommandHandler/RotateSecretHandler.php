@@ -4,7 +4,6 @@ namespace Marvin\Secret\Application\CommandHandler;
 
 use Marvin\Secret\Application\Command\RotateSecret;
 use Marvin\Secret\Application\Service\PasswordGeneratorInterface;
-use Marvin\Secret\Application\Service\SecretPropagatorInterface;
 use Marvin\Secret\Domain\Exception\AutoGenerateError;
 use Marvin\Secret\Domain\Repository\SecretRepositoryInterface;
 use Marvin\Secret\Domain\Service\EncryptionServiceInterface;

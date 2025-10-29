@@ -2,18 +2,19 @@
 
 namespace Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types;
 
+use Override;
 use Marvin\System\Domain\ValueObject\Identity\ContainerId;
 use Symfony\Bridge\Doctrine\Types\AbstractUidType;
 
 final class ContainerIdType extends AbstractUidType
 {
-    #[\Override]
+    #[Override]
     public function getName(): string
     {
         return 'container_id';
     }
 
-    #[\Override]
+    #[Override]
     protected function getUidClass(): string
     {
         return ContainerId::class;

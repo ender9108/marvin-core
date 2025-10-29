@@ -4,7 +4,6 @@ namespace Marvin\PluginManager\Domain\Model;
 
 use DateTimeImmutable;
 use Marvin\PluginManager\Domain\ValueObject\SecurityStatus;
-use Marvin\Shared\Domain\ValueObject\Identity\PluginId;
 use Marvin\Shared\Domain\ValueObject\Identity\SecurityReportId;
 
 class SecurityReport

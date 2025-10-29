@@ -3,8 +3,6 @@
 namespace Marvin\Device\Application\QueryHandler\Scene;
 
 use EnderLab\DddCqrsBundle\Application\Query\QueryHandlerInterface;
-use Marvin\Device\Application\Query\Group\GetGroup;
-use Marvin\Device\Application\Query\Group\GetGroupsCollection;
 use Marvin\Device\Application\Query\Scene\GetScene;
 use Marvin\Device\Domain\Model\Device;
 use Marvin\Device\Domain\Repository\DeviceRepositoryInterface;

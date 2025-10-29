@@ -2,9 +2,9 @@
 
 namespace Marvin\Device\Infrastructure\Persistence\Doctrine\DBAL\Types;
 
+use Override;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\JsonType;
-use Marvin\Device\Domain\ValueObject\NativeGroupInfo;
 use Marvin\Device\Domain\ValueObject\NativeSceneInfo;
 use Marvin\Shared\Domain\ValueObject\Identity\ProtocolId;
 use Marvin\Shared\Domain\ValueObject\Metadata;
@@ -14,13 +14,13 @@ final class NativeSceneInfoType extends JsonType
 {
     public const string NAME = 'native_scene_info';
 
-    #[\Override]
+    #[Override]
     public function getName(): string
     {
         return self::NAME;
     }
 
-    #[\Override]
+    #[Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
         if ($value === null) {
@@ -30,7 +30,7 @@ final class NativeSceneInfoType extends JsonType
         return json_encode($value->toArray());
     }
 
-    #[\Override]
+    #[Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): ?NativeSceneInfo
     {
         if ($value === null) {

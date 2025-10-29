@@ -2,6 +2,7 @@
 
 namespace Marvin\Security\Infrastructure\Persistence\Doctrine\ORM;
 
+use Override;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Marvin\Security\Domain\Model\LoginAttempt;
@@ -18,7 +19,7 @@ final class LoginAttemptOrmRepository extends ServiceEntityRepository implements
         parent::__construct($registry, LoginAttempt::class);
     }
 
-    #[\Override]
+    #[Override]
     public function save(LoginAttempt $loginAttempt, bool $flush = true): void
     {
         $this->getEntityManager()->persist($loginAttempt);
@@ -28,7 +29,7 @@ final class LoginAttemptOrmRepository extends ServiceEntityRepository implements
         }
     }
 
-    #[\Override]
+    #[Override]
     public function remove(LoginAttempt $loginAttempt, bool $flush = true): void
     {
         $this->getEntityManager()->remove($loginAttempt);
@@ -38,7 +39,7 @@ final class LoginAttemptOrmRepository extends ServiceEntityRepository implements
         }
     }
 
-    #[\Override]
+    #[Override]
     public function countBy(User $user): int
     {
         return $this->count([
@@ -46,7 +47,7 @@ final class LoginAttemptOrmRepository extends ServiceEntityRepository implements
         ]);
     }
 
-    #[\Override]
+    #[Override]
     public function deleteBy(User $user): void
     {
         $this->createQueryBuilder('la')

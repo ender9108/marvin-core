@@ -2,7 +2,6 @@
 
 namespace Marvin\Device\Application\QueryHandler\Device;
 
-use Doctrine\Common\Collections\Collection;
 use EnderLab\DddCqrsBundle\Application\Query\QueryHandlerInterface;
 use Marvin\Device\Application\Query\Device\GetDeviceCapabilities;
 use Marvin\Device\Domain\Repository\DeviceRepositoryInterface;

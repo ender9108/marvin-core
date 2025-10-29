@@ -2,6 +2,8 @@
 
 namespace Marvin\Location\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory;
 
+use Override;
+use ReflectionClass;
 use Marvin\Location\Domain\Model\Zone;
 use Marvin\Location\Domain\ValueObject\HexaColor;
 use Marvin\Location\Domain\ValueObject\Humidity;
@@ -47,7 +49,7 @@ final class ZoneFactory extends PersistentProxyObjectFactory
         ];
     }
 
-    #[\Override]
+    #[Override]
     protected function initialize(): static
     {
         return $this
@@ -302,7 +304,7 @@ final class ZoneFactory extends PersistentProxyObjectFactory
     public function withTemperature(float $celsius): self
     {
         return $this->afterInstantiate(function (Zone $zone) use ($celsius): void {
-            $reflection = new \ReflectionClass($zone);
+            $reflection = new ReflectionClass($zone);
             $property = $reflection->getProperty('currentTemperature');
             $property->setValue($zone, Temperature::fromCelsius($celsius));
         });
@@ -311,7 +313,7 @@ final class ZoneFactory extends PersistentProxyObjectFactory
     public function withHumidity(float $percentage): self
     {
         return $this->afterInstantiate(function (Zone $zone) use ($percentage): void {
-            $reflection = new \ReflectionClass($zone);
+            $reflection = new ReflectionClass($zone);
             $property = $reflection->getProperty('currentHumidity');
             $property->setValue($zone, Humidity::fromPercentage($percentage));
         });
@@ -320,7 +322,7 @@ final class ZoneFactory extends PersistentProxyObjectFactory
     public function withPowerConsumption(float $watts): self
     {
         return $this->afterInstantiate(function (Zone $zone) use ($watts): void {
-            $reflection = new \ReflectionClass($zone);
+            $reflection = new ReflectionClass($zone);
             $property = $reflection->getProperty('currentPowerConsumption');
             $property->setValue($zone, PowerConsumption::fromWatts($watts));
         });
@@ -329,7 +331,7 @@ final class ZoneFactory extends PersistentProxyObjectFactory
     public function withActiveSensors(int $count): self
     {
         return $this->afterInstantiate(function (Zone $zone) use ($count): void {
-            $reflection = new \ReflectionClass($zone);
+            $reflection = new ReflectionClass($zone);
             $property = $reflection->getProperty('activeSensorsCount');
             $property->setValue($zone, $count);
         });

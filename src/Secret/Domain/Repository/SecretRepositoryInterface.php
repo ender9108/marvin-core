@@ -8,7 +8,6 @@ use Marvin\Secret\Domain\ValueObject\Identity\SecretId;
 use Marvin\Secret\Domain\ValueObject\SecretCategory;
 use Marvin\Secret\Domain\ValueObject\SecretKey;
 use Marvin\Secret\Domain\ValueObject\SecretScope;
-use Marvin\Shared\Domain\ValueObject\Identity\UniqId;
 
 interface SecretRepositoryInterface
 {

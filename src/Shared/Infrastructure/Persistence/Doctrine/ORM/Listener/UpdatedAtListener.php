@@ -4,9 +4,7 @@ namespace Marvin\Shared\Infrastructure\Persistence\Doctrine\ORM\Listener;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Doctrine\ORM\Events;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 //#[AsDoctrineListener(event: Events::preUpdate)]

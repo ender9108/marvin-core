@@ -4,7 +4,6 @@ namespace Marvin\Location\Application\CommandHandler\Zone;
 
 use Marvin\Location\Application\Command\Zone\UpdateZoneMetricsFromDevice;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
-use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]

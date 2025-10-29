@@ -2,13 +2,13 @@
 
 namespace Marvin\Secret\Application\Service;
 
+use Exception;
 use Marvin\Secret\Domain\Exception\AutoGenerateError;
 use Marvin\Secret\Domain\Model\Secret;
 use Marvin\Secret\Domain\Repository\SecretRepositoryInterface;
 use Marvin\Secret\Domain\Service\EncryptionServiceInterface;
 use Marvin\Secret\Domain\ValueObject\SecretValue;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Process\Process;
 
 final readonly class SecretRotationService
 {
@@ -36,7 +36,7 @@ final readonly class SecretRotationService
                 $this->logger->info('Secret rotated successfully', [
                     'secret_key' => $secret->getKey()->toString(),
                 ]);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->error('Failed to rotate secret', [
                     'secret_key' => $secret->getKey()->toString(),
                     'error' => $e->getMessage(),

@@ -3,7 +3,6 @@
 namespace Marvin\Security\Application\CommandHandler\User;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Security\Application\Command\User\LockUser;
 use Marvin\Security\Application\Command\User\UserLoginAttempt;
 use Marvin\Security\Domain\Model\LoginAttempt;

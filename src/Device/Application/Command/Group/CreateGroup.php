@@ -3,7 +3,6 @@
 namespace Marvin\Device\Application\Command\Group;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandInterface;
-use Marvin\Device\Domain\ValueObject\CompositeStrategy;
 use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Marvin\Shared\Domain\ValueObject\Label;

@@ -4,7 +4,6 @@ namespace Marvin\Shared\Infrastructure\Framework\Symfony\MapperTransformer;
 
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 use Symfony\Component\ObjectMapper\TransformCallableInterface;
-use Traversable;
 
 final readonly class SubCollectionResourceTransformer implements TransformCallableInterface
 {

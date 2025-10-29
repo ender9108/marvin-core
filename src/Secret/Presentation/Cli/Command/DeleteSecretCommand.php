@@ -8,7 +8,6 @@ use Exception;
 use Marvin\Secret\Application\Command\DeleteSecret;
 use Marvin\Secret\Domain\ValueObject\SecretKey;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
-use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;

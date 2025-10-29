@@ -2,6 +2,8 @@
 
 namespace Marvin\Device\Infrastructure\Framework\Symfony\Service\VirtualDevice\Http;
 
+use Throwable;
+use RuntimeException;
 use Marvin\Device\Application\Service\VirtualDevice\Http\HttpClientServiceInterface;
 use Marvin\Device\Application\Service\VirtualDevice\Http\HttpResponse;
 use Psr\Log\LoggerInterface;
@@ -46,7 +48,7 @@ final readonly class HttpClientService implements HttpClientServiceInterface
                 headers: $headers,
                 duration: $duration
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $duration = microtime(true) - $startTime;
 
             $this->logger->error('HTTP request failed', [
@@ -56,7 +58,7 @@ final readonly class HttpClientService implements HttpClientServiceInterface
                 'duration' => round($duration, 3),
             ]);
 
-            throw new \RuntimeException("HTTP request failed: {$e->getMessage()}", 0, $e);
+            throw new RuntimeException("HTTP request failed: {$e->getMessage()}", 0, $e);
         }
     }
 }

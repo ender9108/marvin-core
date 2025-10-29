@@ -2,6 +2,7 @@
 
 namespace Marvin\Device\Infrastructure\Persistence\Doctrine\DBAL\Types;
 
+use Override;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\JsonType;
 use Marvin\Device\Domain\ValueObject\NativeGroupInfo;
@@ -13,13 +14,13 @@ final class NativeGroupInfoType extends JsonType
 {
     public const string NAME = 'native_group_info';
 
-    #[\Override]
+    #[Override]
     public function getName(): string
     {
         return self::NAME;
     }
 
-    #[\Override]
+    #[Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
         if ($value === null) {
@@ -29,7 +30,7 @@ final class NativeGroupInfoType extends JsonType
         return json_encode($value->toArray());
     }
 
-    #[\Override]
+    #[Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): ?NativeGroupInfo
     {
         if ($value === null) {

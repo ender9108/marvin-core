@@ -2,6 +2,7 @@
 
 namespace Marvin\Shared\Infrastructure\Framework\Symfony\Mailer;
 
+use Override;
 use Marvin\Shared\Application\Email\EmailDefinitionInterface;
 use Marvin\Shared\Application\Email\MailerInterface as MarvinMailerInterface;
 use Marvin\Shared\Domain\Application;
@@ -22,7 +23,7 @@ final readonly class SymfonyMailerInterface implements MarvinMailerInterface
     /**
      * @throws TransportExceptionInterface
      */
-    #[\Override]
+    #[Override]
     public function send(EmailDefinitionInterface $email): void
     {
         $sender = new Address(

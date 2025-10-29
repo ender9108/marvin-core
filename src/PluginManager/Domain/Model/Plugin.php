@@ -2,6 +2,7 @@
 
 namespace Marvin\PluginManager\Domain\Model;
 
+use DomainException;
 use DateTimeImmutable;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use EnderLab\DddCqrsBundle\Domain\Model\AggregateRoot;
@@ -70,7 +71,7 @@ class Plugin extends AggregateRoot
             author: $author,
             homepage: $homepage,
             capabilities: $capabilities,
-            installedAt: new \DateTimeImmutable(),
+            installedAt: new DateTimeImmutable(),
             description: $description,
             metadata: $metadata,
             id: $id,
@@ -93,7 +94,7 @@ class Plugin extends AggregateRoot
         Assert::eq($this->status, PluginStatus::ENABLED, 'PM0008::::plugin_update_is_blocked_no_enable');
 
         $this->status = PluginStatus::ENABLED;
-        $this->enabledAt = new \DateTimeImmutable();
+        $this->enabledAt = new DateTimeImmutable();
         $this->disabledAt = null;
 
         $this->recordEvent(new PluginEnabled(
@@ -109,7 +110,7 @@ class Plugin extends AggregateRoot
         Assert::eq($this->status, PluginStatus::ENABLED, 'PM0008::::plugin_only_enabled_plugins_can_be_disabled');
 
         $this->status = PluginStatus::DISABLED;
-        $this->disabledAt = new \DateTimeImmutable();
+        $this->disabledAt = new DateTimeImmutable();
 
         $this->recordEvent(new PluginDisabled(
             pluginId: $this->id->toString(),
@@ -121,7 +122,7 @@ class Plugin extends AggregateRoot
     public function uninstall(): void
     {
         if ($this->status === PluginStatus::ENABLED) {
-            throw new \DomainException('Plugin must be disabled before uninstalling');
+            throw new DomainException('Plugin must be disabled before uninstalling');
         }
 
         $this->recordEvent(new PluginUninstalled(
@@ -138,7 +139,7 @@ class Plugin extends AggregateRoot
 
         $oldVersion = $this->version;
         $this->version = $newVersion;
-        $this->lastAnalyzedAt = new \DateTimeImmutable();
+        $this->lastAnalyzedAt = new DateTimeImmutable();
 
         $this->recordEvent(new PluginUpdated(
             pluginId: $this->id->toString(),
@@ -153,7 +154,7 @@ class Plugin extends AggregateRoot
         $this->status = PluginStatus::UPDATE_BLOCKED;
         $this->blockedVersion = $attemptedVersion;
         $this->blockedReason = $reason;
-        $this->blockedAt = new \DateTimeImmutable();
+        $this->blockedAt = new DateTimeImmutable();
 
         $this->recordEvent(new PluginUpdateBlocked(
             pluginId: $this->id->toString(),
@@ -166,7 +167,7 @@ class Plugin extends AggregateRoot
 
     public function markAsAnalyzed(): void
     {
-        $this->lastAnalyzedAt = new \DateTimeImmutable();
+        $this->lastAnalyzedAt = new DateTimeImmutable();
     }
 
     public function updateMetadata(array $metadata): void

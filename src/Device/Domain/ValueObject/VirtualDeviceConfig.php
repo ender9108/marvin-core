@@ -3,7 +3,6 @@
 namespace Marvin\Device\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use Marvin\Shared\Domain\ValueObject\ArrayValueObjectInterface;
 
 final readonly class VirtualDeviceConfig
 {

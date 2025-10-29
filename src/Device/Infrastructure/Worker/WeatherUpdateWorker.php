@@ -2,6 +2,7 @@
 
 namespace Marvin\Device\Infrastructure\Worker;
 
+use Throwable;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use Marvin\Device\Application\Command\Device\UpdateDeviceState;
 use Marvin\Device\Application\Service\VirtualDevice\Weather\WeatherServiceInterface;
@@ -81,7 +82,7 @@ final readonly class WeatherUpdateWorker
                     $device->getName()->toString(),
                     $weatherData->temperature
                 ));
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $this->logger->error('Failed to update weather device', [
                     'deviceId' => $device->getId()->toString(),
                     'error' => $e->getMessage(),

@@ -2,6 +2,9 @@
 
 namespace Marvin\Device\Infrastructure\Framework\Symfony\Service\VirtualDevice\Weather;
 
+use DateTimeImmutable;
+use Throwable;
+use RuntimeException;
 use Marvin\Device\Application\Service\VirtualDevice\Weather\WeatherData;
 use Marvin\Device\Application\Service\VirtualDevice\Weather\WeatherServiceInterface;
 use Psr\Log\LoggerInterface;
@@ -44,15 +47,15 @@ final readonly class OpenWeatherMapService implements WeatherServiceInterface
                 precipitation: $data['rain']['1h'] ?? null,
                 cloudCover: $data['clouds']['all'] ?? null,
                 uvIndex: null, // Nécessite un appel séparé à l'API UV
-                timestamp: new \DateTimeImmutable('@' . $data['dt'])
+                timestamp: new DateTimeImmutable('@' . $data['dt'])
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->logger->error('Failed to fetch weather data', [
                 'location' => $location,
                 'error' => $e->getMessage(),
             ]);
 
-            throw new \RuntimeException("Failed to fetch weather data: {$e->getMessage()}", 0, $e);
+            throw new RuntimeException("Failed to fetch weather data: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -86,18 +89,18 @@ final readonly class OpenWeatherMapService implements WeatherServiceInterface
                     condition: $this->mapCondition($item['weather'][0]['main'] ?? 'unknown'),
                     precipitation: $item['rain']['3h'] ?? null,
                     cloudCover: $item['clouds']['all'] ?? null,
-                    timestamp: new \DateTimeImmutable('@' . $item['dt'])
+                    timestamp: new DateTimeImmutable('@' . $item['dt'])
                 );
             }
 
             return $forecast;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->logger->error('Failed to fetch weather forecast', [
                 'location' => $location,
                 'error' => $e->getMessage(),
             ]);
 
-            throw new \RuntimeException("Failed to fetch weather forecast: {$e->getMessage()}", 0, $e);
+            throw new RuntimeException("Failed to fetch weather forecast: {$e->getMessage()}", 0, $e);
         }
     }
 

@@ -2,6 +2,9 @@
 
 namespace Marvin\Device\Application\Service\VirtualDevice\Weather;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+
 final readonly class WeatherData
 {
     public function __construct(
@@ -15,7 +18,7 @@ final readonly class WeatherData
         public ?float $precipitation = null,
         public ?int $cloudCover = null,
         public ?float $uvIndex = null,
-        public ?\DateTimeImmutable $timestamp = null
+        public ?DateTimeImmutable $timestamp = null
     ) {
     }
 
@@ -31,7 +34,7 @@ final readonly class WeatherData
             'precipitation' => $this->precipitation,
             'cloud_cover' => $this->cloudCover,
             'uv_index' => $this->uvIndex,
-            'timestamp' => $this->timestamp?->format(\DateTimeInterface::ATOM),
+            'timestamp' => $this->timestamp?->format(DateTimeInterface::ATOM),
         ];
     }
 }

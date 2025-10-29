@@ -17,7 +17,6 @@ use Marvin\Secret\Domain\ValueObject\SecretCategory;
 use Marvin\Secret\Domain\ValueObject\SecretKey;
 use Marvin\Secret\Domain\ValueObject\SecretScope;
 use Marvin\Secret\Infrastructure\Persistence\Doctrine\Cache\SecretCacheKeys;
-use Marvin\Security\Infrastructure\Persistence\Doctrine\Cache\SecurityCacheKeys;
 
 final class SecretOrmRepository extends ServiceEntityRepository implements SecretRepositoryInterface
 {
@@ -106,7 +105,7 @@ final class SecretOrmRepository extends ServiceEntityRepository implements Secre
             ->createQueryBuilder('s')
             ->where('s.expiresAt IS NOT NULL')
             ->andWhere('s.expiresAt <= :now')
-            ->setParameter('now', new \DateTimeImmutable())
+            ->setParameter('now', new DateTimeImmutable())
             ->getQuery()
             ->getResult()
         ;

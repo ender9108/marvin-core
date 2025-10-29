@@ -4,7 +4,6 @@ namespace Marvin\Secret\Domain\Exception;
 
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
-use Marvin\Secret\Domain\ValueObject\SecretKey;
 
 class RotationError extends DomainException implements TranslatableExceptionInterface
 {

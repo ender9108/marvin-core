@@ -7,7 +7,6 @@ use DateTimeInterface;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\Metadata;
 use Marvin\System\Domain\ValueObject\Identity\WorkerId;
-use Marvin\System\Domain\ValueObject\SupervisorProcess;
 use Marvin\System\Domain\ValueObject\WorkerAllowedActions;
 use Marvin\System\Domain\ValueObject\WorkerStatus;
 use Marvin\System\Domain\ValueObject\WorkerType;

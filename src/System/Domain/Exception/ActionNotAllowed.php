@@ -5,7 +5,6 @@ namespace Marvin\System\Domain\Exception;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
 use Marvin\Shared\Domain\ValueObject\Label;
-use Marvin\System\Domain\ValueObject\Identity\ActionRequestId;
 use Marvin\System\Domain\ValueObject\Identity\ContainerId;
 use Override;
 

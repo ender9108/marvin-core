@@ -2,7 +2,6 @@
 
 namespace Marvin\Security\Application\CommandHandler\User;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Security\Application\Command\User\UpdateProfileUser;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;

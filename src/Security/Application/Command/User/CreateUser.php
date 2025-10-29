@@ -10,7 +10,6 @@ use Marvin\Security\Domain\ValueObject\Timezone;
 use Marvin\Security\Domain\ValueObject\UserType;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Locale;
-use Marvin\Shared\Domain\ValueObject\Reference;
 use Marvin\Shared\Domain\ValueObject\Theme;
 
 final readonly class CreateUser implements SyncCommandInterface

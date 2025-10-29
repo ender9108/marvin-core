@@ -2,6 +2,7 @@
 
 namespace Marvin\Location\Domain\Model;
 
+use DomainException;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -125,7 +126,7 @@ class Zone extends AggregateRoot
         $deviceIdString = $deviceId->toString();
 
         if (!$this->hasDevice($deviceId)) {
-            throw new \DomainException("Device {$deviceIdString} is not in this zone");
+            throw new DomainException("Device {$deviceIdString} is not in this zone");
         }
 
         $this->deviceTemperatures[$deviceIdString] = $temperature->toCelsius();
@@ -138,7 +139,7 @@ class Zone extends AggregateRoot
         $deviceIdString = $deviceId->toString();
 
         if (!$this->hasDevice($deviceId)) {
-            throw new \DomainException("Device {$deviceIdString} is not in this zone");
+            throw new DomainException("Device {$deviceIdString} is not in this zone");
         }
 
         $this->deviceHumidities[$deviceIdString] = $humidity->toPercentage();
@@ -150,7 +151,7 @@ class Zone extends AggregateRoot
         $deviceIdString = $deviceId->toString();
 
         if (!$this->hasDevice($deviceId)) {
-            throw new \DomainException("Device {$deviceIdString} is not in this zone");
+            throw new DomainException("Device {$deviceIdString} is not in this zone");
         }
 
         $this->devicePowerConsumptions[$deviceIdString] = $power->toWatts();
@@ -160,7 +161,7 @@ class Zone extends AggregateRoot
     public function updateOccupancyFromDevice(DeviceId $deviceId, bool $motionDetected): void
     {
         if (!$this->hasDevice($deviceId)) {
-            throw new \DomainException("Device {$deviceId->toString()} is not in this zone");
+            throw new DomainException("Device {$deviceId->toString()} is not in this zone");
         }
 
         if ($motionDetected) {

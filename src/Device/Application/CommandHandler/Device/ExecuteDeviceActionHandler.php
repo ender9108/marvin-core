@@ -2,7 +2,7 @@
 
 namespace Marvin\Device\Application\CommandHandler\Device;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
+use Throwable;
 use Marvin\Device\Application\Command\Device\ExecuteDeviceAction;
 use Marvin\Device\Domain\Model\Device;
 use Marvin\Device\Domain\Repository\DeviceRepositoryInterface;
@@ -115,7 +115,7 @@ final readonly class ExecuteDeviceActionHandler
                 if ($result['success']) {
                     $successCount++;
                 }
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $results[] = [
                     'deviceId' => $device->id->toString(),
                     'deviceName' => $device->label->value,
@@ -186,7 +186,7 @@ final readonly class ExecuteDeviceActionHandler
                     ];
                     break; // On a notre première réponse, on arrête
                 }
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 // On ignore les erreurs et continue jusqu'à avoir une réponse valide
                 continue;
             }
@@ -230,7 +230,7 @@ final readonly class ExecuteDeviceActionHandler
                     'response' => $result['response'] ?? null,
                     'error' => $result['error'] ?? null,
                 ];
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $results[] = [
                     'deviceId' => $device->id->toString(),
                     'deviceName' => $device->label->value,
@@ -276,7 +276,7 @@ final readonly class ExecuteDeviceActionHandler
                 );
 
                 $sentCount++;
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $this->logger->warning('Broadcast failed for device', [
                     'deviceId' => $device->id->toString(),
                     'error' => $e->getMessage(),

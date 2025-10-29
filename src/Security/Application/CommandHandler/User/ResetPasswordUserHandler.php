@@ -3,7 +3,6 @@
 namespace Marvin\Security\Application\CommandHandler\User;
 
 use DateTimeImmutable;
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Security\Application\Command\User\ResetPasswordUser;
 use Marvin\Security\Domain\Exception\RequestResetPasswordAlreadyUsed;
 use Marvin\Security\Domain\Exception\RequestResetPasswordExpired;

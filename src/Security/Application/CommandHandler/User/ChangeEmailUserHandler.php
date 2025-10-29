@@ -2,7 +2,6 @@
 
 namespace Marvin\Security\Application\CommandHandler\User;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Security\Application\Command\User\ChangeEmailUser;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;

@@ -2,7 +2,6 @@
 
 namespace Marvin\Device\Application\CommandHandler\Device;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Device\Application\Command\Device\AssignDeviceToZone;
 use Marvin\Device\Domain\Repository\DeviceRepositoryInterface;
 use Psr\Log\LoggerInterface;

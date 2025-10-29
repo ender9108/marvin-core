@@ -3,7 +3,6 @@
 namespace Marvin\Device\Application\CommandHandler\Device;
 
 use DateTimeZone;
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use Marvin\Device\Application\Command\Device\CreateVirtualDevice;
 use Marvin\Device\Domain\Exception\InvalidVirtualConfig;

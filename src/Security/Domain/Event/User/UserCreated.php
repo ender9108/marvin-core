@@ -2,7 +2,6 @@
 
 namespace Marvin\Security\Domain\Event\User;
 
-use DateTimeImmutable;
 use EnderLab\DddCqrsBundle\Domain\Event\AbstractDomainEvent;
 use EnderLab\DddCqrsBundle\Domain\Event\DomainEventInterface;
 use Marvin\Shared\Domain\ValueObject\Identity\UserId;

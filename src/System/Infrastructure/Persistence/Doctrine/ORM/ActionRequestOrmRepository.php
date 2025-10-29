@@ -2,6 +2,7 @@
 
 namespace Marvin\System\Infrastructure\Persistence\Doctrine\ORM;
 
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -78,7 +79,7 @@ final class ActionRequestOrmRepository extends ServiceEntityRepository implement
     #[Override]
     public function getTimeoutActions(int $timeoutSeconds = 300, int $page = 0, int $itemsPerPage = 50): PaginatorInterface
     {
-        $timeoutDate = new \DateTimeImmutable("-{$timeoutSeconds} seconds");
+        $timeoutDate = new DateTimeImmutable("-{$timeoutSeconds} seconds");
 
         $query = $this
             ->createQueryBuilder('ar')

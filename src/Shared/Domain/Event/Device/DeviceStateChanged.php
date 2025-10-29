@@ -2,9 +2,7 @@
 
 namespace Marvin\Shared\Domain\Event\Device;
 
-use DateTimeImmutable;
 use EnderLab\DddCqrsBundle\Domain\Event\AbstractDomainEvent;
-use EnderLab\DddCqrsBundle\Domain\Event\DomainEventInterface;
 
 final readonly class DeviceStateChanged extends AbstractDomainEvent
 {

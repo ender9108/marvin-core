@@ -2,6 +2,7 @@
 
 namespace Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory;
 
+use Override;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Service\PasswordHasherInterface;
 use Marvin\Security\Domain\ValueObject\Firstname;
@@ -92,7 +93,7 @@ class UserFactory extends PersistentProxyObjectFactory
         return [];
     }
 
-    #[\Override]
+    #[Override]
     protected function initialize(): static
     {
         return $this

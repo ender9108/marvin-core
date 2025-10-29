@@ -2,7 +2,8 @@
 
 namespace Marvin\Device\Application\CommandHandler\Group;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Marvin\Device\Application\Command\Group\CreateGroup;
 use Marvin\Device\Domain\Exception\CompositeDeviceNotAllowedInGroup;
 use Marvin\Device\Domain\Exception\DeviceAlreadyInGroup;
@@ -62,7 +63,7 @@ final readonly class CreateGroupHandler
                 [
                     'type' => 'group',
                     'auto_grouped' => true,
-                    'created_at' => new \DateTimeImmutable()->format(\DateTimeInterface::ATOM),
+                    'created_at' => new DateTimeImmutable()->format(DateTimeInterface::ATOM),
                 ]
             )),
         );

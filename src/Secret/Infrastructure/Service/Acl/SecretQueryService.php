@@ -2,6 +2,7 @@
 
 namespace Marvin\Secret\Infrastructure\Service\Acl;
 
+use RuntimeException;
 use Exception;
 use Marvin\Secret\Domain\Exception\SecretNotFound;
 use Marvin\Secret\Domain\Repository\SecretRepositoryInterface;
@@ -29,7 +30,7 @@ final readonly class SecretQueryService implements SecretQueryServiceInterface
         }
 
         if ($secret->isExpired()) {
-            throw new \RuntimeException("Secret '{$key}' has expired");
+            throw new RuntimeException("Secret '{$key}' has expired");
         }
 
         return $secret->value->decrypt($this->encryption);

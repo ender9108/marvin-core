@@ -2,7 +2,6 @@
 
 namespace Marvin\Secret\Presentation\Cli\Command;
 
-use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
 use Exception;
 use Marvin\Secret\Application\Service\SecretRotationService;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
