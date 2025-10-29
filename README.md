@@ -9,7 +9,7 @@
 
 ## 📋 Description
 
-[TON PROJET] est un système de gestion domotique moderne et évolutif, conçu avec une architecture clean (DDD/CQRS) et supportant les principaux protocoles domotiques du marché.
+Marvin est un système de gestion domotique moderne et évolutif, conçu avec une architecture clean (DDD/CQRS) et supportant les principaux protocoles domotiques du marché.
 
 ### 🎯 Objectifs
 
