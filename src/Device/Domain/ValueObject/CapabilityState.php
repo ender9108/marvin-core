@@ -304,11 +304,6 @@ enum CapabilityState: string
     case DEVICE_TEMPERATURE = 'device_temperature'; // °C (température du device lui-même)
     case MEMORY_USAGE = 'memory_usage'; // 0-100%
 
-    public function equals(self $other): bool
-    {
-        return $other instanceof self && $this->value === $other->value;
-    }
-
     public function getDataType(): CapabilityCapabilityStateDataType
     {
         return match ($this) {

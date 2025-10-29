@@ -17,11 +17,6 @@ final readonly class SecretKey implements Stringable
         $this->value = $value;
     }
 
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     public function __toString(): string
     {
         return $this->value;

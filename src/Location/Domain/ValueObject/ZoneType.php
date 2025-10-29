@@ -15,11 +15,6 @@ enum ZoneType: string
     case ROOM = 'room';
     case OUTDOOR = 'outdoor';
 
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     public function isBuilding(): bool
     {
         return $this === self::BUILDING;

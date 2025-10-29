@@ -2,11 +2,11 @@
 
 namespace Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory;
 
-use Marvin\Security\Domain\List\Role;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Service\PasswordHasherInterface;
 use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Lastname;
+use Marvin\Security\Domain\ValueObject\Role;
 use Marvin\Security\Domain\ValueObject\Roles;
 use Marvin\Security\Domain\ValueObject\Timezone;
 use Marvin\Security\Domain\ValueObject\UserStatus;

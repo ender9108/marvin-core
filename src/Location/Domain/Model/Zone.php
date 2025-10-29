@@ -55,7 +55,6 @@ class Zone extends AggregateRoot
     public function __construct(
         private(set) ZoneName $zoneName,
         public readonly ZoneType $type,
-        private(set) ?ZoneId $id = null,
         private(set) ?Temperature $targetTemperature = null,
         private(set) ?PowerConsumption $targetPowerConsumption = null,
         private(set) ?Humidity $targetHumidity = null,
@@ -66,8 +65,8 @@ class Zone extends AggregateRoot
         public ?Metadata $metadata = null,
         public ?DateTimeInterface $updatedAt = null,
         public readonly DateTimeInterface $createdAt = new DateTimeImmutable(),
+        private(set) ?ZoneId $id = new ZoneId(),
     ) {
-        $this->id = $this->id ?? new ZoneId();
         $this->childrens = new ArrayCollection();
         $this->deviceIds = new ArrayCollection();
 
@@ -242,7 +241,6 @@ class Zone extends AggregateRoot
         $this->recalculateAverageTemperature();
         $this->recalculateAverageHumidity();
         $this->recalculateTotalPowerConsumption();
-
     }
 
 

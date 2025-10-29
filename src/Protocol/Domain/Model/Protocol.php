@@ -9,14 +9,13 @@ use Marvin\Shared\Domain\ValueObject\Metadata;
 
 class Protocol extends AggregateRoot
 {
-    public private(set) ProtocolId $id;
-
     public function __construct(
         private(set) Label $label,
         private(set) string $type,
         private(set) bool $isEnabled = false,
         private(set) ?string $status = null,
         private(set) ?Metadata $metadata = null,
+        private(set) ProtocolId $id = new ProtocolId(),
     ) {
     }
 }

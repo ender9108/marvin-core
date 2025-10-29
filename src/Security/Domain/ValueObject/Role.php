@@ -1,6 +1,6 @@
 <?php
 
-namespace Marvin\Security\Domain\List;
+namespace Marvin\Security\Domain\ValueObject;
 
 use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
 

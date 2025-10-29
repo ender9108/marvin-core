@@ -69,9 +69,4 @@ final readonly class SceneStates
     {
         return $this->states;
     }
-
-    public function equals(self $other): bool
-    {
-        return $this->toArray() === $other->toArray();
-    }
 }

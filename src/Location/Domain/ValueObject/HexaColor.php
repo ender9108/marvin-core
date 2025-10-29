@@ -25,9 +25,4 @@ final readonly class HexaColor implements Stringable
     {
         return $this->value;
     }
-
-    public function equals(self $other): bool
-    {
-        return abs($this->value - $other->value) < 0.01;
-    }
 }

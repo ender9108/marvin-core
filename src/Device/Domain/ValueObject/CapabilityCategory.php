@@ -20,9 +20,4 @@ enum CapabilityCategory: string
     case COMMUNICATION = 'communication';
     case SYSTEM = 'system';
     case COMPOSITE = 'composite';
-
-    public function equals(self $other): bool
-    {
-        return $other instanceof self && $this->value === $other->value;
-    }
 }

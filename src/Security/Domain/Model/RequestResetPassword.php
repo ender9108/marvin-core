@@ -10,11 +10,9 @@ use Marvin\Security\Domain\ValueObject\Identity\RequestResetPasswordId;
 
 class RequestResetPassword
 {
-    public private(set) RequestResetPasswordId $id;
+    private(set) ExpiresAt $expiresAt;
 
-    public private(set) ExpiresAt $expiresAt;
-
-    public private(set) bool $used = false;
+    private(set) bool $used = false;
 
     /**
      * @throws DateMalformedStringException
@@ -22,9 +20,9 @@ class RequestResetPassword
     public function __construct(
         private(set) string $token,
         private(set) User $user,
-        public readonly DateTimeInterface $createdAt = new DateTimeImmutable()
+        public readonly DateTimeInterface $createdAt = new DateTimeImmutable(),
+        private(set) RequestResetPasswordId $id = new RequestResetPasswordId(),
     ) {
-        $this->id = new RequestResetPasswordId();
         $this->expiresAt = new ExpiresAt(new DateTimeImmutable()->modify('+1 day'));
     }
 

@@ -20,11 +20,6 @@ final readonly class Firstname implements Stringable
         $this->value = $firstname;
     }
 
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     public function __toString(): string
     {
         return $this->value;

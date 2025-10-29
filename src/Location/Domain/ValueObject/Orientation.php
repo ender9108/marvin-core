@@ -17,11 +17,6 @@ enum Orientation: string
     case SOUTH_EAST = 'south_east';
     case SOUTH_WEST = 'south_west';
 
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     public function isNorth(): bool
     {
         return in_array($this, [self::NORTH, self::NORTH_EAST, self::NORTH_WEST], true);

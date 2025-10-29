@@ -10,8 +10,6 @@ use Marvin\System\Domain\ValueObject\Identity\ActionRequestId;
 
 final class ActionRequest
 {
-    public private(set) ActionRequestId $id;
-
     public function __construct(
         private(set) UniqId $correlationId,
         private(set) string $entityType,
@@ -22,9 +20,9 @@ final class ActionRequest
         private(set) ?string $output = null,
         private(set) ?string $error = null,
         private(set) ?DateTimeInterface $completedAt = null,
-        private(set) DateTimeInterface $createdAt = new DateTimeImmutable()
+        private(set) DateTimeInterface $createdAt = new DateTimeImmutable(),
+        private(set) ActionRequestId $id = new ActionRequestId(),
     ) {
-        $this->id = new ActionRequestId();
     }
 
     public function markAsCompleted(bool $success, ?string $output = null, ?string $error = null): void

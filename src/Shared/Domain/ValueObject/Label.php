@@ -25,11 +25,6 @@ final readonly class Label implements Stringable
         return new self($label);
     }
 
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     public function __toString(): string
     {
         return $this->value;

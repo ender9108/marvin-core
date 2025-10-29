@@ -10,9 +10,7 @@ use Marvin\Device\Domain\ValueObject\Identity\DeviceStateId;
 
 class DeviceState
 {
-    public private(set) DeviceStateId $id;
-
-    public private(set) ?Device $device = null;
+    private(set) ?Device $device = null;
 
     public function __construct(
         private(set) Capability $capability,
@@ -21,6 +19,7 @@ class DeviceState
         private(set) ?string $unit = null,
         private(set) ?DateTimeInterface $updatedAt = null,
         public readonly ?DateTimeInterface $createdAt = new DateTimeImmutable(),
+        private(set) DeviceStateId $id = new DeviceStateId(),
     ) {
     }
 

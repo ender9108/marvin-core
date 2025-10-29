@@ -14,8 +14,6 @@ use Marvin\System\Domain\ValueObject\WorkerType;
 
 final class Worker
 {
-    public private(set) WorkerId $id;
-
     public function __construct(
         private(set) Label $label,
         private(set) WorkerType $type,
@@ -27,7 +25,7 @@ final class Worker
         private(set) ?Metadata $metadata = null,
         private(set) ?DateTimeInterface $lastSyncedAt = null,
         private(set) DateTimeInterface $createdAt = new DateTimeImmutable(),
+        private(set) WorkerId $id = new WorkerId(),
     ) {
-        $this->id = new WorkerId();
     }
 }

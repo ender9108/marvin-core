@@ -47,9 +47,4 @@ final readonly class SecretValue implements Stringable
     {
         return '***ENCRYPTED***';
     }
-
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
 }

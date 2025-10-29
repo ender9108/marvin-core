@@ -35,11 +35,6 @@ final readonly class SurfaceArea implements Stringable
         return $this->value;
     }
 
-    public function equals(self $other): bool
-    {
-        return $other instanceof self && abs($this->value - $other->value) < 0.01;
-    }
-
     public function isSmall(): bool
     {
         return $this->value < 10.0;

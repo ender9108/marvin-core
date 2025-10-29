@@ -215,15 +215,6 @@ enum Capability: string
     case COUNTER = 'counter'; // NOUVEAU - Compteur virtuel
     case TIMER = 'timer'; // NOUVEAU - Timer/minuteur
 
-    // ==========================================
-    // MÉTHODES
-    // ==========================================
-
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     public function getCategory(): CapabilityCategory
     {
         return match ($this) {

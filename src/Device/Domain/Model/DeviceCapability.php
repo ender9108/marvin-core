@@ -14,22 +14,21 @@ use Marvin\Shared\Domain\ValueObject\Metadata;
 
 final class DeviceCapability
 {
-    public private(set) DeviceCapabilityId $id;
+   private(set) ?Device $device = null;
 
-    public private(set) ?Device $device = null;
-
-    public private(set) ?CapabilityCategory $capabilityCategory = null;
+   private(set) ?CapabilityCategory $capabilityCategory = null;
 
     /** @var Collection<int, CapabilityAction> */
-    public private(set) Collection $supportedActions;
+    private(set) Collection $supportedActions;
 
     /** @var Collection<int, CapabilityState> */
-    public private(set) Collection $supportedStates;
+    private(set) Collection $supportedStates;
 
     public function __construct(
         private(set) Capability $capability,
         private(set) ?Metadata $metadata = null,
         private(set) ?Description $description = null,
+        private(set) DeviceCapabilityId $id = new DeviceCapabilityId(),
     ) {
         $this->capabilityCategory = $this->capability->getCategory();
         $this->supportedActions = new ArrayCollection(

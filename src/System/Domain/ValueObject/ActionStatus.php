@@ -9,11 +9,6 @@ enum ActionStatus: string
     case FAILED = 'failed';
     case TIMEOUT = 'timeout';
 
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     public function isPending(): bool
     {
         return $this === self::PENDING;

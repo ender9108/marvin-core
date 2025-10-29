@@ -21,11 +21,6 @@ final readonly class Locale implements Stringable
         $this->value = $locale;
     }
 
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     public function __toString(): string
     {
         return $this->value;

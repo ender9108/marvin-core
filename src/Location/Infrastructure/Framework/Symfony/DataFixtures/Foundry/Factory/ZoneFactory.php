@@ -47,6 +47,7 @@ final class ZoneFactory extends PersistentProxyObjectFactory
         ];
     }
 
+    #[\Override]
     protected function initialize(): static
     {
         return $this
@@ -452,10 +453,3 @@ final class ZoneFactory extends PersistentProxyObjectFactory
             ->withAllMetrics();
     }
 }
-
-
-
-
-
-
-

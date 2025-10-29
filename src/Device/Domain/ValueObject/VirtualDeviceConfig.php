@@ -52,9 +52,4 @@ final readonly class VirtualDeviceConfig
     {
         return $this->config;
     }
-
-    public function equals(self $other): bool
-    {
-        return $this->toArray() === $other->toArray();
-    }
 }

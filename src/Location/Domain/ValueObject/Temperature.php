@@ -44,11 +44,6 @@ final readonly class Temperature implements Stringable
         return $this->value < $other->value;
     }
 
-    public function equals(self $other): bool
-    {
-        return abs($this->value - $other->value) < 0.1; // Tolérance 0.1°C
-    }
-
     public function __toString(): string
     {
         return number_format($this->value, 1) . '°C';

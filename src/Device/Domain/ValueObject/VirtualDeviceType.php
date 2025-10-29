@@ -40,9 +40,4 @@ enum VirtualDeviceType: string implements Stringable
     // External Integrations
     case CALENDAR = 'calendar';
     case RSS_FEED = 'rss_feed';
-
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
 }

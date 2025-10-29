@@ -10,11 +10,6 @@ enum ContainerType: string
     case MONITORING = 'monitoring';
     case MAILER = 'mailer';
 
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     public function isProtocol(): bool
     {
         return $this === self::PROTOCOL;

@@ -21,11 +21,6 @@ final readonly class Theme implements Stringable
         $this->value = $theme;
     }
 
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     public function __toString(): string
     {
         return $this->value;

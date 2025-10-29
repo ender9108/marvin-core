@@ -19,11 +19,6 @@ final readonly class WorkerAllowedActions
         $this->value = $value;
     }
 
-    public function equals(self $other): bool
-    {
-        return $other instanceof self && $this->value === $other->value;
-    }
-
     public function toArray(): array
     {
         return $this->value;

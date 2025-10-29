@@ -13,6 +13,7 @@ doctrine:
             device_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\DeviceIdType
             plugin_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\PluginIdType
             protocol_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\ProtocolIdType
+            security_report_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\SecurityReportIdType
             user_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\UserIdType
             uniq_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\UniqIdType
             zone_id: Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types\ZoneIdType
@@ -46,6 +47,11 @@ doctrine:
                 type: xml
                 dir: '%kernel.project_dir%/config/doctrine/ORM/Location'
                 prefix: 'Marvin\Location\Domain'
+                is_bundle: false
+            Marvin\PluginManager:
+                type: xml
+                dir: '%kernel.project_dir%/config/doctrine/ORM/PluginManager'
+                prefix: 'Marvin\PluginManager\Domain'
                 is_bundle: false
             Marvin\Secret:
                 type: xml

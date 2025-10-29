@@ -38,24 +38,22 @@ use Marvin\Shared\Domain\ValueObject\Metadata;
 
 class Device extends AggregateRoot
 {
-    public private(set) DeviceId $id;
-
     /**
      * @var Collection<int, DeviceCapability>
      */
-    public private(set) Collection $capabilities;
+    private(set) Collection $capabilities;
 
     /**
      * @var Collection<int, DeviceState>
      */
-    public private(set) Collection $states;
+    private(set) Collection $states;
 
     /**
      * @var Collection<int, Device>
      */
-    public private(set) Collection $childrens;
+    private(set) Collection $childrens;
 
-    public private(set) ?Device $parent = null;
+    private(set) ?Device $parent = null;
 
     public function __construct(
         private(set) Label $label,
@@ -76,8 +74,8 @@ class Device extends AggregateRoot
         private(set) ?Metadata $metadata = null,
         private(set) ?DateTimeInterface $updatedAt = null,
         private(set) DateTimeInterface $createdAt = new DateTimeImmutable(),
+        private(set) DeviceId $id = new DeviceId(),
     ) {
-        $this->id = new DeviceId();
         $this->capabilities = new ArrayCollection();
         $this->states = new ArrayCollection();
         $this->childrens = new ArrayCollection();

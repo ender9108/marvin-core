@@ -19,11 +19,6 @@ final readonly class ExpiresAt implements Stringable
         $this->value = $createdAt;
     }
 
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     public function __toString(): string
     {
         return $this->value->format(self::DATE_FORMAT);

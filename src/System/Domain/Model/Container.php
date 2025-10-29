@@ -14,8 +14,6 @@ use Marvin\System\Domain\ValueObject\Identity\ContainerId;
 
 final class Container
 {
-    public private(set) ContainerId $id;
-
     public function __construct(
         private(set) Label $serviceLabel,
         private(set) ContainerType $type,
@@ -29,8 +27,8 @@ final class Container
         private(set) ?Metadata $metadata = null,
         private(set) ?DateTimeInterface $lastSyncedAt = null,
         private(set) DateTimeInterface $createdAt = new DateTimeImmutable(),
+        private(set) ContainerId $id = new ContainerId(),
     ) {
-        $this->id = new ContainerId();
     }
 
     public function isActionAllowed(string $action): bool

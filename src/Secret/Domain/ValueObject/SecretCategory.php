@@ -12,9 +12,4 @@ enum SecretCategory: string
     case API_KEY = 'api_key';
     case CERTIFICATE = 'certificate';
     case INFRASTRUCTURE = 'infrastructure';
-
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
 }

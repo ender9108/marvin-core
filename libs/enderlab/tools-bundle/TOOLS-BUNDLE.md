@@ -508,8 +508,7 @@ class ConfigService
 ### Exemple 3: Form ChoiceType avec Enum
 
 ```php
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Marvin\Security\Domain\List\Role;
+use Marvin\Security\Domain\ValueObject\Role;use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 $builder->add('role', ChoiceType::class, [
     'choices' => array_flip(Role::array()),

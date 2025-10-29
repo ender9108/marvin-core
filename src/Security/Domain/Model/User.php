@@ -22,8 +22,6 @@ use Marvin\Shared\Domain\ValueObject\Theme;
 
 class User extends AggregateRoot
 {
-    public private(set) UserId $id;
-
     public function __construct(
         private(set) Email $email,
         private(set) Firstname $firstname,
@@ -36,9 +34,9 @@ class User extends AggregateRoot
         private(set) Timezone $timezone,
         private(set) ?string $password = null,
         private(set) ?DateTimeInterface $updatedAt = null,
-        public readonly DateTimeInterface $createdAt = new DateTimeImmutable()
+        public readonly DateTimeInterface $createdAt = new DateTimeImmutable(),
+        private(set) UserId $id = new UserId(),
     ) {
-        $this->id = new UserId();
     }
 
     public static function create(

@@ -8,13 +8,11 @@ use Marvin\Security\Domain\ValueObject\Identity\LoginAttemptId;
 
 readonly class LoginAttempt
 {
-    public LoginAttemptId $id;
-
     private function __construct(
         public User $user,
-        public DateTimeInterface $createdAt = new DateTimeImmutable()
+        public DateTimeInterface $createdAt = new DateTimeImmutable(),
+        public LoginAttemptId $id = new LoginAttemptId(),
     ) {
-        $this->id = new LoginAttemptId();
     }
 
     public static function create(User $user): self

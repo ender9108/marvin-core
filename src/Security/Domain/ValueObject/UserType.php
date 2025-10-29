@@ -28,11 +28,6 @@ final readonly class UserType implements Stringable
         $this->value = $type;
     }
 
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     public function __toString(): string
     {
         return (string) $this->value;

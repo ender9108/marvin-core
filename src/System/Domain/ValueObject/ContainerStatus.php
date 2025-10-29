@@ -11,11 +11,6 @@ enum ContainerStatus: string
     case EXITED = 'exited';
     case UNKNOWN = 'unknown';
 
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     public function isRunning(): bool
     {
         return $this === self::RUNNING;

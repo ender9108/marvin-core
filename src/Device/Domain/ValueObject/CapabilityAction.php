@@ -265,15 +265,6 @@ enum CapabilityAction: string
     case START_UPDATE = 'start_update';
     case IDENTIFY = 'identify';
 
-    // ==========================================
-    // MÉTHODES
-    // ==========================================
-
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     public function requiresParameters(): bool
     {
         return match ($this) {

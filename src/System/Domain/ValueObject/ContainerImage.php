@@ -22,11 +22,6 @@ final readonly class ContainerImage implements Stringable
         return $this->value;
     }
 
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     public function getName(): string
     {
         return explode(':', $this->value)[0];

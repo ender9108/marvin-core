@@ -1010,26 +1010,6 @@ class Email
 
 ---
 
-### Égalité de Value Objects
-
-Toujours implémenter une méthode `equals()` pour comparer deux value objects.
-
-```php
-public function equals(self $other): bool
-{
-    return $this->value === $other->value;
-}
-```
-
-**Usage:**
-```php
-if ($user->email->equals(new Email('test@example.com'))) {
-    // Emails identiques
-}
-```
-
----
-
 ### Factory Methods
 
 Privilégier les factory methods pour les cas d'usage fréquents.

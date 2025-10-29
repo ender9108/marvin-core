@@ -46,9 +46,4 @@ final readonly class PowerConsumption implements Stringable
 
         return number_format($this->value, 0) . ' ' . self::UNIT_W;
     }
-
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
 }

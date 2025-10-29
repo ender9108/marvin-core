@@ -12,9 +12,4 @@ enum SecretScope: string
     case USER = 'user';          // Spécifique à un user
     case DEVICE = 'device';      // Spécifique à un device
     case PROTOCOL = 'protocol';  // Spécifique à un protocole
-
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
 }

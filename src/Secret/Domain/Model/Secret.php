@@ -20,8 +20,6 @@ use Marvin\Shared\Domain\ValueObject\Metadata;
 
 class Secret extends AggregateRoot
 {
-    public private(set) SecretId $id;
-
     public function __construct(
         private(set) SecretKey $key,
         private(set) SecretValue $value,
@@ -33,9 +31,8 @@ class Secret extends AggregateRoot
         private(set) ?Metadata $metadata = null,
         private(set) ?DateTimeInterface $updatedAt = null,
         public readonly DateTimeInterface $createdAt = new DateTimeImmutable(),
+        private(set) SecretId $id = new SecretId(),
     ) {
-        $this->id = new SecretId();
-
         $this->recordEvent(
             new SecretCreated(
                 secretId: $this->id->toString(),

@@ -20,11 +20,6 @@ final readonly class Description implements Stringable
         $this->value = $description;
     }
 
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     public function __toString(): string
     {
         return $this->value;

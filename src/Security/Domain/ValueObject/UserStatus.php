@@ -29,11 +29,6 @@ final readonly class UserStatus implements Stringable
         $this->value = $status;
     }
 
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     public function isDisabled(): bool
     {
         return $this->value === self::STATUSES['DISABLED'];

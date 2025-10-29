@@ -22,11 +22,6 @@ final readonly class Email implements Stringable
         $this->value = $email;
     }
 
-    public function equals(self $other): bool
-    {
-        return $this->value === $other->value;
-    }
-
     #[Override]
     public function __toString(): string
     {
