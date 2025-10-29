@@ -10,5 +10,6 @@ final readonly class UninstallPlugin implements CommandInterface
     public function __construct(
         public PluginId $pluginId,
         public bool $deleteOrphanedDevices = false,
-    ) {}
+    ) {
+    }
 }

@@ -41,19 +41,19 @@ class Device extends AggregateRoot
     /**
      * @var Collection<int, DeviceCapability>
      */
-    private(set) Collection $capabilities;
+    public private(set) Collection $capabilities;
 
     /**
      * @var Collection<int, DeviceState>
      */
-    private(set) Collection $states;
+    public private(set) Collection $states;
 
     /**
      * @var Collection<int, Device>
      */
-    private(set) Collection $childrens;
+    public private(set) Collection $childrens;
 
-    private(set) ?Device $parent = null;
+    public private(set) ?Device $parent = null;
 
     public function __construct(
         private(set) Label $label,

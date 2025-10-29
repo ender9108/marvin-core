@@ -174,27 +174,33 @@ class Plugin extends AggregateRoot
         $this->metadata = Metadata::fromArray(array_merge($this->metadata->toArray(), $metadata));
     }
 
-    public function isEnabled(): bool {
+    public function isEnabled(): bool
+    {
         return $this->status === PluginStatus::ENABLED;
     }
 
-    public function isDisabled(): bool {
+    public function isDisabled(): bool
+    {
         return $this->status === PluginStatus::DISABLED;
     }
 
-    public function isUpdateBlocked(): bool {
+    public function isUpdateBlocked(): bool
+    {
         return $this->status === PluginStatus::UPDATE_BLOCKED;
     }
 
-    public function providesProtocol(): bool {
+    public function providesProtocol(): bool
+    {
         return $this->capabilities['provides_protocol'] ?? false;
     }
 
-    public function providesAutomationFunctions(): bool {
+    public function providesAutomationFunctions(): bool
+    {
         return $this->capabilities['provides_automation_functions'] ?? false;
     }
 
-    public function providesWebhooks(): bool {
+    public function providesWebhooks(): bool
+    {
         return $this->capabilities['provides_webhooks'] ?? false;
     }
 }

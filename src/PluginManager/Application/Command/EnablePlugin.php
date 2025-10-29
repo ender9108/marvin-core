@@ -9,5 +9,6 @@ final readonly class EnablePlugin implements CommandInterface
 {
     public function __construct(
         public PluginId $pluginId,
-    ) {}
+    ) {
+    }
 }

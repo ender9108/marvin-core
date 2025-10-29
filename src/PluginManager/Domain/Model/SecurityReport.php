@@ -17,7 +17,8 @@ class SecurityReport
         private(set) array $violations,
         private(set) array $summary,
         private(set) SecurityReportId $id = new SecurityReportId(),
-    ) {}
+    ) {
+    }
 
     public function hasViolations(): bool
     {

@@ -29,28 +29,28 @@ use Marvin\Shared\Domain\ValueObject\Metadata;
 
 class Zone extends AggregateRoot
 {
-    private(set) ?string $slug = null;
+    public private(set) ?string $slug = null;
 
     /* *************** Metrics *************** */
-    private(set) ?Temperature $currentTemperature = null;
-    private(set) ?PowerConsumption $currentPowerConsumption = null;
-    private(set) ?Humidity $currentHumidity = null;
-    private(set) bool $isOccupied = false;
-    private(set) int $noMotionCounter = 0;
-    private(set) int $activeSensorsCount = 0;
-    private(set) ?DateTimeInterface $lastMetricsUpdate = null;
+    public private(set) ?Temperature $currentTemperature = null;
+    public private(set) ?PowerConsumption $currentPowerConsumption = null;
+    public private(set) ?Humidity $currentHumidity = null;
+    public private(set) bool $isOccupied = false;
+    public private(set) int $noMotionCounter = 0;
+    public private(set) int $activeSensorsCount = 0;
+    public private(set) ?DateTimeInterface $lastMetricsUpdate = null;
 
     /* *************** Devices *************** */
-    private(set) Collection $deviceIds;
+    public private(set) Collection $deviceIds;
     /** @var array<string, float> [deviceId => temperature] */
-    private(set) array $deviceTemperatures = [];
+    public private(set) array $deviceTemperatures = [];
     /** @va(set)r array<string, float> [deviceId => humidity] */
-    private(set) array $deviceHumidities = [];
+    public private(set) array $deviceHumidities = [];
     /** @va(set)r array<string, float> [deviceId => power] */
-    private(set) array $devicePowerConsumptions = [];
+    public private(set) array $devicePowerConsumptions = [];
 
-    private(set) Collection $childrens;
-    private(set) ?Zone $parent = null;
+    public private(set) Collection $childrens;
+    public private(set) ?Zone $parent = null;
 
     public function __construct(
         private(set) ZoneName $zoneName,

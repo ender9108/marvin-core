@@ -10,9 +10,9 @@ use Marvin\Security\Domain\ValueObject\Identity\RequestResetPasswordId;
 
 class RequestResetPassword
 {
-    private(set) ExpiresAt $expiresAt;
+    public private(set) ExpiresAt $expiresAt;
 
-    private(set) bool $used = false;
+    public private(set) bool $used = false;
 
     /**
      * @throws DateMalformedStringException

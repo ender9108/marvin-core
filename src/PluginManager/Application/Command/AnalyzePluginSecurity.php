@@ -8,5 +8,6 @@ final readonly class AnalyzePluginSecurity implements CommandInterface
 {
     public function __construct(
         public string $pluginClass,
-    ) {}
+    ) {
+    }
 }

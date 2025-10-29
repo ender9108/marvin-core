@@ -12,5 +12,6 @@ final readonly class UpdatePlugin implements CommandInterface
         public PluginId $pluginId,
         public ?PluginVersion $targetVersion = null,
         public bool $force = false,
-    ) {}
+    ) {
+    }
 }

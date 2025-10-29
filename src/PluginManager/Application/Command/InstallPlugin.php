@@ -10,5 +10,6 @@ final readonly class InstallPlugin implements CommandInterface
         public string $pluginClass,
         public array $secrets = [],
         public array $config = [],
-    ) {}
+    ) {
+    }
 }

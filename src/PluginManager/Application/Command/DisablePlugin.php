@@ -10,5 +10,6 @@ final readonly class DisablePlugin implements CommandInterface
     public function __construct(
         public PluginId $pluginId,
         public ?string $reason = null,
-    ) {}
+    ) {
+    }
 }
