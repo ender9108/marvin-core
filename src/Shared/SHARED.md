@@ -981,7 +981,7 @@ Tous les value objects sont **readonly** et **immuables**.
 
 ✅ **DO:**
 ```php
-final readonly class Email implements ValueObjectInterface
+final readonly class Email implements Stringable
 {
     public string $value;
     
@@ -1015,7 +1015,7 @@ class Email
 Toujours implémenter une méthode `equals()` pour comparer deux value objects.
 
 ```php
-public function equals(ValueObjectInterface $other): bool
+public function equals(self $other): bool
 {
     return $this->value === $other->value;
 }
@@ -1035,7 +1035,7 @@ if ($user->email->equals(new Email('test@example.com'))) {
 Privilégier les factory methods pour les cas d'usage fréquents.
 
 ```php
-final readonly class Theme implements ValueObjectInterface
+final readonly class Theme implements Stringable
 {
     public static function dark(): self
     {
@@ -1206,7 +1206,7 @@ interface ArrayValueObjectInterface
 
 **Exemple:**
 ```php
-final readonly class Metadata implements ArrayValueObjectInterface
+final readonly class Metadata
 {
     public function __construct(
         public array $value = []

@@ -21,4 +21,3 @@ interface SecretQueryServiceInterface
      */
     public function getSecretsByCategory(string $category): array;
 }
-

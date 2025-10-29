@@ -16,7 +16,8 @@ class AutoGenerateError extends DomainException implements TranslatableException
         parent::__construct($message, $code);
     }
 
-    public static function withKey(SecretKey $key): self {
+    public static function withKey(SecretKey $key): self
+    {
         return new self(
             sprintf('Cannot auto-generate value for external secret %s. Please provide a new value.', $key->value),
             'ST0005',

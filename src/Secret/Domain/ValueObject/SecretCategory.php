@@ -2,10 +2,9 @@
 
 namespace Marvin\Secret\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
 
-enum SecretCategory: string implements ValueObjectInterface
+enum SecretCategory: string implements Stringable
 {
     use EnumToArrayTrait;
 
@@ -14,7 +13,7 @@ enum SecretCategory: string implements ValueObjectInterface
     case CERTIFICATE = 'certificate';
     case INFRASTRUCTURE = 'infrastructure';
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $this->value === $other->value;
     }

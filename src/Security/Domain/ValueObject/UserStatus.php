@@ -3,10 +3,9 @@
 namespace Marvin\Security\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Stringable;
 
-final readonly class UserStatus implements ValueObjectInterface
+final readonly class UserStatus implements Stringable
 {
     public const array STATUSES = [
         'DISABLED' => 0,
@@ -30,7 +29,7 @@ final readonly class UserStatus implements ValueObjectInterface
         $this->value = $status;
     }
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $this->value === $other->value;
     }
@@ -73,5 +72,10 @@ final readonly class UserStatus implements ValueObjectInterface
     public static function toDelete(): self
     {
         return new self(self::STATUSES['TO_DELETE']);
+    }
+
+    public function __toString(): string
+    {
+        return (string) array_search($this->value, self::STATUSES);
     }
 }

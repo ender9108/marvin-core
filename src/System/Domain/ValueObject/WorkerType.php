@@ -2,9 +2,7 @@
 
 namespace Marvin\System\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
-
-enum WorkerType: string implements ValueObjectInterface
+enum WorkerType: string
 {
     case CONSUMER = 'consumer';
     case PROTOCOL = 'protocol';
@@ -48,13 +46,8 @@ enum WorkerType: string implements ValueObjectInterface
         return $this === self::UNKNOWN;
     }
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
-        return $other instanceof self && $this->value === $other->value;
-    }
-
-    public function toString(): string
-    {
-        return $this->value;
+        return $this->value === $other->value;
     }
 }

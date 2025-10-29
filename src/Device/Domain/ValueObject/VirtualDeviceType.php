@@ -4,7 +4,7 @@ namespace Marvin\Device\Domain\ValueObject;
 
 use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
 
-enum VirtualDeviceType: string
+enum VirtualDeviceType: string implements Stringable
 {
     use EnumToArrayTrait;
 
@@ -40,4 +40,9 @@ enum VirtualDeviceType: string
     // External Integrations
     case CALENDAR = 'calendar';
     case RSS_FEED = 'rss_feed';
+
+    public function equals(self $other): bool
+    {
+        return $this->value === $other->value;
+    }
 }

@@ -2,10 +2,9 @@
 
 namespace Marvin\Location\Application\CommandHandler\Zone;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use Marvin\Location\Application\Command\Zone\UpdateZone;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
-use Marvin\Shared\Domain\ValueObject\Label;
+use Marvin\Location\Domain\ValueObject\ZoneName;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -22,8 +21,8 @@ final readonly class UpdateZoneHandler
     {
         $zone = $this->zoneRepository->byId($command->zoneId);
 
-        if ($command->label !== null) {
-            $zone->updateLabel(new Label($command->label));
+        if ($command->zoneName !== null) {
+            $zone->updateZoneName(ZoneName::fromString($command->zoneName));
         }
 
         $zone->updateConfiguration(

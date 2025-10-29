@@ -3,7 +3,6 @@
 namespace Marvin\System\Application\CommandHandler\Container;
 
 use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestCommand;
 use EnderLab\MarvinManagerBundle\Reference\ManagerContainerActionReference;
 use Marvin\System\Application\Command\Container\BuildContainer;

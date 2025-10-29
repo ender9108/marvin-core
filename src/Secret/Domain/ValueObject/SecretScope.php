@@ -2,10 +2,9 @@
 
 namespace Marvin\Secret\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
 
-enum SecretScope: string implements ValueObjectInterface
+enum SecretScope: string implements Stringable
 {
     use EnumToArrayTrait;
 
@@ -14,7 +13,7 @@ enum SecretScope: string implements ValueObjectInterface
     case DEVICE = 'device';      // Spécifique à un device
     case PROTOCOL = 'protocol';  // Spécifique à un protocole
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $this->value === $other->value;
     }

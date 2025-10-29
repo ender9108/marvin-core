@@ -18,7 +18,8 @@ class RotationError extends DomainException implements TranslatableExceptionInte
         parent::__construct($message, $code);
     }
 
-    public static function negativeInterval(): self {
+    public static function negativeInterval(): self
+    {
         return new self(
             'The rotation interval cannot be negative',
             'ST0006',
@@ -26,7 +27,8 @@ class RotationError extends DomainException implements TranslatableExceptionInte
         );
     }
 
-    public static function requireIntervalDayGtZero(): self {
+    public static function requireIntervalDayGtZero(): self
+    {
         return new self(
             'Auto-rotate requires a rotation interval > 0',
             'ST0007',
@@ -35,7 +37,8 @@ class RotationError extends DomainException implements TranslatableExceptionInte
         );
     }
 
-    public static function onlyAllowForManaged(): self {
+    public static function onlyAllowForManaged(): self
+    {
         return new self(
             'Auto-rotation is only allowed for managed secrets',
             'ST0008',

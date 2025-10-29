@@ -3,11 +3,10 @@
 namespace Marvin\Shared\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Marvin\Shared\Domain\Application;
 use Stringable;
 
-final readonly class ProtocolType implements ValueObjectInterface, Stringable
+final readonly class ProtocolType implements Stringable
 {
     public readonly string $value;
 
@@ -24,7 +23,7 @@ final readonly class ProtocolType implements ValueObjectInterface, Stringable
         return new self($value);
     }
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $this->value === $other->value;
     }

@@ -3,9 +3,9 @@
 namespace Marvin\System\Domain\ValueObject;
 
 use Enderlab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
+use Stringable;
 
-final readonly class SupervisorProcess implements ValueObjectInterface
+final readonly class SupervisorProcess implements Stringable
 {
     private string $value;
 
@@ -17,13 +17,13 @@ final readonly class SupervisorProcess implements ValueObjectInterface
         $this->value = $value;
     }
 
-    public function toString(): string
+    public function __toString(): string
     {
         return $this->value;
     }
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
-        return $other instanceof self && $this->value === $other->value;
+        return $this->value === $other->value;
     }
 }

@@ -6,13 +6,14 @@ use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use Exception;
 use Marvin\Location\Application\Command\Zone\CreateZone;
 use Marvin\Location\Domain\ValueObject\HexaColor;
+use Marvin\Location\Domain\ValueObject\Humidity;
 use Marvin\Location\Domain\ValueObject\Orientation;
+use Marvin\Location\Domain\ValueObject\PowerConsumption;
 use Marvin\Location\Domain\ValueObject\SurfaceArea;
-use Marvin\Location\Domain\ValueObject\TargetPowerConsumption;
-use Marvin\Location\Domain\ValueObject\TargetTemperature;
+use Marvin\Location\Domain\ValueObject\Temperature;
+use Marvin\Location\Domain\ValueObject\ZoneName;
 use Marvin\Location\Domain\ValueObject\ZoneType;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
-use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -34,8 +35,8 @@ final readonly class CreateZoneCommand
 
     public function __invoke(
         SymfonyStyle $io,
-        #[Argument(name: 'label')]
-        string $label,
+        #[Argument(name: 'zone-name')]
+        string $zoneName,
         #[Argument(name: 'type')]
         string $type,
         #[Option(name: 'parent')]
@@ -48,6 +49,8 @@ final readonly class CreateZoneCommand
         ?float $targetTemperature = null,
         #[Option(name: 'target-power-consumption')]
         ?float $targetPowerConsumption = null,
+        #[Option(name: 'target-humidity')]
+        ?float $targetHumidity = null,
         #[Option(name: 'icon')]
         ?string $icon = null,
         #[Option(name: 'color')]
@@ -55,13 +58,14 @@ final readonly class CreateZoneCommand
     ): int {
         try {
             $command = new CreateZone(
-                label: new Label($label),
+                zoneName: ZoneName::fromString($zoneName),
                 type: ZoneType::from($type),
                 parentZoneId: null !== $parentZoneId ? new ZoneId($parentZoneId) : null,
                 surfaceArea: null !== $surface ? new SurfaceArea($surface) : null,
                 orientation: null !== $orientation ? Orientation::from($orientation) : null,
-                targetTemperature: null !== $targetTemperature ? new TargetTemperature($targetTemperature) : null,
-                targetPowerConsumption: null !== $targetPowerConsumption ? new TargetPowerConsumption($targetPowerConsumption) : null,
+                targetTemperature: null !== $targetTemperature ? Temperature::fromCelsius($targetTemperature) : null,
+                targetHumidity: null !== $targetHumidity ? Humidity::fromPercentage($targetHumidity) : null,
+                targetPowerConsumption: null !== $targetPowerConsumption ? PowerConsumption::fromWatts($targetPowerConsumption) : null,
                 icon: $icon,
                 color: HexaColor::fromString($color),
             );

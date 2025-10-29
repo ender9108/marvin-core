@@ -2,10 +2,9 @@
 
 namespace Marvin\Device\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
 
-enum CapabilityCategory: string implements ValueObjectInterface
+enum CapabilityCategory: string
 {
     use EnumToArrayTrait;
 
@@ -22,13 +21,8 @@ enum CapabilityCategory: string implements ValueObjectInterface
     case SYSTEM = 'system';
     case COMPOSITE = 'composite';
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $other instanceof self && $this->value === $other->value;
-    }
-
-    public function toString(): string
-    {
-        return $this->value;
     }
 }

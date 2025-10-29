@@ -24,7 +24,6 @@ use Override;
 final class UserOrmRepository extends ServiceEntityRepository implements UserRepositoryInterface
 {
     public const string MODEL_CLASS = User::class;
-    public const string MODEL_ALIAS = 'user';
 
     public function __construct(ManagerRegistry $registry)
     {

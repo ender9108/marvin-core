@@ -3,9 +3,8 @@
 namespace Marvin\System\Application\CommandHandler\Container;
 
 use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestCommand;
-use EnderLab\MarvinManagerBundle\Reference\ManagerActionReference;
+use EnderLab\MarvinManagerBundle\Reference\ManagerContainerActionReference;
 use Marvin\System\Application\Command\Container\StopContainer;
 use Marvin\System\Domain\Exception\ActionNotAllowed;
 use Marvin\System\Domain\Model\ActionRequest;
@@ -35,10 +34,10 @@ final readonly class StopContainerHandler
 
         $container = $this->containerRepository->byId($command->containerId);
 
-        if (!$container->isActionAllowed(ManagerActionReference::ACTION_STOP->value)) {
+        if (!$container->isActionAllowed(ManagerContainerActionReference::ACTION_STOP->value)) {
             throw ActionNotAllowed::withContainerAndAction(
-                $container->label,
-                ManagerActionReference::ACTION_STOP->value
+                $container->serviceLabel,
+                ManagerContainerActionReference::ACTION_STOP->value
             );
         }
 
@@ -46,7 +45,7 @@ final readonly class StopContainerHandler
             $command->correlationId,
             'container',
             $command->containerId->toString(),
-            ManagerActionReference::ACTION_STOP->value,
+            ManagerContainerActionReference::ACTION_STOP->value,
             ActionStatus::PENDING,
         );
 
@@ -55,7 +54,7 @@ final readonly class StopContainerHandler
         $managerMessage = new ManagerRequestCommand(
             $command->containerId->toString(),
             $command->correlationId->toString(),
-            ManagerActionReference::ACTION_STOP->value,
+            ManagerContainerActionReference::ACTION_STOP->value,
             $command->timeout
         );
 

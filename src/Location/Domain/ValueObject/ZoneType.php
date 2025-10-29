@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Marvin\Location\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
 
-enum ZoneType: string implements ValueObjectInterface
+enum ZoneType: string
 {
     use EnumToArrayTrait;
 
@@ -16,7 +15,7 @@ enum ZoneType: string implements ValueObjectInterface
     case ROOM = 'room';
     case OUTDOOR = 'outdoor';
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $other instanceof self && $this->value === $other->value;
     }
@@ -44,5 +43,15 @@ enum ZoneType: string implements ValueObjectInterface
     public function canHaveChildren(): bool
     {
         return $this === self::BUILDING || $this === self::FLOOR;
+    }
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::BUILDING => 'location.type.building',
+            self::FLOOR => 'location.type.floor',
+            self::ROOM => 'location.type.room',
+            self::OUTDOOR => 'location.type.outdoor',
+        };
     }
 }

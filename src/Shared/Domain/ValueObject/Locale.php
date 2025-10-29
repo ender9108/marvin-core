@@ -3,11 +3,10 @@
 namespace Marvin\Shared\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Marvin\Shared\Domain\Application;
 use Stringable;
 
-final readonly class Locale implements ValueObjectInterface, Stringable
+final readonly class Locale implements Stringable
 {
     private const int LENGTH = 2;
 
@@ -22,7 +21,7 @@ final readonly class Locale implements ValueObjectInterface, Stringable
         $this->value = $locale;
     }
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $this->value === $other->value;
     }

@@ -30,8 +30,8 @@ HELP
 final class DeleteSecretCommand extends Command
 {
     public function __construct(
-        private SyncCommandBusInterface $syncCommandBus,
-        private ExceptionMessageManager $exceptionMessageManager,
+        private readonly SyncCommandBusInterface $syncCommandBus,
+        private readonly ExceptionMessageManager $exceptionMessageManager,
     ) {
         parent::__construct();
     }

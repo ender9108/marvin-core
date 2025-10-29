@@ -10,24 +10,24 @@ final class ZoneAlreadyExists extends DomainException implements TranslatableExc
     public function __construct(
         string $message,
         string $code,
-        public readonly ?string $label = null,
+        public readonly ?string $zoneName = null,
     ) {
         parent::__construct($message, $code);
     }
 
-    public static function withLabel(string $label): self
+    public static function withLabel(string $zoneName): self
     {
         return new self(
-            sprintf('Zone with name %s already exists', $label),
-            'LO00005',
-            $label,
+            sprintf('Zone with name %s already exists', $zoneName),
+            'LO0005',
+            $zoneName,
         );
     }
 
     #[Override]
     public function translationId(): string
     {
-        if (null !== $this->label) {
+        if (null !== $this->zoneName) {
             return 'location.exceptions.zone_already_exists_with_name';
         }
         return 'location.exceptions.zone_already_exists';
@@ -38,7 +38,7 @@ final class ZoneAlreadyExists extends DomainException implements TranslatableExc
     public function translationParameters(): array
     {
         return [
-            '%name%' => $this->label,
+            '%name%' => $this->zoneName,
         ];
     }
 

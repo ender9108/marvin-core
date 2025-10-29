@@ -25,7 +25,7 @@ final readonly class MoveZoneHandler
         $zone = $this->zoneRepository->byId($command->zoneId);
 
         if ($command->newParentZoneId !== null && $command->newParentZoneId === $command->zoneId) {
-            throw InvalidZoneHierarchy::circularReference($zone->label);
+            throw InvalidZoneHierarchy::circularReference($zone->zoneName);
         }
 
         $newParentZone = null;
@@ -36,24 +36,24 @@ final readonly class MoveZoneHandler
 
             if (!$newParentZone->type->canHaveChildren()) {
                 throw InvalidZoneHierarchy::cannotHaveChildren(
-                    $newParentZone->label,
+                    $newParentZone->zoneName,
                     $newParentZone->type
                 );
             }
 
             foreach ($zone->childrens as $children) {
                 if ($children->id->equals($command->newParentZoneId)) {
-                    throw InvalidZoneHierarchy::circularReference($zone->label);
+                    throw InvalidZoneHierarchy::circularReference($zone->zoneName);
                 }
             }
         }
 
-        $zone->moveToParent($newParentZone);
+        $zone->move($newParentZone);
 
         if ($newParentZone !== null) {
-            $newPath = $newParentZone->path->append($zone->label);
+            $newPath = $newParentZone->path->append($zone->zoneName);
         } else {
-            $newPath = new ZonePath($zone->label);
+            $newPath = new ZonePath($zone->zoneName);
         }
 
         $zone->updatePath($newPath);

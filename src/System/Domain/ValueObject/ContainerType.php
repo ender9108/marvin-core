@@ -2,9 +2,7 @@
 
 namespace Marvin\System\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
-
-enum ContainerType: string implements ValueObjectInterface
+enum ContainerType: string
 {
     case PROTOCOL = 'protocol';
     case DATABASE = 'database';
@@ -12,14 +10,9 @@ enum ContainerType: string implements ValueObjectInterface
     case MONITORING = 'monitoring';
     case MAILER = 'mailer';
 
-    public function equals(ValueObjectInterface $containerStatus): bool
+    public function equals(self $other): bool
     {
-        return $containerStatus instanceof self && $this->value === $containerStatus->value;
-    }
-
-    public function toString(): string
-    {
-        return $this->value;
+        return $this->value === $other->value;
     }
 
     public function isProtocol(): bool

@@ -16,7 +16,8 @@ final readonly class SecretQueryService implements SecretQueryServiceInterface
     public function __construct(
         private SecretRepositoryInterface $secretRepository,
         private EncryptionServiceInterface $encryption,
-    ) {}
+    ) {
+    }
 
     public function getSecretValue(string $key): string
     {

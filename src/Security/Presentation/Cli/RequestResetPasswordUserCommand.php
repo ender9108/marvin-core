@@ -2,7 +2,7 @@
 
 namespace Marvin\Security\Presentation\Cli;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
+use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
 use Exception;
 use Marvin\Security\Application\Command\User\RequestResetPasswordUser;
 use Marvin\Shared\Domain\ValueObject\Email;
@@ -19,7 +19,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final readonly class RequestResetPasswordUserCommand
 {
     public function __construct(
-        private SyncCommandBusInterface $syncCommandBus,
+        private CommandBusInterface $commandBus,
         private ExceptionMessageManager $exceptionMessageManager,
     ) {
     }
@@ -30,7 +30,7 @@ final readonly class RequestResetPasswordUserCommand
         string $mail,
     ): int {
         try {
-            $this->syncCommandBus->handle(new RequestResetPasswordUser(new Email($mail)));
+            $this->commandBus->dispatch(new RequestResetPasswordUser(new Email($mail)));
 
             $io->success('Request reset password successfully.');
 

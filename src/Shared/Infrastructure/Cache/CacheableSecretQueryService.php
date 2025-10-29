@@ -17,7 +17,8 @@ final readonly class CacheableSecretQueryService implements SecretQueryServiceIn
         private SecretQueryServiceInterface $decorated,
         private CacheItemPoolInterface $cache,
         private LoggerInterface $logger,
-    ) {}
+    ) {
+    }
 
     /**
      * @throws InvalidArgumentException

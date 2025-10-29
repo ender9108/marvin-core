@@ -15,7 +15,8 @@ final readonly class SecretInfo
         public ?\DateTimeImmutable $lastRotatedAt,
         public ?\DateTimeImmutable $expiresAt,
         public \DateTimeImmutable $createdAt,
-    ) {}
+    ) {
+    }
 
     public function isExpired(): bool
     {
@@ -53,4 +54,3 @@ final readonly class SecretInfo
         ];
     }
 }
-

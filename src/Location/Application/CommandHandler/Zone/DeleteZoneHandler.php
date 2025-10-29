@@ -26,7 +26,7 @@ final readonly class DeleteZoneHandler
             $this->logger->info('Cannot delete zone with children', ['zoneId' => $command->zoneId, 'childrenCount' => $childrenCount]);
 
             throw InvalidZoneHierarchy::cannotDeleteZoneWithChildren(
-                $zone->label,
+                $zone->zoneName,
                 $childrenCount
             );
         }

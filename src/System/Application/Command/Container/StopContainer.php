@@ -2,12 +2,12 @@
 
 namespace Marvin\System\Application\Command\Container;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandInterface;
+use EnderLab\DddCqrsBundle\Application\Command\CommandInterface;
 use EnderLab\MarvinManagerBundle\Reference\ManagerContainerActionReference;
 use Marvin\Shared\Domain\ValueObject\Identity\UniqId;
 use Marvin\System\Domain\ValueObject\Identity\ContainerId;
 
-final readonly class StopContainer implements SyncCommandInterface
+final readonly class StopContainer implements CommandInterface
 {
     public ManagerContainerActionReference $action;
 

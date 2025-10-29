@@ -3,12 +3,12 @@
 namespace Marvin\Security\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Marvin\Security\Domain\List\Role;
 use Marvin\Shared\Domain\ValueObject\ArrayValueObjectInterface;
 use Override;
+use Stringable;
 
-final readonly class Roles implements ArrayValueObjectInterface, \Stringable
+final readonly class Roles implements Stringable
 {
     private array $value;
 
@@ -85,7 +85,7 @@ final readonly class Roles implements ArrayValueObjectInterface, \Stringable
         return $this->contains(Role::SUPER_ADMIN->value);
     }
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $this->value === $other->value;
     }

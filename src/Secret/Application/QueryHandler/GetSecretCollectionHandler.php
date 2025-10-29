@@ -12,7 +12,8 @@ final readonly class GetSecretCollectionHandler
 {
     public function __construct(
         private SecretRepositoryInterface $secretRepository,
-    ) {}
+    ) {
+    }
 
     public function __invoke(GetSecretCollection $query): PaginatorInterface
     {

@@ -2,10 +2,9 @@
 
 namespace Marvin\System\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
 
-enum WorkerStatus: string implements ValueObjectInterface
+enum WorkerStatus: string
 {
     use EnumToArrayTrait;
 
@@ -85,7 +84,7 @@ enum WorkerStatus: string implements ValueObjectInterface
         };
     }
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $this->value === $other->value;
     }

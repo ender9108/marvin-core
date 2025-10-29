@@ -30,3 +30,14 @@ framework:
         routing:
             #Marvin\Domotic\Application\Command\DomoticEvent: domotic.events
             #Marvin\Domotic\Application\Command\DomoticCommand: domotic.commands
+
+when@test:
+    services:
+        doctrine.orm.messenger.event_subscriber.doctrine_clear_entity_manager:
+            class: stdClass
+    framework:
+        messenger:
+            transports:
+                domotic.events: 'test://'
+                domotic.commands: 'test://'
+                failed: 'test://'

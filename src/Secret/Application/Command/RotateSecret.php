@@ -2,10 +2,10 @@
 
 namespace Marvin\Secret\Application\Command;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandInterface;
+use EnderLab\DddCqrsBundle\Application\Command\CommandInterface;
 use Marvin\Secret\Domain\ValueObject\SecretKey;
 
-final readonly class RotateSecret implements SyncCommandInterface
+final readonly class RotateSecret implements CommandInterface
 {
     public function __construct(
         public SecretKey $key,

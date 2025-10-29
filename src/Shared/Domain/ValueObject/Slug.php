@@ -2,12 +2,12 @@
 
 namespace Marvin\Shared\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Stringable;
 
-final readonly class Slug implements ValueObjectInterface, Stringable
+final readonly class Slug implements Stringable
 {
-    public function __construct(public string $value) {
+    public function __construct(public string $value)
+    {
     }
 
     public function __toString(): string
@@ -15,7 +15,7 @@ final readonly class Slug implements ValueObjectInterface, Stringable
         return $this->value;
     }
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $this->value === $other->value;
     }

@@ -5,7 +5,7 @@ namespace Marvin\Device\Domain\ValueObject;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use Marvin\Shared\Domain\ValueObject\ArrayValueObjectInterface;
 
-final readonly class VirtualDeviceConfig implements ArrayValueObjectInterface
+final readonly class VirtualDeviceConfig
 {
     private array $config;
 
@@ -51,5 +51,10 @@ final readonly class VirtualDeviceConfig implements ArrayValueObjectInterface
     public function toArray(): array
     {
         return $this->config;
+    }
+
+    public function equals(self $other): bool
+    {
+        return $this->toArray() === $other->toArray();
     }
 }

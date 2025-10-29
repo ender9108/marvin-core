@@ -3,9 +3,9 @@
 namespace Marvin\Location\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
+use Stringable;
 
-final readonly class SurfaceArea implements ValueObjectInterface
+final readonly class SurfaceArea implements Stringable
 {
     private const float MIN_VALUE = 0.0;
     private const float MAX_VALUE = 100000.0;
@@ -15,8 +15,8 @@ final readonly class SurfaceArea implements ValueObjectInterface
 
     public function __construct(float $value)
     {
-        Assert::greaterThan($value, self::MIN_VALUE);
-        Assert::lessThan($value, self::MAX_VALUE);
+        Assert::greaterThan($value, self::MIN_VALUE, 'LO0015::::surface_area_cannot_be_negative');
+        Assert::lessThan($value, self::MAX_VALUE, 'LO0016::::surface_area_cannot_exceed_100000');
         $this->value = round($value, 2);
     }
 
@@ -25,7 +25,7 @@ final readonly class SurfaceArea implements ValueObjectInterface
         return new self($value);
     }
 
-    public function toString(): string
+    public function __toString(): string
     {
         return $this->value . ' ' . self::UNIT;
     }
@@ -35,7 +35,7 @@ final readonly class SurfaceArea implements ValueObjectInterface
         return $this->value;
     }
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $other instanceof self && abs($this->value - $other->value) < 0.01;
     }

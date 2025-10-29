@@ -3,10 +3,9 @@
 namespace Marvin\Security\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Stringable;
 
-final readonly class UserType implements ValueObjectInterface, \Stringable
+final readonly class UserType implements Stringable
 {
     public const array TYPES = [
         'APP' => 1,
@@ -29,7 +28,7 @@ final readonly class UserType implements ValueObjectInterface, \Stringable
         $this->value = $type;
     }
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $this->value === $other->value;
     }

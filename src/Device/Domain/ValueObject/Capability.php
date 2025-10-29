@@ -2,7 +2,6 @@
 
 namespace Marvin\Device\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
 
 /**
@@ -13,7 +12,7 @@ use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
  *
  * Total : 145 capabilities
  */
-enum Capability: string implements ValueObjectInterface
+enum Capability: string
 {
     use EnumToArrayTrait;
 
@@ -220,14 +219,9 @@ enum Capability: string implements ValueObjectInterface
     // MÉTHODES
     // ==========================================
 
-    public function toString(): string
+    public function equals(self $other): bool
     {
-        return $this->value;
-    }
-
-    public function equals(ValueObjectInterface $other): bool
-    {
-        return $other instanceof self && $this->value === $other->value;
+        return $this->value === $other->value;
     }
 
     public function getCategory(): CapabilityCategory

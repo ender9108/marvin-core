@@ -2,7 +2,7 @@
 
 namespace Marvin\Secret\Presentation\Cli\Command;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
+use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
 use Exception;
 use Marvin\Secret\Application\Service\SecretRotationService;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
@@ -25,7 +25,6 @@ HELP
 final readonly class RotateSecretsCommand
 {
     public function __construct(
-        private SyncCommandBusInterface $syncCommandBus,
         private SecretRotationService $rotationService,
         private ExceptionMessageManager $exceptionMessageManager,
     ) {

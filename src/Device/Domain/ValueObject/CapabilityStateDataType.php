@@ -2,9 +2,7 @@
 
 namespace Marvin\Device\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
-
-enum CapabilityStateDataType: string implements ValueObjectInterface
+enum CapabilityStateDataType: string implements Stringable
 {
     case BOOLEAN = 'boolean';
     case INTEGER = 'integer';

@@ -3,9 +3,8 @@
 namespace Marvin\System\Application\CommandHandler\Container;
 
 use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
 use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestCommand;
-use EnderLab\MarvinManagerBundle\Reference\ManagerActionReference;
+use EnderLab\MarvinManagerBundle\Reference\ManagerContainerActionReference;
 use Marvin\System\Application\Command\Container\ExecContainerCommand;
 use Marvin\System\Domain\Exception\ActionNotAllowed;
 use Marvin\System\Domain\Model\ActionRequest;
@@ -36,10 +35,10 @@ final readonly class ExecContainerCommandHandler
         $container = $this->containerRepository->byId($command->containerId);
 
         // Vérifier que l'action est autorisée
-        if (!$container->isActionAllowed(ManagerActionReference::ACTION_EXEC_CMD->value)) {
+        if (!$container->isActionAllowed(ManagerContainerActionReference::ACTION_EXEC_CMD->value)) {
             throw ActionNotAllowed::withContainerAndAction(
-                $container->label,
-                ManagerActionReference::ACTION_EXEC_CMD->value
+                $container->serviceLabel,
+                ManagerContainerActionReference::ACTION_EXEC_CMD->value
             );
         }
 

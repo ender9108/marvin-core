@@ -6,7 +6,7 @@ use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use Marvin\Shared\Domain\ValueObject\ArrayValueObjectInterface;
 use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 
-final readonly class SceneStates implements ArrayValueObjectInterface
+final readonly class SceneStates
 {
     /**
      * Format: [
@@ -68,5 +68,10 @@ final readonly class SceneStates implements ArrayValueObjectInterface
     public function toArray(): array
     {
         return $this->states;
+    }
+
+    public function equals(self $other): bool
+    {
+        return $this->toArray() === $other->toArray();
     }
 }

@@ -11,7 +11,8 @@ final readonly class CheckSecretExpirationHandler
 {
     public function __construct(
         private LoggerInterface $logger,
-    ) {}
+    ) {
+    }
 
     public function __invoke(SecretExpired $event): void
     {

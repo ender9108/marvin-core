@@ -6,6 +6,7 @@ use EnderLab\DddCqrsBundle\Application\Query\QueryBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
 use Exception;
 use Marvin\Location\Application\Query\Zone\GetZonesCollection;
+use Marvin\Location\Domain\Model\Zone;
 use Marvin\Location\Domain\ValueObject\ZoneType;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
@@ -54,15 +55,17 @@ final readonly class ListZonesCommand
             }
 
             $rows = [];
+            /** @var Zone $zone */
             foreach ($zones as $zone) {
                 $rows[] = [
                     $zone->id->toString(),
-                    $zone->label->value,
+                    $zone->zoneName->value,
                     $zone->type->value,
                     $zone->path->value,
                     $zone->currentTemperature ? round($zone->currentTemperature, 1) . '°C' : 'N/A',
-                    $zone->isOccupied ? '✓' : '✗',
                     $zone->currentPowerConsumption ? round($zone->currentPowerConsumption, 0) . 'W' : 'N/A',
+                    $zone->currentHumidity ? round($zone->currentHumidity, 0) . '%' : 'N/A',
+                    $zone->isOccupied ? '✓' : '✗',
                     $zone->icon ?? '',
                     $zone->color->value ?? '',
                 ];

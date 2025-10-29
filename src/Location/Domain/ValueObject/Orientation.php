@@ -2,10 +2,9 @@
 
 namespace Marvin\Location\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
 
-enum Orientation: string implements ValueObjectInterface
+enum Orientation: string implements Stringable
 {
     use EnumToArrayTrait;
 
@@ -18,14 +17,9 @@ enum Orientation: string implements ValueObjectInterface
     case SOUTH_EAST = 'south_east';
     case SOUTH_WEST = 'south_west';
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
-        return $other instanceof self && $this->value === $other->value;
-    }
-
-    public function toString(): string
-    {
-        return $this->value;
+        return $this->value === $other->value;
     }
 
     public function isNorth(): bool

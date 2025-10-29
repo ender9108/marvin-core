@@ -2,10 +2,6 @@
 
 namespace EnderLab\DddCqrsBundle;
 
-use EnderLab\DddCqrsBundle\Application\Command\CommandHandlerInterface;
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandHandlerInterface;
-use EnderLab\DddCqrsBundle\Application\Event\DomainEventHandlerInterface;
-use EnderLab\DddCqrsBundle\Application\Query\QueryHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
@@ -16,27 +12,6 @@ class DddCqrsBundle extends AbstractBundle
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $container->import('../config/services.yaml');
-
-        $services = $container->services();
-        /*$services
-            ->instanceof(CommandHandlerInterface::class)
-            ->tag('messenger.message_handler', ['bus' => 'commands'])
-        ;
-
-        $services
-            ->instanceof(SyncCommandHandlerInterface::class)
-            ->tag('messenger.message_handler', ['bus' => 'sync.commands'])
-        ;
-
-        $services
-            ->instanceof(QueryHandlerInterface::class)
-            ->tag('messenger.message_handler', ['bus' => 'queries'])
-        ;
-
-        $services
-            ->instanceof(DomainEventHandlerInterface::class)
-            ->tag('messenger.message_handler', ['bus' => 'domain.events'])
-        ;*/
     }
 
     public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
@@ -46,6 +21,29 @@ class DddCqrsBundle extends AbstractBundle
             true === $builder->getParameter('is_marvin_core')
         ;
 
+        $env = $builder->getParameterBag()->get('kernel.environment');
+        $isTestEnv = $env === 'test';
+
+        if ($isTestEnv) {
+            $this->initMessengerTest($builder);
+        } else {
+            $this->initMessenger($builder, $autoSetup);
+        }
+
+        $builder->prependExtensionConfig('framework', [
+            'messenger' => [
+                'routing' => [
+                    'EnderLab\\DddCqrsBundle\\Application\\Query\\QueryInterface' => 'queries',
+                    'EnderLab\\DddCqrsBundle\\Application\\Command\\CommandInterface' => 'commands',
+                    'EnderLab\\DddCqrsBundle\\Application\\Command\\SyncCommandInterface' => 'sync.commands',
+                    'EnderLab\\DddCqrsBundle\\Domain\\Event\\DomainEventInterface' => 'domain.events',
+                ]
+            ]
+        ]);
+    }
+
+    private function initMessenger(ContainerBuilder $builder, bool $autoSetup): void
+    {
         $builder->prependExtensionConfig('framework', [
             'messenger' => [
                 'transports' => [
@@ -101,12 +99,27 @@ class DddCqrsBundle extends AbstractBundle
                         ]
                     ],
                 ],
-                'routing' => [
-                    'EnderLab\\DddCqrsBundle\\Application\\Query\\QueryInterface' => 'queries',
-                    'EnderLab\\DddCqrsBundle\\Application\\Command\\CommandInterface' => 'commands',
-                    'EnderLab\\DddCqrsBundle\\Application\\Command\\SyncCommandInterface' => 'sync.commands',
-                    'EnderLab\\DddCqrsBundle\\Domain\\Event\\DomainEventInterface' => 'domain.events',
-                ]
+            ]
+        ]);
+    }
+
+    private function initMessengerTest(ContainerBuilder $builder): void
+    {
+        $builder->prependExtensionConfig('framework', [
+            'messenger' => [
+                'transports' => [
+                    'domain.events' => 'test://',
+                    'commands' => 'test://',
+                    'sync.commands' => 'test://',
+                    'queries' => 'test://',
+                ],
+                'default_bus' => 'commands',
+                'buses' => [
+                    'commands' => [],
+                    'sync.commands' => [],
+                    'queries' => [],
+                    'domain.events' => [],
+                ],
             ]
         ]);
     }

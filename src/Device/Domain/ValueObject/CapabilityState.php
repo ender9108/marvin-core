@@ -2,8 +2,6 @@
 
 namespace Marvin\Device\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
-
 /**
  * CapabilityState - États/mesures possibles pour les capabilities
  *
@@ -12,7 +10,7 @@ use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
  *
  * Total : ~150 states
  */
-enum CapabilityState: string implements ValueObjectInterface
+enum CapabilityState: string
 {
     // ==========================================
     // ÉCLAIRAGE (12)
@@ -306,16 +304,7 @@ enum CapabilityState: string implements ValueObjectInterface
     case DEVICE_TEMPERATURE = 'device_temperature'; // °C (température du device lui-même)
     case MEMORY_USAGE = 'memory_usage'; // 0-100%
 
-    // ==========================================
-    // MÉTHODES
-    // ==========================================
-
-    public function toString(): string
-    {
-        return $this->value;
-    }
-
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $other instanceof self && $this->value === $other->value;
     }

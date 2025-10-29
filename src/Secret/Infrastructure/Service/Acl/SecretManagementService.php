@@ -24,7 +24,8 @@ final readonly class SecretManagementService implements SecretManagementServiceI
         private SyncCommandBusInterface $syncCommandBus,
         private SecretRepositoryInterface $secretRepository,
         private LoggerInterface $logger,
-    ) {}
+    ) {
+    }
 
     public function createSecret(
         string $key,

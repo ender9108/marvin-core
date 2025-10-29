@@ -7,11 +7,11 @@ use Exception;
 use Marvin\Location\Application\Command\Zone\UpdateZone;
 use Marvin\Location\Domain\ValueObject\HexaColor;
 use Marvin\Location\Domain\ValueObject\Orientation;
+use Marvin\Location\Domain\ValueObject\PowerConsumption;
 use Marvin\Location\Domain\ValueObject\SurfaceArea;
-use Marvin\Location\Domain\ValueObject\TargetPowerConsumption;
-use Marvin\Location\Domain\ValueObject\TargetTemperature;
+use Marvin\Location\Domain\ValueObject\Temperature;
+use Marvin\Location\Domain\ValueObject\ZoneName;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
-use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -35,8 +35,8 @@ final readonly class UpdateZoneCommand
         SymfonyStyle $io,
         #[Argument(name: 'zoneId')]
         string $zoneId,
-        #[Option(name: 'label')]
-        ?string $label = null,
+        #[Option(name: 'zone-name')]
+        ?string $zoneName = null,
         #[Option(name: 'surfaceArea')]
         ?float $surfaceArea = null,
         #[Option(name: 'orientation')]
@@ -53,11 +53,11 @@ final readonly class UpdateZoneCommand
         try {
             $command = new UpdateZone(
                 ZoneId::fromString($zoneId),
-                null !== $label ? Label::fromString($label) : null,
+                null !== $zoneName ? ZoneName::fromString($zoneName) : null,
                 null !== $surfaceArea ? SurfaceArea::fromFloat($surfaceArea) : null,
                 null !== $orientation ? Orientation::from($orientation) : null,
-                null !== $targetTemperature ? TargetTemperature::fromFloat($targetTemperature) : null,
-                null !== $targetPowerConsumption ? TargetPowerConsumption::fromFloat($targetPowerConsumption) : null,
+                null !== $targetTemperature ? Temperature::fromFloat($targetTemperature) : null,
+                null !== $targetPowerConsumption ? PowerConsumption::fromFloat($targetPowerConsumption) : null,
                 $icon,
                 null !== $color ? HexaColor::fromString($color) : null,
             );

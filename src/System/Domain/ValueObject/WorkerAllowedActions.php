@@ -3,10 +3,9 @@
 namespace Marvin\System\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Marvin\Shared\Domain\ValueObject\ArrayValueObjectInterface;
 
-final readonly class WorkerAllowedActions implements ArrayValueObjectInterface
+final readonly class WorkerAllowedActions
 {
     private const array ALLOWED_ACTIONS = ['start', 'stop', 'restart'];
 
@@ -20,7 +19,7 @@ final readonly class WorkerAllowedActions implements ArrayValueObjectInterface
         $this->value = $value;
     }
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $other instanceof self && $this->value === $other->value;
     }

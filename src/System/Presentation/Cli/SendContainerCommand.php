@@ -2,7 +2,7 @@
 
 namespace Marvin\System\Presentation\Cli;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
+use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use EnderLab\MarvinManagerBundle\Reference\ManagerContainerActionReference;
 use Exception;
@@ -28,7 +28,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final readonly class SendContainerCommand
 {
     public function __construct(
-        private SyncCommandBusInterface $syncCommandBus,
+        private CommandBusInterface $commandBus,
         private ExceptionMessageManager $exceptionMessageManager,
     ) {
     }
@@ -67,7 +67,7 @@ final readonly class SendContainerCommand
                 default => throw ActionNotAllowed::withContainerAndAction($containerId, $action),
             };
 
-            $this->syncCommandBus->handle($command);
+            $this->commandBus->dispatch($command);
 
             $io->success(sprintf('Command %s sent to container %s successfully.', $action, $id));
 

@@ -12,10 +12,11 @@ use Marvin\Location\Domain\Exception\InvalidZoneHierarchy;
 use Marvin\Location\Domain\Exception\ZoneNotFound;
 use Marvin\Location\Domain\Model\Zone;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
+use Marvin\Location\Domain\ValueObject\ZoneName;
 use Marvin\Location\Domain\ValueObject\ZoneType;
 use Marvin\Location\Infrastructure\Persistence\Doctrine\Cache\LocationCacheKeys;
+use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
-use Marvin\Shared\Domain\ValueObject\Label;
 
 final class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRepositoryInterface
 {
@@ -34,13 +35,22 @@ final class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRep
     {
         if ($zone->hasChildren()) {
             throw InvalidZoneHierarchy::cannotDeleteZoneWithChildren(
-                $zone->label,
+                $zone->zoneName,
                 $zone->childrens->count()
             );
         }
 
         $this->getEntityManager()->remove($zone);
         $this->getEntityManager()->flush();
+    }
+
+    public function all(): array
+    {
+        return $this->createQueryBuilder('z')
+            ->orderBy('z.path.value', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     #[Override]
@@ -56,12 +66,12 @@ final class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRep
         return $zone;
     }
 
-    public function byLabel(Label $label): ?Zone
+    public function byZoneName(ZoneName $zoneName): ?Zone
     {
         return $this
             ->createQueryBuilder('z')
-            ->where('z.label.value = :label')
-            ->setParameter('label', $label)
+            ->where('z.zoneName.value = :zoneName')
+            ->setParameter('zoneName', $zoneName)
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -78,13 +88,13 @@ final class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRep
         ;
     }
 
-    public function all(): array
+    public function byDeviceId(DeviceId $deviceId): ?Zone
     {
         return $this->createQueryBuilder('z')
-            ->orderBy('z.path.value', 'ASC')
+            ->where(':deviceId MEMBER OF z.deviceIds')
+            ->setParameter('deviceId', $deviceId->toString())
             ->getQuery()
-            ->getResult()
-        ;
+            ->getOneOrNullResult();
     }
 
     public function byType(ZoneType $type): array
@@ -93,7 +103,7 @@ final class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRep
             ->createQueryBuilder('z')
             ->where('z.type = :type')
             ->setParameter('type', $type)
-            ->orderBy('z.label.value', 'ASC')
+            ->orderBy('z.zoneName.value', 'ASC')
             ->getQuery()
             ->getResult()
         ;
@@ -112,7 +122,7 @@ final class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRep
             ;
         }
 
-        return $qb->orderBy('z.label.value', 'ASC')
+        return $qb->orderBy('z.zoneName.value', 'ASC')
             ->getQuery()
             ->getResult()
         ;
@@ -196,7 +206,7 @@ final class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRep
                 $query->addOrderBy('z.'.$field, $direction);
             }
         } else {
-            $query->orderBy('z.label.value', 'ASC');
+            $query->orderBy('z.zoneName.value', 'ASC');
         }
 
         $query

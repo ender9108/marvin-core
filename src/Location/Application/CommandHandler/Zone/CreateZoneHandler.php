@@ -25,8 +25,8 @@ final readonly class CreateZoneHandler
 
     public function __invoke(CreateZone $command): string
     {
-        if ($this->zoneRepository->bySlug($command->label->value) !== null) {
-            throw ZoneAlreadyExists::withLabel($command->label);
+        if ($this->zoneRepository->bySlug($command->zoneName->value) !== null) {
+            throw ZoneAlreadyExists::withLabel($command->zoneName);
         }
 
         $parentZone = null;
@@ -36,16 +36,18 @@ final readonly class CreateZoneHandler
 
             if (!$parentZone->type->canHaveChildren()) {
                 throw InvalidZoneHierarchy::cannotHaveChildren(
-                    $parentZone->label,
+                    $parentZone->zoneName,
                     $parentZone->type
                 );
             }
         }
 
         $zone = new Zone(
+            zoneName: $command->zoneName,
             type: $command->type,
             targetTemperature: $command->targetTemperature,
             targetPowerConsumption: $command->targetPowerConsumption,
+            targetHumidity: $command->targetHumidity,
             icon: $command->icon,
             surfaceArea: $command->surfaceArea,
             orientation: $command->orientation,
@@ -53,13 +55,13 @@ final readonly class CreateZoneHandler
             metadata: $command->metadata,
         );
 
-        $zone->updateLabel($command->label, $this->slugger);
+        $zone->updateSlug($this->slugger);
 
         if ($parentZone !== null) {
-            $zone->moveToParent($parentZone);
-            $zonePath = $parentZone->path->append($zone->slug);
+            $zone->move($parentZone);
+            $zonePath = $parentZone->path->append($zone->zoneName->value);
         } else {
-            $zonePath = new ZonePath($zone->slug);
+            $zonePath = new ZonePath($zone->zoneName->value);
         }
 
         $zone->updatePath($zonePath);

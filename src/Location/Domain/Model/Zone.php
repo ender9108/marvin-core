@@ -7,202 +7,375 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use EnderLab\DddCqrsBundle\Domain\Model\AggregateRoot;
+use Marvin\Location\Domain\Event\Zone\ZoneCreated;
 use Marvin\Location\Domain\Event\Zone\ZoneDeleted;
-use Marvin\Location\Domain\Event\Zone\ZoneOccupancyChanged;
-use Marvin\Location\Domain\Event\Zone\ZoneTemperatureUpdated;
+use Marvin\Location\Domain\Event\Zone\ZoneUpdated;
 use Marvin\Location\Domain\ValueObject\HexaColor;
+use Marvin\Location\Domain\ValueObject\Humidity;
 use Marvin\Location\Domain\ValueObject\Orientation;
+use Marvin\Location\Domain\ValueObject\PowerConsumption;
 use Marvin\Location\Domain\ValueObject\SurfaceArea;
-use Marvin\Location\Domain\ValueObject\TargetPowerConsumption;
-use Marvin\Location\Domain\ValueObject\TargetTemperature;
+use Marvin\Location\Domain\ValueObject\Temperature;
+use Marvin\Location\Domain\ValueObject\ZoneName;
 use Marvin\Location\Domain\ValueObject\ZonePath;
 use Marvin\Location\Domain\ValueObject\ZoneType;
+use Marvin\Shared\Domain\Event\Location\ZoneAverageHumidityCalculated;
+use Marvin\Shared\Domain\Event\Location\ZoneAverageTemperatureCalculated;
+use Marvin\Shared\Domain\Event\Location\ZoneSlugUpdated;
 use Marvin\Shared\Domain\Service\SluggerInterface;
+use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
-use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\Metadata;
 
 class Zone extends AggregateRoot
 {
-    public private(set) ZoneId $id;
-
+    public ZoneId $id;
+    public private(set) ?string $slug = null;
     public private(set) ?ZonePath $path = null;
 
-    public private(set) ?float $currentTemperature = null;
-
-    public private(set) ?float $currentPowerConsumption = null;
-
-    public private(set) ?bool $isOccupied = null;
-
-    public private(set) ?int $consecutiveNoMotionCount = null;
-
+    /* *************** Metrics *************** */
+    public private(set) ?Temperature $currentTemperature = null;
+    public private(set) ?PowerConsumption $currentPowerConsumption = null;
+    public private(set) ?Humidity $currentHumidity = null;
+    public private(set) bool $isOccupied = false;
+    public private(set) int $noMotionCounter = 0;
+    public private(set) int $activeSensorsCount = 0;
     public private(set) ?DateTimeInterface $lastMetricsUpdate = null;
 
-    public private(set) Collection $childrens;
+    /* *************** Devices *************** */
+    public private(set) Collection $deviceIds;
+    /** @var array<string, float> [deviceId => temperature] */
+    public private(set) array $deviceTemperatures = [];
+    /** @va(set)r array<string, float> [deviceId => humidity] */
+    public private(set) array $deviceHumidities = [];
+    /** @va(set)r array<string, float> [deviceId => power] */
+    public private(set) array $devicePowerConsumptions = [];
 
+    public private(set) Collection $childrens;
     public private(set) ?Zone $parent = null;
 
-    public private(set) ?Label $label = null;
-
-    public private(set) ?string $slug = null;
-
     public function __construct(
+        public readonly ZoneName $zoneName,
         public readonly ZoneType $type,
-        private(set) ?TargetTemperature $targetTemperature = null,
-        private(set) ?TargetPowerConsumption $targetPowerConsumption = null,
+        private(set) ?Temperature $targetTemperature = null,
+        private(set) ?PowerConsumption $targetPowerConsumption = null,
+        private(set) ?Humidity $targetHumidity = null,
         private(set) ?string $icon = null,
         private(set) ?SurfaceArea $surfaceArea = null,
         private(set) ?Orientation $orientation = null,
         private(set) ?HexaColor $color = null,
-        public readonly ?Metadata $metadata = null,
+        public ?Metadata $metadata = null,
         public ?DateTimeInterface $updatedAt = null,
         public readonly DateTimeInterface $createdAt = new DateTimeImmutable(),
     ) {
         $this->id = new ZoneId();
         $this->childrens = new ArrayCollection();
+
+        $this->recordEvent(new ZoneCreated(
+            $this->id->toString(),
+            $this->zoneName->value,
+            $this->type->value,
+            $this->parent?->id->toString(),
+            $this->surfaceArea?->value,
+            $this->targetTemperature?->value,
+            $this->targetPowerConsumption?->value,
+            $this->targetHumidity?->value
+        ));
     }
 
     public function delete(): void
     {
         $this->recordEvent(new ZoneDeleted(
             $this->id->toString(),
-            $this->label->value,
+            $this->zoneName->value,
         ));
     }
 
-    public function updateAverageTemperature(?float $temperature): void
+    public function addDevice(DeviceId $deviceId): void
     {
-        $oldTemp = $this->currentTemperature;
-        $this->currentTemperature = $temperature !== null ? round($temperature, 1) : null;
-        $this->lastMetricsUpdate = new DateTimeImmutable();
+        $deviceIdString = $deviceId->toString();
+        if (!$this->deviceIds->contains($deviceIdString)) {
+            $this->deviceIds->add($deviceIdString);
+        }
+    }
 
-        if ($oldTemp !== null && $temperature !== null && abs($oldTemp - $temperature) >= 0.5) {
-            $this->recordEvent(new ZoneTemperatureUpdated(
-                zoneId: $this->id,
-                oldTemperature: $oldTemp,
-                newTemperature: $temperature,
-                occurredAt: new DateTimeImmutable()
+    public function removeDevice(DeviceId $deviceId): void
+    {
+        $deviceIdString = $deviceId->toString();
+        if ($this->deviceIds->contains($deviceIdString)) {
+            $this->deviceIds->removeElement($deviceIdString);
+
+            // Nettoyer les métriques de ce device
+            unset($this->deviceTemperatures[$deviceIdString]);
+            unset($this->deviceHumidities[$deviceIdString]);
+            unset($this->devicePowerConsumptions[$deviceIdString]);
+
+            // Recalculer les moyennes
+            $this->recalculateAggregatedMetrics();
+        }
+    }
+
+    public function hasDevice(DeviceId $deviceId): bool
+    {
+        return $this->deviceIds->contains($deviceId->toString());
+    }
+
+
+    public function updateTemperatureFromDevice(DeviceId $deviceId, Temperature $temperature): void
+    {
+        $deviceIdString = $deviceId->toString();
+
+        if (!$this->hasDevice($deviceId)) {
+            throw new \DomainException("Device {$deviceIdString} is not in this zone");
+        }
+
+        $this->deviceTemperatures[$deviceIdString] = $temperature->toCelsius();
+        $this->activeSensorsCount = count($this->deviceTemperatures);
+        $this->recalculateAverageTemperature();
+    }
+
+    public function updateHumidityFromDevice(DeviceId $deviceId, Humidity $humidity): void
+    {
+        $deviceIdString = $deviceId->toString();
+
+        if (!$this->hasDevice($deviceId)) {
+            throw new \DomainException("Device {$deviceIdString} is not in this zone");
+        }
+
+        $this->deviceHumidities[$deviceIdString] = $humidity->toPercentage();
+        $this->recalculateAverageHumidity();
+    }
+
+    public function updatePowerConsumptionFromDevice(DeviceId $deviceId, PowerConsumption $power): void
+    {
+        $deviceIdString = $deviceId->toString();
+
+        if (!$this->hasDevice($deviceId)) {
+            throw new \DomainException("Device {$deviceIdString} is not in this zone");
+        }
+
+        $this->devicePowerConsumptions[$deviceIdString] = $power->toWatts();
+        $this->recalculateTotalPowerConsumption();
+    }
+
+    public function updateOccupancyFromDevice(DeviceId $deviceId, bool $motionDetected): void
+    {
+        if (!$this->hasDevice($deviceId)) {
+            throw new \DomainException("Device {$deviceId->toString()} is not in this zone");
+        }
+
+        if ($motionDetected) {
+            $this->markAsOccupied();
+        } else {
+            $this->incrementNoMotionCount();
+        }
+    }
+
+
+    private function recalculateAverageTemperature(): void
+    {
+        if (empty($this->deviceTemperatures)) {
+            $this->currentTemperature = null;
+            return;
+        }
+
+        $oldCurrentTemperature = $this->currentTemperature;
+        $average = array_sum($this->deviceTemperatures) / count($this->deviceTemperatures);
+        $this->currentTemperature = Temperature::fromCelsius($average);
+
+        if ($oldCurrentTemperature !== $this->currentTemperature) {
+            $this->recordEvent(new ZoneAverageTemperatureCalculated(
+                zoneId: $this->id->toString(),
+                zoneName: $this->zoneName->value,
+                averageTemperature: $this->currentTemperature->toCelsius(),
+                targetTemperature: $this->targetTemperature?->toCelsius(),
+                activeSensorsCount: $this->activeSensorsCount,
             ));
         }
     }
 
-    public function updatePowerConsumption(float $consumption): void
+    private function recalculateAverageHumidity(): void
     {
-        $this->currentPowerConsumption = round($consumption, 2);
-        $this->lastMetricsUpdate = new DateTimeImmutable();
+        if (empty($this->deviceHumidities)) {
+            $this->currentHumidity = null;
+            return;
+        }
+
+        $oldHumidity = $this->currentHumidity;
+        $average = array_sum($this->deviceHumidities) / count($this->deviceHumidities);
+        $this->currentHumidity = Humidity::fromPercentage($average);
+
+        if ($oldHumidity !== $this->currentHumidity) {
+            $this->recordEvent(new ZoneAverageHumidityCalculated(
+                zoneId: $this->id->toString(),
+                zoneName: $this->zoneName->value,
+                averageHumidity: $this->currentHumidity->toPercentage(),
+                targetHumidity: $this->targetHumidity?->toPercentage(),
+                activeSensorsCount: $this->activeSensorsCount,
+            ));
+        }
     }
+
+    private function recalculateTotalPowerConsumption(): void
+    {
+        if (empty($this->devicePowerConsumptions)) {
+            $this->currentPowerConsumption = null;
+            return;
+        }
+
+        $oldPowerConsumption = $this->currentPowerConsumption;
+        $total = array_sum($this->devicePowerConsumptions);
+        $this->currentPowerConsumption = PowerConsumption::fromWatts($total);
+
+        /*if ($oldPowerConsumption !== $this->currentPowerConsumption) {
+            $this->recordEvent(new ZoneAverageHumidityCalculated(
+                zoneId: $this->id->toString(),
+                zoneName: $this->zoneName->value,
+                averageHumidity: $this->currentHumidity->toPercentage(),
+                targetHumidity: $this->targetHumidity?->toPercentage(),
+                activeSensorsCount: $this->activeSensorsCount,
+            ));
+        }*/
+    }
+
+    private function recalculateAggregatedMetrics(): void
+    {
+        $this->recalculateAverageTemperature();
+        $this->recalculateAverageHumidity();
+        $this->recalculateTotalPowerConsumption();
+    }
+
 
     public function markAsOccupied(): void
     {
-        $wasOccupied = $this->isOccupied;
         $this->isOccupied = true;
-        $this->consecutiveNoMotionCount = 0;
-        $this->lastMetricsUpdate = new DateTimeImmutable();
-
-        if (!$wasOccupied) {
-            $this->recordEvent(new ZoneOccupancyChanged(
-                zoneId: $this->id,
-                isOccupied: true,
-                occurredAt: new DateTimeImmutable()
-            ));
-        }
+        $this->noMotionCounter = 0;
     }
 
     public function incrementNoMotionCount(): void
     {
-        $this->consecutiveNoMotionCount++;
-        $this->lastMetricsUpdate = new DateTimeImmutable();
+        $this->noMotionCounter++;
 
-        if ($this->consecutiveNoMotionCount >= 3 && $this->isOccupied) {
-            $this->markAsUnoccupied();
+        // Règle des 3 no-motion : après 3 détections "no motion" consécutives
+        if ($this->noMotionCounter >= 3) {
+            $this->isOccupied = false;
         }
     }
 
-    private function markAsUnoccupied(): void
-    {
-        $this->isOccupied = false;
 
-        $this->recordEvent(new ZoneOccupancyChanged(
-            zoneId: $this->id,
-            isOccupied: false,
-            occurredAt: new DateTimeImmutable()
-        ));
-    }
-
-    public function hasTemperatureAnomaly(float $threshold = 3.0): bool
+    /**
+     * Vérifie si la température actuelle s'écarte trop de la cible
+     */
+    public function hasTemperatureAnomaly(float $maxDeltaCelsius = 3.0): bool
     {
         if ($this->currentTemperature === null || $this->targetTemperature === null) {
             return false;
         }
-        return abs($this->currentTemperature - $this->targetTemperature) > $threshold;
+
+        return $this->currentTemperature->difference($this->targetTemperature) > $maxDeltaCelsius;
     }
 
-    public function exceedsPowerConsumption(): bool
+    /**
+     * Vérifie si la consommation dépasse un budget
+     */
+    public function exceedsPowerBudget(float $budgetWatts = 2000.0): bool
     {
-        if ($this->currentPowerConsumption === null || $this->targetPowerConsumption === null) {
+        if ($this->currentPowerConsumption === null) {
             return false;
         }
 
-        return $this->currentPowerConsumption > $this->targetPowerConsumption;
+        return $this->currentPowerConsumption->exceedsBudget($budgetWatts);
     }
 
+    /**
+     * Vérifie si la zone a besoin de chauffage
+     */
     public function needsHeating(): bool
     {
         if ($this->currentTemperature === null || $this->targetTemperature === null) {
             return false;
         }
 
-        return $this->currentTemperature < $this->targetTemperature - 0.5;
+        // Si température actuelle < cible - 0.5°C
+        return $this->currentTemperature->toCelsius() < ($this->targetTemperature->toCelsius() - 0.5);
     }
 
+    /**
+     * Vérifie si la zone a besoin de climatisation
+     */
     public function needsCooling(): bool
     {
         if ($this->currentTemperature === null || $this->targetTemperature === null) {
             return false;
         }
 
-        return $this->currentTemperature > $this->targetTemperature + 0.5;
+        // Si température actuelle > cible + 0.5°C
+        return $this->currentTemperature->toCelsius() > ($this->targetTemperature->toCelsius() + 0.5);
     }
 
-    public function updateLabel(Label $label, ?SluggerInterface $slugger = null): void
+    /**
+     * Calcule le delta de température par rapport à la cible
+     */
+    public function getTemperatureDelta(): ?float
     {
-        $oldLabel = $this->label?->value;
-        $this->label = $label;
+        if ($this->currentTemperature === null || $this->targetTemperature === null) {
+            return null;
+        }
 
-        if (
-            $slugger !== null &&
-            $oldLabel !== $label->value
-        ) {
-            $this->slug = $slugger->slugify($label->value);
+        return $this->currentTemperature->toCelsius() - $this->targetTemperature->toCelsius();
+    }
+
+    public function hasHumidityAnomaly(float $maxDeltaPercentage = 5.0): bool
+    {
+        if ($this->currentHumidity === null || $this->targetHumidity === null) {
+            return false;
+        }
+
+        return $this->currentHumidity->difference($this->targetHumidity) > $maxDeltaPercentage;
+    }
+
+    public function updateSlug(SluggerInterface $slugger): void
+    {
+        $oldSlug = $this->slug;
+        $this->slug = $slugger->slugify($this->zoneName->value);
+
+        if ($oldSlug !== $this->slug) {
+            $this->recordEvent(new ZoneSlugUpdated(
+                $this->id->toString(),
+                $this->zoneName->value,
+                $this->slug,
+            ));
         }
     }
 
     public function updateConfiguration(
         ?SurfaceArea $surfaceArea = null,
         ?Orientation $orientation = null,
-        ?TargetTemperature $targetTemperature = null,
-        ?TargetPowerConsumption $targetPowerConsumption = null,
+        ?Temperature $targetTemperature = null,
+        ?Humidity $targetHumidity = null,
+        ?PowerConsumption $targetPowerConsumption = null,
         ?string $icon = null,
         ?HexaColor $color = null,
+        ?Metadata $metadata = null,
     ): void {
-        if ($surfaceArea !== null) {
-            $this->surfaceArea = $surfaceArea;
-        }
-        if ($orientation !== null) {
-            $this->orientation = $orientation;
-        }
-        if ($targetTemperature !== null) {
-            $this->targetTemperature = $targetTemperature;
-        }
-        if ($targetPowerConsumption !== null) {
-            $this->targetPowerConsumption = $targetPowerConsumption;
-        }
-        if ($icon !== null) {
-            $this->icon = $icon;
-        }
-        if ($color !== null) {
-            $this->color = $color;
-        }
+        $this->surfaceArea = $surfaceArea;
+        $this->orientation = $orientation;
+        $this->targetTemperature = $targetTemperature;
+        $this->targetPowerConsumption = $targetPowerConsumption;
+        $this->targetHumidity = $targetHumidity;
+        $this->icon = $icon;
+        $this->color = $color;
+        $this->metadata = $metadata;
+
+        $this->recordEvent(new ZoneUpdated(
+            zoneId: $this->id->toString(),
+            zoneName: $this->zoneName->value,
+            surfaceArea: $this->surfaceArea?->value,
+            orientation: $this->orientation?->value,
+            targetTemperature: $this->targetTemperature?->value,
+            targetPowerConsumption: $this->targetPowerConsumption?->value,
+            targetHumidity: $this->targetHumidity?->value
+        ));
     }
 
     public function updatePath(ZonePath $path): void
@@ -210,14 +383,11 @@ class Zone extends AggregateRoot
         $this->path = $path;
     }
 
-    public function moveToParent(?Zone $parentZone = null): self
+    public function move(?Zone $parentZone = null): self
     {
-        if (null === $parentZone) {
-            $parentZone->removeChildren($this);
-        }
+        $parentZone?->removeChildren($this);
 
         $this->parent = $parentZone;
-
         $this->updatePath($parentZone->path->append($this->slug));
 
         return $this;
@@ -227,7 +397,7 @@ class Zone extends AggregateRoot
     {
         if (!$this->childrens->contains($children)) {
             $this->childrens->add($children);
-            $children->moveToParent($this);
+            $children->move($this);
         }
 
         return $this;
@@ -237,7 +407,7 @@ class Zone extends AggregateRoot
     {
         if ($this->childrens->contains($children)) {
             $this->childrens->removeElement($children);
-            $children->moveToParent(null);
+            $children->move(null);
         }
     }
 

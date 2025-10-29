@@ -12,31 +12,41 @@
             <generator strategy="NONE" />
         </id>
 
-        <embedded name="label" class="Marvin\Shared\Domain\ValueObject\Label" />
+        <embedded name="zoneName" class="Marvin\Location\Domain\ValueObject\ZoneName" />
         <field name="slug" length="255" />
         <embedded name="path" class="Marvin\Location\Domain\ValueObject\ZonePath" />
-        <field name="currentTemperature" type="float" precision="5" scale="2" nullable="true" />
-        <field name="currentPowerConsumption" type="float" precision="10" scale="2" nullable="true" />
+        <field name="icon" nullable="true" length="50" />
+
+        <embedded name="currentTemperature" class="Marvin\Location\Domain\ValueObject\Temperature" />
+        <embedded name="currentPowerConsumption" class="Marvin\Location\Domain\ValueObject\PowerConsumption" />
+        <embedded name="currentHumidity" class="Marvin\Location\Domain\ValueObject\Humidity" />
         <field name="isOccupied" type="boolean" nullable="true" />
-        <field name="consecutiveNoMotionCount" type="integer" nullable="true" />
-        <field name="type" length="32" />
-        <embedded name="targetTemperature" class="Marvin\Location\Domain\ValueObject\TargetTemperature" />
-        <embedded name="targetPowerConsumption" class="Marvin\Location\Domain\ValueObject\TargetPowerConsumption" />
-        <field name="icon" length="32" nullable="true" />
-        <embedded name="surfaceArea" class="Marvin\Location\Domain\ValueObject\SurfaceArea" />
-        <field name="orientation" length="32" nullable="true" enum-type="Marvin\Location\Domain\ValueObject\Orientation" />
-        <embedded name="color" class="Marvin\Location\Domain\ValueObject\HexaColor" />
-        <embedded name="metadata" class="Marvin\Shared\Domain\ValueObject\Metadata" />
+        <field name="noMotionCounter" type="integer" />
+        <field name="activeSensorsCount" type="integer" />
         <field name="lastMetricsUpdate" type="datetime" nullable="true" />
-        <field name="updatedAt" type="datetime" nullable="true" />
-        <field name="createdAt" type="datetime" />
+
+        <field name="deviceIds" type="array_simple" />
+        <field name="deviceTemperatures" type="json" />
+        <field name="deviceHumidities" type="json" />
+        <field name="devicePowerConsumptions" type="json" />
 
         <one-to-many
             field="childrens"
             target-entity="Marvin\Location\Domain\Model\Zone"
             mapped-by="parent"
         />
-
         <many-to-one field="parent" target-entity="Marvin\Location\Domain\Model\Zone" />
+
+        <embedded name="targetTemperature" class="Marvin\Location\Domain\ValueObject\Temperature" />
+        <embedded name="targetPowerConsumption" class="Marvin\Location\Domain\ValueObject\PowerConsumption" />
+        <embedded name="targetHumidity" class="Marvin\Location\Domain\ValueObject\Humidity" />
+
+        <embedded name="surfaceArea" class="Marvin\Location\Domain\ValueObject\SurfaceArea" />
+        <field name="orientation" length="32" nullable="true" enum-type="Marvin\Location\Domain\ValueObject\Orientation" />
+        <embedded name="color" class="Marvin\Location\Domain\ValueObject\HexaColor" />
+        <embedded name="metadata" class="Marvin\Shared\Domain\ValueObject\Metadata" />
+
+        <field name="updatedAt" type="datetime" nullable="true" />
+        <field name="createdAt" type="datetime" />
     </entity>
 </doctrine-mapping>

@@ -2,9 +2,7 @@
 
 namespace Marvin\System\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
-
-enum ContainerStatus: string implements ValueObjectInterface
+enum ContainerStatus: string
 {
     case RUNNING = 'running';
     case STOPPED = 'stopped';
@@ -13,14 +11,9 @@ enum ContainerStatus: string implements ValueObjectInterface
     case EXITED = 'exited';
     case UNKNOWN = 'unknown';
 
-    public function equals(ValueObjectInterface $containerStatus): bool
+    public function equals(self $other): bool
     {
-        return $containerStatus instanceof self && $this->value === $containerStatus->value;
-    }
-
-    public function toString(): string
-    {
-        return $this->value;
+        return $this->value === $other->value;
     }
 
     public function isRunning(): bool

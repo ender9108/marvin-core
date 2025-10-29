@@ -14,7 +14,8 @@ final readonly class InvalidateSecretCache
 {
     public function __construct(
         private CacheableSecretQueryService $cachedSecretQuery,
-    ) {}
+    ) {
+    }
 
     /**
      * @throws InvalidArgumentException

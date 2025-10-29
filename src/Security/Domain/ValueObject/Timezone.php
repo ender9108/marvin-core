@@ -3,10 +3,9 @@
 namespace Marvin\Security\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Stringable;
 
-final readonly class Timezone implements ValueObjectInterface, Stringable
+final readonly class Timezone implements Stringable
 {
     public string $value;
 
@@ -18,7 +17,7 @@ final readonly class Timezone implements ValueObjectInterface, Stringable
         $this->value = $timezone;
     }
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $this->value === $other->value;
     }

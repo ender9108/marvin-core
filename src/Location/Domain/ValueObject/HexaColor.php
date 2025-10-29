@@ -3,9 +3,9 @@
 namespace Marvin\Location\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
+use Stringable;
 
-final readonly class HexaColor implements ValueObjectInterface
+final readonly class HexaColor implements Stringable
 {
     public string $value;
 
@@ -21,13 +21,13 @@ final readonly class HexaColor implements ValueObjectInterface
         return new self($value);
     }
 
-    public function toString(): string
+    public function __toString(): string
     {
         return $this->value;
     }
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
-        return $other instanceof self && abs($this->value - $other->value) < 0.01;
+        return abs($this->value - $other->value) < 0.01;
     }
 }

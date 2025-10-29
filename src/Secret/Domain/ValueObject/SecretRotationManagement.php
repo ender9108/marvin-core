@@ -31,4 +31,3 @@ enum SecretRotationManagement: string
         return $this->isManaged();
     }
 }
-

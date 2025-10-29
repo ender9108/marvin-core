@@ -3,10 +3,9 @@
 namespace Marvin\Security\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Stringable;
 
-final readonly class Lastname implements ValueObjectInterface, Stringable
+final readonly class Lastname implements Stringable
 {
     private const int MIN = 1;
     private const int MAX = 255;
@@ -21,7 +20,7 @@ final readonly class Lastname implements ValueObjectInterface, Stringable
         $this->value = $lastname;
     }
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $this->value === $other->value;
     }

@@ -15,7 +15,7 @@ final class SecretRotationSchedule implements ScheduleProviderInterface
     {
         return new Schedule()
             ->add(
-            // Tous les jours à 3h du matin
+                // Tous les jours à 3h du matin
                 RecurringMessage::cron('0 3 * * *', new RotateSecrets())
             );
     }

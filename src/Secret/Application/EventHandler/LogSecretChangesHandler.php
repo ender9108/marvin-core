@@ -14,7 +14,8 @@ final readonly class LogSecretChangesHandler
 {
     public function __construct(
         private LoggerInterface $logger,
-    ) {}
+    ) {
+    }
 
     public function __invoke(
         SecretCreated|SecretUpdated|SecretRotated|SecretDeleted $event

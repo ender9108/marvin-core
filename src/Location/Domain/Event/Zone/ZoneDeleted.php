@@ -3,24 +3,23 @@
 namespace Marvin\Location\Domain\Event\Zone;
 
 use DateTimeImmutable;
-use EnderLab\DddCqrsBundle\Domain\Event\DomainEventInterface;
+use EnderLab\DddCqrsBundle\Domain\Event\AbstractDomainEvent;
 
-final readonly class ZoneDeleted implements DomainEventInterface
+final readonly class ZoneDeleted extends AbstractDomainEvent
 {
     public function __construct(
         public string $zoneId,
-        public string $label,
-        public DateTimeImmutable $occurredAt = new DateTimeImmutable(),
+        public string $zoneName,
     ) {
+        parent::__construct();
     }
 
-    public function getOccurredAt(): DateTimeImmutable
+    public function toArray(): array
     {
-        return $this->occurredAt;
-    }
-
-    public function getEventName(): string
-    {
-        return 'location.zone.deleted';
+        return [
+            'zone_id' => $this->zoneId,
+            'zone_name' => $this->zoneName,
+            'occurred_at' => $this->occurredOn->format('c'),
+        ];
     }
 }

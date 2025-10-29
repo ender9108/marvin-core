@@ -2,8 +2,6 @@
 
 namespace Marvin\Device\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
-
 /**
  * CapabilityAction
  *
@@ -12,7 +10,7 @@ use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
  *
  * Total : 142 actions
  */
-enum CapabilityAction: string implements ValueObjectInterface
+enum CapabilityAction: string
 {
     // ==========================================
     // ÉCLAIRAGE & SWITCH
@@ -271,14 +269,9 @@ enum CapabilityAction: string implements ValueObjectInterface
     // MÉTHODES
     // ==========================================
 
-    public function toString(): string
+    public function equals(self $other): bool
     {
-        return $this->value;
-    }
-
-    public function equals(ValueObjectInterface $other): bool
-    {
-        return $other instanceof self && $this->value === $other->value;
+        return $this->value === $other->value;
     }
 
     public function requiresParameters(): bool

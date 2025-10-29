@@ -41,16 +41,16 @@ doctrine:
             #    dir: '%kernel.project_dir%/config/doctrine/ORM/Device'
             #    prefix: 'Marvin\Device\Domain'
             #    is_bundle: false
-            Marvin\Location:
-                type: xml
-                dir: '%kernel.project_dir%/config/doctrine/ORM/Location'
-                prefix: 'Marvin\Location\Domain'
-                is_bundle: false
-            Marvin\Secret:
-                type: xml
-                dir: '%kernel.project_dir%/config/doctrine/ORM/Secret'
-                prefix: 'Marvin\Secret\Domain'
-                is_bundle: false
+            #Marvin\Location:
+            #    type: xml
+            #    dir: '%kernel.project_dir%/config/doctrine/ORM/Location'
+            #    prefix: 'Marvin\Location\Domain'
+            #    is_bundle: false
+            #Marvin\Secret:
+            #    type: xml
+            #    dir: '%kernel.project_dir%/config/doctrine/ORM/Secret'
+            #    prefix: 'Marvin\Secret\Domain'
+            #    is_bundle: false
             Marvin\Security:
                 type: xml
                 dir: '%kernel.project_dir%/config/doctrine/ORM/Security'
@@ -61,11 +61,11 @@ doctrine:
                 dir: '%kernel.project_dir%/config/doctrine/ORM/Shared'
                 prefix: 'Marvin\Shared\Domain'
                 is_bundle: false
-            Marvin\System:
-                type: xml
-                dir: '%kernel.project_dir%/config/doctrine/ORM/System'
-                prefix: 'Marvin\System\Domain'
-                is_bundle: false
+            #Marvin\System:
+            #    type: xml
+            #    dir: '%kernel.project_dir%/config/doctrine/ORM/System'
+            #    prefix: 'Marvin\System\Domain'
+            #    is_bundle: false
         controller_resolver:
             auto_mapping: false
 when@test:

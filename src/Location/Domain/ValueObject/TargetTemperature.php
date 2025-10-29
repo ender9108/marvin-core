@@ -3,9 +3,9 @@
 namespace Marvin\Location\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
+use Stringable;
 
-final readonly class TargetTemperature implements ValueObjectInterface
+final readonly class TargetTemperature implements Stringable
 {
     private const float MIN_VALUE = -10.0;
     private const float MAX_VALUE = 55.0;
@@ -25,7 +25,7 @@ final readonly class TargetTemperature implements ValueObjectInterface
         return new self($value);
     }
 
-    public function toString(): string
+    public function __toString(): string
     {
         return $this->value . ' ' . self::UNIT_C;
     }
@@ -35,7 +35,7 @@ final readonly class TargetTemperature implements ValueObjectInterface
         return $this->value;
     }
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $other instanceof self && abs($this->value - $other->value) < 0.01;
     }

@@ -3,9 +3,9 @@
 namespace Marvin\Location\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
+use Stringable;
 
-final readonly class ZonePath implements ValueObjectInterface
+final readonly class ZonePath implements Stringable
 {
     public string $value;
 
@@ -31,12 +31,12 @@ final readonly class ZonePath implements ValueObjectInterface
         return new self(implode('/', $segments));
     }
 
-    public function toString(): string
+    public function __toString(): string
     {
         return $this->value;
     }
 
-    public function equals(ValueObjectInterface $other): bool
+    public function equals(self $other): bool
     {
         return $other instanceof self && $this->value === $other->value;
     }

@@ -157,7 +157,10 @@
         "symfony/web-profiler-bundle": "7.3.*",
         "symplify/easy-coding-standard": "^12.6",
         "zenstruck/browser": "^1.9",
-        "zenstruck/foundry": "^2.7"
+        "zenstruck/console-test": "^1.7",
+        "zenstruck/foundry": "^2.7",
+        "zenstruck/mailer-test": "^1.4",
+        "zenstruck/messenger-test": "^1.11"
     },
     "repositories": []
 }

@@ -3,148 +3,244 @@
 namespace Marvin\Location\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory;
 
 use Marvin\Location\Domain\Model\Zone;
-use Marvin\Location\Domain\ValueObject\HexaColor;
-use Marvin\Location\Domain\ValueObject\Orientation;
+use Marvin\Location\Domain\ValueObject\Humidity;
+use Marvin\Location\Domain\ValueObject\PowerConsumption;
 use Marvin\Location\Domain\ValueObject\SurfaceArea;
-use Marvin\Location\Domain\ValueObject\TargetPowerConsumption;
-use Marvin\Location\Domain\ValueObject\TargetTemperature;
-use Marvin\Location\Domain\ValueObject\ZonePath;
+use Marvin\Location\Domain\ValueObject\Temperature;
+use Marvin\Location\Domain\ValueObject\ZoneName;
 use Marvin\Location\Domain\ValueObject\ZoneType;
-use Marvin\Shared\Domain\Service\SluggerInterface;
+use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
-use Marvin\Shared\Domain\ValueObject\Label;
-use Marvin\Shared\Domain\ValueObject\Metadata;
+use ReflectionClass;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
-class ZoneFactory extends PersistentProxyObjectFactory
+final class ZoneFactory extends PersistentProxyObjectFactory
 {
-    public function __construct(
-        private readonly SluggerInterface $slugger,
-    ) {
-        parent::__construct();
-    }
-
     public static function class(): string
     {
         return Zone::class;
     }
 
-    protected function defaults(): array|callable
+    /**
+     * @return array<string, mixed>
+     */
+    protected function defaults(): array
     {
-        $name = self::faker()->unique()->word();
-
         return [
-            'type' => self::faker()->randomElement(ZoneType::cases())->value,
-            'surfaceArea' => self::faker()->boolean(70) ? SurfaceArea::fromFloat(self::faker()->randomFloat(2, 5, 50)) : null,
-            'orientation' => self::faker()->boolean(60) ? self::faker()->randomElement(Orientation::cases()) : null,
-            'targetTemperature' => self::faker()->boolean(70) ? new TargetTemperature(self::faker()->randomFloat(1, 18, 24)) : null,
-            'targetPowerConsumption' => self::faker()->boolean(50) ? new TargetPowerConsumption(self::faker()->randomFloat(2, 100, 3000)) : null,
-            'icon' => self::faker()->randomElement(['🏠', '🛋️', '🛏️', '🍳', '🚿', '🌳', '🚗', null]),
-            'color' => self::faker()->boolean(70) ? new HexaColor(self::faker()->hexColor()) : null,
-            'metadata' => new Metadata([]),
+            'id' => ZoneId::fromString(ZoneId::v7()),
+            'zoneName' => ZoneName::fromString(self::faker()->words(2, true)),
+            'type' => self::faker()->randomElement(ZoneType::cases()),
+            'parent' => null,
+            'surface' => null,
+            'targetTemperature' => null,
+            'icon' => null,
         ];
     }
 
-    public function withPath(): self
+    #[\Override]
+    protected function initialize(): static
     {
-        return $this->afterInstantiate(function (Zone $zone): void {
-            if ($zone->parent === null) {
-                $zone->updatePath(ZonePath::fromString($zone->label->value));
-            }
-        });
+        return $this;
     }
 
-    // États nommés
-    public function building(): self
+    // ==========================================
+    // PRESET METHODS (zones prédéfinies)
+    // ==========================================
+
+    /**
+     * Crée une maison (building)
+     */
+    public function building(string $name = 'Maison'): self
     {
         return $this->with([
+            'zoneName' => ZoneName::fromString($name),
             'type' => ZoneType::BUILDING,
             'icon' => '🏠',
-            'surfaceArea' => SurfaceArea::fromFloat(self::faker()->randomFloat(2, 80, 250)),
         ]);
     }
 
-    public function room(): self
+    /**
+     * Crée un étage (floor)
+     */
+    public function floor(string $name = 'Rez-de-chaussée'): self
     {
         return $this->with([
-            'type' => ZoneType::ROOM,
-            'targetTemperature' => new TargetTemperature(self::faker()->randomFloat(1, 19, 22)),
+            'zoneName' => ZoneName::fromString($name),
+            'type' => ZoneType::FLOOR,
+            'icon' => '🏢',
         ]);
     }
 
-    public function outdoor(): self
-    {
-        return $this->with([
-            'type' => ZoneType::OUTDOOR,
-            'icon' => '🌳',
-            'targetTemperature' => null,
-        ]);
-    }
-
+    /**
+     * Crée un salon
+     */
     public function livingRoom(): self
     {
         return $this->with([
+            'zoneName' => ZoneName::fromString('Salon'),
             'type' => ZoneType::ROOM,
-            'surfaceArea' => SurfaceArea::fromFloat(25.0),
-            'targetTemperature' => new TargetTemperature(21.0),
+            'surface' => SurfaceArea::fromFloat(25.0),
+            'targetTemperature' => Temperature::fromCelsius(21.0),
             'icon' => '🛋️',
-            'color' => new HexaColor('#FFA500'),
         ]);
     }
 
-    public function bedroom(): self
-    {
-        return $this->with([
-            'type' => ZoneType::ROOM,
-            'surfaceArea' => SurfaceArea::fromFloat(15.0),
-            'targetTemperature' => new TargetTemperature(19.0),
-            'icon' => '🛏️',
-            'color' => new HexaColor('#4169E1'),
-        ]);
-    }
-
+    /**
+     * Crée une cuisine
+     */
     public function kitchen(): self
     {
         return $this->with([
+            'zoneName' => ZoneName::fromString('Cuisine'),
             'type' => ZoneType::ROOM,
-            'surfaceArea' => SurfaceArea::fromFloat(12.0),
-            'targetTemperature' => new TargetTemperature(20.0),
+            'surface' => SurfaceArea::fromFloat(15.0),
+            'targetTemperature' => Temperature::fromCelsius(20.0),
             'icon' => '🍳',
-            'color' => new HexaColor('#FF6347'),
         ]);
     }
 
+    /**
+     * Crée une chambre
+     */
+    public function bedroom(int $number = 1): self
+    {
+        return $this->with([
+            'zoneName' => ZoneName::fromString("Chambre {$number}"),
+            'type' => ZoneType::ROOM,
+            'surface' => SurfaceArea::fromFloat(12.0),
+            'targetTemperature' => Temperature::fromCelsius(19.0),
+            'icon' => '🛏️',
+        ]);
+    }
+
+    /**
+     * Crée une salle de bain
+     */
     public function bathroom(): self
     {
         return $this->with([
+            'zoneName' => ZoneName::fromString('Salle de bain'),
             'type' => ZoneType::ROOM,
-            'surfaceArea' => SurfaceArea::fromFloat(8.0),
-            'targetTemperature' => new TargetTemperature(22.0),
+            'surface' => SurfaceArea::fromFloat(8.0),
+            'targetTemperature' => Temperature::fromCelsius(22.0),
             'icon' => '🚿',
-            'color' => new HexaColor('#87CEEB'),
         ]);
     }
 
+    /**
+     * Crée un bureau
+     */
+    public function office(): self
+    {
+        return $this->with([
+            'zoneName' => ZoneName::fromString('Bureau'),
+            'type' => ZoneType::ROOM,
+            'surface' => SurfaceArea::fromFloat(10.0),
+            'targetTemperature' => Temperature::fromCelsius(20.0),
+            'icon' => '💼',
+        ]);
+    }
+
+    /**
+     * Crée un jardin
+     */
     public function garden(): self
     {
         return $this->with([
+            'zoneName' => ZoneName::fromString('Jardin'),
             'type' => ZoneType::OUTDOOR,
-            'surfaceArea' => SurfaceArea::fromFloat(50.0),
+            'surface' => SurfaceArea::fromFloat(50.0),
             'icon' => '🌳',
-            'color' => new HexaColor('#228B22'),
         ]);
     }
 
+    /**
+     * Crée un garage
+     */
     public function garage(): self
     {
         return $this->with([
+            'zoneName' => ZoneName::fromString('Garage'),
             'type' => ZoneType::OUTDOOR,
-            'surfaceArea' => SurfaceArea::fromFloat(20.0),
+            'surface' => SurfaceArea::fromFloat(20.0),
             'icon' => '🚗',
-            'color' => new HexaColor('#696969'),
         ]);
     }
 
+    // ==========================================
+    // WITH METHODS (ajout de données)
+    // ==========================================
+
+    /**
+     * Ajoute une zone parente
+     */
+    public function withParent(Zone $parent): self
+    {
+        return $this->with([
+            'parent' => $parent,
+        ]);
+    }
+
+    /**
+     * Ajoute une surface
+     */
+    public function withSurface(float $squareMeters): self
+    {
+        return $this->with([
+            'surface' => SurfaceArea::fromFloat($squareMeters),
+        ]);
+    }
+
+    /**
+     * Ajoute une température cible
+     */
+    public function withTargetTemperature(float $celsius): self
+    {
+        return $this->with([
+            'targetTemperature' => Temperature::fromCelsius($celsius),
+        ]);
+    }
+
+    /**
+     * Ajoute une température actuelle
+     */
+    public function withTemperature(float $celsius): self
+    {
+        return $this->afterInstantiate(function (Zone $zone) use ($celsius): void {
+            // Utiliser la réflexion pour setter la température directement
+            $reflection = new ReflectionClass($zone);
+            $property = $reflection->getProperty('currentTemperature');
+            $property->setValue($zone, Temperature::fromCelsius($celsius));
+        });
+    }
+
+    /**
+     * Ajoute une humidité actuelle
+     */
+    public function withHumidity(float $percentage): self
+    {
+        return $this->afterInstantiate(function (Zone $zone) use ($percentage): void {
+            $reflection = new ReflectionClass($zone);
+            $property = $reflection->getProperty('currentHumidity');
+            $property->setValue($zone, Humidity::fromPercentage($percentage));
+        });
+    }
+
+    /**
+     * Ajoute une consommation électrique actuelle
+     */
+    public function withPowerConsumption(float $watts): self
+    {
+        return $this->afterInstantiate(function (Zone $zone) use ($watts): void {
+            $reflection = new ReflectionClass($zone);
+            $property = $reflection->getProperty('currentPowerConsumption');
+            $property->setValue($zone, PowerConsumption::fromWatts($watts));
+        });
+    }
+
+    /**
+     * Marque la zone comme occupée
+     */
     public function occupied(): self
     {
         return $this->afterInstantiate(function (Zone $zone): void {
@@ -152,65 +248,144 @@ class ZoneFactory extends PersistentProxyObjectFactory
         });
     }
 
+    /**
+     * Marque la zone comme inoccupée
+     */
     public function unoccupied(): self
     {
         return $this->afterInstantiate(function (Zone $zone): void {
+            // Incrémenter 3 fois le compteur no-motion
             $zone->incrementNoMotionCount();
             $zone->incrementNoMotionCount();
             $zone->incrementNoMotionCount();
         });
     }
 
-    public function withTemperature(float $temperature): self
+    /**
+     * Ajoute un device à la zone
+     */
+    public function withDevice(DeviceId|string $deviceId): self
     {
-        return $this->afterInstantiate(function (Zone $zone) use ($temperature): void {
-            $zone->updateAverageTemperature($temperature);
+        if (is_string($deviceId)) {
+            $deviceId = DeviceId::fromString($deviceId);
+        }
+
+        return $this->afterInstantiate(function (Zone $zone) use ($deviceId): void {
+            $zone->addDevice($deviceId);
         });
     }
 
-    public function withLabel(string $label): self
+    /**
+     * Ajoute plusieurs devices à la zone
+     *
+     * @param array<DeviceId|string> $deviceIds
+     */
+    public function withDevices(array $deviceIds): self
     {
-        return $this->afterInstantiate(function (Zone $zone) use ($label): void {
-            $zone->updateLabel(Label::fromString($label), $this->slugger);
+        return $this->afterInstantiate(function (Zone $zone) use ($deviceIds): void {
+            foreach ($deviceIds as $deviceId) {
+                if (is_string($deviceId)) {
+                    $deviceId = DeviceId::fromString($deviceId);
+                }
+                $zone->addDevice($deviceId);
+            }
         });
     }
 
-    public function withPowerConsumption(float $consumption): self
+    /**
+     * Ajoute un nombre spécifique de capteurs actifs
+     * @throws \ReflectionException
+     */
+    public function withActiveSensors(int $count): self
     {
-        return $this->afterInstantiate(function (Zone $zone) use ($consumption): void {
-            $zone->updatePowerConsumption($consumption);
+        return $this->afterInstantiate(function (Zone $zone) use ($count): void {
+            $reflection = new ReflectionClass($zone);
+            $property = $reflection->getProperty('activeSensorsCount');
+            $property->setValue($zone, $count);
         });
     }
 
-    public function hot(): self
+    // ==========================================
+    // STATES METHODS (états complets)
+    // ==========================================
+
+    /**
+     * Zone avec température et humidité confortables
+     */
+    public function comfortable(): self
     {
-        return $this->with(['targetTemperature' => 20.0])
-            ->afterInstantiate(function (Zone $zone): void {
-                $zone->updateAverageTemperature(26.0);
-            });
+        return $this
+            ->withTemperature(21.0)
+            ->withHumidity(45.0)
+            ->occupied();
     }
 
-    public function cold(): self
+    /**
+     * Zone surchauffée
+     */
+    public function overheated(): self
     {
-        return $this->with(['targetTemperature' => 20.0])
-            ->afterInstantiate(function (Zone $zone): void {
-                $zone->updateAverageTemperature(16.0);
-            });
+        return $this
+            ->withTargetTemperature(20.0)
+            ->withTemperature(23.5);
     }
 
-    public function overBudget(): self
+    /**
+     * Zone sous-chauffée
+     */
+    public function underheated(): self
     {
-        return $this->with(['targetPowerConsumption' => 1000.0])
-            ->afterInstantiate(function (Zone $zone): void {
-                $zone->updatePowerConsumption(1500.0);
-            });
+        return $this
+            ->withTargetTemperature(21.0)
+            ->withTemperature(18.0);
     }
 
-    /** @var Zone $parent */
-    public function withParent(object $parent): self
+    /**
+     * Zone avec forte consommation
+     */
+    public function highConsumption(): self
     {
-        return $this->afterInstantiate(function (Zone $zone) use ($parent): void {
-            $zone->moveToParent($parent);
-        });
+        return $this
+            ->withPowerConsumption(2500.0);
+    }
+
+    /**
+     * Zone avec faible consommation
+     */
+    public function lowConsumption(): self
+    {
+        return $this
+            ->withPowerConsumption(50.0);
+    }
+
+    /**
+     * Zone avec humidité trop élevée
+     */
+    public function tooHumid(): self
+    {
+        return $this
+            ->withHumidity(75.0);
+    }
+
+    /**
+     * Zone avec humidité trop basse
+     */
+    public function tooDry(): self
+    {
+        return $this
+            ->withHumidity(20.0);
+    }
+
+    /**
+     * Zone complète avec toutes les métriques
+     */
+    public function withAllMetrics(): self
+    {
+        return $this
+            ->withTemperature(21.5)
+            ->withHumidity(50.0)
+            ->withPowerConsumption(150.0)
+            ->withActiveSensors(2)
+            ->occupied();
     }
 }

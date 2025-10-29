@@ -3,10 +3,9 @@
 namespace Marvin\Device\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectInterface;
 use Stringable;
 
-final readonly class TechnicalName implements ValueObjectInterface, Stringable
+final readonly class TechnicalName implements Stringable
 {
     public string $value;
 
@@ -26,5 +25,10 @@ final readonly class TechnicalName implements ValueObjectInterface, Stringable
     public function __toString(): string
     {
         return $this->value;
+    }
+
+    public function equals(self $other): bool
+    {
+        return $this->value === $other->value;
     }
 }
