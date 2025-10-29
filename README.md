@@ -1,4 +1,4 @@
-# [NOM DE TON PROJET] 🏠🤖
+# Marvin Core 🏠🤖
 
 > Système domotique open source basé sur DDD/CQRS avec support multi-protocoles (Zigbee, Matter, Thread, Z-Wave, WiFi)
 
