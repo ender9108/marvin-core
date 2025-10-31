@@ -12,9 +12,9 @@ final readonly class ZoneName implements Stringable
     private function __construct(
         string $value,
     ) {
-        Assert::notEmpty($value, 'LO0007::::zone_cannot_be_empty');
-        Assert::maxLength($value, 100, 'LO0008::::zone_name_cannot_exceed_100');
-        Assert::minLength($value, 2, 'LO0009::::zone_name_cannot_be_less_than_2');
+        Assert::notEmpty($value, 'location.exceptions.LO0012.zone_name_cannot_be_empty');
+        Assert::maxLength($value, 100, 'location.exceptions.LO0013.zone_name_cannot_exceed_100');
+        Assert::minLength($value, 2, 'location.exceptions.LO0014.zone_name_cannot_be_less_than_2');
 
         $this->value = $value;
     }

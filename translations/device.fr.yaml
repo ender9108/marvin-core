@@ -1,29 +1,33 @@
 device:
     exceptions:
-        device_not_found: Module introuvable.
-        device_not_found_with_id: 'Module introuvable avec l''id "%id%".'
-        device_already_in_group: 'Module(s) %device_name% déjà dans le groupe %group_name% (ID: %group_id%).'
-        device_must_be_composite: Pour ajouter des modules enfant, le module parent doit être de type composite.
-        device_composite_circular_reference: Un module ne peut pas être son propre enfant.
-        composite_device_not_allowed_in_group: 'Le module composite %device_name% (ID : %device_id%, stratégie : %strategy%) ne peut pas être ajouté à un groupe. La profondeur maximale est de 1 niveau.'
-        capability_not_supported: Capacité non supportée
-        capability_not_supported_with_capability_type: 'Capacité %capacity% n''est pas supportée.'
-        capability_not_found: Capacité introuvable.
-        capability_not_found_with_capability_name_and_device_label: Capacité %capability_name% introuvable pour le module %device_label%.
-        protocol_not_available: Ce protocole n'est pas disponible.
-        protocol_not_available_with_id: 'Le protocole %id% n''est pas disponible.'
-        protocol_is_disabled: Le protocole %id% est désactivé.
-        composite_not_supported_with_message_type: 'La stratégie NATIVE_ONLY nécessite une prise en charge native, mais le protocole %protocol_type% ne la prend pas en charge.'
-        composite_not_supported_mixed_protocols: Impossible de créer un groupe/une scène natif(ve) avec des protocoles mixtes. Utilisez la stratégie EMULATED_ONLY.
-        composite_not_supported_no_common_protocol: Aucun protocole commun trouvé parmi les périphériques enfants. Groupe/scène natif impossible.
-        composite_not_supported: Stratégie de composition non supportée.
-        invalid_composite_strategy_with_device_id_and_strategy: La stratégie de composition %strategy% est invalide pour le module %device%.
-        invalid_composite_strategy: Stratégie de composition invalide.
-        invalid_virtual_config: Configuration invalide.
-        invalid_virtual_config_with_key_value: La configuration %key%:%value% est invalide.
-        capability_state_validation_type: 'Type invalide : attendu %data_type%, obtenu %debug_type%'
-        capability_state_validation_min: 'La valeur %value% est inférieure au minimum %min%'
-        capability_state_validation_max: 'La valeur %value% dépasse le maximum %max%'
-        capability_state_validation: 'La valeur n''est pas valide.'
+        DE0001.device_not_found: Module introuvable.
+        DE0002.device_not_found_with_id: 'Module introuvable avec l''id "%id%".'
+        DE0003.device_already_in_group: 'Module(s) %device_name% déjà dans le groupe %group_name% (ID: %group_id%).'
+        DE0004.device_must_be_composite: Pour ajouter des modules enfant, le module parent doit être de type composite.
+        DE0005.device_composite_circular_reference: Un module ne peut pas être son propre enfant.
+        DE0006.composite_device_not_allowed_in_group: 'Le module composite %device_name% (ID : %device_id%, stratégie : %strategy%) ne peut pas être ajouté à un groupe. La profondeur maximale est de 1 niveau.'
+        DE0007.capability_not_supported: Capacité non supportée
+        DE0008.capability_not_supported_with_capability_type: 'Capacité %capacity% n''est pas supportée.'
+        DE0009.capability_not_found: Capacité introuvable.
+        DE0010.capability_not_found_with_capability_name_and_device_label: Capacité %capability_name% introuvable pour le module %device_label%.
+        DE0011.protocol_not_available: Ce protocole n'est pas disponible.
+        DE0012.protocol_not_available_with_id: 'Le protocole %id% n''est pas disponible.'
+        DE0013.protocol_is_disabled: Le protocole %id% est désactivé.
+        DE0014.composite_not_supported_with_message_type: 'La stratégie NATIVE_ONLY nécessite une prise en charge native, mais le protocole %protocol_type% ne la prend pas en charge.'
+        DE0015.composite_not_supported_mixed_protocols: Impossible de créer un groupe/une scène natif(ve) avec des protocoles mixtes. Utilisez la stratégie EMULATED_ONLY.
+        DE0016.composite_not_supported_no_common_protocol: Aucun protocole commun trouvé parmi les périphériques enfants. Groupe/scène natif impossible.
+        DE0017.composite_not_supported: Stratégie de composition non supportée.
+        DE0018.invalid_composite_strategy_with_device_id_and_strategy: La stratégie de composition %strategy% est invalide pour le module %device%.
+        DE0019.invalid_composite_strategy: Stratégie de composition invalide.
+        DE0020.invalid_virtual_config: Configuration invalide.
+        DE0021.invalid_virtual_config_with_key_value: La configuration %key%:%value% est invalide.
+        DE0022.capability_state_validation_type: 'Type invalide : attendu %data_type%, obtenu %debug_type%'
+        DE0023.capability_state_validation_min: 'La valeur %value% est inférieure au minimum %min%'
+        DE0024.capability_state_validation_max: 'La valeur %value% dépasse le maximum %max%'
+        DE0025.capability_state_validation: 'La valeur n''est pas valide.'
+        DE0026.capability_not_supported_action: 'La capacité ne supporte cette action.'
+        DE0027.capability_not_supported_action_with_capability_name_and_action: 'La capacité %capability% ne supporte pas l''action %action%.'
+        DE0028.device_must_be_an_instance_of_device: Le module passé en paramètre doit être une instance de "Device".
+        DE0029.config_must_not_be_empty: La configuration du module virtuel ne peut pas être vide.
     capabilities:
         

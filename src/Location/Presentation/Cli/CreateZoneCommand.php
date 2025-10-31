@@ -67,7 +67,7 @@ final readonly class CreateZoneCommand
                 targetHumidity: null !== $targetHumidity ? Humidity::fromPercentage($targetHumidity) : null,
                 targetPowerConsumption: null !== $targetPowerConsumption ? PowerConsumption::fromWatts($targetPowerConsumption) : null,
                 icon: $icon,
-                color: HexaColor::fromString($color),
+                color: null !== $color ? HexaColor::fromString($color) : null,
             );
 
             $zoneId = $this->syncCommandBus->handle($command);

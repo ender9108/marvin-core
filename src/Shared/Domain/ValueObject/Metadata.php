@@ -4,8 +4,9 @@ namespace Marvin\Shared\Domain\ValueObject;
 
 final readonly class Metadata
 {
-    public function __construct(public array $value = [])
-    {
+    public function __construct(
+        public ?array $value
+    ) {
     }
 
     public static function fromArray(array $value): Metadata
@@ -15,6 +16,6 @@ final readonly class Metadata
 
     public function toArray(): array
     {
-        return $this->value;
+        return $this->value ?? [];
     }
 }

@@ -2,8 +2,10 @@
 
 namespace Marvin\Location\Application\CommandHandler\Zone;
 
+use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use Marvin\Location\Application\Command\Zone\MoveZone;
 use Marvin\Location\Domain\Exception\InvalidZoneHierarchy;
+use Marvin\Location\Domain\Exception\ZoneParentNotFound;
 use Marvin\Location\Domain\Model\Zone;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -22,15 +24,19 @@ final readonly class MoveZoneHandler
     {
         $zone = $this->zoneRepository->byId($command->zoneId);
 
-        if ($command->newParentZoneId !== null && $command->newParentZoneId === $command->zoneId) {
+        if ($command->newParentZoneId?->toString() === $command->zoneId->toString()) {
             throw InvalidZoneHierarchy::circularReference($zone->zoneName);
         }
 
         $newParentZone = null;
 
         if ($command->newParentZoneId !== null) {
-            /** @var Zone $newParentZone */
-            $newParentZone = $this->zoneRepository->byId($command->newParentZoneId);
+            try {
+                /** @var Zone $newParentZone */
+                $newParentZone = $this->zoneRepository->byId($command->newParentZoneId);
+            } catch (DomainException $de) {
+                throw ZoneParentNotFound::withId($command->newParentZoneId);
+            }
 
             if (!$newParentZone->type->canHaveChildren()) {
                 throw InvalidZoneHierarchy::cannotHaveChildren(

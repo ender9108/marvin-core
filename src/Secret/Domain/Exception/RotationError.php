@@ -9,19 +9,17 @@ class RotationError extends DomainException implements TranslatableExceptionInte
 {
     public function __construct(
         string $message,
-        string $code,
         public readonly bool $negativeInterval = false,
         public readonly bool $requireIntervalDayGtZero = false,
         public readonly bool $onlyAllowForManaged = false,
     ) {
-        parent::__construct($message, $code);
+        parent::__construct($message);
     }
 
     public static function negativeInterval(): self
     {
         return new self(
             'The rotation interval cannot be negative',
-            'ST0006',
             true
         );
     }
@@ -30,7 +28,6 @@ class RotationError extends DomainException implements TranslatableExceptionInte
     {
         return new self(
             'Auto-rotate requires a rotation interval > 0',
-            'ST0007',
             false,
             true
         );
@@ -40,7 +37,6 @@ class RotationError extends DomainException implements TranslatableExceptionInte
     {
         return new self(
             'Auto-rotation is only allowed for managed secrets',
-            'ST0008',
             false,
             false,
             true
@@ -50,18 +46,18 @@ class RotationError extends DomainException implements TranslatableExceptionInte
     public function translationId(): string
     {
         if (true === $this->negativeInterval) {
-            return 'secret.exceptions.rotation_error_negative_interval';
+            return 'secret.exceptions.SR0008.rotation_error_negative_interval';
         }
 
         if (true === $this->requireIntervalDayGtZero) {
-            return 'secret.exceptions.rotation_error_require_interval_day_gt_zero';
+            return 'secret.exceptions.SR0009.rotation_error_require_interval_day_gt_zero';
         }
 
         if (true === $this->onlyAllowForManaged) {
-            return 'secret.exceptions.rotation_error_only_allow_for_managed';
+            return 'secret.exceptions.SR0010.rotation_error_only_allow_for_managed';
         }
 
-        return 'secret.exceptions.rotation_error';
+        return 'secret.exceptions.SR0011.rotation_error';
     }
 
     public function translationParameters(): array

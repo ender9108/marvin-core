@@ -18,4 +18,9 @@ trait EnumToArrayTrait
     {
         return array_combine(self::values(), self::names());
     }
+
+    public static function exists(string $value): bool
+    {
+        return in_array($value, self::values(), true);
+    }
 }

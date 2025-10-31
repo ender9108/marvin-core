@@ -6,38 +6,29 @@ use Override;
 final class AssertException extends DomainException implements TranslatableExceptionInterface
 {
     public function __construct(
-        private readonly string $translationId,
-        private readonly array $parameters = [],
+        string $translationId,
+        array $parameters = [],
         ?string $code = null,
     ) {
-        /* Format CODE_ERREUR::::TRANSLATION_ID */
-        $translationIdParts = explode('::::', $translationId);
-        $code = null;
-
-        if (count($translationIdParts) === 2) {
-            $translationId = $translationIdParts[1];
-            $code = $translationIdParts[0];
-        }
-
         parent::__construct($translationId, $code);
-        $this->internalCode = $code ?? self::UNKNOWN_ERROR_CODE;
+        $this->transParams = $parameters;
     }
 
     #[Override]
     public function translationId(): string
     {
-        return $this->translationId;
+        return $this->transId;
     }
 
     #[Override]
     public function translationParameters(): array
     {
-        return $this->parameters;
+        return $this->transParams;
     }
 
     #[Override]
     public function translationDomain(): string
     {
-        return 'assert_messages';
+        return $this->transDomain;
     }
 }

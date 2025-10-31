@@ -1,24 +1,30 @@
 location:
     exceptions:
-        zone_not_found: Zone introuvable.
-        zone_not_found_with_id: Zone introuvable avec l'id "%id%".
-        zone_already_exists: Cette zone existe déjà
-        zone_already_exists_with_name: Une zone avec le nom %name% existe déjà.
-        zone_hierarchy_invalid: Une erreur de hiérarchie est survenue.
-        zone_cannot_have_children: La zone %name% de type %type% ne peut pas avoir d'enfants.
-        zone_circular_reference: 'Impossible de créer une référence circulaire: la zone %name% ne peut pas être son propre parent.'
-        zone_parent_not_found: Zone parent avec l'identifiant %parentId% introuvable
-        zone_cannot_delete_zone_with_device_children: Impossible de supprimer la zone %name% car elle comporte %childrenCount% enfants.
-        zone_name_cannot_be_empty: Le nom de la zone ne peux pas être vide.
-        zone_name_cannot_exceed_100: Le nom de la zone ne peut pas excéder 100 caractères.
-        zone_name_cannot_be_less_than_2: Le nom de la zone ne peut pas être inférieur à 2
-        zone_temperature_cannot_be_below: La température ne peux pas être inférieur à -80°C
-        zone_temperature_cannot_be_exceed: La température ne peux pas être supérieur à 100°C
-        zone_humidity_cannot_be_below: La température ne peux pas être inférieur à 0%
-        zone_humidity_cannot_be_exceed: La température ne peux pas être supérieur à 100%
-        power_consumption_cannot_be_negative: La consommation électrique ne peut pas être négative.
-        surface_area_cannot_be_negative: La surface ne peut pas être négative.
-        surface_area_cannot_exceed_100000: La surface ne peut pas dépasser 100000W.
+        LO0001.zone_not_found: Zone introuvable.
+        LO0002.zone_not_found_with_id: Zone introuvable avec l'id "%id%".
+        LO0003.zone_parent_not_found: Zone parent introuvable.
+        LO0004.zone_parent_not_found_with_id: Zone parent introuvable avec l'id "%id%".
+        LO0005.zone_already_exists: Cette zone existe déjà
+        LO0006.zone_already_exists_with_name: Une zone avec le nom %name% existe déjà.
+        LO0007.zone_hierarchy_invalid: Une erreur de hiérarchie est survenue.
+        LO0008.zone_cannot_have_children: La zone parent "%name%" de type "%type%" ne peut pas avoir d'enfants.
+        LO0009.zone_circular_reference: 'Impossible de créer une référence circulaire: la zone "%name%" ne peut pas être son propre parent.'
+        LO0010.zone_cannot_delete_zone_with_children: Impossible de supprimer la zone "%name%" car elle comporte %childrenCount% enfants.
+        LO0011.zone_cannot_delete_zone_with_device_children: Impossible de supprimer la zone %name% car elle comporte %childrenCount% enfants.
+        LO0012.zone_name_cannot_be_empty: Le nom de la zone ne peux pas être vide.
+        LO0013.zone_name_cannot_exceed_100: Le nom de la zone ne peut pas excéder 100 caractères.
+        LO0014.zone_name_cannot_be_less_than_2: Le nom de la zone ne peut pas être inférieur à 2
+        LO0015.zone_temperature_cannot_be_below: La température ne peux pas être inférieur à -80°C
+        LO0016.zone_temperature_cannot_be_exceed: La température ne peux pas être supérieur à 100°C
+        LO0017.zone_humidity_cannot_be_below: La température ne peux pas être inférieur à 0%
+        LO0018.zone_humidity_cannot_be_exceed: La température ne peux pas être supérieur à 100%
+        LO0019.power_consumption_cannot_be_negative: La consommation électrique ne peut pas être négative.
+        LO0020.zone_surface_area_cannot_be_negative: La surface ne peut pas être négative.
+        LO0021.zone_surface_area_cannot_exceed_100000: La surface ne peut pas dépasser 100000m2.
+        LO0022.hex_color_cannot_be_empty: La couleur ne peut pas être une chaine vide.
+        LO0023.hex_color_must_be_valid: La couleur doit être un code hexadécimal valide.
+        LO0024.zone_target_temp_lower_than: La température cible de peut pas être inférieur à %limit%°C.
+        LO0025.zone_target_temp_greater_than: La température cible de peut pas être supérieur à %limit%°C.
     types:
         building: Bâtiment
         floor: Etage

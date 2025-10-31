@@ -10,10 +10,9 @@ final class DeviceAlreadyInGroup extends DomainException implements Translatable
 {
     public function __construct(
         string $message,
-        string $code,
         public readonly array $infos = []
     ) {
-        parent::__construct($message, $code);
+        parent::__construct($message);
     }
 
     public static function withDevice(Device $device, Device $existingGroup): self
@@ -26,7 +25,6 @@ final class DeviceAlreadyInGroup extends DomainException implements Translatable
                 $existingGroup->label->value,
                 $existingGroup->id->toString(),
             ),
-            'DE00010',
             [
                 [
                     'deviceName' => $device->label->value,
@@ -64,14 +62,13 @@ final class DeviceAlreadyInGroup extends DomainException implements Translatable
                 'Devices [%s] are already in groups and cannot be added',
                 implode(', ', $deviceNames),
             ),
-            'DE00010',
             $infos
         );
     }
 
     public function translationId(): string
     {
-        return 'device.exceptions.device_already_in_group';
+        return 'device.exceptions.DE0003.device_already_in_group';
     }
 
     public function translationParameters(): array

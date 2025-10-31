@@ -1,14 +1,14 @@
 security:
     exceptions:
-        action_request_not_found: ActionRequest introuvable.
-        action_request_not_found_with_id: ActionRequest introuvable avec l'id "%id%".
-        action_request_not_found_with_correlation_id: 'ActionRequest introuvable avec l''id de transaction "%correlationId%".'
-        action_not_allowed: Action non autorisé pour ce containeur.
-        action_not_allowed_with_label_and_action: 'Action %action% non autorisé pour le containeur %containerLabel%.'
-        worker_not_found: Worker introuvable.
-        worker_not_found_with_id: Worker introuvable avec l'id "%id%".
-        container_not_found: Container introuvable.
-        container_not_found_with_id: Container introuvable avec l'id "%id%".
+        SY0001.action_request_not_found: ActionRequest introuvable.
+        SY0002.action_request_not_found_with_id: ActionRequest introuvable avec l'id "%id%".
+        SY0003.action_request_not_found_with_correlation_id: 'ActionRequest introuvable avec l''id de transaction "%correlationId%".'
+        SY0004.action_not_allowed: Action non autorisé pour ce containeur.
+        SY0005.action_not_allowed_with_label_and_action: 'Action %action% non autorisé pour le containeur %containerLabel%.'
+        SY0006.worker_not_found: Worker introuvable.
+        SY0007.worker_not_found_with_id: Worker introuvable avec l'id "%id%".
+        SY0008.container_not_found: Container introuvable.
+        SY0009.container_not_found_with_id: Container introuvable avec l'id "%id%".
         #plugin_not_found: Plugin introuvable.
         #plugin_not_found_with_id: Plugin introuvable avec l'id "%id%".
         #plugin_already_exist: Ce plugin existe déjà.

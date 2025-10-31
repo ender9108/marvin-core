@@ -15,8 +15,8 @@ final readonly class TargetTemperature implements Stringable
 
     public function __construct(float $value)
     {
-        Assert::greaterThan($value, self::MIN_VALUE);
-        Assert::lessThan($value, self::MAX_VALUE);
+        Assert::greaterThan($value, self::MIN_VALUE, 'location.exceptions.LO0024.zone_target_temp_lower_than');
+        Assert::lessThan($value, self::MAX_VALUE, 'location.exceptions.LO0025.zone_target_temp_greater_than');
         $this->value = round($value, 2);
     }
 

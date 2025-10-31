@@ -37,7 +37,7 @@ final readonly class UpdateZoneCommand
         string $zoneId,
         #[Option(name: 'zone-name')]
         ?string $zoneName = null,
-        #[Option(name: 'surfaceArea')]
+        #[Option(name: 'surface-area')]
         ?float $surfaceArea = null,
         #[Option(name: 'orientation')]
         ?string $orientation = null,
@@ -56,8 +56,8 @@ final readonly class UpdateZoneCommand
                 null !== $zoneName ? ZoneName::fromString($zoneName) : null,
                 null !== $surfaceArea ? SurfaceArea::fromFloat($surfaceArea) : null,
                 null !== $orientation ? Orientation::from($orientation) : null,
-                null !== $targetTemperature ? Temperature::fromFloat($targetTemperature) : null,
-                null !== $targetPowerConsumption ? PowerConsumption::fromFloat($targetPowerConsumption) : null,
+                null !== $targetTemperature ? Temperature::fromCelsius($targetTemperature) : null,
+                null !== $targetPowerConsumption ? PowerConsumption::fromWatts($targetPowerConsumption) : null,
                 $icon,
                 null !== $color ? HexaColor::fromString($color) : null,
             );

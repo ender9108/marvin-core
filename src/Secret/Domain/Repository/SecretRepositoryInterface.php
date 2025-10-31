@@ -11,9 +11,9 @@ use Marvin\Secret\Domain\ValueObject\SecretScope;
 
 interface SecretRepositoryInterface
 {
-    public function save(Secret $secret): void;
+    public function save(Secret $secret, bool $flush = true): void;
 
-    public function remove(Secret $secret): void;
+    public function remove(Secret $secret, bool $flush = true): void;
 
     public function byId(SecretId $id): ?Secret;
 

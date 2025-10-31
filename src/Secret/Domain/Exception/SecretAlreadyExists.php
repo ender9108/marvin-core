@@ -11,18 +11,16 @@ final class SecretAlreadyExists extends DomainException implements TranslatableE
 {
     public function __construct(
         string $message,
-        string $code,
         public readonly ?string $id = null,
         public readonly ?string $key = null,
     ) {
-        parent::__construct($message, $code);
+        parent::__construct($message);
     }
 
     public static function withId(SecretId $id): self
     {
         return new self(
             sprintf('Secret with id "%s" already exists', $id->toString()),
-            'ST0004',
             $id->toString()
         );
     }
@@ -31,7 +29,6 @@ final class SecretAlreadyExists extends DomainException implements TranslatableE
     {
         return new self(
             sprintf('Secret with key "%s" already exists', $key->value),
-            'ST0003',
             null,
             $key->value
         );
@@ -40,14 +37,14 @@ final class SecretAlreadyExists extends DomainException implements TranslatableE
     public function translationId(): string
     {
         if (null !== $this->id) {
-            return 'secret.exceptions.secret_already_exists_with_id';
+            return 'secret.exceptions.SR0012.secret_already_exists_with_id';
         }
 
         if (null !== $this->key) {
-            return 'secret.exceptions.secret_already_exists_with_key';
+            return 'secret.exceptions.SR0013.secret_already_exists_with_key';
         }
 
-        return 'secret.exceptions.secret_already_exists';
+        return 'secret.exceptions.SR0014.secret_already_exists';
     }
 
     public function translationParameters(): array

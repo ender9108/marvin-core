@@ -39,14 +39,14 @@ final class RequestResetPasswordNotFound extends DomainException implements Tran
     public function translationId(): string
     {
         if (null !== $this->token) {
-            return 'security.exceptions.request_reset_password_not_found_with_token';
+            return 'security.exceptions.SC0022.request_reset_password_not_found_with_token';
         }
 
         if (null !== $this->id) {
-            return 'security.exceptions.request_reset_password_not_found_with_id';
+            return 'security.exceptions.SC0021.request_reset_password_not_found_with_id';
         }
 
-        return 'security.exceptions.request_reset_password_not_found';
+        return 'security.exceptions.SC0020.request_reset_password_not_found';
     }
 
     #[Override]

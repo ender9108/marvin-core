@@ -10,14 +10,13 @@ class CapabilityStateValidation extends DomainException implements TranslatableE
 {
     public function __construct(
         string $message,
-        string $code,
         private readonly mixed $value = null,
         private readonly ?string $stateDataType = null,
         private readonly ?string $debugType = null,
         private readonly ?int $min = null,
         private readonly ?int $max = null,
     ) {
-        parent::__construct($message, $code);
+        parent::__construct($message);
     }
 
     public static function withTypeAndDebugType(
@@ -30,7 +29,6 @@ class CapabilityStateValidation extends DomainException implements TranslatableE
                 $stateDataType->value,
                 $debugType
             ),
-            '',
             null,
             $stateDataType->value,
             $debugType,
@@ -43,7 +41,6 @@ class CapabilityStateValidation extends DomainException implements TranslatableE
     {
         return new self(
             sprintf('Value %s is below minimum %s', $value, $min),
-            '',
             $value,
             null,
             null,
@@ -56,7 +53,6 @@ class CapabilityStateValidation extends DomainException implements TranslatableE
     {
         return new self(
             sprintf('Value %s exceeds maximum %s', $value, $max),
-            '',
             $value,
             null,
             null,
@@ -68,18 +64,18 @@ class CapabilityStateValidation extends DomainException implements TranslatableE
     public function translationId(): string
     {
         if (null !== $this->stateDataType && null !== $this->debugType) {
-            return 'device.exceptions.capability_state_validation_type';
+            return 'device.exceptions.DE0022.capability_state_validation_type';
         }
 
         if (null !== $this->min && null !== $this->value) {
-            return 'device.exceptions.capability_state_validation_min';
+            return 'device.exceptions.DE0023.capability_state_validation_min';
         }
 
         if (null !== $this->max && null !== $this->value) {
-            return 'device.exceptions.capability_state_validation_max';
+            return 'device.exceptions.DE0024.capability_state_validation_max';
         }
 
-        return 'device.exceptions.capability_state_validation';
+        return 'device.exceptions.DE0025.capability_state_validation';
     }
 
     public function translationParameters(): array

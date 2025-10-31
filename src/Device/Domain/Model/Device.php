@@ -178,7 +178,11 @@ class Device extends AggregateRoot
 
         /** @var Device $deviceWithStates */
         foreach ($devicesWithStates as $deviceWithStates) {
-            Assert::isInstanceOf($deviceWithStates, Device::class);
+            Assert::isInstanceOf(
+                $deviceWithStates,
+                Device::class,
+                'device.exceptions.DE0028.device_must_be_an_instance_of_device'
+            );
 
             $device->addChildren($deviceWithStates);
             $currentStates[$deviceWithStates->id->toString()] = $deviceWithStates->states->toArray();

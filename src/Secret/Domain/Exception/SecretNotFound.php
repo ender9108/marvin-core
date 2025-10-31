@@ -11,7 +11,6 @@ final class SecretNotFound extends DomainException implements TranslatableExcept
 {
     public function __construct(
         string $message,
-        string $code,
         public readonly ?string $id = null,
         public readonly ?string $key = null,
     ) {
@@ -22,7 +21,6 @@ final class SecretNotFound extends DomainException implements TranslatableExcept
     {
         return new self(
             sprintf('Secret with key "%s" not found', $key->value),
-            'ST0001',
             null,
             $key->value
         );
@@ -32,7 +30,6 @@ final class SecretNotFound extends DomainException implements TranslatableExcept
     {
         return new self(
             sprintf('Secret with id "%s" not found', $id->toString()),
-            'ST0002',
             $id->toString(),
             null
         );
@@ -41,14 +38,14 @@ final class SecretNotFound extends DomainException implements TranslatableExcept
     public function translationId(): string
     {
         if ($this->id !== null) {
-            return 'secret.exceptions.secret_not_found_with_id';
+            return 'secret.exceptions.SR0015.secret_not_found_with_id';
         }
 
         if ($this->key !== null) {
-            return 'secret.exceptions.secret_not_found_with_key';
+            return 'secret.exceptions.SR0016.secret_not_found_with_key';
         }
 
-        return 'secret.exceptions.secret_not_found';
+        return 'secret.exceptions.SR0017.secret_not_found';
     }
 
     public function translationParameters(): array

@@ -33,21 +33,10 @@ final readonly class ListZonesCommand
         ?string $type = null,
         #[Option(name: 'parent')]
         ?string $parent = null,
-        #[Option(name: 'page')]
-        int $page = 1,
-        #[Option(name: 'items-per-page')]
-        int $itemsPerPage = 25,
     ): int {
         try {
-            $query = new GetZonesCollection(
-                type: null !== $type ? ZoneType::from($type) : null,
-                parentZoneId: null !== $parent ? new ZoneId($parent) : null,
-                page: $page,
-                itemsPerPage: $itemsPerPage,
-            );
-
-            /** @var PaginatorInterface $zones */
-            $zones = $this->queryBus->handle($query);
+            /** @var array $zones */
+            $zones = $this->queryBus->handle(new GetZonesCollection());
 
             if (empty($zones)) {
                 $io->info('No zones found.');
@@ -61,10 +50,9 @@ final readonly class ListZonesCommand
                     $zone->id->toString(),
                     $zone->zoneName->value,
                     $zone->type->value,
-                    $zone->path->value,
-                    $zone->currentTemperature ? round($zone->currentTemperature, 1) . '°C' : 'N/A',
-                    $zone->currentPowerConsumption ? round($zone->currentPowerConsumption, 0) . 'W' : 'N/A',
-                    $zone->currentHumidity ? round($zone->currentHumidity, 0) . '%' : 'N/A',
+                    $zone->currentTemperature ? round($zone->currentTemperature->value, 1) . '°C' : 'N/A',
+                    $zone->currentPowerConsumption ? round($zone->currentPowerConsumption->value, 0) . 'W' : 'N/A',
+                    $zone->currentHumidity ? round($zone->currentHumidity->value, 0) . '%' : 'N/A',
                     $zone->isOccupied ? '✓' : '✗',
                     $zone->icon ?? '',
                     $zone->color->value ?? '',
@@ -72,7 +60,7 @@ final readonly class ListZonesCommand
             }
 
             $io->table(
-                ['ID', 'Name', 'Type', 'Path', 'Temp', 'Occupied', 'Power', 'Icon', 'Color'],
+                ['ID', 'Name', 'Type', 'Temp', 'Power', 'Humi', 'Occupied', 'Icon', 'Color'],
                 $rows
             );
 

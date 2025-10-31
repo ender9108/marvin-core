@@ -9,18 +9,16 @@ class InvalidVirtualConfig extends DomainException implements TranslatableExcept
 {
     public function __construct(
         string $message,
-        string $code,
         public readonly ?string $key = null,
         public readonly mixed $value = null,
     ) {
-        parent::__construct($message, $code);
+        parent::__construct($message);
     }
 
     public static function invalidValue(string $key, mixed $value): self
     {
         return new self(
             sprintf('Invalid value for key %s: %s', $key, $value),
-            'DE00009',
             $key,
             $value
         );
@@ -29,10 +27,10 @@ class InvalidVirtualConfig extends DomainException implements TranslatableExcept
     public function translationId(): string
     {
         if (null !== $this->key && null !== $this->value) {
-            return 'device.exceptions.invalid_virtual_config_with_key_value';
+            return 'device.exceptions.DE0021.invalid_virtual_config_with_key_value';
         }
 
-        return 'device.exceptions.invalid_virtual_config';
+        return 'device.exceptions.DE0020.invalid_virtual_config';
     }
 
     public function translationParameters(): array

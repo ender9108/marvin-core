@@ -16,13 +16,13 @@ final readonly class UserType implements Stringable
 
     public function __construct(string|int $type)
     {
-        Assert::notEmpty($type);
+        Assert::notEmpty($type, 'security.exceptions.SC0037.user_type_empty');
 
         if (is_string($type)) {
-            Assert::keyExists(self::TYPES, $type);
+            Assert::keyExists(self::TYPES, $type, 'security.exceptions.SC0038.user_type_not_exists');
             $type = self::TYPES[$type];
         } else {
-            Assert::inArray($type, self::TYPES);
+            Assert::inArray($type, self::TYPES, 'security.exceptions.SC0038.user_type_not_exists');
         }
 
         $this->value = $type;

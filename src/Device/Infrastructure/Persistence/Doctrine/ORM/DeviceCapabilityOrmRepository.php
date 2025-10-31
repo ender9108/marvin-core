@@ -20,16 +20,22 @@ class DeviceCapabilityOrmRepository extends ServiceEntityRepository implements D
         parent::__construct($registry, DeviceCapability::class);
     }
 
-    public function save(DeviceCapability $capability): void
+    public function save(DeviceCapability $capability, bool $flush = true): void
     {
         $this->getEntityManager()->persist($capability);
-        $this->getEntityManager()->flush();
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
     }
 
-    public function remove(DeviceCapability $capability): void
+    public function remove(DeviceCapability $capability, bool $flush = true): void
     {
         $this->getEntityManager()->remove($capability);
-        $this->getEntityManager()->flush();
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
     }
 
     public function all(): array

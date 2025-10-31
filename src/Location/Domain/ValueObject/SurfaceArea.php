@@ -15,8 +15,8 @@ final readonly class SurfaceArea implements Stringable
 
     public function __construct(float $value)
     {
-        Assert::greaterThan($value, self::MIN_VALUE, 'LO0015::::surface_area_cannot_be_negative');
-        Assert::lessThan($value, self::MAX_VALUE, 'LO0016::::surface_area_cannot_exceed_100000');
+        Assert::greaterThan($value, self::MIN_VALUE, 'location.exceptions.LO0020.zone_surface_area_cannot_be_negative');
+        Assert::lessThan($value, self::MAX_VALUE, 'location.exceptions.LO0021.zone_surface_area_cannot_exceed_100000');
         $this->value = round($value, 2);
     }
 

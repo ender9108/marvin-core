@@ -39,14 +39,14 @@ final class RequestResetPasswordAlreadyUsed extends DomainException implements T
     public function translationId(): string
     {
         if (null !== $this->token) {
-            return 'security.exceptions.request_reset_password_already_used_with_token';
+            return 'security.exceptions.SC0028.request_reset_password_already_used_with_token';
         }
 
         if (null !== $this->id) {
-            return 'security.exceptions.request_reset_password_already_used_with_id';
+            return 'security.exceptions.SC0027.request_reset_password_already_used_with_id';
         }
 
-        return 'security.exceptions.request_reset_password_already_used';
+        return 'security.exceptions.SC0026.request_reset_password_already_used';
     }
 
     #[Override]

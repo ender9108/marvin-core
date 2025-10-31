@@ -10,12 +10,11 @@ final class CompositeDeviceNotAllowedInGroup extends DomainException implements 
 {
     public function __construct(
         string $message,
-        string $code,
         public readonly ?string $id = null,
         public readonly ?string $label = null,
         public readonly ?string $strategy = null,
     ) {
-        parent::__construct($message, $code);
+        parent::__construct($message);
     }
 
     public static function withDevice(Device $device): self
@@ -27,7 +26,6 @@ final class CompositeDeviceNotAllowedInGroup extends DomainException implements 
                 $device->label->value,
                 $device->compositeStrategy?->value ?? 'unknown',
             ),
-            'DE00011',
             $device->id->toString(),
             $device->label->value,
             $device->compositeStrategy?->value ?? 'unknown',
@@ -36,7 +34,7 @@ final class CompositeDeviceNotAllowedInGroup extends DomainException implements 
 
     public function translationId(): string
     {
-        return 'device.exceptions.composite_device_not_allowed_in_group';
+        return 'device.exceptions.DE0006.composite_device_not_allowed_in_group';
     }
 
     public function translationParameters(): array

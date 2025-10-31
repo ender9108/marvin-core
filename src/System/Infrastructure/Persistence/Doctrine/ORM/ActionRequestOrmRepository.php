@@ -32,6 +32,7 @@ final class ActionRequestOrmRepository extends ServiceEntityRepository implement
     public function save(ActionRequest $model, bool $flush = true): void
     {
         $this->getEntityManager()->persist($model);
+
         if ($flush) {
             $this->getEntityManager()->flush();
         }
@@ -41,6 +42,7 @@ final class ActionRequestOrmRepository extends ServiceEntityRepository implement
     public function remove(ActionRequest $model, bool $flush = true): void
     {
         $this->getEntityManager()->remove($model);
+
         if ($flush) {
             $this->getEntityManager()->flush();
         }

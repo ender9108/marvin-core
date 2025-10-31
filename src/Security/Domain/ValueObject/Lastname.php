@@ -14,8 +14,8 @@ final readonly class Lastname implements Stringable
 
     public function __construct(string $lastname)
     {
-        Assert::notEmpty($lastname);
-        Assert::lengthBetween($lastname, self::MIN, self::MAX);
+        Assert::notEmpty($lastname, 'security.exceptions.SC0031.lastname_does_not_empty');
+        Assert::lengthBetween($lastname, self::MIN, self::MAX, 'security.exceptions.SC0033.lastname_length_between');
 
         $this->value = $lastname;
     }

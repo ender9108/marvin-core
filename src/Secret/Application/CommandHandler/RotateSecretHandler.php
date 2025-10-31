@@ -5,6 +5,7 @@ namespace Marvin\Secret\Application\CommandHandler;
 use Marvin\Secret\Application\Command\RotateSecret;
 use Marvin\Secret\Application\Service\PasswordGeneratorInterface;
 use Marvin\Secret\Domain\Exception\AutoGenerateError;
+use Marvin\Secret\Domain\Exception\SecretNotFound;
 use Marvin\Secret\Domain\Repository\SecretRepositoryInterface;
 use Marvin\Secret\Domain\Service\EncryptionServiceInterface;
 use Marvin\Secret\Domain\ValueObject\SecretValue;
@@ -25,6 +26,10 @@ final readonly class RotateSecretHandler
     public function __invoke(RotateSecret $command): void
     {
         $secret = $this->secretRepository->byKey($command->key);
+
+        if (null === $secret) {
+            throw SecretNotFound::withKey($command->key);
+        }
 
         // Si external et pas de nouvelle valeur → erreur
         if ($secret->rotationPolicy->getManagement()->isExternal() && $command->newValue === null) {

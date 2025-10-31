@@ -11,7 +11,7 @@ final class LastUserAdmin extends DomainException implements TranslatableExcepti
     #[Override]
     public function translationId(): string
     {
-        return 'security.exceptions.last_user_type';
+        return 'security.exceptions.SC0017.last_user_type';
     }
 
     #[Override]

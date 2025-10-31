@@ -2,9 +2,11 @@
 
 namespace Marvin\Location\Application\CommandHandler\Zone;
 
+use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use Marvin\Location\Application\Command\Zone\CreateZone;
 use Marvin\Location\Domain\Exception\InvalidZoneHierarchy;
 use Marvin\Location\Domain\Exception\ZoneAlreadyExists;
+use Marvin\Location\Domain\Exception\ZoneParentNotFound;
 use Marvin\Location\Domain\Model\Zone;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
 use Marvin\Shared\Domain\Service\SluggerInterface;
@@ -23,14 +25,18 @@ final readonly class CreateZoneHandler
 
     public function __invoke(CreateZone $command): string
     {
-        if ($this->zoneRepository->bySlug($command->zoneName->value) !== null) {
+        if ($this->zoneRepository->bySlug($this->slugger->slugify($command->zoneName->value)) !== null) {
             throw ZoneAlreadyExists::withLabel($command->zoneName);
         }
 
         $parentZone = null;
 
         if ($command->parentZoneId !== null) {
-            $parentZone = $this->zoneRepository->byId($command->parentZoneId);
+            try {
+                $parentZone = $this->zoneRepository->byId($command->parentZoneId);
+            } catch (DomainException $de) {
+                throw ZoneParentNotFound::withId($command->parentZoneId);
+            }
 
             if (!$parentZone->type->canHaveChildren()) {
                 throw InvalidZoneHierarchy::cannotHaveChildren(

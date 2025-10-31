@@ -69,6 +69,8 @@ final readonly class GetSecretCommand
                     ]
                 );
             }
+
+            return Command::SUCCESS;
         } catch (Exception $e) {
             $io->error($this->exceptionMessageManager->cliResponseFormat($e));
             return Command::FAILURE;

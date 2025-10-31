@@ -5,6 +5,6 @@
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
 >
     <embeddable name="Marvin\Location\Domain\ValueObject\Temperature">
-        <field name="value" type="decimal" precision="5" scale="2" nullable="true" />
+        <field name="value" type="decimal" nullable="true" precision="5" scale="2" />
     </embeddable>
 </doctrine-mapping>

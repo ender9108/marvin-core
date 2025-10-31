@@ -4076,12 +4076,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ai-platform.git",
-                "reference": "a1df0fd69a004587905aedcd14d1b7259112125d"
+                "reference": "2849d048a5b10cd911c6fdf3d3f59d27095a5886"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ai-platform/zipball/a1df0fd69a004587905aedcd14d1b7259112125d",
-                "reference": "a1df0fd69a004587905aedcd14d1b7259112125d",
+                "url": "https://api.github.com/repos/symfony/ai-platform/zipball/2849d048a5b10cd911c6fdf3d3f59d27095a5886",
+                "reference": "2849d048a5b10cd911c6fdf3d3f59d27095a5886",
                 "shasum": ""
             },
             "require": {
@@ -4191,7 +4191,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-10-27T10:36:01+00:00"
+            "time": "2025-10-30T13:26:51+00:00"
         },
         {
             "name": "symfony/ai-store",
@@ -10045,16 +10045,16 @@
         },
         {
             "name": "twig/extra-bundle",
-            "version": "v3.21.0",
+            "version": "v3.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/twig-extra-bundle.git",
-                "reference": "62d1cf47a1aa009cbd07b21045b97d3d5cb79896"
+                "reference": "6d253f0fe28a83a045497c8fb3ea9bfe84e82cf4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/twig-extra-bundle/zipball/62d1cf47a1aa009cbd07b21045b97d3d5cb79896",
-                "reference": "62d1cf47a1aa009cbd07b21045b97d3d5cb79896",
+                "url": "https://api.github.com/repos/twigphp/twig-extra-bundle/zipball/6d253f0fe28a83a045497c8fb3ea9bfe84e82cf4",
+                "reference": "6d253f0fe28a83a045497c8fb3ea9bfe84e82cf4",
                 "shasum": ""
             },
             "require": {
@@ -10064,7 +10064,7 @@
                 "twig/twig": "^3.2|^4.0"
             },
             "require-dev": {
-                "league/commonmark": "^1.0|^2.0",
+                "league/commonmark": "^2.7",
                 "symfony/phpunit-bridge": "^6.4|^7.0",
                 "twig/cache-extra": "^3.0",
                 "twig/cssinliner-extra": "^3.0",
@@ -10103,7 +10103,7 @@
                 "twig"
             ],
             "support": {
-                "source": "https://github.com/twigphp/twig-extra-bundle/tree/v3.21.0"
+                "source": "https://github.com/twigphp/twig-extra-bundle/tree/v3.22.0"
             },
             "funding": [
                 {
@@ -10115,20 +10115,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-02-19T14:29:33+00:00"
+            "time": "2025-09-15T05:57:37+00:00"
         },
         {
             "name": "twig/twig",
-            "version": "v3.21.1",
+            "version": "v3.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "285123877d4dd97dd7c11842ac5fb7e86e60d81d"
+                "reference": "4509984193026de413baf4ba80f68590a7f2c51d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/285123877d4dd97dd7c11842ac5fb7e86e60d81d",
-                "reference": "285123877d4dd97dd7c11842ac5fb7e86e60d81d",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/4509984193026de413baf4ba80f68590a7f2c51d",
+                "reference": "4509984193026de413baf4ba80f68590a7f2c51d",
                 "shasum": ""
             },
             "require": {
@@ -10182,7 +10182,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.21.1"
+                "source": "https://github.com/twigphp/Twig/tree/v3.22.0"
             },
             "funding": [
                 {
@@ -10194,20 +10194,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-05-03T07:21:55+00:00"
+            "time": "2025-10-29T15:56:47+00:00"
         },
         {
             "name": "webmozart/assert",
-            "version": "1.12.0",
+            "version": "1.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozarts/assert.git",
-                "reference": "541057574806f942c94662b817a50f63f7345360"
+                "reference": "9be6926d8b485f55b9229203f962b51ed377ba68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozarts/assert/zipball/541057574806f942c94662b817a50f63f7345360",
-                "reference": "541057574806f942c94662b817a50f63f7345360",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/9be6926d8b485f55b9229203f962b51ed377ba68",
+                "reference": "9be6926d8b485f55b9229203f962b51ed377ba68",
                 "shasum": ""
             },
             "require": {
@@ -10250,9 +10250,9 @@
             ],
             "support": {
                 "issues": "https://github.com/webmozarts/assert/issues",
-                "source": "https://github.com/webmozarts/assert/tree/1.12.0"
+                "source": "https://github.com/webmozarts/assert/tree/1.12.1"
             },
-            "time": "2025-10-20T12:43:39+00:00"
+            "time": "2025-10-29T15:56:20+00:00"
         },
         {
             "name": "willdurand/negotiation",
@@ -11769,16 +11769,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.4.1",
+            "version": "12.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "fc5413a2e6d240d2f6d9317bdf7f0a24e73de194"
+                "reference": "a94ea4d26d865875803b23aaf78c3c2c670ea2ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/fc5413a2e6d240d2f6d9317bdf7f0a24e73de194",
-                "reference": "fc5413a2e6d240d2f6d9317bdf7f0a24e73de194",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a94ea4d26d865875803b23aaf78c3c2c670ea2ea",
+                "reference": "a94ea4d26d865875803b23aaf78c3c2c670ea2ea",
                 "shasum": ""
             },
             "require": {
@@ -11846,7 +11846,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.4.1"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.4.2"
             },
             "funding": [
                 {
@@ -11870,20 +11870,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-10-09T14:08:29+00:00"
+            "time": "2025-10-30T08:41:39+00:00"
         },
         {
             "name": "rector/rector",
-            "version": "2.2.6",
+            "version": "2.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "5c5bbc956b9a056a26cb593379253104b7ed9c2d"
+                "reference": "022038537838bc8a4e526af86c2d6e38eaeff7ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/5c5bbc956b9a056a26cb593379253104b7ed9c2d",
-                "reference": "5c5bbc956b9a056a26cb593379253104b7ed9c2d",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/022038537838bc8a4e526af86c2d6e38eaeff7ef",
+                "reference": "022038537838bc8a4e526af86c2d6e38eaeff7ef",
                 "shasum": ""
             },
             "require": {
@@ -11922,7 +11922,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.2.6"
+                "source": "https://github.com/rectorphp/rector/tree/2.2.7"
             },
             "funding": [
                 {
@@ -11930,7 +11930,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-27T11:35:56+00:00"
+            "time": "2025-10-29T15:46:12+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -13437,16 +13437,16 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "12.6.1",
+            "version": "12.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/easy-coding-standard/easy-coding-standard.git",
-                "reference": "572539abbfd46a74c715fed4f63b638230980029"
+                "reference": "7a6798aa424f0ecafb1542b6f5207c5a99704d3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/easy-coding-standard/easy-coding-standard/zipball/572539abbfd46a74c715fed4f63b638230980029",
-                "reference": "572539abbfd46a74c715fed4f63b638230980029",
+                "url": "https://api.github.com/repos/easy-coding-standard/easy-coding-standard/zipball/7a6798aa424f0ecafb1542b6f5207c5a99704d3d",
+                "reference": "7a6798aa424f0ecafb1542b6f5207c5a99704d3d",
                 "shasum": ""
             },
             "require": {
@@ -13482,7 +13482,7 @@
             ],
             "support": {
                 "issues": "https://github.com/easy-coding-standard/easy-coding-standard/issues",
-                "source": "https://github.com/easy-coding-standard/easy-coding-standard/tree/12.6.1"
+                "source": "https://github.com/easy-coding-standard/easy-coding-standard/tree/12.6.2"
             },
             "funding": [
                 {
@@ -13494,7 +13494,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-27T16:34:59+00:00"
+            "time": "2025-10-29T08:51:50+00:00"
         },
         {
             "name": "theseer/tokenizer",

@@ -2,26 +2,28 @@
 
 namespace Marvin\Location\Application\EventHandler;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
+use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
 use EnderLab\DddCqrsBundle\Application\Query\QueryBusInterface;
 use Marvin\Location\Application\Command\Zone\UpdateZoneMetricsFromDevice;
 use Marvin\Location\Application\Query\Zone\GetDeviceZoneId;
 use Marvin\Shared\Domain\Event\Device\DeviceStateChanged;
+use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
 final readonly class UpdateZoneFromDeviceStateHandler
 {
     public function __construct(
-        private SyncCommandBusInterface $syncCommandBus,
+        private CommandBusInterface $commandBus,
         private QueryBusInterface $queryBus,
     ) {
     }
 
     public function __invoke(DeviceStateChanged $event): void
     {
+        $deviceId = DeviceId::fromString($event->deviceId);
         // Récupère la zone du device
-        $zoneId = $this->queryBus->handle(new GetDeviceZoneId($event->deviceId));
+        $zoneId = $this->queryBus->handle(new GetDeviceZoneId($deviceId));
 
         if (!$zoneId) {
             // Device pas assigné à une zone
@@ -40,13 +42,12 @@ final readonly class UpdateZoneFromDeviceStateHandler
         }
 
         // Dispatch la commande de mise à jour
-        $this->syncCommandBus->handle(new UpdateZoneMetricsFromDevice(
-            zoneId: $zoneId,
-            deviceId: $event->deviceId,
+        $this->commandBus->dispatch(new UpdateZoneMetricsFromDevice(
+            deviceId: $deviceId,
             temperature: $temperature,
             humidity: $humidity,
-            isOccupied: $occupancy,
             powerWatts: $power,
+            motionDetected: $occupancy,
         ));
     }
 }

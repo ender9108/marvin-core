@@ -600,8 +600,8 @@ Utilise le bundle `lexik/jwt-authentication-bundle` pour l'authentification JWT.
 
 ```php
 interface UserRepositoryInterface {
-    public function save(User $user): void;
-    public function byId(UserId $id): ?User;
+    public function save(User $user, bool $flush = true): void;
+    public function byId(UserId $id, bool $flush = true): ?User;
     public function byEmail(Email $email): ?User;
     public function byIdentifier(string $identifier): ?User;
     // ...

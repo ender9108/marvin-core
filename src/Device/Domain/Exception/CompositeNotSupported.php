@@ -9,18 +9,16 @@ final class CompositeNotSupported extends DomainException implements Translatabl
 {
     public function __construct(
         string $message,
-        string $code,
         private readonly ?string $protocolType = null,
         private readonly ?string $messageType = null,
     ) {
-        parent::__construct($message, $code);
+        parent::__construct($message);
     }
 
     public static function nativeOnlyButNotSupported(string $protocolType): self
     {
         return new self(
             sprintf('Strategy NATIVE_ONLY requires native support, but protocol %s does not support it.', $protocolType),
-            'DE00002',
             $protocolType
         );
     }
@@ -29,7 +27,6 @@ final class CompositeNotSupported extends DomainException implements Translatabl
     {
         return new self(
             'Cannot create native group/scene with mixed protocols. Use EMULATED_ONLY strategy.',
-            'DE00003',
             null,
             'mixed_protocols'
         );
@@ -39,7 +36,6 @@ final class CompositeNotSupported extends DomainException implements Translatabl
     {
         return new self(
             'No common protocol found among child devices. Native group/scene not possible.',
-            'DE00004',
             null,
             'no_common_protocol'
         );
@@ -48,24 +44,25 @@ final class CompositeNotSupported extends DomainException implements Translatabl
     public function translationId(): string
     {
         if (null !== $this->protocolType) {
-            return 'device.exceptions.composite_not_supported_with_message_type';
+            return 'device.exceptions.DE0014.composite_not_supported_with_message_type';
         }
 
         if ($this->messageType === 'mixed_protocols') {
-            return 'device.exceptions.composite_not_supported_mixed_protocols';
+            return 'device.exceptions.DE0015.composite_not_supported_mixed_protocols';
         }
 
         if ($this->messageType === 'no_common_protocol') {
-            return 'device.exceptions.composite_not_supported_no_common_protocol';
+            return 'device.exceptions.DE0016.composite_not_supported_no_common_protocol';
         }
 
-        return 'device.exceptions.composite_not_supported';
+        return 'device.exceptions.DE0017.composite_not_supported';
     }
 
     public function translationParameters(): array
     {
         return [
-            '%protocol_type%' => $this->protocolType
+            '%protocol_type%' => $this->protocolType,
+            '%message_type%' => $this->messageType,
         ];
     }
 

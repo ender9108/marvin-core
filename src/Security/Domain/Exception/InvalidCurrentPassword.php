@@ -7,15 +7,13 @@ use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
 
 class InvalidCurrentPassword extends DomainException implements TranslatableExceptionInterface
 {
-    public function __construct(string $message)
-    {
+    public function __construct(string $message) {
         parent::__construct($message);
-        $this->internalCode = 'SY0001';
     }
 
     public function translationId(): string
     {
-        return 'security.exceptions.invalid_current_password';
+        return 'security.exceptions.SC0012.invalid_current_password';
     }
 
     /** @return array<string, string> */

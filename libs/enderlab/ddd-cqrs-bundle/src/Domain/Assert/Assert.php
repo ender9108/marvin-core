@@ -1562,7 +1562,7 @@ class Assert
      *
      * @throws InvalidArgumentException
      */
-    public static function lengthBetween($value, $min, $max, $message = '')
+    public static function lengthBetween($value, $min, $max, $message = ''): void
     {
         $length = static::strlen($value);
 

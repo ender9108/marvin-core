@@ -16,18 +16,8 @@ final readonly class GetZonesCollectionHandler implements QueryHandlerInterface
     ) {
     }
 
-    public function __invoke(GetZonesCollection $query): PaginatorInterface
+    public function __invoke(GetZonesCollection $query): array
     {
-        $filters = [];
-
-        if ($query->type !== null) {
-            $filters['type'] = $query->type;
-        }
-
-        if ($query->parentZoneId !== null) {
-            $filters['parent'] = $query->parentZoneId;
-        }
-
-        return $this->zoneRepository->collection($filters, $query->orderBy, $query->page, $query->itemsPerPage);
+        return $this->zoneRepository->all();
     }
 }

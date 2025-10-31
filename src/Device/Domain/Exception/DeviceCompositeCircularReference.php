@@ -10,12 +10,12 @@ class DeviceCompositeCircularReference extends DomainException implements Transl
     public function __construct(
         string $message,
     ) {
-        parent::__construct($message, 'DE00013');
+        parent::__construct($message);
     }
 
     public function translationId(): string
     {
-        return 'device.exceptions.device_composite_circular_reference';
+        return 'device.exceptions.DE0005.device_composite_circular_reference';
     }
 
     public function translationParameters(): array

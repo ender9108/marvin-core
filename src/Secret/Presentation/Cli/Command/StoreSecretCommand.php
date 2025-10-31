@@ -79,6 +79,16 @@ final readonly class StoreSecretCommand
                 return Command::FAILURE;
             }
 
+            if (SecretScope::exists($scope) === false) {
+                $io->error(sprintf('Invalid scope %s', $scope));
+                return Command::FAILURE;
+            }
+
+            if (SecretCategory::exists($category) === false) {
+                $io->error(sprintf('Invalid category %s', $category));
+                return Command::FAILURE;
+            }
+
             $this->syncCommandBus->handle(
                 new StoreSecret(
                     key: new SecretKey($key),
@@ -100,11 +110,11 @@ final readonly class StoreSecretCommand
             } elseif ($external && $rotateEvery > 0) {
                 $io->note("Expiration warning: after {$rotateEvery} days (manual rotation required)");
             }
+
+            return Command::SUCCESS;
         } catch (Exception $e) {
             $io->error($this->exceptionMessageManager->cliResponseFormat($e));
             return Command::FAILURE;
         }
-
-        return Command::SUCCESS;
     }
 }

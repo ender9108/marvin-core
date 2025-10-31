@@ -25,13 +25,16 @@ final class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRep
         parent::__construct($registry, Zone::class);
     }
 
-    public function save(Zone $zone): void
+    public function save(Zone $zone, bool $flush = true): void
     {
         $this->getEntityManager()->persist($zone);
-        $this->getEntityManager()->flush();
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
     }
 
-    public function remove(Zone $zone): void
+    public function remove(Zone $zone, bool $flush = true): void
     {
         if ($zone->hasChildren()) {
             throw InvalidZoneHierarchy::cannotDeleteZoneWithChildren(
@@ -41,13 +44,17 @@ final class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRep
         }
 
         $this->getEntityManager()->remove($zone);
-        $this->getEntityManager()->flush();
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
     }
 
     public function all(): array
     {
         return $this->createQueryBuilder('z')
-            ->orderBy('z.path.value', 'ASC')
+            ->addOrderBy('z.type', 'ASC')
+            ->addOrderBy('z.zoneName.value', 'ASC')
             ->getQuery()
             ->getResult()
         ;
@@ -133,11 +140,6 @@ final class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRep
         return $this->byParentZoneId(null);
     }
 
-    public function getHierarchy(): array
-    {
-        return $this->all();
-    }
-
     public function countChildren(ZoneId $zoneId): int
     {
         return (int) $this->createQueryBuilder('z')
@@ -151,26 +153,6 @@ final class ZoneOrmRepository extends ServiceEntityRepository implements ZoneRep
     public function hasChildren(ZoneId $zoneId): bool
     {
         return $this->countChildren($zoneId) > 0;
-    }
-
-    public function getDescendants(ZoneId $zoneId): array
-    {
-        $zone = $this->find($zoneId->toString());
-        if ($zone === null) {
-            return [];
-        }
-
-        $pathPrefix = $zone->getPath()->toString();
-
-        return $this->createQueryBuilder('z')
-            ->where('z.path.value LIKE :pathPrefix')
-            ->andWhere('z.id != :zoneId')
-            ->setParameter('pathPrefix', $pathPrefix . '/%')
-            ->setParameter('zoneId', $zoneId)
-            ->orderBy('z.path.value', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;
     }
 
     public function collection(array $filters = [], array $orderBy = [], int $page = 0, int $itemsPerPage = 50): PaginatorInterface

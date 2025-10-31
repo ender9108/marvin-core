@@ -15,6 +15,7 @@
         <embedded name="zoneName" class="Marvin\Location\Domain\ValueObject\ZoneName" />
         <field name="slug" length="255" />
         <field name="icon" nullable="true" length="50" />
+        <field name="type" length="16" enum-type="Marvin\Location\Domain\ValueObject\ZoneType" />
 
         <embedded name="currentTemperature" class="Marvin\Location\Domain\ValueObject\Temperature" />
         <embedded name="currentPowerConsumption" class="Marvin\Location\Domain\ValueObject\PowerConsumption" />
@@ -36,9 +37,9 @@
         />
         <many-to-one field="parent" target-entity="Marvin\Location\Domain\Model\Zone" />
 
-        <embedded name="targetTemperature" class="Marvin\Location\Domain\ValueObject\Temperature" />
-        <embedded name="targetPowerConsumption" class="Marvin\Location\Domain\ValueObject\PowerConsumption" />
-        <embedded name="targetHumidity" class="Marvin\Location\Domain\ValueObject\Humidity" />
+        <embedded name="targetTemperature" class="Marvin\Location\Domain\ValueObject\Temperature" nullable="true" />
+        <embedded name="targetPowerConsumption" class="Marvin\Location\Domain\ValueObject\PowerConsumption" nullable="true" />
+        <embedded name="targetHumidity" class="Marvin\Location\Domain\ValueObject\Humidity" nullable="true" />
 
         <embedded name="surfaceArea" class="Marvin\Location\Domain\ValueObject\SurfaceArea" />
         <field name="orientation" length="32" nullable="true" enum-type="Marvin\Location\Domain\ValueObject\Orientation" />

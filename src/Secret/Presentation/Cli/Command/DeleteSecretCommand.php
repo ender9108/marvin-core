@@ -14,6 +14,7 @@ use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
@@ -50,7 +51,7 @@ final class DeleteSecretCommand extends Command
             $key = $input->getArgument('key');
 
             $helper = new QuestionHelper();
-            $question = new ConfirmationQuestion(
+            $question = new Question(
                 sprintf(
                     'Are you sure you want to delete secret %s? This cannot be undone. [y/N] ',
                     $key
@@ -66,6 +67,8 @@ final class DeleteSecretCommand extends Command
 
             $this->syncCommandBus->handle(new DeleteSecret(new SecretKey($key)));
             $io->success("✅ Secret '{$key}' deleted successfully!");
+
+            return Command::SUCCESS;
         } catch (Exception $e) {
             $io->error($this->exceptionMessageManager->cliResponseFormat($e));
             return Command::FAILURE;

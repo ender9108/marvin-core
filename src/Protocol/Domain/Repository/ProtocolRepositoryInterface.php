@@ -7,9 +7,9 @@ use Marvin\Shared\Domain\ValueObject\Identity\ProtocolId;
 
 interface ProtocolRepositoryInterface
 {
-    public function save(Protocol $protocol): void;
+    public function save(Protocol $protocol, bool $flush = true): void;
 
-    public function remove(Protocol $protocol): void;
+    public function remove(Protocol $protocol, bool $flush = true): void;
 
     public function byId(ProtocolId $id): Protocol;
 }

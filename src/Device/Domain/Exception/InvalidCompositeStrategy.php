@@ -9,28 +9,28 @@ final class InvalidCompositeStrategy extends DomainException implements Translat
 {
     public function __construct(
         string $message,
-        string $code,
         private readonly ?string $deviceId = null,
         private readonly ?string $strategy = null,
     ) {
-        parent::__construct($message, $code);
+        parent::__construct($message);
     }
 
     public static function forDevice(string $deviceId, string $strategy): self
     {
         return new self(
             sprintf('Invalid composite strategy %s for device %s', $strategy, $deviceId),
-            'DE00008',
+            $deviceId,
+            $strategy,
         );
     }
 
     public function translationId(): string
     {
         if (null !== $this->deviceId && null !== $this->strategy) {
-            return 'device.exceptions.invalid_composite_strategy_with_device_id_and_strategy';
+            return 'device.exceptions.DE0018.invalid_composite_strategy_with_device_id_and_strategy';
         }
 
-        return 'device.exceptions.invalid_composite_strategy';
+        return 'device.exceptions.DE0019.invalid_composite_strategy';
     }
 
     public function translationParameters(): array

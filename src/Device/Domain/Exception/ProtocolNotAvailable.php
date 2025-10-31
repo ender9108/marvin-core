@@ -10,18 +10,16 @@ class ProtocolNotAvailable extends DomainException implements TranslatableExcept
 {
     public function __construct(
         string $message,
-        string $code,
         public readonly ?string $protocolId = null,
         public readonly ?bool $isDisabled = null
     ) {
-        parent::__construct($message, $code);
+        parent::__construct($message);
     }
 
     public static function withId(ProtocolId $protocolId): self
     {
         return new self(
             sprintf('The protocol %d is not available', $protocolId->toString()),
-            'DE00006',
             $protocolId->toString(),
         );
     }
@@ -30,7 +28,6 @@ class ProtocolNotAvailable extends DomainException implements TranslatableExcept
     {
         return new self(
             sprintf('The protocol %d is not enabled', $protocolId->toString()),
-            'DE00007',
             $protocolId->toString(),
             true
         );
@@ -39,14 +36,14 @@ class ProtocolNotAvailable extends DomainException implements TranslatableExcept
     public function translationId(): string
     {
         if (null !== $this->protocolId && null === $this->isDisabled) {
-            return 'device.exceptions.protocol_not_available_with_id';
+            return 'device.exceptions.DE0012.protocol_not_available_with_id';
         }
 
         if (null !== $this->protocolId && null !== $this->isDisabled) {
-            return 'device.exceptions.protocol_is_disabled';
+            return 'device.exceptions.DE0013.protocol_is_disabled';
         }
 
-        return 'device.exceptions.protocol_not_available';
+        return 'device.exceptions.DE0011.protocol_not_available';
     }
 
     public function translationParameters(): array

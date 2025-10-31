@@ -10,17 +10,15 @@ class DeviceNotFound extends DomainException implements TranslatableExceptionInt
 {
     public function __construct(
         string $message,
-        string $code,
         public readonly ?string $id = null,
     ) {
-        parent::__construct($message, $code);
+        parent::__construct($message);
     }
 
     public static function withId(DeviceId $id): self
     {
         return new self(
             sprintf('The device %d is not found', $id->toString()),
-            'DE00005',
             $id->toString(),
         );
     }
@@ -28,10 +26,10 @@ class DeviceNotFound extends DomainException implements TranslatableExceptionInt
     public function translationId(): string
     {
         if (null !== $this->id) {
-            return 'device.exceptions.device_not_found_with_id';
+            return 'device.exceptions.DE0002.device_not_found_with_id';
         }
 
-        return 'device.exceptions.device_not_found';
+        return 'device.exceptions.DE0001.device_not_found';
     }
 
     public function translationParameters(): array

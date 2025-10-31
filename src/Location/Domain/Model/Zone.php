@@ -33,29 +33,29 @@ class Zone extends AggregateRoot
     public private(set) ?string $slug = null;
 
     /* *************** Metrics *************** */
-    public private(set) ?Temperature $currentTemperature = null;
-    public private(set) ?PowerConsumption $currentPowerConsumption = null;
-    public private(set) ?Humidity $currentHumidity = null;
-    public private(set) bool $isOccupied = false;
-    public private(set) int $noMotionCounter = 0;
-    public private(set) int $activeSensorsCount = 0;
-    public private(set) ?DateTimeInterface $lastMetricsUpdate = null;
+    private(set) ?Temperature $currentTemperature = null;
+    private(set) ?PowerConsumption $currentPowerConsumption = null;
+    private(set) ?Humidity $currentHumidity = null;
+    private(set) bool $isOccupied = false;
+    private(set) int $noMotionCounter = 0;
+    private(set) int $activeSensorsCount = 0;
+    private(set) ?DateTimeInterface $lastMetricsUpdate = null;
 
     /* *************** Devices *************** */
-    public private(set) Collection $deviceIds;
+    private(set) array $deviceIds = [];
     /** @var array<string, float> [deviceId => temperature] */
-    public private(set) array $deviceTemperatures = [];
+    private(set) array $deviceTemperatures = [];
     /** @va(set)r array<string, float> [deviceId => humidity] */
-    public private(set) array $deviceHumidities = [];
+    private(set) array $deviceHumidities = [];
     /** @va(set)r array<string, float> [deviceId => power] */
-    public private(set) array $devicePowerConsumptions = [];
+    private(set) array $devicePowerConsumptions = [];
 
-    public private(set) Collection $childrens;
-    public private(set) ?Zone $parent = null;
+    private(set) Collection $childrens;
+    private(set) ?Zone $parent = null;
 
     public function __construct(
         private(set) ZoneName $zoneName,
-        public readonly ZoneType $type,
+        private(set) ZoneType $type,
         private(set) ?Temperature $targetTemperature = null,
         private(set) ?PowerConsumption $targetPowerConsumption = null,
         private(set) ?Humidity $targetHumidity = null,
@@ -66,10 +66,9 @@ class Zone extends AggregateRoot
         public ?Metadata $metadata = null,
         public ?DateTimeInterface $updatedAt = null,
         public readonly DateTimeInterface $createdAt = new DateTimeImmutable(),
-        private(set) ?ZoneId $id = new ZoneId(),
+        private(set) ZoneId $id = new ZoneId(),
     ) {
         $this->childrens = new ArrayCollection();
-        $this->deviceIds = new ArrayCollection();
 
         $this->recordEvent(new ZoneCreated(
             $this->id->toString(),
@@ -93,31 +92,29 @@ class Zone extends AggregateRoot
 
     public function addDevice(DeviceId $deviceId): void
     {
-        $deviceIdString = $deviceId->toString();
-        if (!$this->deviceIds->contains($deviceIdString)) {
-            $this->deviceIds->add($deviceIdString);
+        if (!in_array($deviceId->toString(), $this->deviceIds, true)) {
+            $this->deviceIds[] = $deviceId->toString();
+            $this->recalculateAggregatedMetrics();
         }
     }
 
     public function removeDevice(DeviceId $deviceId): void
     {
         $deviceIdString = $deviceId->toString();
-        if ($this->deviceIds->contains($deviceIdString)) {
-            $this->deviceIds->removeElement($deviceIdString);
 
-            // Nettoyer les métriques de ce device
+        if (($key = array_search($deviceIdString, $this->deviceIds)) !== false) {
+            unset($this->deviceIds[$key]);
             unset($this->deviceTemperatures[$deviceIdString]);
             unset($this->deviceHumidities[$deviceIdString]);
             unset($this->devicePowerConsumptions[$deviceIdString]);
 
-            // Recalculer les moyennes
             $this->recalculateAggregatedMetrics();
         }
     }
 
     public function hasDevice(DeviceId $deviceId): bool
     {
-        return $this->deviceIds->contains($deviceId->toString());
+        return in_array($deviceId->toString(), $this->deviceIds, true);
     }
 
 
@@ -391,7 +388,8 @@ class Zone extends AggregateRoot
             orientation: $this->orientation?->value,
             targetTemperature: $this->targetTemperature?->value,
             targetPowerConsumption: $this->targetPowerConsumption?->value,
-            targetHumidity: $this->targetHumidity?->value
+            targetHumidity: $this->targetHumidity?->value,
+            metadata: $this->metadata?->toArray(),
         ));
 
         return $this;

@@ -44,11 +44,11 @@ final readonly class ExceptionMessageManager
             $exception instanceof DomainException
         ) {
             $parts = explode('.', $exception->translationId());
-            $codeName = '#'.end($parts).'-'.$exception->getInternalCode();
+            $codeName = '#'.$exception->getInternalCode().'_'.end($parts);
 
             $body = [
                 'type' => self::ERROR_LIST_URL.$codeName,
-                'title' => $codeName,
+                'title' => '#'.end($parts),
                 'detail' => $message,
             ];
         } else {
@@ -81,6 +81,6 @@ final readonly class ExceptionMessageManager
 
     private function isDebugMode(): bool
     {
-        return $this->parameters->get('kernel.debug');
+        return false; //$this->parameters->get('kernel.debug');
     }
 }

@@ -19,11 +19,11 @@ final readonly class UserStatus implements Stringable
     public function __construct(string|int $status)
     {
         if (is_string($status)) {
-            Assert::notEmpty($status);
-            Assert::keyExists(self::STATUSES, $status);
+            Assert::notEmpty($status, 'security.exceptions.SC0039.user_status_empty');
+            Assert::keyExists(self::STATUSES, $status, 'security.exceptions.SC0040.user_status_not_exists');
             $status = self::STATUSES[$status];
         } else {
-            Assert::inArray($status, self::STATUSES);
+            Assert::inArray($status, self::STATUSES, 'security.exceptions.SC0040.user_status_not_exists');
         }
 
         $this->value = $status;

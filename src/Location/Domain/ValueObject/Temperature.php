@@ -8,10 +8,12 @@ use Stringable;
 final readonly class Temperature implements Stringable
 {
     private function __construct(
-        public float $value,
+        public ?float $value,
     ) {
-        Assert::greaterThanEq($value, -50.0, 'LO0010::::zone_temperature_cannot_be_below');
-        Assert::lessThanEq($value, 100.0, 'LO0011::::zone_temperature_cannot_be_exceed');
+        if (null !== $this->value) {
+            Assert::greaterThanEq($this->value, -50.0, 'location.exception.LO0015.zone_temperature_cannot_be_below');
+            Assert::lessThanEq($this->value, 100.0, 'location.exceptions.LO0016.zone_temperature_cannot_be_exceed');
+        }
     }
 
     public static function fromCelsius(float $celsius): self

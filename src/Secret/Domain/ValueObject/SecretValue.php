@@ -13,7 +13,7 @@ final readonly class SecretValue implements Stringable
     public function __construct(
         string $encryptedValue
     ) {
-        Assert::notEmpty($encryptedValue);
+        Assert::notEmpty($encryptedValue, 'secret.exceptions.SR0018.secret_value_does_not_empty');
         $this->value = $encryptedValue;
     }
 
@@ -21,14 +21,14 @@ final readonly class SecretValue implements Stringable
         string $plainText,
         EncryptionServiceInterface $encryption
     ): self {
-        Assert::notEmpty($plainText);
+        Assert::notEmpty($plainText, 'secret.exceptions.SR0018.secret_value_does_not_empty');
         $encrypted = $encryption->encrypt($plainText);
         return new self($encrypted);
     }
 
     public static function fromEncrypted(string $encryptedValue): self
     {
-        Assert::notEmpty($encryptedValue);
+        Assert::notEmpty($encryptedValue, 'secret.exceptions.SR0018.secret_value_does_not_empty');
 
         return new self($encryptedValue);
     }

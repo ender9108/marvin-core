@@ -11,9 +11,9 @@ use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 
 interface DeviceRepositoryInterface
 {
-    public function save(Device $model): void;
+    public function save(Device $model, bool $flush = true): void;
 
-    public function remove(Device $model): void;
+    public function remove(Device $model, bool $flush = true): void;
 
     public function byId(DeviceId $id): ?Device;
 

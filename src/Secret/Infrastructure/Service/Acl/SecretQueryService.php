@@ -2,6 +2,7 @@
 
 namespace Marvin\Secret\Infrastructure\Service\Acl;
 
+use Marvin\Secret\Domain\Model\Secret;
 use RuntimeException;
 use Exception;
 use Marvin\Secret\Domain\Exception\SecretNotFound;
@@ -87,9 +88,10 @@ final readonly class SecretQueryService implements SecretQueryServiceInterface
         $secrets = $this->secretRepository->byCategory($categoryEnum);
 
         $values = [];
+        /** @var Secret $secret */
         foreach ($secrets as $secret) {
             if (!$secret->isExpired()) {
-                $values[$secret->getKey()->toString()] = $secret->getValue()->decrypt($this->encryption);
+                $values[$secret->key->value] = $secret->value->decrypt($this->encryption);
             }
         }
 

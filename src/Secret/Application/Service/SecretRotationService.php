@@ -28,17 +28,18 @@ final readonly class SecretRotationService
         $secrets = $this->secretRepository->getNeedingRotation();
         $rotated = [];
 
+        /** @var Secret $secret */
         foreach ($secrets as $secret) {
             try {
                 $this->rotateSecret($secret);
-                $rotated[] = $secret->getKey()->toString();
+                $rotated[] = $secret->key->value;
 
                 $this->logger->info('Secret rotated successfully', [
-                    'secret_key' => $secret->getKey()->toString(),
+                    'secret_key' => $secret->key->value,
                 ]);
             } catch (Exception $e) {
                 $this->logger->error('Failed to rotate secret', [
-                    'secret_key' => $secret->getKey()->toString(),
+                    'secret_key' => $secret->key->value,
                     'error' => $e->getMessage(),
                 ]);
             }

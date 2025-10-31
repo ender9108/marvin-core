@@ -11,17 +11,15 @@ final class ZoneNotFound extends DomainException implements TranslatableExceptio
 {
     public function __construct(
         string $message,
-        string $code,
         public readonly ?string $id = null,
     ) {
-        parent::__construct($message, $code);
+        parent::__construct($message);
     }
 
     public static function withId(ZoneId $id): self
     {
         return new self(
             sprintf('Zone with id %s was not found', $id->toString()),
-            'LO0006',
             $id->toString(),
         );
     }
@@ -30,9 +28,9 @@ final class ZoneNotFound extends DomainException implements TranslatableExceptio
     public function translationId(): string
     {
         if (null !== $this->id) {
-            return 'location.exceptions.zone_not_found_with_id';
+            return 'location.exceptions.LO0002.zone_not_found_with_id';
         }
-        return 'location.exceptions.zone_not_found';
+        return 'location.exceptions.LO0001.zone_not_found';
     }
 
     #[Override]

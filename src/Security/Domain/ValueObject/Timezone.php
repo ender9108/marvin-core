@@ -11,8 +11,8 @@ final readonly class Timezone implements Stringable
 
     public function __construct(string $timezone)
     {
-        Assert::notEmpty($timezone);
-        Assert::isValidTimezone($timezone);
+        Assert::notEmpty($timezone, 'security.exceptions.SC0034.timezone_does_not_empty');
+        Assert::isValidTimezone($timezone, 'security.exceptions.SC0035.timezone_is_invalid');
 
         $this->value = $timezone;
     }

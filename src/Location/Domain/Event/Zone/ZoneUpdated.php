@@ -11,10 +11,10 @@ final readonly class ZoneUpdated extends AbstractDomainEvent
         public string $zoneName,
         public float $surfaceArea,
         public string $orientation,
-        public float $targetTemperature,
-        public float $targetPowerConsumption,
-        public float $targetHumidity,
-        public array $metadata = [],
+        public ?float $targetTemperature = null,
+        public ?float $targetPowerConsumption = null,
+        public ?float $targetHumidity = null,
+        public ?array $metadata = null,
     ) {
         parent::__construct();
     }

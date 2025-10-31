@@ -64,9 +64,9 @@ final readonly class ShowZoneHierarchyCommand
         $prefix = $level > 0 ? '└─ ' : '';
 
         $icon = $node['icon'] ?? '';
-        $temp = $node['currentTemperature'] ? round($node['currentTemperature'], 1) . '°C' : '';
+        $temp = $node['currentTemperature'] ? round($node['currentTemperature']->value, 1) . '°C' : '';
         $occupied = $node['isOccupied'] ? '✓' : '✗';
-        $power = $node['currentPowerConsumption'] ? round($node['currentPowerConsumption'], 0) . 'W' : '';
+        $power = $node['currentPowerConsumption'] ? round($node['currentPowerConsumption']->value, 0) . 'W' : '';
 
         $info = '';
 

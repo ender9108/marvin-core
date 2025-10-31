@@ -29,6 +29,7 @@ final class WorkerOrmRepository extends ServiceEntityRepository implements Worke
     public function save(Worker $model, bool $flush = true): void
     {
         $this->getEntityManager()->persist($model);
+
         if ($flush) {
             $this->getEntityManager()->flush();
         }
@@ -38,6 +39,7 @@ final class WorkerOrmRepository extends ServiceEntityRepository implements Worke
     public function remove(Worker $model, bool $flush = true): void
     {
         $this->getEntityManager()->remove($model);
+
         if ($flush) {
             $this->getEntityManager()->flush();
         }

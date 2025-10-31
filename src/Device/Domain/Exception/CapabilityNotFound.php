@@ -11,11 +11,10 @@ class CapabilityNotFound extends DomainException implements TranslatableExceptio
 {
     public function __construct(
         string $message,
-        string $code,
         public readonly ?string $capability = null,
         public readonly ?string $deviceLabel = null,
     ) {
-        parent::__construct($message, $code);
+        parent::__construct($message);
     }
 
     public static function withCapabilityAndDevice(
@@ -24,7 +23,6 @@ class CapabilityNotFound extends DomainException implements TranslatableExceptio
     ): self {
         return new self(
             sprintf('Capability %s not found on device %s', $capability->value, $deviceLabel->value),
-            'DE00013',
             $capability->value,
             $deviceLabel->value,
         );
@@ -33,10 +31,10 @@ class CapabilityNotFound extends DomainException implements TranslatableExceptio
     public function translationId(): string
     {
         if (null !== $this->capability && null !== $this->deviceLabel) {
-            return 'device.exceptions.capability_not_found_with_capability_name_and_device_label';
+            return 'device.exceptions.DE0010.capability_not_found_with_capability_name_and_device_label';
         }
 
-        return 'device.exceptions.capability_not_found';
+        return 'device.exceptions.DE0009.capability_not_found';
     }
 
     public function translationParameters(): array

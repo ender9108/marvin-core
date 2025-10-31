@@ -29,9 +29,12 @@ trait Mixin
         null === $value || static::string($value, $message);
     }
 
-    public static function dateGreaterThanNow(DateTimeInterface $date): void
+    public static function dateGreaterThanNow(DateTimeInterface $date, ?string $message = null): void
     {
-        self::greaterThanEq($date->format('Y-m-d'), new DateTimeImmutable()->format('Y-m-d'));
+        self::greaterThanEq(
+            $date->format('Y-m-d'), new DateTimeImmutable()->format('Y-m-d'),
+            $message ?? 'Date must be greater than now'
+        );
     }
 
     /**

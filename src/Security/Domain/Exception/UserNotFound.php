@@ -39,14 +39,14 @@ final class UserNotFound extends DomainException implements TranslatableExceptio
     public function translationId(): string
     {
         if (null !== $this->email) {
-            return 'security.exceptions.user_not_found_with_email';
+            return 'security.exceptions.SC0003.user_not_found_with_email';
         }
 
         if (null !== $this->id) {
-            return 'security.exceptions.user_not_found_with_id';
+            return 'security.exceptions.SC0004.user_not_found_with_id';
         }
 
-        return 'security.exceptions.user_not_found';
+        return 'security.exceptions.SC0002.user_not_found';
     }
 
     #[Override]

@@ -1,34 +1,45 @@
 security:
     exceptions:
-        invalid_user_status: Pour l'action "%action%", le statut passé en paramètre est invalide (%reference%).
-        user_not_found: Utilisateur introuvable.
-        user_not_found_with_email: Utilisateur introuvable avec l'email "%email%".
-        user_not_found_with_id: Utilisateur introuvable avec l'id "%id%".
-        user_status_not_found: Statut introuvable.
-        user_status_not_found_with_email: Statut introuvable avec la référence "%reference%".
-        user_status_not_found_with_id: Statut introuvable avec l'id "%id%".
-        user_type_not_found: Type introuvable.
-        user_type_not_found_with_email: Type introuvable avec la référence "%reference%".
-        user_type_not_found_with_id: Type introuvable avec l'id "%id%".
-        model_not_found: Modèle %model% introuvable.
-        invalid_current_password: Votre mot de passe actuel est incorrect.
-        email_already_used: L'email "%email%" existe déjà.
-        user_locked: Votre compte est bloqué, merci de contacter l'administrateur.
-        user_disabled: Votre compte est désactivé, merci de contacter l'administrateur.
-        user_deleted: Compte supprimer, merci de contacter l'administrateur pour en créer un nouveau.
-        last_user_type: Vous ne pouvez pas supprimer le dernier utilisateur de ce type.
-        role_not_exist: Le rôle "%role%" n'existe pas.
-        invalid_same_password: Vous ne pouvez pas saisir le même mot de passe que le précédent.
-        request_reset_password_not_found: Demande de réinitialisation de mot de passe introuvable.
-        request_reset_password_not_found_with_id: Demande de réinitialisation de mot de passe introuvable avec l'id "%id%".
-        request_reset_password_not_found_with_token: Demande de réinitialisation de mot de passe introuvable avec le token "%token%".
-        request_reset_password_expired: Demande de réinitialisation de mot de passe expirée.
-        request_reset_password_expired_with_id: Demande de réinitialisation de mot de passe expirée avec l'id "%id%".
-        request_reset_password_expired_with_token: Demande de réinitialisation de mot de passe expirée avec le token "%token%".
-        request_reset_password_already_used: Demande de réinitialisation de mot de passe déjà utilisée.
-        request_reset_password_already_used_with_id: Demande de réinitialisation de mot de passe déjà utilisée avec l'id "%id%".
-        request_reset_password_already_used_with_token: Demande de réinitialisation de mot de passe déjà utilisée avec le token "%token%".
-        request_reset_password_already_exists: Vous avez déjà une demande de réinitialisation de mot de passe en cours.
+        SC0001.invalid_user_status: Pour l'action "%action%", le statut passé en paramètre est invalide (%reference%).
+        SC0002.user_not_found: Utilisateur introuvable.
+        SC0003.user_not_found_with_email: Utilisateur introuvable avec l'email "%email%".
+        SC0004.user_not_found_with_id: Utilisateur introuvable avec l'id "%id%".
+        SC0005.user_status_not_found: Statut introuvable.
+        SC0006.user_status_not_found_with_email: Statut introuvable avec la référence "%reference%".
+        SC0007.user_status_not_found_with_id: Statut introuvable avec l'id "%id%".
+        SC0008.user_type_not_found: Type introuvable.
+        SC0009.user_type_not_found_with_email: Type introuvable avec la référence "%reference%".
+        SC0010.user_type_not_found_with_id: Type introuvable avec l'id "%id%".
+        SC0011.model_not_found: Modèle %model% introuvable.
+        SC0012.invalid_current_password: Votre mot de passe actuel est incorrect.
+        SC0013.email_already_used: L'email "%email%" existe déjà.
+        SC0014.user_locked: Votre compte est bloqué, merci de contacter l'administrateur.
+        SC0015.user_disabled: Votre compte est désactivé, merci de contacter l'administrateur.
+        SC0016.user_deleted: Compte supprimer, merci de contacter l'administrateur pour en créer un nouveau.
+        SC0017.last_user_type: Vous ne pouvez pas supprimer le dernier utilisateur de ce type.
+        SC0018.role_not_exist: Le rôle "%role%" n'existe pas.
+        SC0019.invalid_same_password: Vous ne pouvez pas saisir le même mot de passe que le précédent.
+        SC0020.request_reset_password_not_found: Demande de réinitialisation de mot de passe introuvable.
+        SC0021.request_reset_password_not_found_with_id: Demande de réinitialisation de mot de passe introuvable avec l'id "%id%".
+        SC0022.request_reset_password_not_found_with_token: Demande de réinitialisation de mot de passe introuvable avec le token "%token%".
+        SC0023.request_reset_password_expired: Demande de réinitialisation de mot de passe expirée.
+        SC0024.request_reset_password_expired_with_id: Demande de réinitialisation de mot de passe expirée avec l'id "%id%".
+        SC0025.request_reset_password_expired_with_token: Demande de réinitialisation de mot de passe expirée avec le token "%token%".
+        SC0026.request_reset_password_already_used: Demande de réinitialisation de mot de passe déjà utilisée.
+        SC0027.request_reset_password_already_used_with_id: Demande de réinitialisation de mot de passe déjà utilisée avec l'id "%id%".
+        SC0028.request_reset_password_already_used_with_token: Demande de réinitialisation de mot de passe déjà utilisée avec le token "%token%".
+        SC0029.request_reset_password_already_exists: Vous avez déjà une demande de réinitialisation de mot de passe en cours.
+        SC0030.firstname_does_not_empty: Le prénom ne doit pas être vide.
+        SC0031.lastname_does_not_empty: Le nom ne doit pas être vide.
+        SC0032.firstname_length_between: Le prénom doit avoir au moins %min% caractères et %max% caractères
+        SC0033.lastname_length_between: Le nom doit avoir au moins %min% caractères et %max% caractères
+        SC0034.timezone_does_not_empty: Le fuseau horaire ne peut pas être vide.
+        SC0035.timezone_is_invalid: Le fuseau horaire %value% est invalide.
+        SC0036.expires_at_must_be_gt_now: La date d'expiration doit être supérieur à la date du jour. 
+        SC0037.user_type_empty: 'Le type d''utilisateur ne doit pas être vide.'
+        SC0038.user_type_not_exists: 'Le type d''utilisateur n''existe pas.'
+        SC0039.user_status_empty: 'Le statut d''utilisateur ne doit pas être vide.'
+        SC0040.user_status_not_exists: 'Le statut d''utilisateur n''existe pas.'
     email:
         request_change_password:
             subject: Réinitialisation de votre mot de passe

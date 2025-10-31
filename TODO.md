@@ -1,8 +1,8 @@
 ### TODOS
 
 - **Tests**
-  - Test complet contexte Location (65%)
-  - Test complet contexte Secret (45%)
+  - OK - Test complet contexte Location (100%)
+  - OK - Test complet contexte Secret (100%)
   - Test complet contexte Security (80%)
   - Test complet contexte System (80%)
 
@@ -22,12 +22,12 @@
 - Contexte Protocol
 - Contexte Plugin
 - Contexte Automation
-- OK - Contexte Location
-    - PROD - OK
-    - DEV - OK
-- OK - Contexte Security
-    - PROD - OK
-    - DEV - OK
+- OK - Contexte Location (PROD, DEV)
+- OK - Contexte Security (PROD, DEV)
+
+- **Error code**
+- Passer dans tous les contextes pour vérifier que tous les codes d'erreurs sont en places
+- Faire le lexique des codes d'erreurs
 
 ### Roadmap
 

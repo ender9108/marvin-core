@@ -7,9 +7,9 @@ use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 
 interface DeviceCapabilityRepositoryInterface
 {
-    public function save(DeviceCapability $capability): void;
+    public function save(DeviceCapability $capability, bool $flush = true): void;
 
-    public function remove(DeviceCapability $capability): void;
+    public function remove(DeviceCapability $capability, bool $flush = true): void;
 
     public function all(): array;
 

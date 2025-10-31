@@ -8,10 +8,12 @@ use Stringable;
 final readonly class Humidity implements Stringable
 {
     private function __construct(
-        public float $value,
+        public ?float $value,
     ) {
-        Assert::greaterThanEq($value, 0.0, 'LO0012::::zone_humidity_cannot_be_below');
-        Assert::lessThanEq($value, 100.0, 'LO0013::::zone_humidity_cannot_be_exceed');
+        if (null !== $this->value) {
+            Assert::greaterThanEq($value, 0.0, 'location.exceptions.LO0017.zone_humidity_cannot_be_below');
+            Assert::lessThanEq($value, 100.0, 'location.exceptions.LO0018.zone_humidity_cannot_be_exceed');
+        }
     }
 
     public static function fromPercentage(float $percentage): self

@@ -10,7 +10,7 @@ final readonly class VirtualDeviceConfig
 
     private function __construct(array $config)
     {
-        Assert::notEmpty($config);
+        Assert::notEmpty($config, 'device.exceptions.DE0029.config_must_not_be_empty');;
         $this->config = $config;
     }
 

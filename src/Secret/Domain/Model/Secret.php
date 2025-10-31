@@ -86,10 +86,13 @@ class Secret extends AggregateRoot
     public function rotate(SecretValue $newValue): void
     {
         $previousValueHash = hash('sha256', $this->value->getEncrypted());
-
-        // Garder l'ancienne valeur dans metadata pour période de transition
-        $this->metadata['previous_value'] = $this->value->getEncrypted();
-        $this->metadata['previous_value_rotated_at'] = new DateTimeImmutable()->format('c');
+        $metadata = [];
+        $metadata['previous_value'] = $this->value->getEncrypted();
+        $metadata['previous_value_rotated_at'] = new DateTimeImmutable()->format('c');
+        $this->metadata = Metadata::fromArray(array_merge(
+            null === $this->metadata ? [] : $this->metadata->toArray(),
+            $metadata
+        ));
 
         $this->value = $newValue;
         $this->lastRotatedAt = new DateTimeImmutable();

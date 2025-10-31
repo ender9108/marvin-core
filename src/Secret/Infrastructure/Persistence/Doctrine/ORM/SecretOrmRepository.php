@@ -25,16 +25,22 @@ final class SecretOrmRepository extends ServiceEntityRepository implements Secre
         parent::__construct($registry, Secret::class);
     }
 
-    public function save(Secret $secret): void
+    public function save(Secret $secret, bool $flush = true): void
     {
         $this->getEntityManager()->persist($secret);
-        $this->getEntityManager()->flush();
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
     }
 
-    public function remove(Secret $secret): void
+    public function remove(Secret $secret, bool $flush = true): void
     {
         $this->getEntityManager()->remove($secret);
-        $this->getEntityManager()->flush();
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
     }
 
     public function byId(SecretId $id): Secret
@@ -83,16 +89,15 @@ final class SecretOrmRepository extends ServiceEntityRepository implements Secre
         $query = $this->createQueryBuilder('s');
 
         return $query
-            ->join('s.rotationPolicy', 'rp')
-            ->where('rp.autoRotate = :autoRotate')
+            ->where('s.rotationPolicy.autoRotate = :autoRotate')
+            ->setParameter('autoRotate', true)
             ->andWhere('s.lastRotatedAt IS NOT NULL')
             ->andWhere(
                 $query->expr()->lte(
-                    'DATE_ADD(s.lastRotatedAt, rp.rotationIntervalDays, \'DAY\')',
+                    'DATE_ADD(s.lastRotatedAt, s.rotationPolicy.rotationIntervalDays, \'DAY\')',
                     ':now'
                 )
             )
-            ->setParameter('autoRotate', true)
             ->setParameter('now', new DateTimeImmutable())
             ->getQuery()
             ->getResult()

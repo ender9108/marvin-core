@@ -10,12 +10,12 @@ final readonly class PowerConsumption implements Stringable
     private const string UNIT_W = 'W';
     private const string UNIT_KW = 'KW';
 
-    public float $value;
-
-    public function __construct(float $value)
-    {
-        Assert::greaterThan($value, 0, 'LO0014::::power_consumption_cannot_be_negative');
-        $this->value = round($value, 2);
+    public function __construct(
+        public ?float $value
+    ) {
+        if (null !== $this->value) {
+            Assert::greaterThan($value, 0, 'location.exceptions.LO0019.power_consumption_cannot_be_negative');
+        }
     }
 
     public static function fromWatts(float $value): self

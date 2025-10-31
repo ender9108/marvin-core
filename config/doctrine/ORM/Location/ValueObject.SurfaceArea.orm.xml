@@ -5,6 +5,6 @@
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
 >
     <embeddable name="Marvin\Location\Domain\ValueObject\SurfaceArea">
-        <field name="value" type="float" nullable="true" precision="8" scale="2" />
+        <field name="value" type="decimal" nullable="true" precision="8" scale="2" />
     </embeddable>
 </doctrine-mapping>

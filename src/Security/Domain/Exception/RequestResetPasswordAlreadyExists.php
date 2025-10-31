@@ -16,7 +16,7 @@ final class RequestResetPasswordAlreadyExists extends DomainException implements
     #[Override]
     public function translationId(): string
     {
-        return 'security.exceptions.request_reset_password_already_exists';
+        return 'security.exceptions.SC0029.request_reset_password_already_exists';
     }
 
     #[Override]

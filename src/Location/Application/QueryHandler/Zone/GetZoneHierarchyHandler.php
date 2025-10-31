@@ -38,7 +38,6 @@ final readonly class GetZoneHierarchyHandler
             'id' => $zone->id->toString(),
             'name' => $zone->zoneName->value,
             'type' => $zone->type->value,
-            'path' => $zone->path->value,
             'currentTemperature' => $zone->currentTemperature,
             'targetTemperature' => $zone->targetTemperature->value,
             'isOccupied' => $zone->isOccupied,

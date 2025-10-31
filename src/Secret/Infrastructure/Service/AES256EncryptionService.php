@@ -16,7 +16,7 @@ final readonly class AES256EncryptionService implements EncryptionServiceInterfa
         #[Autowire(env: 'SECRET_MASTER_KEY')]
         private string $masterKey,
     ) {
-        if (strlen($this->masterKey) !== 32) {
+        if (strlen($this->masterKey) !== 64) {
             throw EncryptionError::masterKeyLength();
         }
     }

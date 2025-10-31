@@ -63,11 +63,6 @@ final class ZoneFactory extends PersistentProxyObjectFactory
                     ? $attributes['type']
                     : ZoneType::from($attributes['type']);
 
-                $id = $attributes['id'];
-                if (is_string($id)) {
-                    $id = ZoneId::fromString($id);
-                }
-
                 $targetTemperature = $attributes['targetTemperature'];
                 if (is_float($targetTemperature) || is_int($targetTemperature)) {
                     $targetTemperature = Temperature::fromCelsius((float) $targetTemperature);
@@ -106,7 +101,6 @@ final class ZoneFactory extends PersistentProxyObjectFactory
                 $zone = new Zone(
                     zoneName: $zoneName,
                     type: $type,
-                    id: $id,
                     targetTemperature: $targetTemperature,
                     targetPowerConsumption: $targetPowerConsumption,
                     targetHumidity: $targetHumidity,

@@ -4,31 +4,33 @@ namespace Marvin\Location\Domain\Exception;
 
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
+use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
+use Override;
 
-final class ZoneAlreadyExists extends DomainException implements TranslatableExceptionInterface
+final class ZoneParentNotFound extends DomainException implements TranslatableExceptionInterface
 {
     public function __construct(
         string $message,
-        public readonly ?string $zoneName = null,
+        public readonly ?string $id = null,
     ) {
-        parent::__construct($message);
+        parent::__construct($message, );
     }
 
-    public static function withLabel(string $zoneName): self
+    public static function withId(ZoneId $id): self
     {
         return new self(
-            sprintf('Zone with name %s already exists', $zoneName),
-            $zoneName,
+            sprintf('Zone parent with id %s was not found', $id->toString()),
+            $id->toString(),
         );
     }
 
     #[Override]
     public function translationId(): string
     {
-        if (null !== $this->zoneName) {
-            return 'location.exceptions.LO0006.zone_already_exists_with_name';
+        if (null !== $this->id) {
+            return 'location.exceptions.LO0004.zone_parent_not_found_with_id';
         }
-        return 'location.exceptions.LO0005.zone_already_exists';
+        return 'location.exceptions.LO0003.zone_parent_not_found';
     }
 
     #[Override]
@@ -36,7 +38,7 @@ final class ZoneAlreadyExists extends DomainException implements TranslatableExc
     public function translationParameters(): array
     {
         return [
-            '%name%' => $this->zoneName,
+            '%id%' => $this->id,
         ];
     }
 

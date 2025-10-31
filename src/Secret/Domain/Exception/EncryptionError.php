@@ -9,21 +9,19 @@ final class EncryptionError extends DomainException implements TranslatableExcep
 {
     public function __construct(
         string $message,
-        string $code,
         public readonly bool $masterKeyLength = false,
         public readonly bool $ivLength = false,
         public readonly bool $cipherText = false,
         public readonly bool $decryptionFailedBase64Decode = false,
         public readonly bool $decryptionFailedOpenSsl = false,
     ) {
-        parent::__construct($message, $code);
+        parent::__construct($message);
     }
 
     public static function masterKeyLength(): self
     {
         return new self(
-            'The master key length must be 32 characters',
-            'ST0009',
+            'The master key length must be 64 characters',
             true
         );
     }
@@ -32,7 +30,6 @@ final class EncryptionError extends DomainException implements TranslatableExcep
     {
         return new self(
             'Iv length error. Expected 16 bytes, got false',
-            'ST0010',
             false,
             true
         );
@@ -42,7 +39,6 @@ final class EncryptionError extends DomainException implements TranslatableExcep
     {
         return new self(
             'Cipher text error.',
-            'ST0011',
             false,
             false,
             true
@@ -53,7 +49,6 @@ final class EncryptionError extends DomainException implements TranslatableExcep
     {
         return new self(
             'Base 64 decode failed.',
-            'ST0012',
             false,
             false,
             false,
@@ -65,7 +60,6 @@ final class EncryptionError extends DomainException implements TranslatableExcep
     {
         return new self(
             'Open SSL decrypt failed.',
-            'ST0013',
             false,
             false,
             false,
@@ -77,22 +71,22 @@ final class EncryptionError extends DomainException implements TranslatableExcep
     public function translationId(): string
     {
         if (true === $this->masterKeyLength) {
-            return 'secret.exceptions.encryption_error_master_key_length';
+            return 'secret.exceptions.SR0003.encryption_error_master_key_length';
         }
 
         if (true === $this->ivLength) {
-            return 'secret.exceptions.encryption_error_iv_length';
+            return 'secret.exceptions.SR0004.encryption_error_iv_length';
         }
 
         if (true === $this->cipherText) {
-            return 'secret.exceptions.encryption_error_cipher_text';
+            return 'secret.exceptions.SR0005.encryption_error_cipher_text';
         }
 
         if (true === $this->decryptionFailedBase64Decode) {
-            return 'secret.exceptions.encryption_error_decryption_failed_base64_decode';
+            return 'secret.exceptions.SR0006.encryption_error_decryption_failed_base64_decode';
         }
 
-        return 'secret.exceptions.encryption_error';
+        return 'secret.exceptions.SR0007.encryption_error';
     }
 
     public function translationParameters(): array

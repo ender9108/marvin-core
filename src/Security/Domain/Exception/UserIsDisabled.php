@@ -9,7 +9,7 @@ class UserIsDisabled extends DomainException implements TranslatableExceptionInt
 {
     public function translationId(): string
     {
-        return 'security.exceptions.user_disabled';
+        return 'security.exceptions.SC0015.user_disabled';
     }
 
     /** @return array<string, string> */

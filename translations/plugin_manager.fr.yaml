@@ -1,14 +1,14 @@
 plugin_manager:
     exceptions:
-        plugin_name_cannot_be_empty: Le nom du plugin ne doit pas être vide.
-        plugin_name_must_be_at_least_3_characters: Le nom du plugin doit contenir au moins 3 caractères.
-        plugin_name_must_be_at_most_100_characters: Le nom du plugin ne peux pas faire plus de 100 caractères.
-        plugin_version_must_follow_semantic_versioning: 'La version du plugin doit suivre le format (ex: 1.0.0).'
-        plugin_slug_cannot_be_empty: Le slug ne peut pas être vide.
-        plugin_slug_format_error: Le slug du plugin doit contenir uniquement des lettres minuscules, des chiffres et des tirets.
-        plugin_is_already_at_this_version: Le plugin est déjà dans cette version.
-        plugin_update_is_blocked: Le plugin est bloqué pour des raisons de sécurité.
-        plugin_is_already_disabled: Le plugin est déjà désactivé.
-        plugin_only_enabled_plugins_can_be_disabled: Seul les plugins activé peuvent être désactivé.
-        plugin_is_already_enabled: Le plugin est déjà activé.
-        plugin_update_is_blocked_no_enable: Le plugin est bloqué pour des raisons de sécurité. Vous ne pouvez pas l'activer.
+        PM0001.plugin_name_cannot_be_empty: Le nom du plugin ne doit pas être vide.
+        PM0002.plugin_name_must_be_at_least_3_characters: Le nom du plugin doit contenir au moins 3 caractères.
+        PM0003.plugin_name_must_be_at_most_100_characters: Le nom du plugin ne peux pas faire plus de 100 caractères.
+        PM0004.plugin_version_must_follow_semantic_versioning: 'La version du plugin doit suivre le format (ex: 1.0.0).'
+        PM0005.plugin_slug_cannot_be_empty: Le slug ne peut pas être vide.
+        PM0006.plugin_slug_format_error: Le slug du plugin doit contenir uniquement des lettres minuscules, des chiffres et des tirets.
+        PM0007.plugin_is_already_at_this_version: Le plugin est déjà dans cette version.
+        PM0008.plugin_update_is_blocked: Le plugin est bloqué pour des raisons de sécurité.
+        PM0009.plugin_is_already_disabled: Le plugin est déjà désactivé.
+        PM0010.plugin_only_enabled_plugins_can_be_disabled: Seul les plugins activé peuvent être désactivé.
+        PM0011.plugin_is_already_enabled: Le plugin est déjà activé.
+        PM0012.plugin_update_is_blocked_no_enable: Le plugin est bloqué pour des raisons de sécurité. Vous ne pouvez pas l'activer.

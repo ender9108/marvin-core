@@ -1,4 +1,6 @@
 shared:
+    exceptions:
+        SH0001:
     label:
         hello: Bonjour
         good_day: Bonne journée !

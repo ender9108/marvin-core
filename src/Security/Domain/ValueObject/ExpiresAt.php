@@ -12,11 +12,11 @@ final readonly class ExpiresAt implements Stringable
 
     public DateTimeInterface $value;
 
-    public function __construct(DateTimeInterface $createdAt)
+    public function __construct(DateTimeInterface $expiresAt)
     {
-        Assert::dateGreaterThanNow($createdAt);
+        Assert::dateGreaterThanNow($expiresAt, 'security.exception.SC0036.expires_at_must_be_gt_now');
 
-        $this->value = $createdAt;
+        $this->value = $expiresAt;
     }
 
     public function __toString(): string

@@ -8,24 +8,29 @@ use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
 class InvalidUserStatus extends DomainException implements TranslatableExceptionInterface
 {
     public function __construct(
+        string $message,
         private readonly string $action,
         private readonly string $reference
     ) {
-        parent::__construct(sprintf(
-            'For action "%s", invalid user status provided (%s)',
-            $this->action,
-            $this->reference
-        ));
+        parent::__construct($message);
     }
 
     public static function withByActionAndReference(string $action, string $reference): self
     {
-        return new self($action, $reference);
+        return new self(
+            sprintf(
+                'For action "%s", invalid user status provided (%s)',
+                $action,
+                $reference
+            ),
+            $action,
+            $reference
+        );
     }
 
     public function translationId(): string
     {
-        return 'security.exceptions.invalid_user_status';
+        return 'security.exceptions.SC0001.invalid_user_status';
     }
 
     /** @return array<string, string> */

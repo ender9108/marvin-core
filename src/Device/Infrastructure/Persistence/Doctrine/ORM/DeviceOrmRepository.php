@@ -23,16 +23,22 @@ class DeviceOrmRepository extends ServiceEntityRepository implements DeviceRepos
         parent::__construct($registry, Device::class);
     }
 
-    public function save(Device $model): void
+    public function save(Device $model, bool $flush = true): void
     {
         $this->getEntityManager()->persist($model);
-        $this->getEntityManager()->flush();
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
     }
 
-    public function remove(Device $model): void
+    public function remove(Device $model, bool $flush = true): void
     {
         $this->getEntityManager()->remove($model);
-        $this->getEntityManager()->flush();
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
     }
 
     public function byId(DeviceId $id): ?Device

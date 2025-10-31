@@ -11,8 +11,12 @@ final readonly class SecretKey implements Stringable
 
     public function __construct(string $value)
     {
-        Assert::notEmpty($value);
-        Assert::regex($value, '/^[a-zA-Z0-9_.:-]{3,128}$/');
+        Assert::notEmpty($value, 'secret.exceptions.SR0019.secret_key_does_not_empty');
+        Assert::regex(
+            $value,
+            '/^[a-zA-Z0-9_.:-]{3,128}$/',
+            'secret.exceptions.SR0020.secret_key_must_be_valid'
+        );
 
         $this->value = $value;
     }

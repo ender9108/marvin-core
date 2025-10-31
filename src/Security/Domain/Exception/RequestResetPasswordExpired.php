@@ -39,14 +39,14 @@ final class RequestResetPasswordExpired extends DomainException implements Trans
     public function translationId(): string
     {
         if (null !== $this->token) {
-            return 'security.exceptions.request_reset_password_expired_with_token';
+            return 'security.exceptions.SC0025.request_reset_password_expired_with_token';
         }
 
         if (null !== $this->id) {
-            return 'security.exceptions.request_reset_password_expired_with_id';
+            return 'security.exceptions.SC0024.request_reset_password_expired_with_id';
         }
 
-        return 'security.exceptions.request_reset_password_expired';
+        return 'security.exceptions.SC0023.request_reset_password_expired';
     }
 
     #[Override]
