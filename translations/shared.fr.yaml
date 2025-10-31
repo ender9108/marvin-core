@@ -3,7 +3,6 @@ shared:
         SH0001.url_not_empty: L'url ne peut pas être vide
         SH0002.url_is_not_valid: Le format de l'url est invalide
         SH0003.url_parsing_error: L'url n'a pas pu être parsée, format invalide
-        SH0004.url_must_be_start_with_http_or_https: 'L''url doit commencer par http:// ou https://'
         SH0005.url_not_valid_rfc_3986: 'L''URL n''est pas valide selon le standard RFC 3986'
         SH0006.description_does_not_empty: La description ne doit pas être vide
         SH0007.description_length_between: La description doit faire au moins %min% caractères et maximum %max% caractères

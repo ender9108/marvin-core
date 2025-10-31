@@ -40,15 +40,6 @@ final class Url implements Stringable
 
     private function validateUrl(): void
     {
-        $pattern = '/^https?:\/\/.+$/i';
-
-        Assert::regex(
-            $this->value,
-            $pattern,
-            'shared.exceptions.SH0004.url_must_be_start_with_http_or_https'
-        );
-
-        // Validation supplémentaire avec filter_var
         Assert::true(
             filter_var($this->value, FILTER_VALIDATE_URL) !== false,
             'shared.exceptions.SH0005.url_not_valid_rfc_3986'
