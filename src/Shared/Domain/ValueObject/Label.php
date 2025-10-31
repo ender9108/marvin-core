@@ -14,8 +14,8 @@ final readonly class Label implements Stringable
 
     public function __construct(string $label)
     {
-        Assert::notEmpty($label);
-        Assert::lengthBetween($label, self::MIN, self::MAX);
+        Assert::notEmpty($label, 'shared.exceptions.SH0011.label_does_not_empty');
+        Assert::lengthBetween($label, self::MIN, self::MAX, 'shared.exceptions.SH0012.label_length_between');
 
         $this->value = $label;
     }

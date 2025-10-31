@@ -14,8 +14,8 @@ final readonly class Reference implements Stringable
 
     public function __construct(string $reference)
     {
-        Assert::notEmpty($reference);
-        Assert::lengthBetween($reference, self::MIN, self::MAX);
+        Assert::notEmpty($reference, 'shared.exceptions.SH0018.reference_does_not_empty');
+        Assert::lengthBetween($reference, self::MIN, self::MAX, 'shared.exceptions.SH0019.reference_length_between');
 
         $this->value = $reference;
     }

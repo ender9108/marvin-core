@@ -1,6 +1,27 @@
 shared:
     exceptions:
-        SH0001:
+        SH0001.url_not_empty: L'url ne peut pas être vide
+        SH0002.url_is_not_valid: Le format de l'url est invalide
+        SH0003.url_parsing_error: L'url n'a pas pu être parsée, format invalide
+        SH0004.url_must_be_start_with_http_or_https: 'L''url doit commencer par http:// ou https://'
+        SH0005.url_not_valid_rfc_3986: 'L''URL n''est pas valide selon le standard RFC 3986'
+        SH0006.description_does_not_empty: La description ne doit pas être vide
+        SH0007.description_length_between: La description doit faire au moins %min% caractères et maximum %max% caractères
+        SH0008.email_does_not_empty: L'email ne peut pas être vide
+        SH0009.email_is_not_valid: Email invalide
+        SH0010.email_length_between: L'email doit faire au moins %min% caractères et maximum %max% caractères
+        SH0011.label_does_not_empty: Le libellé ne doit pas être vide
+        SH0012.label_length_between: Le libellé doit faire au moins %min% caractères et maximum %max% caractères
+        SH0013.locale_does_not_empty: Le code langue ne doit pas être vide
+        SH0014.locale_length: Le code langue doit faire 2 caractères
+        SH0015.locale_is_not_available: Code langue invalide
+        SH0016.protocol_type_does_not_empty: Le type de protocole ne doit pas être vide
+        SH0017.protocol_type_is_not_available: Type de protocole invalide
+        SH0018.reference_does_not_empty: La référence ne doit pas être vide
+        SH0019.reference_length_between: La référence doit faire au moins %min% caractères et maximum %max% caractères
+        SH0020.theme_does_not_empty: Le thème ne doit pas être vide
+        SH0021.theme_length_between: Le thème doit faire au moins %min% caractères et maximum %max% caractères
+        SH0022.theme_is_not_available: Le thème n'est pas disponible
     label:
         hello: Bonjour
         good_day: Bonne journée !

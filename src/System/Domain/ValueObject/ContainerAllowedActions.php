@@ -11,8 +11,8 @@ final readonly class ContainerAllowedActions
 
     public function __construct(array $value = [])
     {
-        Assert::notEmpty($value);
-        Assert::allInArray($value, ManagerContainerActionReference::values());
+        Assert::notEmpty($value, 'system.exceptions.SY0016.container_actions_does_not_empty');
+        Assert::allInArray($value, ManagerContainerActionReference::values(), 'system.exceptions.SY0017.container_actions_is_not_available');
 
         $this->value = $value;
     }

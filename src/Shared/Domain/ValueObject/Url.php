@@ -17,13 +17,13 @@ final class Url implements Stringable
     public function __construct(
         public readonly string $value
     ) {
-        Assert::notEmpty($this->value, 'L\'URL ne peut pas être vide.');
-        Assert::string($this->value, 'L\'URL doit être une chaîne de caractères.');
+        Assert::notEmpty($this->value, 'shared.exceptions.SH0001.url_not_empty');
+        Assert::true(filter_var($this->value, FILTER_VALIDATE_URL) !== false, 'shared.exceptions.SH0002.url_is_not_valid');
 
         $this->validateUrl();
 
         $parsed = parse_url($this->value);
-        Assert::isArray($parsed, 'L\'URL n\'a pas pu être parsée correctement.');
+        Assert::isArray($parsed, 'shared.exceptions.SH0003.url_parsing_error');
 
         $this->scheme = $parsed['scheme'] ?? '';
         $this->host = $parsed['host'] ?? '';
@@ -45,13 +45,13 @@ final class Url implements Stringable
         Assert::regex(
             $this->value,
             $pattern,
-            'L\'URL doit commencer par http:// ou https:// et contenir un hôte valide.'
+            'shared.exceptions.SH0004.url_must_be_start_with_http_or_https'
         );
 
         // Validation supplémentaire avec filter_var
         Assert::true(
             filter_var($this->value, FILTER_VALIDATE_URL) !== false,
-            'L\'URL n\'est pas valide selon le standard RFC 3986.'
+            'shared.exceptions.SH0005.url_not_valid_rfc_3986'
         );
     }
 

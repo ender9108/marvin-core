@@ -11,8 +11,8 @@ final readonly class ContainerImage implements Stringable
 
     public function __construct(string $value)
     {
-        Assert::notEmpty($value);
-        Assert::regex($value, '/^[a-z0-9\/\-_]+:[a-z0-9\.\-_]+$/i', );
+        Assert::notEmpty($value, 'shared.exceptions.SY0014.container_image_does_not_empty');
+        Assert::regex($value, '/^[a-z0-9\/\-_]+:[a-z0-9\.\-_]+$/i', 'shared.exceptions.SY0015.container_image_is_not_valid');;
 
         $this->value = $value;
     }

@@ -14,9 +14,9 @@ final readonly class Theme implements Stringable
 
     public function __construct(string $theme = Application::APP_DEFAULT_THEME)
     {
-        Assert::notEmpty($theme);
-        Assert::lengthBetween($theme, 1, self::MAX);
-        Assert::inArray($theme, Application::APP_AVAILABLE_THEMES);
+        Assert::notEmpty($theme, 'shared.exceptions.SH0020.theme_does_not_empty');
+        Assert::lengthBetween($theme, 1, self::MAX, 'shared.exceptions.SH0021.theme_length_between');
+        Assert::inArray($theme, Application::APP_AVAILABLE_THEMES, 'shared.exceptions.SH0022.theme_is_not_available');
 
         $this->value = $theme;
     }

@@ -6,6 +6,9 @@
   - Test complet contexte Security (80%)
   - Test complet contexte System (80%)
 
+- **Translations**
+  - OK - Mettre en place le nouveau système de traduction des erreurs
+
 - **Contextes**
   - Terminer contexte Device
   - Contexte Protocol
@@ -26,7 +29,7 @@
 - OK - Contexte Security (PROD, DEV)
 
 - **Error code**
-- Passer dans tous les contextes pour vérifier que tous les codes d'erreurs sont en places
+- OK - Passer dans tous les contextes pour vérifier que tous les codes d'erreurs sont en places
 - Faire le lexique des codes d'erreurs
 
 ### Roadmap

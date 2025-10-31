@@ -47,7 +47,7 @@ final readonly class SendContainerCommand
         int $timeout = 10,
     ): int {
         try {
-            Assert::inArray($action, ManagerContainerActionReference::values());
+            Assert::inArray($action, ManagerContainerActionReference::values(), 'system.exceptions.SY0011.invalid_action');;
 
             $containerId = new ContainerId($id);
             $correlationId = new UniqId();

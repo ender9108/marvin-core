@@ -16,8 +16,8 @@ location:
         LO0014.zone_name_cannot_be_less_than_2: Le nom de la zone ne peut pas être inférieur à 2
         LO0015.zone_temperature_cannot_be_below: La température ne peux pas être inférieur à -80°C
         LO0016.zone_temperature_cannot_be_exceed: La température ne peux pas être supérieur à 100°C
-        LO0017.zone_humidity_cannot_be_below: La température ne peux pas être inférieur à 0%
-        LO0018.zone_humidity_cannot_be_exceed: La température ne peux pas être supérieur à 100%
+        LO0017.zone_humidity_cannot_be_below: Le taux d'humidité ne peux pas être inférieur à 0%
+        LO0018.zone_humidity_cannot_be_exceed: Le taux d'humidité ne peux pas être supérieur à 100%
         LO0019.power_consumption_cannot_be_negative: La consommation électrique ne peut pas être négative.
         LO0020.zone_surface_area_cannot_be_negative: La surface ne peut pas être négative.
         LO0021.zone_surface_area_cannot_exceed_100000: La surface ne peut pas dépasser 100000m2.

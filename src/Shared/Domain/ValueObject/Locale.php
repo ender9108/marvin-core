@@ -14,9 +14,9 @@ final readonly class Locale implements Stringable
 
     public function __construct(string $locale = Application::APP_DEFAULT_LOCALE)
     {
-        Assert::notEmpty($locale);
-        Assert::length($locale, self::LENGTH);
-        Assert::inArray($locale, Application::APP_AVAILABLE_LOCALES);
+        Assert::notEmpty($locale, 'shared.exceptions.SH0013.locale_does_not_empty');
+        Assert::length($locale, self::LENGTH, 'shared.exceptions.SH0014.locale_length');
+        Assert::inArray($locale, Application::APP_AVAILABLE_LOCALES, 'shared.exceptions.SH0015.locale_is_not_available');
 
         $this->value = $locale;
     }

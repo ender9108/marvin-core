@@ -15,9 +15,9 @@ final readonly class Email implements Stringable
 
     public function __construct(string $email)
     {
-        Assert::notEmpty($email);
-        Assert::email($email);
-        Assert::lengthBetween($email, self::MIN, self::MAX);
+        Assert::notEmpty($email, 'shared.exceptions.SH0008.email_does_not_empty');
+        Assert::email($email, 'shared.exceptions.SH0009.email_is_not_valid');
+        Assert::lengthBetween($email, self::MIN, self::MAX, 'shared.exceptions.SH0010.email_length_between');
 
         $this->value = $email;
     }

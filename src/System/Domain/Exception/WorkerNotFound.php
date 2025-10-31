@@ -11,17 +11,15 @@ final class WorkerNotFound extends DomainException implements TranslatableExcept
 {
     public function __construct(
         string $message,
-        string $code,
         public readonly ?string $id = null,
     ) {
-        parent::__construct($message, $code);
+        parent::__construct($message);
     }
 
     public static function withId(WorkerId $id): self
     {
         return new self(
             sprintf('Worker with id %s was not found', $id->toString()),
-            'SM0005',
             $id->toString(),
         );
     }
@@ -30,9 +28,9 @@ final class WorkerNotFound extends DomainException implements TranslatableExcept
     public function translationId(): string
     {
         if (null !== $this->id) {
-            return 'system.exceptions.worker_not_found_with_id';
+            return 'system.exceptions.SY0008.worker_not_found_with_id';
         }
-        return 'system.exceptions.worker_not_found';
+        return 'system.exceptions.SY0007.worker_not_found';
     }
 
     #[Override]
