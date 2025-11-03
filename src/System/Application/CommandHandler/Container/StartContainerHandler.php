@@ -2,8 +2,8 @@
 
 namespace Marvin\System\Application\CommandHandler\Container;
 
-use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
-use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestCommand;
+use EnderLab\MarvinManagerBundle\Messenger\Bus\MarvinToManagerCommandBusInterface;
+use EnderLab\MarvinManagerBundle\Messenger\Request\ManagerRequestCommand;
 use EnderLab\MarvinManagerBundle\Reference\ManagerContainerActionReference;
 use Marvin\System\Application\Command\Container\StartContainer;
 use Marvin\System\Domain\Exception\ActionNotAllowed;
@@ -20,7 +20,7 @@ final readonly class StartContainerHandler
     public function __construct(
         private ContainerRepositoryInterface $containerRepository,
         private ActionRequestRepositoryInterface $actionRequestRepository,
-        private CommandBusInterface $commandBus,
+        private MarvinToManagerCommandBusInterface $marvinToManagerCommandBus,
         private LoggerInterface $logger,
     ) {
     }
@@ -58,7 +58,7 @@ final readonly class StartContainerHandler
             $command->timeout,
         );
 
-        $this->commandBus->dispatch($managerMessage);
+        $this->marvinToManagerCommandBus->dispatch($managerMessage);
 
         $this->logger->info('Start container command dispatched', [
             'correlationId' => $command->correlationId,

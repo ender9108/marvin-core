@@ -2,8 +2,8 @@
 
 namespace Marvin\System\Application\CommandHandler\Container;
 
-use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
-use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestCommand;
+use EnderLab\MarvinManagerBundle\Messenger\Bus\MarvinToManagerCommandBusInterface;
+use EnderLab\MarvinManagerBundle\Messenger\Request\ManagerRequestCommand;
 use EnderLab\MarvinManagerBundle\Reference\ManagerContainerActionReference;
 use Marvin\System\Application\Command\Container\RestartContainer;
 use Marvin\System\Domain\Exception\ActionNotAllowed;
@@ -19,8 +19,8 @@ final readonly class RestartContainerHandler
 {
     public function __construct(
         private ContainerRepositoryInterface $containerRepository,
+        private MarvinToManagerCommandBusInterface $marvinToManagerCommandBus,
         private ActionRequestRepositoryInterface $actionRequestRepository,
-        private CommandBusInterface $commandBus,
         private LoggerInterface $logger,
     ) {
     }
@@ -58,7 +58,7 @@ final readonly class RestartContainerHandler
             $command->timeout,
         );
 
-        $this->commandBus->dispatch($managerMessage);
+        $this->marvinToManagerCommandBus->dispatch($managerMessage);
 
         $this->logger->info('Restart container command dispatched', [
             'correlationId' => $command->correlationId,

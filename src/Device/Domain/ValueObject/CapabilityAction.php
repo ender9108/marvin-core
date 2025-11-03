@@ -2,6 +2,9 @@
 
 namespace Marvin\Device\Domain\ValueObject;
 
+use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectTrait;
+use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
+
 /**
  * CapabilityAction
  *
@@ -12,6 +15,9 @@ namespace Marvin\Device\Domain\ValueObject;
  */
 enum CapabilityAction: string
 {
+    use EnumToArrayTrait;
+    use ValueObjectTrait;
+
     // ==========================================
     // ÉCLAIRAGE & SWITCH
     // ==========================================

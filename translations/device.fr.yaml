@@ -28,6 +28,13 @@ device:
         DE0026.capability_not_supported_action: 'La capacité ne supporte cette action.'
         DE0027.capability_not_supported_action_with_capability_name_and_action: 'La capacité %capability% ne supporte pas l''action %action%.'
         DE0028.device_must_be_an_instance_of_device: Le module passé en paramètre doit être une instance de "Device".
-        DE0029.config_must_not_be_empty: La configuration du module virtuel ne peut pas être vide.
+        DE0029.physical_address_empty: L'adresse physique ne doit pas être vide
+        DE0030.physical_address_length: L'adresse physique ne doit pas contenir plus de 100 caractères
+        DE0031.manufacturer_empty: Le constructeur du module ne doit pas être vide
+        DE0032.manufacturer_length: Le constructeur du module ne doit pas contenir plus de 100 caractères
+        DE0033.device_model_empty: Le modèle ne doit pas être vide
+        DE0034.device_model_length: Le modèle ne doit pas contenir plus de 100 caractères
+        DE0035.firmware_version_empty: La version du firmware ne doit pas être vide
+        DE0036.firmware_version_length: La version du firmware ne doit pas contenir plus de 50 caractères
     capabilities:
         

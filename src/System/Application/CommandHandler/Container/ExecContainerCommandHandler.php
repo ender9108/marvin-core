@@ -2,8 +2,8 @@
 
 namespace Marvin\System\Application\CommandHandler\Container;
 
-use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
-use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestCommand;
+use EnderLab\MarvinManagerBundle\Messenger\Bus\MarvinToManagerCommandBusInterface;
+use EnderLab\MarvinManagerBundle\Messenger\Request\ManagerRequestCommand;
 use EnderLab\MarvinManagerBundle\Reference\ManagerContainerActionReference;
 use Marvin\System\Application\Command\Container\ExecContainerCommand;
 use Marvin\System\Domain\Exception\ActionNotAllowed;
@@ -20,7 +20,7 @@ final readonly class ExecContainerCommandHandler
     public function __construct(
         private ContainerRepositoryInterface $containerRepository,
         private ActionRequestRepositoryInterface $actionRequestRepository,
-        private CommandBusInterface $commandBus,
+        private MarvinToManagerCommandBusInterface $marvinToManagerCommandBus,
         private LoggerInterface $logger,
     ) {
     }
@@ -47,7 +47,7 @@ final readonly class ExecContainerCommandHandler
             $command->correlationId,
             'container',
             $command->containerId->toString(),
-            ManagerActionReference::ACTION_EXEC_CMD->value,
+            ManagerContainerActionReference::ACTION_EXEC_CMD->value,
             ActionStatus::PENDING,
         );
 
@@ -56,12 +56,12 @@ final readonly class ExecContainerCommandHandler
         $managerMessage = new ManagerRequestCommand(
             $command->containerId->toString(),
             $command->correlationId->toString(),
-            ManagerActionReference::ACTION_EXEC_CMD->value,
+            ManagerContainerActionReference::ACTION_EXEC_CMD->value,
             $command->command,
             $command->args
         );
 
-        $this->commandBus->dispatch($managerMessage);
+        $this->marvinToManagerCommandBus->dispatch($managerMessage);
 
         $this->logger->info('Exec command in container dispatched', [
             'correlationId' => $command->correlationId,

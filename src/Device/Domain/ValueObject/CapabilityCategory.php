@@ -2,11 +2,13 @@
 
 namespace Marvin\Device\Domain\ValueObject;
 
+use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectTrait;
 use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
 
 enum CapabilityCategory: string
 {
     use EnumToArrayTrait;
+    use ValueObjectTrait;
 
     case LIGHTING = 'lighting';
     case ENERGY = 'energy';

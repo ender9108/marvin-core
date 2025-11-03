@@ -2,8 +2,8 @@
 
 namespace Marvin\System\Application\CommandHandler\Container;
 
-use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
-use EnderLab\MarvinManagerBundle\Messenger\ManagerRequestCommand;
+use EnderLab\MarvinManagerBundle\Messenger\Bus\MarvinToManagerCommandBusInterface;
+use EnderLab\MarvinManagerBundle\Messenger\Request\ManagerRequestCommand;
 use EnderLab\MarvinManagerBundle\Reference\ManagerContainerActionReference;
 use Marvin\System\Application\Command\Container\BuildContainer;
 use Marvin\System\Domain\Exception\ActionNotAllowed;
@@ -20,7 +20,7 @@ final readonly class BuildContainerHandler
     public function __construct(
         private ContainerRepositoryInterface $containerRepository,
         private ActionRequestRepositoryInterface $actionRequestRepository,
-        private CommandBusInterface $commandBus,
+        private MarvinToManagerCommandBusInterface $marvinToManagerCommandBus,
         private LoggerInterface $logger,
     ) {
     }
@@ -57,7 +57,7 @@ final readonly class BuildContainerHandler
             ManagerContainerActionReference::ACTION_BUILD->value
         );
 
-        $this->commandBus->dispatch($managerMessage);
+        $this->marvinToManagerCommandBus->dispatch($managerMessage);
 
         $this->logger->info('Build container command dispatched', [
             'correlationId' => $command->correlationId,

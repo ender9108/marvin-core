@@ -12,13 +12,13 @@
             <generator strategy="NONE" />
         </id>
 
-        <field name="containerId" type="string" length="128" nullable="true" unique="true" />
         <embedded name="serviceLabel" class="Marvin\Shared\Domain\ValueObject\Label" />
-        <field name="containerLabel" type="string" length="128" nullable="true" />
-        <embedded name="image" class="Marvin\System\Domain\ValueObject\ContainerImage" />
-        <field name="type" type="string" length="64" />
-        <field name="status" type="string" length="128" nullable="true" />
+        <field name="type" length="64" enum-type="Marvin\System\Domain\ValueObject\ContainerType" />
+        <field name="status" length="128" nullable="true" enum-type="Marvin\System\Domain\ValueObject\ContainerStatus" />
         <embedded name="allowedActions" class="Marvin\System\Domain\ValueObject\ContainerAllowedActions" />
+        <field name="containerId" length="128" nullable="true" unique="true" />
+        <field name="containerLabel" length="128" nullable="true" />
+        <embedded name="image" class="Marvin\System\Domain\ValueObject\ContainerImage" />
         <field name="ports" type="json" />
         <field name="volumes" type="json" />
         <embedded name="metadata" class="Marvin\Shared\Domain\ValueObject\Metadata" />

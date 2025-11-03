@@ -12,14 +12,14 @@
             <generator strategy="NONE" />
         </id>
 
-        <field name="correlationId" type="string" />
-        <field name="entityType" type="string" length="32" />
-        <field name="entityId" type="string" length="64" />
-        <field name="action" type="string" length="32" />
-        <field name="status" type="string" length="32" />
+        <field name="correlationId" />
+        <field name="entityType" length="32" />
+        <field name="entityId" length="64" />
+        <field name="action" length="32" />
+        <field name="status" length="32" enum-type="Marvin\System\Domain\ValueObject\ActionStatus" />
         <field name="input" type="json" nullable="true" />
-        <field name="output" type="string" length="255" nullable="true" />
-        <field name="error" type="string" length="255" nullable="true" />
+        <field name="output" type="text" nullable="true" />
+        <field name="error" type="text" nullable="true" />
         <field name="completedAt" type="datetime" nullable="true" />
         <field name="createdAt" type="datetime" />
     </entity>

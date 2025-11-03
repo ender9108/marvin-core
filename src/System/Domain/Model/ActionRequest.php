@@ -4,6 +4,7 @@ namespace Marvin\System\Domain\Model;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use Marvin\Shared\Domain\ValueObject\Identity\CorrelationId;
 use Marvin\Shared\Domain\ValueObject\Identity\UniqId;
 use Marvin\System\Domain\ValueObject\ActionStatus;
 use Marvin\System\Domain\ValueObject\Identity\ActionRequestId;
@@ -11,7 +12,7 @@ use Marvin\System\Domain\ValueObject\Identity\ActionRequestId;
 final class ActionRequest
 {
     public function __construct(
-        private(set) UniqId $correlationId,
+        private(set) CorrelationId $correlationId,
         private(set) string $entityType,
         private(set) string $entityId,
         private(set) string $action,

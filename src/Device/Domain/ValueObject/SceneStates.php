@@ -2,70 +2,70 @@
 
 namespace Marvin\Device\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
+use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectTrait;
+use Stringable;
 
-final readonly class SceneStates
+final readonly class SceneStates implements Stringable
 {
+    use ValueObjectTrait;
+
     /**
-     * Format: [
-     *   'device-id-1' => ['light' => ['brightness' => 80, 'color_temp' => 'warm']],
-     *   'device-id-2' => ['light' => ['state' => 'OFF']],
-     * ]
+     * @param array<string, array<string, array<string, mixed>>> $states
+     *        Format: ['deviceId' => ['capability' => ['state' => value]]]
      */
-    private array $states;
+    private array $value;
 
-    private function __construct(array $states)
+    private function __construct(array $value)
     {
-        Assert::notEmpty($states);
-
-        foreach ($states as $deviceId => $capabilityStates) {
-            Assert::uuid($deviceId);
-            Assert::isArray($capabilityStates);
-            Assert::notEmpty($capabilityStates);
-        }
-
-        $this->states = $states;
+        $this->value = $value;
     }
 
-    public static function fromArray(array $states): self
+    public static function fromArray(array $value): self
     {
-        return new self($states);
+        return new self($value);
     }
 
-    public function getStateForDevice(DeviceId $deviceId): ?array
+    public static function empty(): self
     {
-        return $this->states[$deviceId->toString()] ?? null;
-    }
-
-    public function hasDevice(DeviceId $deviceId): bool
-    {
-        return isset($this->states[$deviceId->toString()]);
-    }
-
-    public function getDeviceIds(): array
-    {
-        return array_keys($this->states);
-    }
-
-    public function addState(DeviceId $deviceId, array $state): SceneStates
-    {
-        return new self([...$this->states, $deviceId->toString() => $state]);
-    }
-
-    public function removeState(DeviceId $deviceId): SceneStates
-    {
-        $states = $this->states;
-
-        if (isset($states[$deviceId->toString()])) {
-            unset($states[$deviceId->toString()]);
-        }
-
-        return new self($states);
+        return new self([]);
     }
 
     public function toArray(): array
     {
-        return $this->states;
+        return $this->value;
+    }
+
+    public function getDeviceState(string $deviceId): ?array
+    {
+        return $this->value[$deviceId] ?? null;
+    }
+
+    public function hasDevice(string $deviceId): bool
+    {
+        return isset($this->value[$deviceId]);
+    }
+
+    public function withDeviceState(string $deviceId, array $state): self
+    {
+        $states = $this->value;
+        $states[$deviceId] = $state;
+        return new self($states);
+    }
+
+    public function withoutDevice(string $deviceId): self
+    {
+        $states = $this->value;
+        unset($states[$deviceId]);
+        return new self($states);
+    }
+
+    public function getDeviceIds(): array
+    {
+        return array_keys($this->value);
+    }
+
+    public function __toString(): string
+    {
+        return json_encode($this->value);
     }
 }

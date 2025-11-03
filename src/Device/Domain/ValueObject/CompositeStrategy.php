@@ -23,27 +23,8 @@ enum CompositeStrategy: string
      */
     case EMULATED_ONLY = 'emulated_only';
 
-    /**
-     * Broadcast classique (envoie à tous les devices simultanément)
-     * Pour groupes simples
-     */
-    case BROADCAST = 'broadcast';
-
-    /**
-     * Séquentiel (un par un avec délai)
-     * Pour scénarios complexes nécessitant un ordre
-     */
-    case SEQUENTIAL = 'sequential';
-
-    /**
-     * Agrégation des réponses
-     * Pour capteurs multiples (moyenne, somme, etc.)
-     */
-    case AGGREGATE = 'aggregate';
-
-    /**
-     * Premier qui répond
-     * Pour queries où on veut juste une réponse rapide
-     */
-    case FIRST_RESPONSE = 'first_response';
+    public function toString(): string
+    {
+        return $this->value;
+    }
 }

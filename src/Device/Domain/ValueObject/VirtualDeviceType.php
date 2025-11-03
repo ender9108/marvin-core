@@ -4,7 +4,7 @@ namespace Marvin\Device\Domain\ValueObject;
 
 use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
 
-enum VirtualDeviceType: string implements Stringable
+enum VirtualDeviceType: string
 {
     use EnumToArrayTrait;
 

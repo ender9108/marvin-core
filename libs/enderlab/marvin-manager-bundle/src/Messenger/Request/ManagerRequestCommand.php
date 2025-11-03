@@ -1,23 +1,19 @@
 <?php
-namespace EnderLab\MarvinManagerBundle\Messenger;
+namespace EnderLab\MarvinManagerBundle\Messenger\Request;
 
-use EnderLab\DddCqrsBundle\Application\Command\CommandInterface;
 use EnderLab\MarvinManagerBundle\Reference\ManagerContainerActionReference;
 use EnderLab\MarvinManagerBundle\Reference\ManagerWorkerActionReference;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
-final readonly class ManagerResponseCommand implements CommandInterface
+final readonly class ManagerRequestCommand implements ManagerRequestCommandInterface
 {
     public function __construct(
-        #[Assert\NotBlank]
+        #[NotBlank]
+        public string $containerId,
+        #[NotBlank]
         public string $correlationId,
-        #[Assert\NotBlank]
-        #[Assert\Choice(choices: ['container', 'worker'])]
-        public string $entityType,
-        #[Assert\NotBlank]
-        public string $entityId,
-        #[Assert\NotBlank]
+        #[NotBlank]
         #[Choice(choices: [
             ManagerContainerActionReference::ACTION_START->value,
             ManagerContainerActionReference::ACTION_STOP->value,
@@ -32,25 +28,9 @@ final readonly class ManagerResponseCommand implements CommandInterface
             ManagerWorkerActionReference::ACTION_UPDATE->value,
         ])]
         public string $action,
-        public bool $success = false,
-        public ?string $output = null,
-        public ?string $error = null,
-        public ?array $metadata = [],
+        public ?string $command = null,
+        public array $args = [],
+        public int $timeout = 10,
     ) {
-    }
-
-    public function isSuccess(): bool
-    {
-        return $this->success;
-    }
-
-    public function isFailed(): bool
-    {
-        return !$this->success;
-    }
-
-    public function hasError(): bool
-    {
-        return $this->error !== null;
     }
 }

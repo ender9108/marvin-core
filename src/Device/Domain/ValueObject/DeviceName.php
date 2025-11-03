@@ -5,7 +5,7 @@ namespace Marvin\Device\Domain\ValueObject;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use Stringable;
 
-final readonly class TechnicalName implements Stringable
+final readonly class DeviceName implements Stringable
 {
     public string $value;
 

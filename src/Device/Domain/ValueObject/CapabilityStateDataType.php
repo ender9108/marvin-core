@@ -2,7 +2,7 @@
 
 namespace Marvin\Device\Domain\ValueObject;
 
-enum CapabilityStateDataType: string implements Stringable
+enum CapabilityStateDataType: string
 {
     case BOOLEAN = 'boolean';
     case INTEGER = 'integer';

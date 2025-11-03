@@ -2,6 +2,26 @@ framework:
     messenger:
         failure_transport: failed
         transports:
+            marvin.to.manager:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    auto_setup: true
+                    table_name: messenger_marvin_to_manager
+                    queue_name: marvin.to.manager
+                    use_notify: true
+                retry_strategy:
+                    max_retries: 3
+                    delay: 500
+            manager.to.marvin:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    auto_setup: true
+                    table_name: messenger_manager_to_marvin
+                    queue_name: manager.to.marvin
+                    use_notify: true
+                retry_strategy:
+                    max_retries: 3
+                    delay: 500
             domotic.events:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
@@ -28,6 +48,7 @@ framework:
                     queue_name: failed
                     use_notify: true
         routing:
+            EnderLab\MarvinManagerBundle\Messenger\ManagerRequestCommandInterface: marvin.to.manager
             #Marvin\Domotic\Application\Command\DomoticEvent: domotic.events
             #Marvin\Domotic\Application\Command\DomoticCommand: domotic.commands
 
