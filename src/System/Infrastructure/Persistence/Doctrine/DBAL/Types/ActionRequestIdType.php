@@ -2,8 +2,8 @@
 
 namespace Marvin\System\Infrastructure\Persistence\Doctrine\DBAL\Types;
 
-use Override;
 use Marvin\System\Domain\ValueObject\Identity\ActionRequestId;
+use Override;
 use Symfony\Bridge\Doctrine\Types\AbstractUidType;
 
 final class ActionRequestIdType extends AbstractUidType

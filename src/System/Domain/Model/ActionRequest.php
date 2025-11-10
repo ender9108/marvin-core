@@ -5,7 +5,6 @@ namespace Marvin\System\Domain\Model;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Marvin\Shared\Domain\ValueObject\Identity\CorrelationId;
-use Marvin\Shared\Domain\ValueObject\Identity\UniqId;
 use Marvin\System\Domain\ValueObject\ActionStatus;
 use Marvin\System\Domain\ValueObject\Identity\ActionRequestId;
 

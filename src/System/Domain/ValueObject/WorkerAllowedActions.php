@@ -12,7 +12,8 @@ final readonly class WorkerAllowedActions
 
     public function __construct(array $value = [])
     {
-        Assert::notEmpty($value, 'system.exceptions.SY0018.worker_actions_does_not_empty');;
+        Assert::notEmpty($value, 'system.exceptions.SY0018.worker_actions_does_not_empty');
+        ;
         Assert::allInArray($value, self::ALLOWED_ACTIONS, 'system.exceptions.SY0019.worker_actions_is_not_available');
 
         $this->value = $value;
