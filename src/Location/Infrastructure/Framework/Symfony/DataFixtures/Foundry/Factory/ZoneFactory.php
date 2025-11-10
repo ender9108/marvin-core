@@ -2,8 +2,6 @@
 
 namespace Marvin\Location\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory;
 
-use Override;
-use ReflectionClass;
 use Marvin\Location\Domain\Model\Zone;
 use Marvin\Location\Domain\ValueObject\HexaColor;
 use Marvin\Location\Domain\ValueObject\Humidity;
@@ -15,8 +13,9 @@ use Marvin\Location\Domain\ValueObject\ZoneName;
 use Marvin\Location\Domain\ValueObject\ZoneType;
 use Marvin\Shared\Domain\Service\SluggerInterface;
 use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
-use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Marvin\Shared\Domain\ValueObject\Metadata;
+use Override;
+use ReflectionClass;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 final class ZoneFactory extends PersistentProxyObjectFactory
