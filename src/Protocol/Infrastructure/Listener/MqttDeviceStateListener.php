@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Marvin\Protocol\Infrastructure\Listener;
 
+use function Swoole\Coroutine\run;
 use EnderLab\DddCqrsBundle\Application\Event\DomainEventBusInterface;
-use Exception;
 use Marvin\Protocol\Domain\Model\ProtocolAdapterInterface;
 use Marvin\Protocol\Infrastructure\Protocol\MqttProtocol;
 use Psr\Log\LoggerInterface;
-use Swoole\Coroutine;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 /**
@@ -43,7 +42,7 @@ final readonly class MqttDeviceStateListener
             'timeout' => $timeout,
         ]);
 
-        Coroutine\run(function () use ($topics, $timeout) {
+        run(function () use ($topics, $timeout): void {
             // Connect to MQTT broker
             $this->mqttProtocol->connect();
 

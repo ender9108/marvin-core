@@ -10,7 +10,6 @@ use Exception;
 use Marvin\Security\Application\Command\User\UpdateProfileUser;
 use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Lastname;
-use Marvin\Security\Domain\ValueObject\Role;
 use Marvin\Security\Domain\ValueObject\Roles;
 use Marvin\Security\Domain\ValueObject\Timezone;
 use Marvin\Security\Presentation\Api\Dto\Input\UpdateProfileUserDto;
@@ -19,7 +18,6 @@ use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 use Marvin\Shared\Domain\ValueObject\Locale;
 use Marvin\Shared\Domain\ValueObject\Theme;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
-use Symfony\Component\Validator\Constraints\Time;
 
 final readonly class UpdateProfileUserProcessor implements ProcessorInterface
 {

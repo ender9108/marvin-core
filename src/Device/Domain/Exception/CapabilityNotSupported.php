@@ -8,7 +8,6 @@ use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
 use Marvin\Device\Domain\ValueObject\Capability;
 use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
-use RuntimeException;
 
 final class CapabilityNotSupported extends DomainException implements TranslatableExceptionInterface
 {

@@ -58,7 +58,7 @@ final readonly class CreateSceneHandler
                 try {
                     $device = $this->deviceRepository->byId($deviceId);
                     $childDevices[] = $device;
-                } catch (DeviceNotFound $e) {
+                } catch (DeviceNotFound) {
                     $this->logger->warning('Failed to load children device for scene', [
                         'deviceId' => $deviceId->toString(),
                     ]);

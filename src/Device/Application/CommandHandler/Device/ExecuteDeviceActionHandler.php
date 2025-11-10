@@ -416,7 +416,7 @@ final readonly class ExecuteDeviceActionHandler
         }
 
         // For other types, return most common value
-        $valueCounts = array_count_values(array_map('serialize', $values));
+        $valueCounts = array_count_values(array_map(serialize(...), $values));
         arsort($valueCounts);
         $mostCommon = unserialize((string) array_key_first($valueCounts));
 

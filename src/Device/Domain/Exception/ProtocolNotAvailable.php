@@ -7,7 +7,6 @@ namespace Marvin\Device\Domain\Exception;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
 use Marvin\Shared\Domain\ValueObject\Identity\ProtocolId;
-use RuntimeException;
 
 final class ProtocolNotAvailable extends DomainException implements TranslatableExceptionInterface
 {

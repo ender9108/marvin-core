@@ -12,7 +12,6 @@ use Marvin\Security\Domain\ValueObject\Firstname;
 use Marvin\Security\Domain\ValueObject\Lastname;
 use Marvin\Security\Domain\ValueObject\Roles;
 use Marvin\Security\Domain\ValueObject\Timezone;
-use Marvin\Security\Domain\ValueObject\UserType;
 use Marvin\Security\Presentation\Api\Dto\Input\CreateUserDto;
 use Marvin\Security\Presentation\Api\Resource\ReadUserResource;
 use Marvin\Shared\Domain\ValueObject\Email;

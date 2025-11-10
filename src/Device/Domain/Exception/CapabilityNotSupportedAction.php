@@ -9,7 +9,6 @@ use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
 use Marvin\Device\Domain\ValueObject\Capability;
 use Marvin\Device\Domain\ValueObject\CapabilityAction;
 use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
-use RuntimeException;
 
 /**
  * Exception levée quand un device ne supporte pas une action spécifique pour une capability

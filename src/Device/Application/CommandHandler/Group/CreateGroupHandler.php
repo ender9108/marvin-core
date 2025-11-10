@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Marvin\Device\Application\CommandHandler\Group;
 
 use DateTimeImmutable;
-use InvalidArgumentException;
 use Marvin\Device\Application\Command\Group\CreateGroup;
 use Marvin\Device\Application\Service\Acl\ProtocolCapabilityServiceInterface;
 use Marvin\Device\Domain\Exception\CannotAddCompositeDeviceOnGroup;
@@ -19,7 +18,6 @@ use Marvin\Device\Domain\ValueObject\CompositeType;
 use Marvin\Device\Domain\ValueObject\NativeGroupInfo;
 use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 /**

@@ -4,7 +4,6 @@ namespace Marvin\Device\Domain\Exception;
 
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
-use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 
 class UpdateSceneStateNotAuthorized extends DomainException implements TranslatableExceptionInterface
 {

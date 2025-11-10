@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Marvin\Device\Domain\Specification;
 
+use InvalidArgumentException;
+use DateTimeInterface;
 use Marvin\Device\Domain\ValueObject\CapabilityStateDataType;
 
 /**
@@ -36,7 +38,7 @@ final readonly class CapabilityStateConstraints
     /**
      * Valide une valeur selon les contraintes
      *
-     * @throws \InvalidArgumentException Si la valeur ne respecte pas les contraintes
+     * @throws InvalidArgumentException Si la valeur ne respecte pas les contraintes
      */
     public function validate(mixed $value): void
     {
@@ -45,7 +47,7 @@ final readonly class CapabilityStateConstraints
 
         // Validation des contraintes spécifiques
         if ($this->min !== null && is_numeric($value) && $value < $this->min) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Value %s is below minimum %s',
                 $value,
                 $this->min
@@ -53,7 +55,7 @@ final readonly class CapabilityStateConstraints
         }
 
         if ($this->max !== null && is_numeric($value) && $value > $this->max) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Value %s is above maximum %s',
                 $value,
                 $this->max
@@ -61,7 +63,7 @@ final readonly class CapabilityStateConstraints
         }
 
         if ($this->allowedValues !== null && !in_array($value, $this->allowedValues, true)) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Value "%s" is not in allowed values: %s',
                 $value,
                 implode(', ', array_map(fn ($v) => '"' . $v . '"', $this->allowedValues))
@@ -69,7 +71,7 @@ final readonly class CapabilityStateConstraints
         }
 
         if ($this->pattern !== null && is_string($value) && !preg_match($this->pattern, $value)) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Value "%s" does not match pattern %s',
                 $value,
                 $this->pattern
@@ -87,13 +89,13 @@ final readonly class CapabilityStateConstraints
             CapabilityStateDataType::INTEGER => is_int($value),
             CapabilityStateDataType::FLOAT => is_float($value) || is_int($value), // int acceptable pour float
             CapabilityStateDataType::STRING => is_string($value),
-            CapabilityStateDataType::DATETIME => $value instanceof \DateTimeInterface || is_string($value),
+            CapabilityStateDataType::DATETIME => $value instanceof DateTimeInterface || is_string($value),
             CapabilityStateDataType::OBJECT => is_array($value) && $this->isAssociativeArray($value),
             CapabilityStateDataType::ARRAY => is_array($value),
         };
 
         if (!$isValid) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Value type "%s" does not match expected type "%s"',
                 gettype($value),
                 $this->dataType->value

@@ -6,7 +6,6 @@ namespace Marvin\Device\Application\Command\Group;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandInterface;
 use Marvin\Device\Domain\Model\DeviceCapability;
-use Marvin\Device\Domain\ValueObject\Capability;
 use Marvin\Device\Domain\ValueObject\CompositeStrategy;
 use Marvin\Device\Domain\ValueObject\ExecutionStrategy;
 use Marvin\Shared\Domain\ValueObject\Description;

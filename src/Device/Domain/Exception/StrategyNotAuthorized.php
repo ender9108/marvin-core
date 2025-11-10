@@ -5,7 +5,6 @@ namespace Marvin\Device\Domain\Exception;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
 use Marvin\Device\Domain\ValueObject\Protocol;
-use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 
 class StrategyNotAuthorized extends DomainException implements TranslatableExceptionInterface
 {

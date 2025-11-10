@@ -4,8 +4,6 @@ namespace Marvin\Security\Infrastructure\Framework\Symfony\Security;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Marvin\Security\Domain\Model\User;
-use Marvin\Shared\Domain\ValueObject\Email;
-use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;

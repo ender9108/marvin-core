@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Marvin\Device\Domain\Model;
 
+use InvalidArgumentException;
+use ValueError;
+use Throwable;
 use DateTimeImmutable;
 use Marvin\Device\Domain\ValueObject\Capability;
 use Marvin\Device\Domain\ValueObject\CapabilityState;
@@ -39,7 +42,7 @@ final class DeviceCapability
         if ($stateName === null) {
             $states = CapabilityState::getStatesForCapability($capability);
             if (empty($states)) {
-                throw new \InvalidArgumentException(sprintf(
+                throw new InvalidArgumentException(sprintf(
                     'No states defined for capability "%s"',
                     $capability->value
                 ));
@@ -55,7 +58,7 @@ final class DeviceCapability
         );
 
         if (!$stateExists) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'State "%s" is not valid for capability "%s"',
                 $stateName,
                 $capability->value
@@ -86,7 +89,7 @@ final class DeviceCapability
      *
      * Valide la valeur selon le type de données et les contraintes du CapabilityState
      *
-     * @throws \InvalidArgumentException Si la valeur ne respecte pas les contraintes
+     * @throws InvalidArgumentException Si la valeur ne respecte pas les contraintes
      */
     public function updateValue(mixed $newValue): void
     {
@@ -100,7 +103,7 @@ final class DeviceCapability
     /**
      * Valide une valeur pour un state donné (méthode statique)
      *
-     * @throws \InvalidArgumentException Si la valeur ne respecte pas les contraintes
+     * @throws InvalidArgumentException Si la valeur ne respecte pas les contraintes
      */
     private static function validateValueForState(string $stateName, mixed $value): void
     {
@@ -108,11 +111,11 @@ final class DeviceCapability
             $capabilityState = CapabilityState::from($stateName);
             $constraints = $capabilityState->getConstraints();
             $constraints->validate($value);
-        } catch (\ValueError) {
+        } catch (ValueError) {
             // State inconnu, on accepte la valeur (pour compatibilité)
             return;
-        } catch (\Throwable $e) {
-            throw new \InvalidArgumentException(sprintf(
+        } catch (Throwable $e) {
+            throw new InvalidArgumentException(sprintf(
                 'Invalid value for state "%s": %s',
                 $stateName,
                 $e->getMessage()

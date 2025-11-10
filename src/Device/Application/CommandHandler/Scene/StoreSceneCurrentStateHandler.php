@@ -13,7 +13,6 @@ use Marvin\Device\Domain\Repository\DeviceRepositoryInterface;
 use Marvin\Device\Domain\ValueObject\SceneStates;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Throwable;
 
 /**
  * Handler for StoreSceneCurrentState command
@@ -55,7 +54,7 @@ final readonly class StoreSceneCurrentStateHandler
             try {
                 $device = $this->deviceRepository->byId($deviceId);
                 $devices[] = $device;
-            } catch (DeviceNotFound $e) {
+            } catch (DeviceNotFound) {
                 $this->logger->warning('Device not found while storing scene state', [
                     'deviceId' => $deviceId->toString(),
                 ]);
