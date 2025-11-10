@@ -22,6 +22,9 @@
 .idea
 .editorconfig
 .junie
+.claude
+CLAUDE.md
+/**/CLAUDE.md
 
 !compose.override.yaml
 !compose.prod.yaml
