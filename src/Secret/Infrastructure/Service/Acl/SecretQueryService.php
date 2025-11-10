@@ -2,16 +2,16 @@
 
 namespace Marvin\Secret\Infrastructure\Service\Acl;
 
-use Marvin\Secret\Domain\Model\Secret;
-use RuntimeException;
 use Exception;
 use Marvin\Secret\Domain\Exception\SecretNotFound;
+use Marvin\Secret\Domain\Model\Secret;
 use Marvin\Secret\Domain\Repository\SecretRepositoryInterface;
 use Marvin\Secret\Domain\Service\EncryptionServiceInterface;
 use Marvin\Secret\Domain\ValueObject\SecretCategory;
 use Marvin\Secret\Domain\ValueObject\SecretKey;
 use Marvin\Shared\Application\Acl\SecretInfo;
 use Marvin\Shared\Application\Acl\SecretQueryServiceInterface;
+use RuntimeException;
 
 final readonly class SecretQueryService implements SecretQueryServiceInterface
 {

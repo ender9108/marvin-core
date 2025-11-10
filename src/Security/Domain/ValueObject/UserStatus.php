@@ -3,74 +3,56 @@
 namespace Marvin\Security\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
+use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectTrait;
+use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
 use Stringable;
 
-final readonly class UserStatus implements Stringable
-{
-    public const array STATUSES = [
-        'DISABLED' => 0,
-        'ENABLED' => 1,
-        'LOCKED' => 2,
-        'TO_DELETE' => 9,
-    ];
+enum UserStatus: string {
+    use ValueObjectTrait;
+    use EnumToArrayTrait;
 
-    public int $value;
-
-    public function __construct(string|int $status)
-    {
-        if (is_string($status)) {
-            Assert::notEmpty($status, 'security.exceptions.SC0039.user_status_empty');
-            Assert::keyExists(self::STATUSES, $status, 'security.exceptions.SC0040.user_status_not_exists');
-            $status = self::STATUSES[$status];
-        } else {
-            Assert::inArray($status, self::STATUSES, 'security.exceptions.SC0040.user_status_not_exists');
-        }
-
-        $this->value = $status;
-    }
+    case DISABLED = 'disabled';
+    case ENABLED = 'enabled';
+    case LOCKED = 'locked';
+    case TO_DELETE = 'to_delete';
 
     public function isDisabled(): bool
     {
-        return $this->value === self::STATUSES['DISABLED'];
+        return $this === self::DISABLED;
     }
 
     public function isEnabled(): bool
     {
-        return $this->value === self::STATUSES['ENABLED'];
+        return $this === self::ENABLED;
     }
 
     public function isLocked(): bool
     {
-        return $this->value === self::STATUSES['LOCKED'];
+        return $this === self::LOCKED;
     }
 
     public function isToDelete(): bool
     {
-        return $this->value === self::STATUSES['TO_DELETE'];
+        return $this === self::TO_DELETE;
     }
 
     public static function disabled(): self
     {
-        return new self(self::STATUSES['DISABLED']);
+        return self::DISABLED;
     }
 
     public static function enabled(): self
     {
-        return new self(self::STATUSES['ENABLED']);
+        return self::ENABLED;
     }
 
     public static function locked(): self
     {
-        return new self(self::STATUSES['LOCKED']);
+        return self::LOCKED;
     }
 
     public static function toDelete(): self
     {
-        return new self(self::STATUSES['TO_DELETE']);
-    }
-
-    public function __toString(): string
-    {
-        return (string) array_search($this->value, self::STATUSES);
+        return self::TO_DELETE;
     }
 }

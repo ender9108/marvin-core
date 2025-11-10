@@ -1,0 +1,52 @@
+<?php
+
+namespace Marvin\Security\Presentation\Api\State\Processor;
+
+use ApiPlatform\Metadata\Operation;
+use ApiPlatform\State\ProcessorInterface;
+use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
+use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
+use Exception;
+use Marvin\Security\Application\Command\User\UpdateProfileUser;
+use Marvin\Security\Domain\ValueObject\Firstname;
+use Marvin\Security\Domain\ValueObject\Lastname;
+use Marvin\Security\Domain\ValueObject\Role;
+use Marvin\Security\Domain\ValueObject\Roles;
+use Marvin\Security\Domain\ValueObject\Timezone;
+use Marvin\Security\Presentation\Api\Dto\Input\UpdateProfileUserDto;
+use Marvin\Security\Presentation\Api\Resource\ReadUserResource;
+use Marvin\Shared\Domain\ValueObject\Identity\UserId;
+use Marvin\Shared\Domain\ValueObject\Locale;
+use Marvin\Shared\Domain\ValueObject\Theme;
+use Symfony\Component\ObjectMapper\ObjectMapperInterface;
+use Symfony\Component\Validator\Constraints\Time;
+
+final readonly class UpdateProfileUserProcessor implements ProcessorInterface
+{
+    public function __construct(
+        private ObjectMapperInterface $objectMapper,
+        private SyncCommandBusInterface $syncCommandBus,
+    ) {
+    }
+
+    /**
+     * @param UpdateProfileUserDto $data
+     * @throws Exception
+     */
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ReadUserResource
+    {
+        Assert::isInstanceOf($data, UpdateProfileUserDto::class);
+
+        $model = $this->syncCommandBus->handle(new UpdateProfileUser(
+            new UserId($uriVariables['id']),
+            null !== $data->firstname ? Firstname::fromString($data->firstname) : null,
+            null !== $data->lastname ? Lastname::fromString($data->lastname) : null,
+            !empty($data->roles) ? Roles::fromArray($data->roles) : null,
+            null !== $data->theme ? Theme::fromString($data->theme) : null,
+            null !== $data->locale ? Locale::fromString($data->locale) : null,
+            null !== $data->timezone ? Timezone::fromString($data->timezone) : null,
+        ));
+
+        return $this->objectMapper->map($model, ReadUserResource::class);
+    }
+}

@@ -21,6 +21,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->exclude([
             dirname(__DIR__, 2).'/src/Secret/Domain/Model/*',
             dirname(__DIR__, 2).'/src/Secret/Domain/ValueObject/*',
+            dirname(__DIR__, 2).'/src/Secret/Domain/Event/*',
         ])
     ;
 

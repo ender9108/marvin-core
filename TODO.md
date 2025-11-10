@@ -10,14 +10,14 @@
   - **OK - Mettre en place le nouveau système de traduction des erreurs**
 
 - **Contextes**
-  - Finition contexte System (ajout commande pour composer install et update)
-  - Terminer contexte Device
-  - Contexte Protocol
+  - ENC - Finition contexte System (ajout commande pour composer install et update)
+  - ENC - Contexte Device
+  - ENC - Contexte Protocol
   - Contexte Plugin
   - Contexte Automation
 
 - **ACL**
-  - Mettre en place stratégie ACL
+  - **OK - Mettre en place stratégie ACL**
 
 - **Fixtures**
 - Contexte System
@@ -35,8 +35,8 @@
 ### Roadmap
 
 1. Finition contexte System
-2. Terminer contexte Device
-3. Mettre en place stratégie ACL
+2. Contexte Device
+3. **OK - Mettre en place stratégie ACL**
 4. Test des contextes existants
 5. Contexte Protocol
 6. Contexte Plugin

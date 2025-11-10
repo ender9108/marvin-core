@@ -17,8 +17,8 @@ final readonly class ExceptionListener
 
     public function __invoke(ExceptionEvent $event): void
     {
-        $exception = $event->getThrowable();
+        /*$exception = $event->getThrowable();
         $response = $this->exceptionMessageManager->jsonResponseFormat($exception);
-        $event->setResponse($response);
+        $event->setResponse($response);*/
     }
 }

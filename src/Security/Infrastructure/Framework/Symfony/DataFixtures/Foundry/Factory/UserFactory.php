@@ -2,7 +2,6 @@
 
 namespace Marvin\Security\Infrastructure\Framework\Symfony\DataFixtures\Foundry\Factory;
 
-use Override;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Service\PasswordHasherInterface;
 use Marvin\Security\Domain\ValueObject\Firstname;
@@ -15,6 +14,7 @@ use Marvin\Security\Domain\ValueObject\UserType;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Locale;
 use Marvin\Shared\Domain\ValueObject\Theme;
+use Override;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 class UserFactory extends PersistentProxyObjectFactory
@@ -26,8 +26,8 @@ class UserFactory extends PersistentProxyObjectFactory
             'email' => 'marvin.domotic@marvin.test',
             'roles' => [Role::SUPER_ADMIN],
             'password' => 'Test123456789',
-            'status' => UserStatus::STATUSES['ENABLED'],
-            'type' => UserType::TYPES['CLI'],
+            'status' => UserStatus::ENABLED,
+            'type' => UserType::CLI,
             'locale' => 'fr',
             'theme' => 'dark',
             'timezone' => 'Europe/Paris',
@@ -38,8 +38,8 @@ class UserFactory extends PersistentProxyObjectFactory
             'email' => 'administrator@marvin.test',
             'roles' => [Role::SUPER_ADMIN],
             'password' => 'Test123456789',
-            'status' => UserStatus::STATUSES['ENABLED'],
-            'type' => UserType::TYPES['APP'],
+            'status' => UserStatus::ENABLED,
+            'type' => UserType::APP,
             'locale' => 'fr',
             'theme' => 'dark',
             'timezone' => 'Europe/Paris',
@@ -50,8 +50,8 @@ class UserFactory extends PersistentProxyObjectFactory
             'email' => 'johnny.begood@marvin.test',
             'roles' => [Role::ADMIN],
             'password' => 'Test123456789',
-            'status' => UserStatus::STATUSES['ENABLED'],
-            'type' => UserType::TYPES['APP'],
+            'status' => UserStatus::ENABLED,
+            'type' => UserType::APP,
             'locale' => 'fr',
             'theme' => 'dark',
             'timezone' => 'Europe/Paris',
@@ -62,8 +62,8 @@ class UserFactory extends PersistentProxyObjectFactory
             'email' => 'darkender91@gmail.com',
             'roles' => [Role::SUPER_ADMIN],
             'password' => 'Test123456789',
-            'status' => UserStatus::STATUSES['ENABLED'],
-            'type' => UserType::TYPES['APP'],
+            'status' => UserStatus::ENABLED,
+            'type' => UserType::APP,
             'locale' => 'fr',
             'theme' => 'dark',
             'timezone' => 'Europe/Paris',
@@ -74,8 +74,8 @@ class UserFactory extends PersistentProxyObjectFactory
             'email' => 'john.doe@test.com',
             'roles' => [Role::USER],
             'password' => 'Test123456789',
-            'status' => UserStatus::STATUSES['ENABLED'],
-            'type' => UserType::TYPES['APP'],
+            'status' => UserStatus::ENABLED,
+            'type' => UserType::APP,
             'locale' => 'fr',
             'theme' => 'dark',
             'timezone' => 'Europe/Paris',
@@ -105,8 +105,6 @@ class UserFactory extends PersistentProxyObjectFactory
                 $parameters['locale'] = new Locale($parameters['locale']);
                 $parameters['theme'] = new Theme($parameters['theme']);
                 $parameters['timezone'] = new Timezone($parameters['timezone']);
-                $parameters['type'] = new UserType($parameters['type']);
-                $parameters['status'] = new UserStatus($parameters['status']);
 
                 return $parameters;
             })

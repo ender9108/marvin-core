@@ -3,7 +3,6 @@
 namespace Marvin\Location\Application\QueryHandler\Zone;
 
 use EnderLab\DddCqrsBundle\Application\Query\QueryHandlerInterface;
-use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
 use Marvin\Location\Application\Query\Zone\GetZonesCollection;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;

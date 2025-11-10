@@ -66,6 +66,6 @@ final readonly class SceneStates implements Stringable
 
     public function __toString(): string
     {
-        return json_encode($this->value);
+        return (string) json_encode($this->value);
     }
 }

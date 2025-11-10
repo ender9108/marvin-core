@@ -8,6 +8,7 @@ use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Marvin\Security\Domain\Service\PasswordHasherInterface;
 use Marvin\Security\Domain\Service\UniqueEmailVerifierInterface;
 use Marvin\Security\Domain\ValueObject\UserStatus;
+use Marvin\Security\Domain\ValueObject\UserType;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
@@ -28,7 +29,7 @@ final readonly class CreateUserHandler
             $command->firstname,
             $command->lastname,
             UserStatus::enabled(),
-            $command->type,
+            UserType::APP,
             $command->timezone,
             $command->roles,
             $command->locale,

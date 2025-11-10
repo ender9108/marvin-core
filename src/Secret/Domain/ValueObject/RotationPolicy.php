@@ -2,9 +2,9 @@
 
 namespace Marvin\Secret\Domain\ValueObject;
 
-use DateTimeInterface;
 use DateMalformedStringException;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Marvin\Secret\Domain\Exception\RotationError;
 
 final readonly class RotationPolicy

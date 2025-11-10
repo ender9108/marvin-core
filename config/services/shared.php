@@ -29,6 +29,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             dirname(__DIR__, 2).'/src/Shared/Infrastructure/Framework/Symfony/Kernel.php',
             dirname(__DIR__, 2).'/src/Shared/Domain/Model/*',
             dirname(__DIR__, 2).'/src/Shared/Domain/ValueObject/*',
+            dirname(__DIR__, 2).'/src/Shared/Domain/Event/*',
         ])
     ;
 

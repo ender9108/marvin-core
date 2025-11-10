@@ -2,8 +2,8 @@
 
 namespace Marvin\Security\Infrastructure\Persistence\Doctrine\DBAL\Types;
 
-use Override;
 use Marvin\Security\Domain\ValueObject\Identity\RequestResetPasswordId as RequestResetPasswordId;
+use Override;
 use Symfony\Bridge\Doctrine\Types\AbstractUidType;
 
 final class RequestResetPasswordIdType extends AbstractUidType

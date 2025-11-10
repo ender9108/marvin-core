@@ -2,7 +2,7 @@
 
 namespace Marvin\Secret\Infrastructure\Framework\Symfony\Scheduler;
 
-use Marvin\Secret\Application\Message\RotateSecrets;
+use Marvin\Secret\Application\Command\RotateSecrets;
 use Symfony\Component\Scheduler\Attribute\AsSchedule;
 use Symfony\Component\Scheduler\RecurringMessage;
 use Symfony\Component\Scheduler\Schedule;

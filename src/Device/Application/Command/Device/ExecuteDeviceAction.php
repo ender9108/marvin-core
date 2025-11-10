@@ -1,17 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Marvin\Device\Application\Command\Device;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandInterface;
+use Marvin\Device\Domain\ValueObject\Capability;
+use Marvin\Device\Domain\ValueObject\CapabilityAction;
 use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 
+/**
+ * Command to execute an action on a device
+ *
+ * Can be used for:
+ * - Physical devices (single action)
+ * - Composite devices (group/scene with execution strategy)
+ */
 final readonly class ExecuteDeviceAction implements SyncCommandInterface
 {
+    /**
+     * @param array<string, mixed> $parameters Action parameters (e.g., brightness value, color, etc.)
+     */
     public function __construct(
         public DeviceId $deviceId,
-        public string $capability,
-        public string $action,
-        public array $params = []
+        public Capability $capability,
+        public CapabilityAction $action,
+        public array $parameters = []
     ) {
     }
 }

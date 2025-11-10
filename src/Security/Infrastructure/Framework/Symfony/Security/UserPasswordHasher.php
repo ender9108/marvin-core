@@ -17,15 +17,12 @@ final readonly class UserPasswordHasher implements PasswordHasherInterface
     #[Override]
     public function hash(User $user, string $password): string
     {
-        $securityUser = SecurityUser::create($user);
-        return $this->passwordHasher->hashPassword($securityUser, $password);
+        return $this->passwordHasher->hashPassword(SecurityUser::create($user), $password);
     }
 
     #[Override]
     public function verify(User $user, string $password): bool
     {
-        $securityUser = SecurityUser::create($user);
-
-        return $this->passwordHasher->isPasswordValid($securityUser, $password);
+        return $this->passwordHasher->isPasswordValid(SecurityUser::create($user), $password);
     }
 }

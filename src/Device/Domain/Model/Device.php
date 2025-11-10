@@ -1,555 +1,537 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Marvin\Device\Domain\Model;
 
 use DateTimeImmutable;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use EnderLab\DddCqrsBundle\Domain\Model\AggregateRoot;
-use Marvin\Device\Domain\Event\Device\DeviceActionExecuted;
-use Marvin\Device\Domain\Event\Device\DeviceAssignedToZone;
 use Marvin\Device\Domain\Event\Device\DeviceCreated;
-use Marvin\Device\Domain\Event\Device\DeviceDeleted;
-use Marvin\Device\Domain\Event\Device\DeviceOffline;
-use Marvin\Device\Domain\Event\Device\DeviceOnline;
+use Marvin\Device\Domain\Event\Device\DeviceRemovedFromGroup;
 use Marvin\Device\Domain\Event\Device\DeviceStateChanged;
-use Marvin\Device\Domain\Exception\CapabilityNotFound;
-use Marvin\Device\Domain\Exception\CapabilityNotSupportedAction;
-use Marvin\Device\Domain\Exception\DeviceCompositeCircularReference;
-use Marvin\Device\Domain\Exception\DeviceMustBeComposite;
+use Marvin\Device\Domain\Event\Scene\SceneStatesUpdated;
+use Marvin\Device\Domain\Exception\RemoveChildrenNotAuthorized;
+use Marvin\Device\Domain\Exception\UpdateSceneStateNotAuthorized;
 use Marvin\Device\Domain\ValueObject\Capability;
 use Marvin\Device\Domain\ValueObject\CompositeStrategy;
 use Marvin\Device\Domain\ValueObject\CompositeType;
 use Marvin\Device\Domain\ValueObject\DeviceStatus;
 use Marvin\Device\Domain\ValueObject\DeviceType;
+use Marvin\Device\Domain\ValueObject\ExecutionStrategy;
 use Marvin\Device\Domain\ValueObject\NativeGroupInfo;
 use Marvin\Device\Domain\ValueObject\NativeSceneInfo;
+use Marvin\Device\Domain\ValueObject\PhysicalAddress;
+use Marvin\Device\Domain\ValueObject\Protocol;
 use Marvin\Device\Domain\ValueObject\SceneStates;
 use Marvin\Device\Domain\ValueObject\TechnicalName;
 use Marvin\Device\Domain\ValueObject\VirtualDeviceConfig;
 use Marvin\Device\Domain\ValueObject\VirtualDeviceType;
+use Marvin\Shared\Domain\ValueObject\Description;
 use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 use Marvin\Shared\Domain\ValueObject\Identity\ProtocolId;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Marvin\Shared\Domain\ValueObject\Label;
 use Marvin\Shared\Domain\ValueObject\Metadata;
 
-class Device extends AggregateRoot
+/**
+ * Device - Aggregate Root
+ *
+ * Représente un équipement dans le système domotique (physique, virtuel ou composite)
+ */
+final class Device extends AggregateRoot
 {
-    /**
-     * @var Collection<int, DeviceCapability>
-     */
+    /** @var Collection<int, DeviceCapability> */
     public private(set) Collection $capabilities;
 
-    /**
-     * @var Collection<int, DeviceState>
-     */
-    public private(set) Collection $states;
-
-    /**
-     * @var Collection<int, Device>
-     */
-    public private(set) Collection $childrens;
-
-    public private(set) ?Device $parent = null;
-
-    public function __construct(
+    private function __construct(
         private(set) Label $label,
-        private(set) DeviceType $type,
-        private(set) DeviceStatus $status,
+        private(set) ?Description $description = null,
+        private(set) ?DeviceType $deviceType = null,
+        private(set) ?DeviceStatus $status = null,
+
+        // Physical device properties
+        private(set) ?Protocol $protocol = null,
         private(set) ?ProtocolId $protocolId = null,
+        private(set) ?PhysicalAddress $physicalAddress = null,
         private(set) ?TechnicalName $technicalName = null,
-        private(set) ?VirtualDeviceType $virtualDeviceType = null,
-        private(set) ?VirtualDeviceConfig $virtualDeviceConfig = null,
-        private(set) ?NativeGroupInfo $nativeGroupInfo = null,
-        private(set) ?NativeSceneInfo $nativeSceneInfo = null,
-        private(set) ?SceneStates $sceneStates = null, // Pour les scènes : états par device
+
+        // Composite device properties
+        private(set) ?CompositeType $compositeType = null,
         private(set) ?CompositeStrategy $compositeStrategy = null,
+        private(set) ?ExecutionStrategy $executionStrategy = null,
+        /** @var DeviceId[] $childDeviceIds */
+        private(set) array $childDeviceIds = [],
+        private(set) ?NativeGroupInfo $nativeGroupInfo = null,
+        private(set) array $nativeSubGroups = [],
+        private(set) ?NativeSceneInfo $nativeSceneInfo = null,
+        private(set) ?SceneStates $sceneStates = null,
+
+        // Virtual device properties
+        private(set) ?VirtualDeviceType $virtualType = null,
+        private(set) ?VirtualDeviceConfig $virtualConfig = null,
+
+        // Common properties
         private(set) ?ZoneId $zoneId = null,
-        private(set) ?string $manufacturer = null,
-        private(set) ?string $model = null,
-        private(set) ?string $firmwareVersion = null,
         private(set) ?Metadata $metadata = null,
-        private(set) ?DateTimeInterface $updatedAt = null,
-        private(set) DateTimeInterface $createdAt = new DateTimeImmutable(),
+        private(set) DateTimeImmutable $createdAt = new DatetimeImmutable(),
+        private(set) ?DateTimeImmutable $lastSeenAt = null,
+        private(set) ?DateTimeImmutable $lastStateUpdateAt = null,
         private(set) DeviceId $id = new DeviceId(),
     ) {
         $this->capabilities = new ArrayCollection();
-        $this->states = new ArrayCollection();
-        $this->childrens = new ArrayCollection();
     }
 
+    /**
+     * Crée un device physique (ACTUATOR ou SENSOR)
+     */
     public static function createPhysical(
         Label $label,
+        DeviceType $deviceType,
+        Protocol $protocol,
         ProtocolId $protocolId,
+        PhysicalAddress $physicalAddress,
         TechnicalName $technicalName,
-        ?string $manufacturer = null,
-        ?string $model = null,
-        ?string $firmwareVersion = null,
-        ?Metadata $metadata = null
+        array|Collection $capabilities,
+        ?ZoneId $zoneId = null,
+        ?Description $description = null,
+        ?Metadata $metadata = null,
     ): self {
+        $now = new DateTimeImmutable();
+
         $device = new self(
             label: $label,
-            type: DeviceType::PHYSICAL,
-            status: DeviceStatus::OFFLINE,
+            description: $description,
+            deviceType: $deviceType,
+            status: DeviceStatus::UNKNOWN,
+            protocol: $protocol,
             protocolId: $protocolId,
+            physicalAddress: $physicalAddress,
             technicalName: $technicalName,
-            manufacturer: $manufacturer,
-            model: $model,
-            firmwareVersion: $firmwareVersion,
-            metadata: $metadata,
+            compositeType: null,
+            compositeStrategy: null,
+            executionStrategy: null,
+            childDeviceIds: [],
+            nativeGroupInfo: null,
+            nativeSubGroups: [],
+            nativeSceneInfo: null,
+            sceneStates: null,
+            virtualType: null,
+            virtualConfig: null,
+            zoneId: $zoneId,
+            metadata: $metadata ?? Metadata::empty(),
+            createdAt: $now,
+            lastSeenAt: null,
+            lastStateUpdateAt: null,
         );
+
+        foreach ($capabilities as $key => $capability) {
+            if ($capability instanceof DeviceCapability) {
+                $device->addCapability($capability);
+            } else {
+                $device->createAndAddCapability(
+                    Capability::from($key),
+                    $capability['stateName'],
+                    $capability['initialValue'] ?? null,
+                    $capability['unit'] ?? null,
+                );
+            }
+        }
 
         $device->recordEvent(new DeviceCreated(
             deviceId: $device->id->toString(),
-            label: $device->label->value,
-            type: $device->type->value,
-            protocolId: $device->protocolId->toString(),
-            zoneId: $device->zoneId?->toString()
+            label: $label->value,
+            deviceType: $deviceType->value,
+            protocol: $protocol->value,
         ));
 
         return $device;
     }
 
+    /**
+     * Crée un device virtuel (TIME, WEATHER, HTTP)
+     */
     public static function createVirtual(
         Label $label,
-        VirtualDeviceType $virtualDeviceType,
-        VirtualDeviceConfig $virtualDeviceConfig
+        VirtualDeviceType $virtualType,
+        VirtualDeviceConfig $virtualConfig,
+        array|Collection $capabilities,
+        ?ZoneId $zoneId = null,
+        ?Description $description = null,
+        ?Metadata $metadata = null,
     ): self {
+        $now = new DateTimeImmutable();
+
         $device = new self(
             label: $label,
-            type: DeviceType::VIRTUAL,
-            status: DeviceStatus::ONLINE,
-            virtualDeviceType: $virtualDeviceType,
-            virtualDeviceConfig: $virtualDeviceConfig,
+            description: $description,
+            deviceType: DeviceType::VIRTUAL,
+            status: DeviceStatus::UNKNOWN,
+            protocol: null,
+            protocolId: null,
+            physicalAddress: null,
+            technicalName: null,
+            compositeType: null,
+            compositeStrategy: null,
+            executionStrategy: null,
+            childDeviceIds: [],
+            nativeGroupInfo: null,
+            nativeSubGroups: [],
+            nativeSceneInfo: null,
+            sceneStates: null,
+            virtualType: $virtualType,
+            virtualConfig: $virtualConfig,
+            zoneId: $zoneId,
+            metadata: $metadata ?? Metadata::empty(),
+            createdAt: $now,
+            lastSeenAt: null,
+            lastStateUpdateAt: null,
         );
 
-        $device->recordEvent(new DeviceCreated(
-            deviceId: $device->id->toString(),
-            label: $device->label->value,
-            type: $device->type->value,
-            virtualDeviceType: $device->virtualDeviceType->value
-        ));
-
-        return $device;
-    }
-
-    public static function createGroup(
-        Label $label,
-        /** @var Device[] $childrens */
-        array $childrens,
-        CompositeStrategy $strategy = CompositeStrategy::NATIVE_IF_AVAILABLE
-    ): self {
-        $device = new self(
-            label: $label,
-            type: DeviceType::COMPOSITE,
-            status: DeviceStatus::ONLINE,
-            compositeStrategy: $strategy,
-        );
-
-        $device->setChildrens($childrens);
+        foreach ($capabilities as $key => $capability) {
+            if ($capability instanceof DeviceCapability) {
+                $device->addCapability($capability);
+            } else {
+                $device->createAndAddCapability(
+                    Capability::from($key),
+                    $capability['stateName'],
+                    $capability['initialValue'] ?? null,
+                    $capability['unit'] ?? null,
+                );
+            }
+        }
 
         $device->recordEvent(new DeviceCreated(
             deviceId: $device->id->toString(),
             label: $label->value,
-            type: DeviceType::COMPOSITE->value,
-            compositeType: CompositeType::GROUP->value,
-            childCount: count($childrens)
+            deviceType: DeviceType::VIRTUAL->value,
+            protocol: null,
         ));
 
         return $device;
     }
 
-    public static function createScene(
+    /**
+     * Crée un device composite (GROUP ou SCENE)
+     */
+    public static function createComposite(
         Label $label,
-        array $devicesWithStates,
-        CompositeStrategy $strategy = CompositeStrategy::NATIVE_IF_AVAILABLE
+        CompositeType $compositeType,
+        array $childDeviceIds,
+        array|Collection $capabilities,
+        CompositeStrategy $compositeStrategy,
+        ?ExecutionStrategy $executionStrategy = null,
+        ?NativeGroupInfo $nativeGroupInfo = null,
+        array $nativeSubGroups = [],
+        ?NativeSceneInfo $nativeSceneInfo = null,
+        ?SceneStates $sceneStates = null,
+        ?ZoneId $zoneId = null,
+        ?Description $description = null,
+        ?Metadata $metadata = null,
     ): self {
+        $now = new DateTimeImmutable();
+
         $device = new self(
             label: $label,
-            type: DeviceType::COMPOSITE,
-            status: DeviceStatus::ONLINE,
-            compositeStrategy: $strategy,
+            description: $description,
+            deviceType: DeviceType::COMPOSITE,
+            status: DeviceStatus::ONLINE, // Composites toujours online
+            protocol: null,
+            protocolId: null,
+            physicalAddress: null,
+            technicalName: null,
+            compositeType: $compositeType,
+            compositeStrategy: $compositeStrategy,
+            executionStrategy: $executionStrategy ?? ExecutionStrategy::BROADCAST,
+            childDeviceIds: $childDeviceIds,
+            nativeGroupInfo: $nativeGroupInfo,
+            nativeSubGroups: $nativeSubGroups,
+            nativeSceneInfo: $nativeSceneInfo,
+            sceneStates: $sceneStates,
+            virtualType: null,
+            virtualConfig: null,
+            zoneId: $zoneId,
+            metadata: $metadata ?? Metadata::empty(),
+            createdAt: $now,
+            lastSeenAt: $now,
+            lastStateUpdateAt: null,
         );
 
-        $currentStates = [];
-
-        /** @var Device $deviceWithStates */
-        foreach ($devicesWithStates as $deviceWithStates) {
-            Assert::isInstanceOf(
-                $deviceWithStates,
-                Device::class,
-                'device.exceptions.DE0028.device_must_be_an_instance_of_device'
-            );
-
-            $device->addChildren($deviceWithStates);
-            $currentStates[$deviceWithStates->id->toString()] = $deviceWithStates->states->toArray();
+        foreach ($capabilities as $key => $capability) {
+            if ($capability instanceof DeviceCapability) {
+                $device->addCapability($capability);
+            } else {
+                $device->createAndAddCapability(
+                    Capability::from($key),
+                    $capability['stateName'],
+                    $capability['initialValue'] ?? null,
+                    $capability['unit'] ?? null,
+                );
+            }
         }
-
-        $device->setSceneStates($currentStates);
 
         $device->recordEvent(new DeviceCreated(
             deviceId: $device->id->toString(),
             label: $label->value,
-            type: DeviceType::COMPOSITE->value,
-            compositeType: CompositeType::SCENE->value,
-            childCount: count($device->childrens)
+            deviceType: DeviceType::COMPOSITE->value,
+            protocol: null,
         ));
 
         return $device;
     }
 
-    public function setParent(Device $parent): void
-    {
-        if ($this->id === $parent->id) {
-            throw new DeviceCompositeCircularReference("A device cannot be its own parent");
-        }
-
-        $this->parent = $parent;
-    }
-
-    public function delete(): void
-    {
-        $this->recordEvent(new DeviceDeleted(
-            deviceId: $this->id->toString(),
-            name: $this->label->value,
-        ));
-    }
-
-    public function addCapability(DeviceCapability $capability): self
+    public function addCapability(DeviceCapability $capability): void
     {
         if (!$this->capabilities->contains($capability)) {
             $this->capabilities->add($capability);
+            $capability->setDevice($this);
         }
-
-        return $this;
     }
 
-    public function removeCapability(DeviceCapability $capability): self
+    public function removeCapability(DeviceCapability $capability): void
     {
-        if (!$this->capabilities->contains($capability)) {
+        if ($this->capabilities->contains($capability)) {
             $this->capabilities->removeElement($capability);
             $capability->setDevice(null);
+        }
+    }
 
-            $state = $this->findStateCapability($capability->name);
+    public function createAndAddCapability(
+        Capability $capability,
+        string $stateName,
+        mixed $initialValue = null,
+        ?string $unit = null,
+    ): void {
+        // Vérifier si ce state existe déjà
+        if (array_any($this->capabilities, fn ($existingCap) => $existingCap->stateName === $stateName)) {
+            return; // State déjà ajouté
+        }
 
-            if (null !== $state) {
-                $this->removeState($state);
+        $capability = DeviceCapability::create($capability, $stateName, $initialValue);
+
+        if (null !== $unit) {
+            $capability->setUnit($unit);
+        }
+
+        $this->addCapability($capability);
+    }
+
+    /**
+     * Met à jour l'état du device
+     */
+    public function updateState(array $newStates): void
+    {
+        $oldState = $this->getCurrentState();
+        $hasChanges = false;
+
+        foreach ($newStates as $capabilityName => $values) {
+            foreach ($this->capabilities as $deviceCapability) {
+                if (
+                    $deviceCapability->capability->value === $capabilityName &&
+                    $deviceCapability->stateName === $values['stateName']
+                ) {
+                    $deviceCapability->updateValue($values['newValue']);
+
+                    if (isset($values['unit'])) {
+                        $deviceCapability->setUnit($values['unit']);
+                    }
+
+                    $hasChanges = true;
+                    break;
+                }
             }
         }
 
-        return $this;
+        if ($hasChanges) {
+            $this->lastStateUpdateAt = new DateTimeImmutable();
+            $this->recordEvent(new DeviceStateChanged(
+                deviceId: $this->id->toString(),
+                oldState: $oldState,
+                newState: $this->getCurrentState(),
+            ));
+        }
     }
 
-    public function addState(DeviceState $state): self
+    /**
+     * Met à jour un état partiel du device (un seul state)
+     *
+     * Utilisé principalement par les event handlers MQTT/Protocol
+     * qui reçoivent des mises à jour incrémentales
+     *
+     * @param string $stateName Nom du state (ex: "brightness", "is_heating", "state")
+     * @param mixed $value Nouvelle valeur
+     * @param string|null $unit Unité optionnelle (ex: "°C", "%", "lux")
+     */
+    public function updatePartialState(string $stateName, mixed $value, ?string $unit = null): void
     {
-        if (!$this->states->contains($state)) {
-            $this->states->add($state);
-        }
+        foreach ($this->capabilities as $deviceCapability) {
+            if ($deviceCapability->stateName === $stateName) {
+                $deviceCapability->updateValue($value);
 
-        return $this;
-    }
+                // Store unit in metadata if provided
+                if ($unit !== null) {
+                    $deviceCapability->setUnit($unit);
+                }
 
-    public function removeState(DeviceState $state): self
-    {
-        if (!$this->states->contains($state)) {
-            $this->states->removeElement($state);
-            $state->setDevice(null);
-        }
+                $this->lastStateUpdateAt = new DateTimeImmutable();
 
-        return $this;
-    }
+                // Note: We don't record DeviceStateChanged event here to avoid
+                // flooding the event bus with partial updates. The event handler
+                // will save the device, and full state events can be triggered
+                // by updateState() when needed.
 
-    public function setChildrens(array $childrens): void
-    {
-        $this->childrens = new ArrayCollection();
-
-        foreach ($childrens as $children) {
-            $this->addChildren($children);
+                return;
+            }
         }
     }
 
-    public function addChildren(Device $device): self
-    {
-        if (!$this->isComposite()) {
-            throw new DeviceMustBeComposite("Only composite devices can have child devices");
-        }
-
-        if ($this->id === $device->id) {
-            throw new DeviceCompositeCircularReference("A device cannot be its own child");
-        }
-
-        if (!$this->childrens->contains($device)) {
-            $this->childrens->add($device);
-        }
-
-        return $this;
-    }
-
-    public function removeChildren(Device $device): self
-    {
-        if (!$this->isComposite()) {
-            throw new DeviceMustBeComposite("Only composite devices can have child devices");
-        }
-
-        if (!$this->childrens->contains($device)) {
-            $this->childrens->removeElement($device);
-        }
-
-        return $this;
-    }
-
-    public function updateState(Capability $capability, mixed $value, ?string $unit = null): void
-    {
-        $state = $this->getOrCreateState($capability);
-        $oldValue = $state->value;
-
-        $state->updateValue($value, $unit);
-
-        $this->recordEvent(new DeviceStateChanged(
-            deviceId: $this->id->toString(),
-            capability: $capability->value,
-            oldValue: $oldValue,
-            newValue: $value
-        ));
-    }
-
-    public function executeAction(Capability $capability, string $action, array $params = []): void
-    {
-        $deviceCapability = $this->findCapability($capability);
-
-        if (!$deviceCapability) {
-            throw CapabilityNotFound::withCapabilityAndDevice(
-                $capability,
-                $this->label,
-            );
-        }
-
-        if (!$deviceCapability->supportsAction($action)) {
-            throw CapabilityNotSupportedAction::withCapabilityAndAction(
-                $capability,
-                $action,
-            );
-        }
-
-        $this->recordEvent(new DeviceActionExecuted(
-            deviceId: $this->id->toString(),
-            capability: $capability->value,
-            action: $action,
-            params: $params
-        ));
-    }
-
+    /**
+     * Marque le device comme online
+     */
     public function markOnline(): void
     {
-        if ($this->status !== DeviceStatus::ONLINE) {
-            $this->status = DeviceStatus::ONLINE;
-
-            $this->recordEvent(new DeviceOnline(
-                deviceId: $this->id->toString(),
-                label: $this->label
-            ));
-        }
+        $this->status = DeviceStatus::ONLINE;
+        $this->lastSeenAt = new DateTimeImmutable();
     }
 
+    /**
+     * Marque le device comme offline
+     */
     public function markOffline(): void
     {
-        if ($this->status !== DeviceStatus::OFFLINE) {
-            $this->status = DeviceStatus::OFFLINE;
-
-            $this->recordEvent(new DeviceOffline(
-                deviceId: $this->id->toString(),
-                label: $this->label->value
-            ));
-        }
+        $this->status = DeviceStatus::OFFLINE;
     }
 
-    public function markUnavailable(string $reason): void
-    {
-        $this->status = DeviceStatus::UNAVAILABLE;
-        $this->metadata = new Metadata([
-            'unavailable_reason' => $reason,
-        ]);
-    }
-
+    /**
+     * Assigne le device à une zone
+     */
     public function assignToZone(ZoneId $zoneId): void
     {
-        $oldZoneId = $this->zoneId?->toString();
         $this->zoneId = $zoneId;
-
-        $this->recordEvent(new DeviceAssignedToZone(
-            deviceId: $this->id->toString(),
-            zoneId: $zoneId->toString(),
-            previousZoneId: $oldZoneId
-        ));
     }
 
-    public function hasZone(): bool
+    /**
+     * Retire le device de sa zone
+     */
+    public function removeFromZone(): void
     {
-        return $this->zoneId !== null;
+        $this->zoneId = null;
     }
 
-    public function unassignFromZone(): void
+    /**
+     * Retire un device enfant du groupe composite
+     *
+     * @throws RemoveChildrenNotAuthorized Si le device n'est pas composite
+     */
+    public function removeChildDevice(DeviceId $deviceId): void
     {
-        if ($this->zoneId !== null) {
-            $oldZoneId = $this->zoneId->toString();
-            $this->zoneId = null;
+        if (!$this->isComposite()) {
+            throw new RemoveChildrenNotAuthorized('Cannot remove child device from non-composite device');
+        }
 
-            $this->recordEvent(new DeviceAssignedToZone(
-                deviceId: $this->id->toString(),
-                zoneId: null,
-                previousZoneId: $oldZoneId
+        // Rechercher et retirer le device enfant
+        $originalCount = count($this->childDeviceIds);
+        $this->childDeviceIds = array_filter(
+            $this->childDeviceIds,
+            fn (DeviceId $childId) => !$childId->equals($deviceId)
+        );
+
+        // Réindexer le tableau pour éviter les trous dans les clés
+        $this->childDeviceIds = array_values($this->childDeviceIds);
+
+        // Si un device a été retiré, enregistrer l'événement
+        if (count($this->childDeviceIds) < $originalCount) {
+            $this->recordEvent(new DeviceRemovedFromGroup(
+                groupId: $this->id->toString(),
+                deviceId: $deviceId->toString(),
+                groupLabel: $this->label->value,
             ));
         }
     }
 
-    public function getState(Capability $capability): ?DeviceState
+    /**
+     * Retourne l'état actuel du device sous forme de tableau
+     * @todo check si ça fonctionne bien
+     */
+    public function getCurrentState(): array
     {
-        /** @var DeviceState $state */
-        foreach ($this->states as $state) {
-            if ($state->capability->equals($capability)) {
-                return $state;
+        $state = [];
+
+        foreach ($this->capabilities as $capability) {
+            $capabilityState = $capability->toStateArray();
+            $state = array_merge($state, $capabilityState);
+        }
+
+        return $state;
+    }
+
+    /**
+     * Vérifie si le device supporte une capability
+     */
+    public function hasCapability(Capability $capability): bool
+    {
+        foreach ($this->capabilities as $deviceCapability) {
+            if ($deviceCapability->capability === $capability) {
+                return true;
             }
         }
-        return null;
+
+        return false;
     }
 
-    public function setNativeGroupInfo(NativeGroupInfo $info): void
-    {
-        if (!$this->isComposite()) {
-            throw new DeviceMustBeComposite("Only composite devices can have native group info");
-        }
-
-        $this->nativeGroupInfo = $info;
-    }
-
-    public function setNativeSceneInfo(NativeSceneInfo $info): void
-    {
-        if (!$this->isComposite()) {
-            throw new DeviceMustBeComposite("Only composite devices can have native scene info");
-        }
-
-        $this->nativeSceneInfo = $info;
-    }
-
-    public function hasNativeSupport(): bool
-    {
-        return
-            ($this->nativeGroupInfo !== null && $this->nativeGroupInfo->isSupported) ||
-            ($this->nativeSceneInfo !== null && $this->nativeSceneInfo->isSupported)
-        ;
-    }
-
-    public function shouldUseNative(): bool
-    {
-        if (!$this->hasNativeSupport()) {
-            return false;
-        }
-
-        return match ($this->compositeStrategy) {
-            CompositeStrategy::NATIVE_IF_AVAILABLE, CompositeStrategy::NATIVE_ONLY => true,
-            default => false,
-        };
-    }
-
-    public function setSceneState(DeviceId $deviceId, array $state): void
-    {
-        if (!$this->isComposite()) {
-            throw new DeviceMustBeComposite("Only composite devices can have scene states");
-        }
-
-        $previousState = [];
-
-        if (null !== $this->sceneStates) {
-            $previousState = $this->sceneStates->toArray();
-        }
-
-        $this->sceneStates = SceneStates::fromArray(array_merge(
-            $previousState,
-            [$deviceId->toString() => $state]
-        ));
-    }
-
-    public function setSceneStates(array $states): void
-    {
-        foreach ($states as $deviceId => $state) {
-            $this->setSceneState(DeviceId::fromString($deviceId), $state);
-        }
-    }
-
+    /**
+     * Vérifie si le device est un device physique
+     */
     public function isPhysical(): bool
     {
-        return $this->type === DeviceType::PHYSICAL;
+        return $this->deviceType === DeviceType::ACTUATOR || $this->deviceType === DeviceType::SENSOR;
     }
 
-    public function isVirtual(): bool
-    {
-        return $this->type === DeviceType::VIRTUAL;
-    }
-
+    /**
+     * Vérifie si le device est un device composite
+     */
     public function isComposite(): bool
     {
-        return $this->type === DeviceType::COMPOSITE;
+        return $this->deviceType === DeviceType::COMPOSITE;
     }
 
-    public function isOnline(): bool
+    /**
+     * Vérifie si le device est un device virtuel
+     */
+    public function isVirtual(): bool
     {
-        return $this->status === DeviceStatus::ONLINE;
+        return $this->deviceType === DeviceType::VIRTUAL;
     }
 
-    public function hasProtocol(): bool
+    /**
+     * Vérifie si le device est en lecture seule (sensor)
+     */
+    public function isReadOnly(): bool
     {
-        return $this->protocolId !== null;
+        return $this->deviceType === DeviceType::SENSOR;
     }
 
-    public function isScene(): bool
+    /**
+     * Mise à jour des états de scène pour un dispositif composite de scène
+     *
+     * Remplace les états actuellement enregistrés par de nouveaux états.
+     * Utilisé par la commande StoreSceneCurrentState pour créer un snapshot des états des périphériques.
+     *
+     * @throws UpdateSceneStateNotAuthorized if device is not a scene
+     */
+    public function updateSceneStates(SceneStates $newStates): void
     {
-        return
-            $this->isComposite() &&
-            $this->nativeSceneInfo !== null &&
-            $this->sceneStates !== null
-        ;
-    }
-
-    public function isGroup(): bool
-    {
-        return
-            $this->isComposite() &&
-            $this->nativeGroupInfo !== null &&
-            $this->sceneStates === null
-        ;
-    }
-
-    private function getOrCreateState(Capability $capability): DeviceState
-    {
-        /** @var DeviceState $state */
-        foreach ($this->states as $state) {
-            if ($state->capability->equals($capability)) {
-                return $state;
-            }
+        if (!$this->isComposite() || $this->compositeType !== CompositeType::SCENE) {
+            throw new UpdateSceneStateNotAuthorized('Cannot update scene states on non-scene device');
         }
 
-        $newState = new DeviceState($capability);
-        $this->states->add($newState);
+        $this->sceneStates = $newStates;
 
-        return $newState;
-    }
-
-    private function findCapability(Capability $capability): ?DeviceCapability
-    {
-        $capabilityFound = $this->capabilities->filter(
-            fn (DeviceCapability $deviceCapability) => $deviceCapability->capability->equals($capability)
-        )->first();
-
-        return false === $capabilityFound ? null : $capabilityFound;
-    }
-
-    private function findStateCapability(Capability $capability): ?DeviceState
-    {
-        $stateFound = $this->states->filter(fn (DeviceState $state) => $state->capability->equals($capability))->first();
-
-        return false === $stateFound ? null : $stateFound;
+        $this->recordEvent(new SceneStatesUpdated(
+            sceneId: $this->id->toString(),
+            sceneLabel: $this->label->value,
+            deviceCount: count($newStates->getDeviceIds()),
+        ));
     }
 }

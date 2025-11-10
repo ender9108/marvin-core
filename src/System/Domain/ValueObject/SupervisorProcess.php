@@ -12,7 +12,8 @@ final readonly class SupervisorProcess implements Stringable
     public function __construct(string $value)
     {
         Assert::notEmpty($value, 'shared.exceptions.SY0012.supervisor_process_does_not_empty');
-        Assert::regex($value, '/^[a-z0-9_\-]+$/i', 'shared.exceptions.SY0013.supervisor_process_is_not_valid');;
+        Assert::regex($value, '/^[a-z0-9_\-]+$/i', 'shared.exceptions.SY0013.supervisor_process_is_not_valid');
+        ;
 
         $this->value = $value;
     }

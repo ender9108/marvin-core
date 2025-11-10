@@ -2,8 +2,8 @@
 
 namespace Marvin\Shared\Application\Acl;
 
-use DateTimeImmutable;
 use DateMalformedStringException;
+use DateTimeImmutable;
 
 final readonly class SecretInfo
 {

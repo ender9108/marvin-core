@@ -40,8 +40,8 @@ services:
                 UNIX_UID: '${UID:-1000}'
                 UNIX_GID: '${GID:-1000}'
         container_name: '${APP_NAME}-worker'
-        ports:
-            - '127.0.0.1:9001:9001'
+        #ports:
+        #    - '127.0.0.1:9001:9001'
         environment:
             UNIX_UID: '${UID:-1000}'
             UNIX_GID: '${GID:-1000}'
@@ -78,31 +78,31 @@ services:
         container_name: '${APP_NAME}-mqtt-broker'
         restart: unless-stopped
         volumes:
-            - ./docker/mqtt_broker/config:/mosquitto/config
+            - ./docker/mqtt_broker/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
             - mqtt_broker_datas:/mosquitto/data
             - mqtt_broker_logs:/mosquitto/log
         ports:
             - "127.0.0.1:1883:1883"
             - "127.0.0.1:9002:9001"
 
-    #zigbee2mqtt:
-    #    image: koenkk/zigbee2mqtt:2.6
-    #    container_name: ${APP_NAME}-zigbee2mqtt
-    #    restart: unless-stopped
-    #    #user: "${UID:-1000}:${GID:-1000}"
-    #    group_add:
-    #        - dialout
-    #    volumes:
-    #        - ./docker/zigbee2mqtt/config/configuration.yaml:/app/data/configuration.yaml
-    #        - ./docker/zigbee2mqtt/config/secret.yaml:/app/data/secret.yaml
-    #        - zigbee2mqtt_datas:/app/data
-    #        - /run/udev:/run/udev:ro
-    #    # ports: # Enabled to activate front access + update config file frontend.enabled: true
-    #    #     - "127.0.0.1:8081:8080"
-    #    devices:
-    #        - /dev/serial/by-id/usb-Texas_Instruments_TI_CC2531_USB_CDC___0X00124B001CDD463E-if00:/dev/ttyACM0
-    #    depends_on:
-    #        - mqtt_broker
+    zigbee2mqtt:
+        image: koenkk/zigbee2mqtt:2.6
+        container_name: ${APP_NAME}-zigbee2mqtt
+        restart: unless-stopped
+        #user: "${UID:-1000}:${GID:-1000}"
+        group_add:
+            - dialout
+        volumes:
+            - ./docker/zigbee2mqtt/config/configuration.yaml:/app/data/configuration.yaml
+            - ./docker/zigbee2mqtt/config/secret.yaml:/app/data/secret.yaml
+            - zigbee2mqtt_datas:/app/data
+            - /run/udev:/run/udev:ro
+        # ports: # Enabled to activate front access + update config file frontend.enabled: true
+        #     - "127.0.0.1:8081:8080"
+        devices:
+            - /dev/serial/by-id/usb-Texas_Instruments_TI_CC2531_USB_CDC___0X00124B001CDD463E-if00:/dev/ttyACM0
+        depends_on:
+            - mqtt_broker
 
 volumes:
     database_datas: {}

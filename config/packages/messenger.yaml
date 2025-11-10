@@ -48,7 +48,8 @@ framework:
                     queue_name: failed
                     use_notify: true
         routing:
-            EnderLab\MarvinManagerBundle\Messenger\ManagerRequestCommandInterface: marvin.to.manager
+            # TODO: Fix ManagerRequestCommandInterface namespace issue
+            #EnderLab\MarvinManagerBundle\Messenger\ManagerRequestCommandInterface: marvin.to.manager
             #Marvin\Domotic\Application\Command\DomoticEvent: domotic.events
             #Marvin\Domotic\Application\Command\DomoticCommand: domotic.commands
 

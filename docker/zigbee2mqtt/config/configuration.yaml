@@ -1,6 +1,6 @@
 mqtt:
   server: '!secret.yaml server'
-  base_topic: zigbee2mqtt2marvin
+  base_topic: zigbee2mqtt
   user: '!secret.yaml user'
   password: '!secret.yaml password'
   client_id: zigbee_mqtt_marvin

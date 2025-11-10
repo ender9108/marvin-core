@@ -24,7 +24,8 @@ readonly class JWTListener
 
         $payload['firstname'] = $user->firstname->value;
         $payload['lastname'] = $user->lastname->value;
-        $payload['status'] = $user->status->reference->value;
+        $payload['status'] = $user->status->value;
+        $payload['type'] = $user->type->value;
         $payload['id'] = $user->id->toString();
         $payload['ip'] = $request?->getClientIp();
 

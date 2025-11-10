@@ -1,20 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Marvin\Device\Domain\Event\Device;
 
 use EnderLab\DddCqrsBundle\Domain\Event\AbstractDomainEvent;
 
+/**
+ * Domain Event: A device was created
+ *
+ * Emitted when a new device (physical, virtual, or composite) is created
+ */
 final readonly class DeviceCreated extends AbstractDomainEvent
 {
     public function __construct(
         public string $deviceId,
         public string $label,
-        public string $type,
-        public ?string $protocolId = null,
-        public ?string $zoneId = null,
-        public ?string $virtualDeviceType = null,
-        public ?string $compositeType = null,
-        public ?int $childCount = null,
+        public string $deviceType,
+        public ?string $protocol = null,
     ) {
         parent::__construct();
     }
@@ -24,12 +27,8 @@ final readonly class DeviceCreated extends AbstractDomainEvent
         return [
             'device_id' => $this->deviceId,
             'label' => $this->label,
-            'type' => $this->type,
-            'protocol_id' => $this->protocolId,
-            'zone_id' => $this->zoneId,
-            'virtual_device_type' => $this->virtualDeviceType,
-            'composite_type' => $this->compositeType,
-            'child_count' => $this->childCount,
+            'device_type' => $this->deviceType,
+            'protocol' => $this->protocol,
         ];
     }
 }

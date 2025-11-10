@@ -5,17 +5,17 @@ namespace Marvin\Shared\Domain\ValueObject;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use Stringable;
 
-final class Url implements Stringable
+final readonly class Url implements Stringable
 {
-    private readonly string $scheme;
-    private readonly string $host;
-    private readonly ?int $port;
-    private readonly string $path;
-    private readonly ?string $query;
-    private readonly ?string $fragment;
+    private string $scheme;
+    private string $host;
+    private ?int $port;
+    private string $path;
+    private ?string $query;
+    private ?string $fragment;
 
     public function __construct(
-        public readonly string $value
+        public string $value
     ) {
         Assert::notEmpty($this->value, 'shared.exceptions.SH0001.url_not_empty');
         Assert::true(filter_var($this->value, FILTER_VALIDATE_URL) !== false, 'shared.exceptions.SH0002.url_is_not_valid');
@@ -116,10 +116,3 @@ final class Url implements Stringable
         return $this->value;
     }
 }
-
-
-
-
-
-
-

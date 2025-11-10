@@ -4,7 +4,6 @@ namespace Marvin\System\Presentation\Cli;
 
 use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use EnderLab\MarvinManagerBundle\Messenger\Bus\MarvinToManagerCommandBusInterface;
 use EnderLab\MarvinManagerBundle\Reference\ManagerContainerActionReference;
 use Exception;
 use Marvin\Shared\Domain\ValueObject\Identity\CorrelationId;
@@ -51,7 +50,8 @@ final readonly class SendContainerCommand
         int $timeout = 10,
     ): int {
         try {
-            Assert::inArray($action, ManagerContainerActionReference::values(), 'system.exceptions.SY0011.invalid_action');;
+            Assert::inArray($action, ManagerContainerActionReference::values(), 'system.exceptions.SY0011.invalid_action');
+            ;
 
             $container = $this->containerRepository->byId(ContainerId::fromString($id));
 

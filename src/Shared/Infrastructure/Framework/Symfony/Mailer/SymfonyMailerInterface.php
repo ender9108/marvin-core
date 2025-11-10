@@ -2,10 +2,10 @@
 
 namespace Marvin\Shared\Infrastructure\Framework\Symfony\Mailer;
 
-use Override;
 use Marvin\Shared\Application\Email\EmailDefinitionInterface;
 use Marvin\Shared\Application\Email\MailerInterface as MarvinMailerInterface;
 use Marvin\Shared\Domain\Application;
+use Override;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;

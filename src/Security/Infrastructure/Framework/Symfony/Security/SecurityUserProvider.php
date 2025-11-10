@@ -2,9 +2,9 @@
 
 namespace Marvin\Security\Infrastructure\Framework\Symfony\Security;
 
-use Override;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Marvin\Shared\Domain\ValueObject\Email;
+use Override;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;

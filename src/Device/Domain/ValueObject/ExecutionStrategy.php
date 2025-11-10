@@ -20,4 +20,3 @@ enum ExecutionStrategy: string
         return $this->value;
     }
 }
-

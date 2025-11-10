@@ -2,7 +2,6 @@
 
 namespace Marvin\Device\Domain\ValueObject;
 
-use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectTrait;
 use Stringable;
 
@@ -44,6 +43,6 @@ final readonly class VirtualDeviceConfig implements Stringable
 
     public function __toString(): string
     {
-        return json_encode($this->value);
+        return (string) json_encode($this->value);
     }
 }

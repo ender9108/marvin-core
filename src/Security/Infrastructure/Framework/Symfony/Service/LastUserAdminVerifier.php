@@ -23,7 +23,7 @@ final readonly class LastUserAdminVerifier implements LastUserAdminVerifierInter
         $countSameRoleUsers = $this->userRepository->countSameEnabledUserType($user);
 
         if ($countSameRoleUsers === 1) {
-            throw new LastUserAdmin();
+            throw new LastUserAdmin('You cannot delete the last admin.');
         }
     }
 }

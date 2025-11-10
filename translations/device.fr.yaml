@@ -26,7 +26,7 @@ device:
         DE0024.capability_state_validation_max: 'La valeur %value% dépasse le maximum %max%'
         DE0025.capability_state_validation: 'La valeur n''est pas valide.'
         DE0026.capability_not_supported_action: 'La capacité ne supporte cette action.'
-        DE0027.capability_not_supported_action_with_capability_name_and_action: 'La capacité %capability% ne supporte pas l''action %action%.'
+        DE0027.capability_not_supported_action_with_capability_name_and_action: 'Le module %device_id% avec la capacité %capability% ne supporte pas l''action %action%.'
         DE0028.device_must_be_an_instance_of_device: Le module passé en paramètre doit être une instance de "Device".
         DE0029.physical_address_empty: L'adresse physique ne doit pas être vide
         DE0030.physical_address_length: L'adresse physique ne doit pas contenir plus de 100 caractères
@@ -36,5 +36,27 @@ device:
         DE0034.device_model_length: Le modèle ne doit pas contenir plus de 100 caractères
         DE0035.firmware_version_empty: La version du firmware ne doit pas être vide
         DE0036.firmware_version_length: La version du firmware ne doit pas contenir plus de 50 caractères
+        DE0037.data_type_not_implemented: Le type d'état n'est pas implémenté
+        DE0038.data_type_not_implementedwith_type: Le type d'état %type% n'est pas implémenté
+        DE0039.invalid_virtual_config_with_missing_key: 'Le type de périphérique virtuel %virtual_type% nécessite les clés de configuration suivantes : %key%'
+        DE0040.remove_children_not_authorized_on_non_composite_device: 'Impossible de retirer les modules enfants de ce module. Ce module n''est pas composite.'
+        DE0041.protocol_not_found: Protocole introuvable.
+        DE0042.protocol_not_found_with_id: 'Protocole introuvable avec l''id "%id%".'
+        DE0043.protocol_is_disabled: 'Protocole %id% est désactivé.'
+        DE0044.capability_not_supported_by_device: 'La capacité %capability% n''est pas supportée par le module %device_id%.'
+        DE0045.capability_not_supported_by_protocol: 'La capacité %capability% n''est pas supportée par le protocol %protocol%.'
+        DE0046.cannot_add_composite_on_group: Impossible d'ajouter un module composite à un groupe
+        DE0047.cannot_add_composite_on_group_with_device_id: Impossible d'ajouter un module composite %device_id% à un groupe
+        DE0048.native_only_with_different_protocols: 'Impossible de créer un groupe natif : les périphériques utilisent des protocoles différents. Utilisez la stratégie EMULATED_ONLY pour les protocoles mixtes.'
+        DE0049.native_group_without_protocol: 'Impossible de créer un groupe natif : les appareils ne disposent d''aucun protocole.'
+        DE0050.protocol_does_not_support_native_group: Le protocole %protocol% ne prend pas en charge les groupes natifs. Utilisez plutôt la stratégie EMULATED_ONLY.
+        DE0051.failed_create_native_group: 'Échec de la création du groupe natif : %error%'
+
+    events:
+        device_created: 'Device "%label%" créé avec succès'
+        device_state_changed: 'État du device modifié'
+        device_removed_from_group: 'Device retiré du groupe "%groupLabel%"'
+        scene_states_updated: 'États de la scène "%sceneLabel%" mis à jour (%deviceCount% devices)'
+
     capabilities:
-        
+

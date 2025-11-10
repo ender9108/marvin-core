@@ -34,7 +34,7 @@ final readonly class CreateZoneHandler
         if ($command->parentZoneId !== null) {
             try {
                 $parentZone = $this->zoneRepository->byId($command->parentZoneId);
-            } catch (DomainException $de) {
+            } catch (DomainException) {
                 throw ZoneParentNotFound::withId($command->parentZoneId);
             }
 

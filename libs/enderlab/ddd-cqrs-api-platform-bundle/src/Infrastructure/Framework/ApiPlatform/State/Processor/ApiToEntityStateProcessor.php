@@ -13,6 +13,7 @@ use ApiPlatform\State\ProcessorInterface;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\Framework\ApiPlatform\ApiResourceInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 final readonly class ApiToEntityStateProcessor implements ProcessorInterface
@@ -23,6 +24,7 @@ final readonly class ApiToEntityStateProcessor implements ProcessorInterface
         #[Autowire(service: RemoveProcessor::class)]
         protected ProcessorInterface $removeProcessor,
         private MicroMapperInterface $microMapper,
+        private ObjectMapperInterface $objectMapper,
     ) {
     }
 
@@ -39,20 +41,25 @@ final readonly class ApiToEntityStateProcessor implements ProcessorInterface
 
         if ($operation instanceof Put) {
             $data->id = $context['previous_data']->id;
-            $context['previous_data'] = $this->microMapper->map($context['previous_data'], $entityClass, [
-                MicroMapperInterface::MAX_DEPTH => 0
-            ]);
+            $context['previous_data'] = $this->objectMapper->map($context['previous_data'], $entityClass);
         }
 
-        $entity = $this->microMapper->map($data, $entityClass, [
-            MicroMapperInterface::MAX_DEPTH => 0
-        ]);
+        $entity = $this->objectMapper->map($data, $entityClass);
 
         if (!is_object($entity)) {
             throw new RuntimeException('Entity "'.$entityClass.'" is not object');
         }
 
-        switch (true) {
+        if ($operation instanceof DeleteOperationInterface) {
+            if (method_exists($entity, 'delete')) {
+                $entity->delete();
+            }
+
+            $this->removeProcessor->process($entity, $operation, $uriVariables, $context);
+            return null;
+        }
+
+        /*switch (true) {
             case $operation instanceof Put:
             case $operation instanceof Patch:
                 if (method_exists($entity, 'update')) {
@@ -67,14 +74,15 @@ final readonly class ApiToEntityStateProcessor implements ProcessorInterface
                 $this->removeProcessor->process($entity, $operation, $uriVariables, $context);
                 return null;
             default:
-        }
+        }*/
 
         $this->persistProcessor->process($entity, $operation, $uriVariables, $context);
 
         /** @var ApiResourceInterface $resource */
-        $resource = $this->microMapper->map($entity, get_class($data), [
+        $resource = $this->objectMapper->map($entity, get_class($data));
+            /*$this->microMapper->map($entity, get_class($data), [
             MicroMapperInterface::MAX_DEPTH => 0
-        ]);
+        ]);*/
 
         return $resource;
     }

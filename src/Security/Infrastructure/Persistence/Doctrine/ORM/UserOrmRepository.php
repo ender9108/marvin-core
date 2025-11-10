@@ -3,8 +3,6 @@
 namespace Marvin\Security\Infrastructure\Persistence\Doctrine\ORM;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
@@ -13,7 +11,7 @@ use Marvin\Security\Domain\Exception\UserNotFound;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
 use Marvin\Security\Domain\ValueObject\UserStatus;
-use Marvin\Security\Infrastructure\Persistence\Doctrine\Cache\SecurityCacheKeys;
+use Marvin\Security\Domain\ValueObject\UserType;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 use Override;
@@ -55,13 +53,12 @@ final class UserOrmRepository extends ServiceEntityRepository implements UserRep
         return $this
             ->createQueryBuilder('u')
             ->select('COUNT(u)')
-            ->innerJoin('u.type', 't', Join::WITH, 't = u.type')
             ->where('u.id != :id')
             ->setParameter('id', $user->id)
             ->andWhere('u.status = :status')
-            ->setParameter('status', new UserStatus(UserStatus::STATUSES['ENABLED']))
-            ->andWhere('t = :type')
-            ->setParameter('type', $user->type)
+            ->setParameter('status', UserStatus::ENABLED->value)
+            ->andWhere('u.type = :type')
+            ->setParameter('type', UserType::APP->value)
             ->getQuery()
             ->getSingleScalarResult()
         ;
@@ -99,12 +96,7 @@ final class UserOrmRepository extends ServiceEntityRepository implements UserRep
         int $page = 0,
         int $itemsPerPage = 20
     ): PaginatorInterface {
-        $query = $this
-            ->createQueryBuilder('u')
-            ->setCacheable(true)
-            ->setCacheMode(ClassMetadata::CACHE_USAGE_NONSTRICT_READ_WRITE)
-            ->setCacheRegion(SecurityCacheKeys::USER_LIST->value)
-        ;
+        $query = $this->createQueryBuilder('u');
 
         foreach ($criterias as $field => $value) {
             switch ($field) {

@@ -1,0 +1,47 @@
+<?php
+
+namespace Marvin\Device\Presentation\Cli;
+
+use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
+use Exception;
+use Marvin\Device\Application\Command\Device\CreatePhysicalDevice as AppCreatePhysicalDevice;
+use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
+use Symfony\Component\Console\Attribute\Argument;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Style\SymfonyStyle;
+
+#[AsCommand(
+    name: 'device:physical:create',
+    description: 'Create a physical device',
+)]
+final readonly class CreatePhysicalDevice
+{
+    public function __construct(
+        private CommandBusInterface $commandBus,
+        private ExceptionMessageManager $exceptionMessageManager,
+    ) {
+    }
+
+    public function __invoke(
+        SymfonyStyle $io,
+        #[Argument(name: 'label')]
+        string $label,
+    ): int {
+        try {
+            $command = new AppCreatePhysicalDevice(
+                label: '',
+            );
+
+            $this->commandBus->dispatch($command);
+
+            $io->success(sprintf('Physical %s device created successfully.', $command->label->value));
+
+            return Command::SUCCESS;
+        } catch (Exception $e) {
+            $io->error($this->exceptionMessageManager->cliResponseFormat($e));
+
+            return Command::FAILURE;
+        }
+    }
+}

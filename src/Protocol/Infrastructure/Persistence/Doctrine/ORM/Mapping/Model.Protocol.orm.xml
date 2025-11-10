@@ -1,0 +1,21 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity
+        name="Marvin\Protocol\Domain\Model\Protocol"
+        table="protocol_protocol"
+        repository-class="Marvin\Protocol\Infrastructure\Persistence\Doctrine\ORM\ProtocolOrmRepository"
+    >
+        <id name="id" type="protocol_id"/>
+
+        <embedded name="name" class="Marvin\Shared\Domain\ValueObject\Label"/>
+        <field name="transportType" enum-type="Marvin\Protocol\Domain\ValueObject\TransportType"/>
+        <embedded name="configuration" class="Marvin\Protocol\Domain\ValueObject\ProtocolConfiguration"/>
+        <field name="status" enum-type="Marvin\Protocol\Domain\ValueObject\ProtocolStatus"/>
+        <field name="preferredExecutionMode" enum-type="Marvin\Protocol\Domain\ValueObject\ExecutionMode"/>
+        <field name="createdAt" type="datetime_immutable" column="created_at"/>
+        <field name="updatedAt" type="datetime_immutable" column="updated_at" nullable="true"/>
+    </entity>
+</doctrine-mapping>

@@ -1,210 +1,278 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Marvin\Device\Application\CommandHandler\Group;
 
 use DateTimeImmutable;
-use DateTimeInterface;
+use InvalidArgumentException;
 use Marvin\Device\Application\Command\Group\CreateGroup;
-use Marvin\Device\Domain\Exception\CompositeDeviceNotAllowedInGroup;
-use Marvin\Device\Domain\Exception\DeviceAlreadyInGroup;
+use Marvin\Device\Application\Service\Acl\ProtocolCapabilityServiceInterface;
+use Marvin\Device\Domain\Exception\CannotAddCompositeDeviceOnGroup;
+use Marvin\Device\Domain\Exception\FailedCreateNativeGroup;
+use Marvin\Device\Domain\Exception\StrategyNotAuthorized;
 use Marvin\Device\Domain\Model\Device;
 use Marvin\Device\Domain\Repository\DeviceRepositoryInterface;
-use Marvin\Device\Domain\Service\ProtocolGroupingServiceInterface;
+use Marvin\Device\Domain\ValueObject\Capability;
 use Marvin\Device\Domain\ValueObject\CompositeStrategy;
-use Marvin\Device\Domain\ValueObject\DeviceStatus;
-use Marvin\Device\Domain\ValueObject\DeviceType;
+use Marvin\Device\Domain\ValueObject\CompositeType;
 use Marvin\Device\Domain\ValueObject\NativeGroupInfo;
 use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
-use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
-use Marvin\Shared\Domain\ValueObject\Label;
-use Marvin\Shared\Domain\ValueObject\Metadata;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+/**
+ * Handler for CreateGroup command
+ *
+ * Creates a composite device (GROUP) that can control multiple devices together
+ * Attempts to create native protocol groups when possible for better performance
+ */
 #[AsMessageHandler]
 final readonly class CreateGroupHandler
 {
     public function __construct(
         private DeviceRepositoryInterface $deviceRepository,
-        private ProtocolGroupingServiceInterface $protocolGroupingService,
-        private LoggerInterface $logger,
+        private ProtocolCapabilityServiceInterface $protocolCapability,
+        private LoggerInterface $logger
     ) {
     }
 
-    public function __invoke(CreateGroup $command): void
+    public function __invoke(CreateGroup $command): Device
     {
-        $this->logger->info('Creating group with automatic protocol grouping', [
-            'groupName' => $command->groupName,
-            'deviceCount' => count($command->deviceIds),
+        $this->logger->info('Creating group', [
+            'label' => $command->label->value,
+            'childCount' => count($command->childrenDeviceIds),
+            'strategy' => $command->compositeStrategy->value,
         ]);
 
-        // 1. Charger et valider les devices
-        $devices = $this->loadAndValidateDevices($command->deviceIds);
+        // Load and validate all child devices
+        $childrenDevices = $this->loadAndValidateChildDevices($command->childrenDeviceIds);
 
-        // 2. Analyser les devices pour déterminer le regroupement
-        $grouping = $this->protocolGroupingService->analyzeDevicesForGrouping($devices);
+        // Determine capabilities (union of all child capabilities if not specified)
+        $capabilities = empty($command->capabilities)
+            ? $this->determineGroupCapabilities($childrenDevices)
+            : $command->capabilities;
 
-        $this->logger->debug('Protocol grouping analysis', [
-            'native_groups' => array_map(count(...), $grouping['native_groups']),
-            'individual_devices' => count($grouping['individual_devices']),
-        ]);
-
-        // 3. Créer le groupe parent
-        $parentGroup = new Device(
-            label: Label::fromString($command->groupName),
-            type: DeviceType::COMPOSITE,
-            status: DeviceStatus::UNAVAILABLE,
-            zoneId: $command->zoneId,
-            parentId: null,
-            isComposite: true,
-            compositeStrategy: CompositeStrategy::GROUP,
-            metadata: Metadata::fromArray(array_merge(
-                $command->metadata ?? [],
-                [
-                    'type' => 'group',
-                    'auto_grouped' => true,
-                    'created_at' => new DateTimeImmutable()->format(DateTimeInterface::ATOM),
-                ]
-            )),
+        // Try to create native group if strategy allows
+        $nativeGroupInfo = $this->tryCreateNativeGroup(
+            $childrenDevices,
+            $command->compositeStrategy,
+            $command->label->value
         );
 
-        // 4. Créer les sous-composites natifs pour chaque protocole
-        foreach ($grouping['native_groups'] as $protocol => $protocolDevices) {
-            $nativeComposite = $this->createNativeGroupComposite(
-                protocol: $protocol,
-                devices: $protocolDevices,
-                parentGroupId: $groupId,
-                parentGroupName: $command->groupName,
-                zoneId: $command->zoneId,
-            );
+        // Create group device
+        $group = Device::createComposite(
+            label: $command->label,
+            compositeType: CompositeType::GROUP,
+            childDeviceIds: $command->childrenDeviceIds,
+            capabilities: $capabilities,
+            compositeStrategy: $command->compositeStrategy,
+            executionStrategy: $command->executionStrategy,
+            nativeGroupInfo: $nativeGroupInfo,
+            zoneId: $command->zoneId,
+            description: $command->description,
+            metadata: $command->metadata,
+        );
 
-            $parentGroup->addChild($nativeComposite);
-            $this->deviceRepository->save($nativeComposite);
-
-            $this->logger->info('Created native group composite', [
-                'protocol' => $protocol,
-                'compositeId' => $nativeComposite->id->toString(),
-                'deviceCount' => count($protocolDevices),
-            ]);
-        }
-
-        // 5. Ajouter les devices individuels
-        foreach ($grouping['individual_devices'] as $device) {
-            $parentGroup->addChild($device);
-
-            $this->logger->debug('Added individual device to group', [
-                'deviceId' => $device->getId()->toString(),
-                'deviceName' => $device->getName()->toString(),
-            ]);
-        }
-
-        // 6. Sauvegarder le groupe parent
-        $this->deviceRepository->save($parentGroup);
+        // Save group
+        $this->deviceRepository->save($group);
 
         $this->logger->info('Group created successfully', [
-            'groupId' => $groupId->toString(),
-            'groupName' => $command->groupName,
-            'nativeGroups' => count($grouping['native_groups']),
-            'individualDevices' => count($grouping['individual_devices']),
-            'totalDevices' => count($command->deviceIds),
+            'groupId' => $group->id->toString(),
+            'label' => $group->label->value,
+            'hasNativeGroup' => null !== $group->nativeGroupInfo,
+            'capabilitiesCount' => count($group->capabilities),
         ]);
 
-        // TODO: Dispatch event GroupCreated
-        // TODO: Dispatch commands vers Protocol pour créer les groupes natifs
+        return $group;
     }
 
     /**
-     * Charge et valide les devices
+     * Load and validate all child devices exist
      *
-     * @param string[] $deviceIds
+     * @param DeviceId[] $deviceIds
      * @return Device[]
      */
-    private function loadAndValidateDevices(array $deviceIds): array
+    private function loadAndValidateChildDevices(array $deviceIds): array
     {
         $devices = [];
-        $devicesInGroups = [];
 
-        /** @var DeviceId $deviceId */
         foreach ($deviceIds as $deviceId) {
             $device = $this->deviceRepository->byId($deviceId);
 
-            // Validation 1 : Interdire les composites (profondeur max 1)
+            // Prevent composite devices in groups (no nested groups)
             if ($device->isComposite()) {
-                throw CompositeDeviceNotAllowedInGroup::withDevice($device);
-            }
-
-            // Validation 2 : Vérifier si déjà dans un groupe
-            if ($device->parentId instanceof DeviceId) {
-                $existingGroup = $this->deviceRepository->find($device->parentId->toString());
-
-                if ($existingGroup && $existingGroup->isComposite()) {
-                    $devicesInGroups[] = [
-                        'device' => $device,
-                        'group' => $existingGroup,
-                    ];
-                }
+                throw CannotAddCompositeDeviceOnGroup::withDeviceId($deviceId);
             }
 
             $devices[] = $device;
-        }
-
-        // Si des devices sont déjà dans des groupes, bloquer
-        if (!empty($devicesInGroups)) {
-            throw DeviceAlreadyInGroup::withDevices(
-                array_column($devicesInGroups, 'device'),
-                array_column($devicesInGroups, 'group'),
-            );
         }
 
         return $devices;
     }
 
     /**
-     * Crée un composite natif pour un protocole
+     * Determine group capabilities from child devices
      *
-     * @param Device[] $devices
+     * @param Device[] $childrenDevices
+     * @return Capability[]
      */
-    private function createNativeGroupComposite(
-        string $protocol,
-        array $devices,
-        DeviceId $parentGroupId,
-        string $parentGroupName,
-        ?ZoneId $zoneId = null,
-    ): Device {
-        $nativeGroupId = $this->protocolGroupingService->generateNativeGroupId($protocol);
-        $nativeGroupFriendlyName = $this->protocolGroupingService->generateNativeGroupName(
-            $protocol,
-            $parentGroupName
-        );
+    private function determineGroupCapabilities(array $childrenDevices): array
+    {
+        $allCapabilities = [];
 
-        $composite = new Device(
-            label: Label::fromString(ucfirst($protocol) . " - {$parentGroupName}"),
-            type: DeviceType::COMPOSITE,
-            status: DeviceStatus::UNAVAILABLE,
-            zoneId: $zoneId,
-            parentId: $parentGroupId,
-            compositeStrategy: CompositeStrategy::NATIVE_GROUP,
-            nativeGroupInfo: NativeGroupInfo::create(
-                protocol: $protocol,
-                groupId: $nativeGroupId,
-                friendlyName: $nativeGroupFriendlyName,
-                metadata: [
-                    'auto_created' => true,
-                    'parent_group' => $parentGroupName,
-                ],
-            ),
-            metadata: Metadata::fromArray([
-                'protocol' => $protocol,
-                'native_group_id' => $nativeGroupId,
-                'native_group_friendly_name' => $nativeGroupFriendlyName,
-            ]),
-        );
+        foreach ($childrenDevices as $device) {
+            foreach ($device->capabilities as $deviceCapability) {
+                $capability = $deviceCapability->capability;
 
-        // Attacher les devices au composite
-        foreach ($devices as $device) {
-            $composite->addChild($device);
+                // Only include write capabilities (not read-only)
+                if (!$capability->isReadOnly()) {
+                    $allCapabilities[$capability->value] = $capability;
+                }
+            }
         }
 
-        return $composite;
+        return array_values($allCapabilities);
+    }
+
+    /**
+     * Try to create a native protocol group if possible
+     *
+     * Behavior depends on CompositeStrategy:
+     * - EMULATED_ONLY: Skip native creation, return null
+     * - NATIVE_IF_AVAILABLE: Try native, fallback to null if fails (default)
+     * - NATIVE_ONLY: Try native, throw exception if fails
+     *
+     * @param Device[] $childDevices
+     */
+    private function tryCreateNativeGroup(
+        array $childDevices,
+        CompositeStrategy $strategy,
+        string $groupLabel
+    ): ?NativeGroupInfo {
+        // EMULATED_ONLY: Don't even try native
+        if ($strategy === CompositeStrategy::EMULATED_ONLY) {
+            $this->logger->debug('Strategy is EMULATED_ONLY, skipping native group creation');
+            return null;
+        }
+
+        // Check if all devices use the same protocol
+        $protocols = array_unique(array_map(
+            fn (Device $device) => $device->protocol?->value,
+            $childDevices
+        ));
+
+        if (count($protocols) !== 1) {
+            $this->logger->debug('Cannot create native group: devices use different protocols', [
+                'protocols' => $protocols,
+                'strategy' => $strategy->value,
+            ]);
+
+            // NATIVE_ONLY: Must have same protocol
+            if ($strategy === CompositeStrategy::NATIVE_ONLY) {
+                throw StrategyNotAuthorized::nativeOnlyWithDifferentProtocols();
+            }
+
+            // NATIVE_IF_AVAILABLE: Fallback to emulation
+            return null;
+        }
+
+        $protocol = $childDevices[0]->protocol;
+        $protocolId = $childDevices[0]->protocolId;
+
+        if ($protocol === null || $protocolId === null) {
+            if ($strategy === CompositeStrategy::NATIVE_ONLY) {
+                throw StrategyNotAuthorized::nativeGroupWithoutProtocol();
+            }
+            return null;
+        }
+
+        // Check if protocol supports native groups
+        if (!$this->protocolCapability->supportsNativeGroups($protocol)) {
+            $this->logger->debug('Protocol does not support native groups', [
+                'protocol' => $protocol->value,
+                'strategy' => $strategy->value,
+            ]);
+
+            // NATIVE_ONLY: Protocol must support native groups
+            if ($strategy === CompositeStrategy::NATIVE_ONLY) {
+                throw StrategyNotAuthorized::protocolDoesNotSupportNativeGroup($protocol);
+            }
+
+            // NATIVE_IF_AVAILABLE: Fallback to emulation
+            return null;
+        }
+
+        // Get native IDs (physicalAddress) of all child devices
+        $deviceNativeIds = array_map(
+            fn (Device $device) => $device->physicalAddress?->value ?? $device->id->toString(),
+            $childDevices
+        );
+
+        // Generate friendly name for native group (sanitized)
+        $groupFriendlyName = $this->sanitizeFriendlyName($groupLabel);
+
+        // Create native group via Protocol Context
+        $result = $this->protocolCapability->createNativeGroup(
+            protocol: $protocol,
+            protocolId: $protocolId->toString(),
+            groupFriendlyName: $groupFriendlyName,
+            deviceNativeIds: $deviceNativeIds
+        );
+
+        if (!$result['success']) {
+            $this->logger->warning('Failed to create native group', [
+                'protocol' => $protocol->value,
+                'strategy' => $strategy->value,
+                'error' => $result['error'] ?? 'Unknown error',
+            ]);
+
+            // NATIVE_ONLY: Propagate error
+            if ($strategy === CompositeStrategy::NATIVE_ONLY) {
+                throw new FailedCreateNativeGroup(
+                    sprintf(
+                        'Failed to create native group: %s',
+                        $result['error'] ?? 'Unknown error'
+                    ),
+                    $result['error'] ?? 'Unknown error'
+                );
+            }
+
+            // NATIVE_IF_AVAILABLE: Fallback to emulated
+            return null;
+        }
+
+        $this->logger->info('Native group created successfully', [
+            'protocol' => $protocol->value,
+            'nativeGroupId' => $result['nativeGroupId'],
+            'friendlyName' => $result['friendlyName'] ?? $groupFriendlyName,
+        ]);
+
+        return NativeGroupInfo::create(
+            nativeGroupId: $result['nativeGroupId'],
+            protocolId: $protocolId->toString(),
+            friendlyName: $result['friendlyName'] ?? $groupFriendlyName,
+            metadata: [
+                'protocol' => $protocol->value,
+                'createdAt' => new DateTimeImmutable()->format('c'),
+            ]
+        );
+    }
+
+    /**
+     * Sanitize group friendly name for protocol compatibility
+     * Removes special characters and spaces
+     */
+    private function sanitizeFriendlyName(string $name): string
+    {
+        // Replace spaces with underscores
+        $sanitized = str_replace(' ', '_', $name);
+
+        // Remove special characters (keep alphanumeric and underscores)
+        $sanitized = preg_replace('/[^a-zA-Z0-9_]/', '', $sanitized);
+
+        // Lowercase
+        return strtolower((string) $sanitized);
     }
 }

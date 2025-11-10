@@ -34,7 +34,7 @@ final readonly class MoveZoneHandler
             try {
                 /** @var Zone $newParentZone */
                 $newParentZone = $this->zoneRepository->byId($command->newParentZoneId);
-            } catch (DomainException $de) {
+            } catch (DomainException) {
                 throw ZoneParentNotFound::withId($command->newParentZoneId);
             }
 

@@ -70,7 +70,7 @@ final class RequestResetPasswordOrmRepository extends ServiceEntityRepository im
             ->select('COUNT('.self::MODEL_ALIAS.')')
             ->where(self::MODEL_ALIAS.'.user = :user')
             ->setParameter('user', $user)
-            ->andWhere(self::MODEL_ALIAS.'.expiresAt > :now')
+            ->andWhere(self::MODEL_ALIAS.'.expiresAt.value > :now')
             ->setParameter('now', new DateTimeImmutable())
             ->andWhere(self::MODEL_ALIAS.'.used = false')
             ->getQuery()

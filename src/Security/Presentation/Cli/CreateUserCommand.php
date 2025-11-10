@@ -66,7 +66,7 @@ final readonly class CreateUserCommand
                 $roles,
                 new Locale($locale),
                 new Theme($theme),
-                new UserType($type),
+                UserType::from($type),
                 new Timezone($timezone),
                 $password,
             ));

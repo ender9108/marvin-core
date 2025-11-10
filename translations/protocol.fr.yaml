@@ -1,0 +1,110 @@
+protocol:
+    exceptions:
+        PR0001.protocol_not_found: Protocole introuvable.
+        PR0002.protocol_not_found_with_id: 'Protocole introuvable avec l''id "%id%".'
+        PR0003.protocol_connection_error: Erreur de connexion au protocole.
+        PR0004.protocol_connection_error_with_id: 'Erreur de connexion au protocole %protocol_id% : %error_message%'
+        PR0005.device_timeout: Le module n'a pas répondu dans le délai imparti.
+        PR0006.device_timeout_with_id: 'Le module %device_id% n''a pas répondu dans un délai de %timeout% secondes.'
+        PR0007.device_locked: Le module est actuellement verrouillé par une autre commande.
+        PR0008.device_locked_with_id: 'Le module %device_id% est actuellement verrouillé par une autre commande. Veuillez réessayer ultérieurement.'
+        PR0009.correlation_not_found: Aucune action en attente trouvée pour cet identifiant de corrélation.
+        PR0010.correlation_not_found_with_id: 'Aucune action en attente trouvée pour l''identifiant de corrélation %correlation_id%.'
+        PR0011.adapter_not_found: Aucun adaptateur trouvé pour ce type de protocole.
+        PR0012.adapter_not_found_with_protocol: 'Aucun adaptateur trouvé pour le protocole "%protocol%".'
+
+    commands:
+        mqtt:
+            listen:
+                description: 'Écoute les messages MQTT et les transforme en événements de domaine'
+                started: 'Démarrage du listener MQTT...'
+                listening_on_topics: 'Écoute des topics : %topics%'
+                timeout: 'Timeout : %timeout%'
+                timeout_infinite: 'Timeout : infini'
+                stopped_gracefully: 'Le listener MQTT s''est arrêté proprement'
+                error: 'Erreur lors de l''écoute MQTT : %error%'
+            publish:
+                description: 'Publie un message sur un topic MQTT'
+                success: 'Message publié avec succès sur le topic %topic%'
+                error: 'Erreur lors de la publication : %error%'
+
+        websocket:
+            connect:
+                description: 'Teste la connexion WebSocket vers un périphérique'
+                connecting: 'Connexion à %url%...'
+                connected: 'Connecté avec succès'
+                disconnected: 'Déconnecté'
+                error: 'Erreur de connexion : %error%'
+            listen:
+                description: 'Écoute les messages WebSocket depuis un serveur'
+                started: 'Démarrage du listener WebSocket...'
+                listening_on: 'Écoute sur : %url%'
+                stopped_gracefully: 'Le listener WebSocket s''est arrêté proprement'
+                error: 'Erreur lors de l''écoute WebSocket : %error%'
+            send:
+                description: 'Envoie un message à un serveur WebSocket et attend optionnellement une réponse'
+                sending: 'Envoi du message...'
+                response_received: 'Réponse reçue'
+                no_response: 'Aucune réponse (mode fire-and-forget)'
+                error: 'Erreur lors de l''envoi : %error%'
+
+        adapter:
+            list:
+                description: 'Liste tous les adaptateurs de protocole disponibles'
+                header: 'Adaptateurs de protocole disponibles'
+                name: 'Nom'
+                protocols: 'Protocoles supportés'
+                execution_mode: 'Mode d''exécution par défaut'
+                no_adapters: 'Aucun adaptateur disponible'
+            test:
+                description: 'Teste un adaptateur de protocole en envoyant une commande'
+                testing: 'Test de l''adaptateur %adapter%...'
+                success: 'Commande exécutée avec succès'
+                result: 'Résultat : %result%'
+                error: 'Erreur lors du test : %error%'
+                adapter_not_found: 'Adaptateur "%adapter%" introuvable'
+
+    adapters:
+        zigbee2mqtt:
+            name: 'Zigbee2MQTT'
+            description: 'Adaptateur pour périphériques Zigbee via Zigbee2MQTT bridge'
+        tasmota:
+            name: 'Tasmota'
+            description: 'Adaptateur pour périphériques avec firmware Tasmota (ESP8266/ESP32)'
+        shelly_gen1:
+            name: 'Shelly Gen1'
+            description: 'Adaptateur pour périphériques Shelly Gen1 (API REST)'
+        shelly_gen2:
+            name: 'Shelly Gen2/Gen3'
+            description: 'Adaptateur pour périphériques Shelly Gen2/Gen3 (JSON-RPC)'
+        shelly_mqtt:
+            name: 'Shelly MQTT'
+            description: 'Adaptateur pour périphériques Shelly via MQTT'
+        bluetooth2mqtt:
+            name: 'Bluetooth2MQTT'
+            description: 'Adaptateur pour périphériques Bluetooth BLE via ESP32 Proxy'
+
+    execution_modes:
+        fire_and_forget: 'Fire & Forget (asynchrone, pas d''attente)'
+        correlation_id: 'Correlation ID (synchrone, avec corrélation)'
+        device_lock: 'Device Lock (synchrone, avec verrouillage séquentiel)'
+
+    protocol_types:
+        mqtt: 'MQTT'
+        rest: 'REST (HTTP)'
+        jsonrpc: 'JSON-RPC'
+        websocket: 'WebSocket'
+
+    messages:
+        device_state_changed: 'État du module %device_id% mis à jour'
+        device_online: 'Module %device_id% en ligne'
+        device_offline: 'Module %device_id% hors ligne'
+        command_sent: 'Commande envoyée au module %device_id%'
+        command_failed: 'Échec de l''envoi de la commande au module %device_id% : %error%'
+        pending_action_completed: 'Action en attente %pending_action_id% terminée avec succès'
+        pending_action_failed: 'Action en attente %pending_action_id% a échoué : %error%'
+        pending_action_timeout: 'Action en attente %pending_action_id% a expiré après %timeout% secondes'
+        mqtt_message_transformed: 'Message MQTT transformé par l''adaptateur %adapter%'
+        mqtt_message_skipped: 'Message MQTT ignoré (aucun adaptateur compatible)'
+        correlation_id_extracted: 'Identifiant de corrélation extrait : %correlation_id%'
+        response_topic_subscribed: 'Abonnement au topic de réponse : %topic%'

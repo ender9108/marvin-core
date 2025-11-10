@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity
+        name="Marvin\Device\Domain\Model\PendingAction"
+        repository-class="Marvin\Device\Infrastructure\Persistence\Doctrine\ORM\Repository\DoctrinePendingActionRepository"
+        table="device_pending_action"
+    >
+        <id name="id" type="pending_action_id" column="id">
+            <generator strategy="NONE"/>
+        </id>
+
+        <!-- Device reference -->
+        <field name="deviceId" type="device_id" nullable="false" />
+
+        <!-- Correlation ID (nullable for DEVICE_LOCK mode) -->
+        <field name="correlationId" type="correlation_id" nullable="true" />
+
+        <!-- Status -->
+        <field name="status" nullable="false" enum-type="Marvin\Device\Domain\ValueObject\PendingActionStatus" />
+
+        <!-- Action details -->
+        <field name="capability" type="string" length="100" nullable="false" />
+        <field name="action" type="string" length="100" nullable="false" />
+        <field name="parameters" type="json" nullable="false" />
+
+        <!-- Result -->
+        <field name="result" type="json" nullable="true" />
+        <field name="errorMessage" type="text" nullable="true" />
+
+        <!-- Timestamps -->
+        <field name="createdAt" type="datetime" nullable="false" />
+        <field name="completedAt" type="datetime" nullable="true" />
+        <field name="timeoutSeconds" type="integer" nullable="false" />
+
+        <!-- Indexes -->
+        <indexes>
+            <index name="idx_device_id" columns="device_id" />
+            <index name="idx_correlation_id" columns="correlation_id" />
+            <index name="idx_status" columns="status" />
+            <index name="idx_created_at" columns="created_at" />
+        </indexes>
+    </entity>
+</doctrine-mapping>

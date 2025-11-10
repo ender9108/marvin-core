@@ -2,8 +2,8 @@
 
 namespace Marvin\Secret\Infrastructure\Persistence\Doctrine\DBAL\Types;
 
-use Override;
 use Marvin\Secret\Domain\ValueObject\Identity\SecretId;
+use Override;
 use Symfony\Bridge\Doctrine\Types\AbstractUidType;
 
 final class SecretIdType extends AbstractUidType

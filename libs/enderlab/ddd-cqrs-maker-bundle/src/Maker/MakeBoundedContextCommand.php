@@ -41,9 +41,9 @@ class MakeBoundedContextCommand extends AbstractMaker
         //'Infrastructure/Messaging/Producer',
         //'Infrastructure/Messaging/Consumer',
         'Presentation/Cli/Command',
-        //'Presentation/Api/Resource',
-        //'Presentation/Api/State/Processor',
-        //'Presentation/Api/State/Provider',
+        'Presentation/Api/Resource',
+        'Presentation/Api/State/Processor',
+        'Presentation/Api/State/Provider',
     ];
 
     public function __construct(private readonly string $projectDir)

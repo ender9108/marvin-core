@@ -8,7 +8,8 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler]
 class ManagerResponseHandler
 {
-    public function __invoke(ManagerResponseCommand $response): void {
+    public function __invoke(ManagerResponseCommand $response): void
+    {
         dump($response->correlationId, $response->action);
     }
 }

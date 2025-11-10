@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity
+        name="Marvin\Device\Domain\Model\DeviceCapability"
+        table="device_device_capability"
+    >
+        <id name="id" type="device_capability_id" column="id">
+            <generator strategy="NONE"/>
+        </id>
+
+        <!-- Relationship to parent Device -->
+        <many-to-one field="device" target-entity="Marvin\Device\Domain\Model\Device" inversed-by="capabilities">
+            <join-column name="device_id" referenced-column-name="id" nullable="false" />
+        </many-to-one>
+
+        <!-- Capability enum -->
+        <field name="capability" enum-type="Marvin\Device\Domain\ValueObject\Capability" />
+        <field name="stateName" length="128" />
+        <!-- Current value (stored as JSON to handle mixed types) -->
+        <field name="currentValue" type="json" nullable="true" />
+        <!-- Metadata array (stored as JSON) -->
+        <embedded name="metadata" class="Marvin\Shared\Domain\ValueObject\Metadata" />
+        <!-- Timestamps -->
+        <field name="lastUpdatedAt" type="datetime" nullable="true" />
+    </entity>
+</doctrine-mapping>

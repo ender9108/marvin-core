@@ -21,6 +21,11 @@ final readonly class Theme implements Stringable
         $this->value = $theme;
     }
 
+    public static function fromString(string $theme): self
+    {
+        return new self($theme);
+    }
+
     public function __toString(): string
     {
         return $this->value;

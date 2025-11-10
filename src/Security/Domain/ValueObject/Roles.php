@@ -3,11 +3,14 @@
 namespace Marvin\Security\Domain\ValueObject;
 
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
+use EnderLab\DddCqrsBundle\Domain\ValueObject\ValueObjectTrait;
 use Override;
 use Stringable;
 
 final readonly class Roles implements Stringable
 {
+    use ValueObjectTrait;
+
     private array $value;
 
     public function __construct(array $roles = [])

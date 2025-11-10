@@ -21,6 +21,11 @@ final readonly class Locale implements Stringable
         $this->value = $locale;
     }
 
+    public static function fromString(string $locale): self
+    {
+        return new self($locale);
+    }
+
     public function __toString(): string
     {
         return $this->value;

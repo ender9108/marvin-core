@@ -2,7 +2,6 @@
 
 namespace Marvin\Secret\Presentation\Cli\Command;
 
-use _PHPStan_6597ef616\Symfony\Component\Console\Question\ConfirmationQuestion;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use Exception;
 use Marvin\Secret\Application\Command\DeleteSecret;

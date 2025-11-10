@@ -3,12 +3,9 @@
 namespace Marvin\Location\Presentation\Cli;
 
 use EnderLab\DddCqrsBundle\Application\Query\QueryBusInterface;
-use EnderLab\DddCqrsBundle\Domain\Repository\PaginatorInterface;
 use Exception;
 use Marvin\Location\Application\Query\Zone\GetZonesCollection;
 use Marvin\Location\Domain\Model\Zone;
-use Marvin\Location\Domain\ValueObject\ZoneType;
-use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;

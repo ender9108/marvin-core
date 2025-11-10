@@ -21,12 +21,12 @@ abstract class DomainException extends RuntimeException
     public function __construct(string $message, string|int|null $code = null) {
         $exceptionCode = 0;
 
-        if (
+        /*if (
             false !== class_implements($this) &&
             in_array(TranslatableExceptionInterface::class, class_implements($this))
         ) {
             /* Format [DOMAIN_NAME(lowercase)].exceptions.[ERROR_CODE(uppercase)].[TRANSLATION_ID(lower_underscore_case)] */
-            $translationIdParts = explode(self::SEPARATOR, $message);
+            /*$translationIdParts = explode(self::SEPARATOR, $message);
 
             if (count($translationIdParts) >= 4) {
                 $this->transDomain = array_shift($translationIdParts);
@@ -43,10 +43,10 @@ abstract class DomainException extends RuntimeException
             if (is_int($code)) {
                 $exceptionCode = $code;
             }
-        }
+        }*/
 
 
-        parent::__construct($message, $exceptionCode);
+        parent::__construct($message, is_int($code) ? $code : $exceptionCode);
     }
 
     public function getInternalCode(): string

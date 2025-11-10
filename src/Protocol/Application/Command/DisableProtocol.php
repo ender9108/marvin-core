@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Marvin\Protocol\Application\Command;
+
+use EnderLab\DddCqrsBundle\Application\Command\CommandInterface;
+use Marvin\Shared\Domain\ValueObject\Identity\ProtocolId;
+
+final readonly class DisableProtocol implements CommandInterface
+{
+    public function __construct(
+        public ProtocolId $protocolId,
+    ) {
+    }
+}

@@ -22,6 +22,11 @@ final readonly class Email implements Stringable
         $this->value = $email;
     }
 
+    public static function fromString(string $email): self
+    {
+        return new self($email);
+    }
+
     #[Override]
     public function __toString(): string
     {

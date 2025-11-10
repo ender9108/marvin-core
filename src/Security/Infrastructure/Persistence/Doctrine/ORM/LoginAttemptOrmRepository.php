@@ -2,12 +2,12 @@
 
 namespace Marvin\Security\Infrastructure\Persistence\Doctrine\ORM;
 
-use Override;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Marvin\Security\Domain\Model\LoginAttempt;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Repository\LoginAttemptRepositoryInterface;
+use Override;
 
 /**
  * @extends ServiceEntityRepository<LoginAttempt>

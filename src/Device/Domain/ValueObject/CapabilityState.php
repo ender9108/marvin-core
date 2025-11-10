@@ -2,6 +2,9 @@
 
 namespace Marvin\Device\Domain\ValueObject;
 
+use Marvin\Device\Domain\Exception\CapabilityStateDataTypeNotImplemented;
+use Marvin\Device\Domain\Specification\CapabilityStateConstraints;
+
 /**
  * CapabilityState - États/mesures possibles pour les capabilities
  *
@@ -304,7 +307,7 @@ enum CapabilityState: string
     case DEVICE_TEMPERATURE = 'device_temperature'; // °C (température du device lui-même)
     case MEMORY_USAGE = 'memory_usage'; // 0-100%
 
-    public function getDataType(): CapabilityCapabilityStateDataType
+    public function getDataType(): CapabilityStateDataType
     {
         return match ($this) {
             // Boolean
@@ -346,8 +349,7 @@ enum CapabilityState: string
             self::UPDATE_AVAILABLE,
             self::BATTERY_LOW,
             self::BATTERY_CHARGING,
-            self::IS_REACHABLE
-            => CapabilityCapabilityStateDataType::BOOLEAN,
+            self::IS_REACHABLE => CapabilityStateDataType::BOOLEAN,
 
             // Integer
             self::BRIGHTNESS,
@@ -413,8 +415,7 @@ enum CapabilityState: string
             self::BUTTON_NUMBER,
             self::CHANNEL,
             self::FAN_SPEED_PERCENT,
-            self::FILTER_LIFE_REMAINING
-            => CapabilityCapabilityStateDataType::INTEGER,
+            self::FILTER_LIFE_REMAINING => CapabilityStateDataType::INTEGER,
 
             // Float
             self::TEMPERATURE,
@@ -432,8 +433,7 @@ enum CapabilityState: string
             self::FLOW_RATE,
             self::WATER_FLOW,
             self::SOIL_TEMPERATURE,
-            self::DEVICE_TEMPERATURE
-            => CapabilityCapabilityStateDataType::FLOAT,
+            self::DEVICE_TEMPERATURE => CapabilityStateDataType::FLOAT,
 
             // String
             self::STATE,
@@ -503,8 +503,7 @@ enum CapabilityState: string
             self::SCRIPT_OUTPUT,
             self::FIRMWARE_VERSION,
             self::HEALTH_STATUS,
-            self::LAST_ERROR
-            => CapabilityCapabilityStateDataType::STRING,
+            self::LAST_ERROR => CapabilityStateDataType::STRING,
 
             // DateTime
             self::LAST_MOTION,
@@ -515,60 +514,105 @@ enum CapabilityState: string
             self::LAST_RECORDING,
             self::LAST_BUTTON_EVENT,
             self::LAST_WEBHOOK_TRIGGER,
-            self::LAST_SEEN
-            => CapabilityCapabilityStateDataType::DATETIME,
+            self::LAST_SEEN => CapabilityStateDataType::DATETIME,
 
             // Object/Array
             self::COLOR_RGB,
             self::COLOR_HSV,
-            self::COLOR_XY
-            => CapabilityCapabilityStateDataType::OBJECT,
+            self::COLOR_XY => CapabilityStateDataType::OBJECT,
+            self::CO_DETECTED => throw CapabilityStateDataTypeNotImplemented::withType(self::CO_DETECTED),
+            self::OSCILLATION => throw CapabilityStateDataTypeNotImplemented::withType(self::OSCILLATION),
+            self::BATTERY => throw CapabilityStateDataTypeNotImplemented::withType(self::BATTERY),
         };
     }
 
     public function getUnit(): ?string
     {
         return match ($this) {
-            self::BRIGHTNESS, self::SATURATION, self::BATTERY_PERCENTAGE,
-            self::POSITION, self::TILT, self::VALVE_POSITION, self::VOLUME,
-            self::VOLUME_LEVEL, self::MEDIA_PROGRESS, self::HUMIDITY,
-            self::TARGET_HUMIDITY, self::CURRENT_HUMIDITY, self::SOIL_MOISTURE,
-            self::FILTER_LIFE_REMAINING, self::UPDATE_PROGRESS, self::MEMORY_USAGE,
-            self::FAN_SPEED_PERCENT, self::VACUUM_BATTERY
-            => '%',
+            self::BRIGHTNESS,
+            self::SATURATION,
+            self::BATTERY_PERCENTAGE,
+            self::POSITION,
+            self::TILT,
+            self::VALVE_POSITION,
+            self::VOLUME,
+            self::VOLUME_LEVEL,
+            self::MEDIA_PROGRESS,
+            self::HUMIDITY,
+            self::TARGET_HUMIDITY,
+            self::CURRENT_HUMIDITY,
+            self::SOIL_MOISTURE,
+            self::FILTER_LIFE_REMAINING,
+            self::UPDATE_PROGRESS,
+            self::MEMORY_USAGE,
+            self::FAN_SPEED_PERCENT,
+            self::VACUUM_BATTERY => '%',
 
-            self::TEMPERATURE, self::HEATING_SETPOINT, self::COOLING_SETPOINT,
-            self::TARGET_TEMPERATURE, self::CURRENT_TEMPERATURE,
-            self::SOIL_TEMPERATURE, self::DEVICE_TEMPERATURE
-            => '°C',
+            self::TEMPERATURE,
+            self::HEATING_SETPOINT,
+            self::COOLING_SETPOINT,
+            self::TARGET_TEMPERATURE,
+            self::CURRENT_TEMPERATURE,
+            self::SOIL_TEMPERATURE,
+            self::DEVICE_TEMPERATURE => '°C',
 
-            self::COLOR_TEMPERATURE, self::POWER
-            => 'K',
+            self::COLOR_TEMPERATURE,
+            self::POWER => 'K',
 
             self::ENERGY => 'kWh',
-            self::VOLTAGE, self::BATTERY_VOLTAGE => 'V',
+
+            self::VOLTAGE,
+            self::BATTERY_VOLTAGE => 'V',
+
             self::CURRENT => 'A',
+
             self::APPARENT_POWER => 'VA',
+
             self::REACTIVE_POWER => 'VAR',
+
             self::PRESSURE => 'hPa',
-            self::CO2, self::CO => 'ppm',
+
+            self::CO2,
+            self::CO => 'ppm',
+
             self::VOC => 'ppb',
-            self::PM25, self::PM10 => 'µg/m³',
+
+            self::PM25,
+            self::PM10 => 'µg/m³',
+
             self::ILLUMINANCE => 'lux',
+
             self::NOISE_LEVEL => 'dB',
-            self::PAN_POSITION, self::TILT_ANGLE, self::ROTATION_ANGLE => '°',
-            self::FLOW_RATE, self::WATER_FLOW => 'L/min',
+
+            self::PAN_POSITION,
+            self::TILT_ANGLE,
+            self::ROTATION_ANGLE => '°',
+
+            self::FLOW_RATE,
+            self::WATER_FLOW => 'L/min',
+
             self::TOTAL_WATER_USED => 'L',
+
             self::CLEANED_AREA => 'm²',
-            self::SIGNAL_STRENGTH, self::RSSI => 'dBm',
 
-            self::MEDIA_DURATION, self::MEDIA_POSITION, self::CLEANING_TIME,
-            self::WATERING_DURATION, self::REMAINING_TIME, self::DAYLIGHT_DURATION,
-            self::TIMER_REMAINING, self::TIMER_ELAPSED, self::TIMER_DURATION,
-            self::UPTIME, self::RECORDING_DURATION => 's',
+            self::SIGNAL_STRENGTH,
+            self::RSSI => 'dBm',
 
-            self::FILTER_REMAINING, self::BRUSH_REMAINING, self::SIDE_BRUSH_REMAINING
-            => 'h',
+            self::MEDIA_DURATION,
+            self::MEDIA_POSITION,
+            self::CLEANING_TIME,
+            self::WATERING_DURATION,
+            self::REMAINING_TIME,
+            self::DAYLIGHT_DURATION,
+            self::TIMER_REMAINING,
+            self::TIMER_ELAPSED,
+            self::TIMER_DURATION,
+            self::UPTIME,
+            self::RECORDING_DURATION => 's',
+
+            self::FILTER_REMAINING,
+            self::BRUSH_REMAINING,
+            self::SIDE_BRUSH_REMAINING => 'h',
 
             default => null,
         };
@@ -696,10 +740,6 @@ enum CapabilityState: string
     public static function getStatesForCapability(Capability $capability): array
     {
         return match ($capability) {
-            // ==========================================
-            // ÉCLAIRAGE
-            // ==========================================
-
             Capability::SWITCH,
             Capability::LIGHT => [
                 self::STATE,
@@ -730,10 +770,6 @@ enum CapabilityState: string
                 self::EFFECT,
             ],
 
-            // ==========================================
-            // ÉNERGIE
-            // ==========================================
-
             Capability::POWER_METER => [
                 self::POWER,
                 self::APPARENT_POWER,
@@ -759,10 +795,6 @@ enum CapabilityState: string
             Capability::POWER_SOURCE => [
                 self::POWER_SOURCE,
             ],
-
-            // ==========================================
-            // CAPTEURS ENVIRONNEMENTAUX
-            // ==========================================
 
             Capability::TEMPERATURE_MEASUREMENT => [
                 self::TEMPERATURE,
@@ -811,10 +843,6 @@ enum CapabilityState: string
             Capability::NOISE_LEVEL => [
                 self::NOISE_LEVEL,
             ],
-
-            // ==========================================
-            // SÉCURITÉ
-            // ==========================================
 
             Capability::MOTION_SENSOR => [
                 self::MOTION,
@@ -897,10 +925,6 @@ enum CapabilityState: string
                 self::LAST_RECORDING,
             ],
 
-            // ==========================================
-            // CLIMAT
-            // ==========================================
-
             Capability::THERMOSTAT_MODE => [
                 self::THERMOSTAT_MODE,
                 self::HVAC_MODE,
@@ -918,7 +942,7 @@ enum CapabilityState: string
                 self::COOLING_SETPOINT,
             ],
 
-            Capability::THERMOSTAT_FAN_MODE => [
+            Capability::THERMOSTAT_FAN_MODE, Capability::FAN_MODE => [
                 self::FAN_MODE,
                 self::FAN_STATE,
             ],
@@ -933,11 +957,6 @@ enum CapabilityState: string
             Capability::FAN_SPEED => [
                 self::FAN_SPEED,
                 self::FAN_SPEED_PERCENT,
-            ],
-
-            Capability::FAN_MODE => [
-                self::FAN_MODE,
-                self::FAN_STATE,
             ],
 
             Capability::FAN_OSCILLATION => [
@@ -970,10 +989,6 @@ enum CapabilityState: string
                 self::FILTER_LIFE_REMAINING,
             ],
 
-            // ==========================================
-            // COUVERTURES / VOLETS
-            // ==========================================
-
             Capability::WINDOW_COVERING => [
                 self::WINDOW_COVERING_STATE,
                 self::IS_COVER_OPEN,
@@ -995,10 +1010,6 @@ enum CapabilityState: string
                 self::VALVE_POSITION,
                 self::FLOW_RATE,
             ],
-
-            // ==========================================
-            // AUDIO / VIDÉO
-            // ==========================================
 
             Capability::AUDIO_VOLUME => [
                 self::VOLUME,
@@ -1060,10 +1071,6 @@ enum CapabilityState: string
                 self::MEDIA_IMAGE_URL,
             ],
 
-            // ==========================================
-            // CONTRÔLE
-            // ==========================================
-
             Capability::BUTTON => [
                 self::BUTTON_STATE,
                 self::BUTTON_EVENT,
@@ -1086,10 +1093,6 @@ enum CapabilityState: string
                 self::INDICATOR_STATE,
                 self::INDICATOR_COLOR,
             ],
-
-            // ==========================================
-            // MESURE
-            // ==========================================
 
             Capability::BATTERY => [
                 self::BATTERY,
@@ -1121,10 +1124,6 @@ enum CapabilityState: string
                 self::LAST_SEEN,
             ],
 
-            // ==========================================
-            // NETTOYAGE
-            // ==========================================
-
             Capability::VACUUM_CONTROL => [
                 self::VACUUM_STATE,
                 self::IS_CLEANING,
@@ -1142,10 +1141,6 @@ enum CapabilityState: string
                 self::CURRENT_ZONE,
             ],
 
-            // ==========================================
-            // JARDIN / IRRIGATION
-            // ==========================================
-
             Capability::SPRINKLER,
             Capability::IRRIGATION_CONTROL => [
                 self::SPRINKLER_STATE,
@@ -1160,10 +1155,6 @@ enum CapabilityState: string
                 self::SOIL_MOISTURE,
                 self::SOIL_TEMPERATURE,
             ],
-
-            // ==========================================
-            // VIRTUELS - TEMPS
-            // ==========================================
 
             Capability::CURRENT_TIME => [
                 self::CURRENT_TIME,
@@ -1194,10 +1185,6 @@ enum CapabilityState: string
                 self::DAYLIGHT_DURATION,
             ],
 
-            // ==========================================
-            // VIRTUELS - COMPTEUR & TIMER
-            // ==========================================
-
             Capability::COUNTER => [
                 self::COUNTER_VALUE,
                 self::COUNTER_MAX,
@@ -1209,10 +1196,6 @@ enum CapabilityState: string
                 self::TIMER_ELAPSED,
                 self::TIMER_DURATION,
             ],
-
-            // ==========================================
-            // VIRTUELS - WEBHOOK & HTTP
-            // ==========================================
 
             Capability::WEBHOOK => [
                 self::LAST_WEBHOOK_TRIGGER,
@@ -1227,10 +1210,6 @@ enum CapabilityState: string
             Capability::SCRIPT_EXECUTION => [
                 self::SCRIPT_OUTPUT,
             ],
-
-            // ==========================================
-            // SYSTÈME
-            // ==========================================
 
             Capability::CONFIGURATION => [],
 
@@ -1256,11 +1235,6 @@ enum CapabilityState: string
             Capability::TIME_SYNC => [
                 self::CURRENT_DATETIME,
             ],
-
-            // ==========================================
-            // CAPABILITIES COMPOSITES
-            // Délèguent aux capabilities de base
-            // ==========================================
 
             Capability::THERMOSTAT => array_merge(
                 self::getStatesForCapability(Capability::THERMOSTAT_MODE),
@@ -1301,82 +1275,84 @@ enum CapabilityState: string
                 self::getStatesForCapability(Capability::WINDOW_COVERING_TILT),
             ),
 
-            // ==========================================
-            // PAR DÉFAUT
-            // ==========================================
-
             default => [],
         };
     }
 
-    public function getConstraints(): StateConstraints
+    public function getConstraints(): CapabilityStateConstraints
     {
         return match ($this) {
-            // ==========================================
-            // ÉCLAIRAGE
-            // ==========================================
-
-            self::STATE => new StateConstraints(
+            self::STATE,
+            self::FAN_STATE,
+            self::OSCILLATION,
+            self::HUMIDIFIER_STATE,
+            self::DEHUMIDIFIER_STATE,
+            self::PURIFIER_STATE,
+            self::SHUFFLE_MODE,
+            self::INDICATOR_STATE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['on', 'off'],
             ),
 
-            self::BRIGHTNESS => new StateConstraints(
+            self::BRIGHTNESS,
+            self::SATURATION,
+            self::BATTERY_PERCENTAGE,
+            self::BATTERY,
+            self::FAN_SPEED_PERCENT,
+            self::FILTER_LIFE_REMAINING,
+            self::POSITION,
+            self::TILT,
+            self::VALVE_POSITION,
+            self::VOLUME,
+            self::VOLUME_LEVEL,
+            self::MEDIA_PROGRESS,
+            self::VACUUM_BATTERY,
+            self::UPDATE_PROGRESS,
+            self::MEMORY_USAGE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: 0,
                 max: 100,
                 unit: '%',
             ),
 
-            self::COLOR_TEMPERATURE => new StateConstraints(
+            self::COLOR_TEMPERATURE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: 1000,  // Kelvin minimum (blanc très chaud)
                 max: 10000, // Kelvin maximum (blanc très froid)
                 unit: 'K',
             ),
 
-            self::COLOR_TEMPERATURE_MIRED => new StateConstraints(
+            self::COLOR_TEMPERATURE_MIRED => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: 100,   // Mired minimum
                 max: 1000,  // Mired maximum
             ),
 
-            self::COLOR_MODE => new StateConstraints(
+            self::COLOR_MODE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['xy', 'hs', 'temp', 'rgb'],
             ),
 
-            self::HUE => new StateConstraints(
+            self::HUE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: 0,
                 max: 360,
                 unit: '°',
             ),
 
-            self::SATURATION => new StateConstraints(
-                dataType: CapabilityStateDataType::INTEGER,
-                min: 0,
-                max: 100,
-                unit: '%',
-            ),
-
-            self::EFFECT => new StateConstraints(
+            self::EFFECT => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['none', 'blink', 'breathe', 'colorloop', 'okay', 'finish_effect'],
             ),
 
-            self::TRANSITION => new StateConstraints(
+            self::TRANSITION => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: 0,
                 max: 65535, // Millisecondes
                 unit: 'ms',
             ),
 
-            // ==========================================
-            // ÉNERGIE
-            // ==========================================
-
-            self::POWER => new StateConstraints(
+            self::POWER => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::FLOAT,
                 min: 0,
                 max: 100000, // 100kW max
@@ -1384,7 +1360,7 @@ enum CapabilityState: string
                 precision: 2,
             ),
 
-            self::ENERGY => new StateConstraints(
+            self::ENERGY => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::FLOAT,
                 min: 0,
                 max: null, // Pas de max (cumulatif)
@@ -1392,7 +1368,7 @@ enum CapabilityState: string
                 precision: 3,
             ),
 
-            self::VOLTAGE => new StateConstraints(
+            self::VOLTAGE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::FLOAT,
                 min: 0,
                 max: 500, // 500V max
@@ -1400,7 +1376,7 @@ enum CapabilityState: string
                 precision: 1,
             ),
 
-            self::CURRENT => new StateConstraints(
+            self::CURRENT => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::FLOAT,
                 min: 0,
                 max: 100, // 100A max
@@ -1408,22 +1384,14 @@ enum CapabilityState: string
                 precision: 2,
             ),
 
-            self::POWER_FACTOR => new StateConstraints(
+            self::POWER_FACTOR => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::FLOAT,
                 min: 0,
                 max: 1,
                 precision: 3,
             ),
 
-            self::BATTERY_PERCENTAGE,
-            self::BATTERY => new StateConstraints(
-                dataType: CapabilityStateDataType::INTEGER,
-                min: 0,
-                max: 100,
-                unit: '%',
-            ),
-
-            self::BATTERY_VOLTAGE => new StateConstraints(
+            self::BATTERY_VOLTAGE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::FLOAT,
                 min: 0,
                 max: 50, // 50V max (batteries)
@@ -1431,16 +1399,12 @@ enum CapabilityState: string
                 precision: 2,
             ),
 
-            self::POWER_SOURCE => new StateConstraints(
+            self::POWER_SOURCE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['mains', 'battery', 'dc', 'emergency', 'unknown'],
             ),
 
-            // ==========================================
-            // CAPTEURS ENVIRONNEMENTAUX
-            // ==========================================
-
-            self::TEMPERATURE => new StateConstraints(
+            self::TEMPERATURE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::FLOAT,
                 min: -50,  // -50°C min
                 max: 100,  // 100°C max
@@ -1448,7 +1412,11 @@ enum CapabilityState: string
                 precision: 1,
             ),
 
-            self::HUMIDITY => new StateConstraints(
+            self::HUMIDITY,
+            self::HUMIDITY_SETPOINT,
+            self::TARGET_HUMIDITY,
+            self::CURRENT_HUMIDITY,
+            self::SOIL_MOISTURE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::FLOAT,
                 min: 0,
                 max: 100,
@@ -1456,7 +1424,7 @@ enum CapabilityState: string
                 precision: 1,
             ),
 
-            self::PRESSURE => new StateConstraints(
+            self::PRESSURE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::FLOAT,
                 min: 500,  // hPa minimum (tempête extrême)
                 max: 1100, // hPa maximum
@@ -1464,85 +1432,37 @@ enum CapabilityState: string
                 precision: 1,
             ),
 
-            self::AIR_QUALITY => new StateConstraints(
+            self::AIR_QUALITY => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['excellent', 'good', 'moderate', 'poor', 'unhealthy', 'hazardous'],
             ),
 
-            self::AIR_QUALITY_INDEX => new StateConstraints(
+            self::AIR_QUALITY_INDEX => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: 0,
                 max: 500,
             ),
 
-            self::CO2 => new StateConstraints(
+            self::CO2 => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: 0,
                 max: 10000, // ppm
                 unit: 'ppm',
             ),
 
-            self::CO2_LEVEL => new StateConstraints(
+            self::CO2_LEVEL => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['normal', 'warning', 'critical'],
             ),
 
-            self::CO => new StateConstraints(
+            self::CO => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: 0,
                 max: 1000, // ppm
                 unit: 'ppm',
             ),
 
-            self::CO_DETECTED => new StateConstraints(
-                dataType: CapabilityStateDataType::BOOLEAN,
-            ),
-
-            self::VOC => new StateConstraints(
-                dataType: CapabilityStateDataType::INTEGER,
-                min: 0,
-                max: 60000, // ppb
-                unit: 'ppb',
-            ),
-
-            self::PM25 => new StateConstraints(
-                dataType: CapabilityStateDataType::INTEGER,
-                min: 0,
-                max: 1000, // µg/m³
-                unit: 'µg/m³',
-            ),
-
-            self::PM10 => new StateConstraints(
-                dataType: CapabilityStateDataType::INTEGER,
-                min: 0,
-                max: 2000, // µg/m³
-                unit: 'µg/m³',
-            ),
-
-            self::ILLUMINANCE => new StateConstraints(
-                dataType: CapabilityStateDataType::INTEGER,
-                min: 0,
-                max: 100000, // lux
-                unit: 'lux',
-            ),
-
-            self::UV_INDEX => new StateConstraints(
-                dataType: CapabilityStateDataType::INTEGER,
-                min: 0,
-                max: 15,
-            ),
-
-            self::NOISE_LEVEL => new StateConstraints(
-                dataType: CapabilityStateDataType::INTEGER,
-                min: 0,
-                max: 140, // dB
-                unit: 'dB',
-            ),
-
-            // ==========================================
-            // SÉCURITÉ - DÉTECTION (BOOLEAN)
-            // ==========================================
-
+            self::CO_DETECTED,
             self::MOTION_DETECTED,
             self::OCCUPANCY_DETECTED,
             self::CONTACT_OPEN,
@@ -1581,93 +1501,120 @@ enum CapabilityState: string
             self::UPDATE_AVAILABLE,
             self::BATTERY_LOW,
             self::BATTERY_CHARGING,
-            self::IS_REACHABLE => new StateConstraints(
+            self::IS_REACHABLE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::BOOLEAN,
             ),
 
-            // ==========================================
-            // SÉCURITÉ - ÉTATS ENUM
-            // ==========================================
-
-            self::MOTION => new StateConstraints(
-                dataType: CapabilityStateDataType::STRING,
-                allowedValues: ['detected', 'clear'],
+            self::VOC => new CapabilityStateConstraints(
+                dataType: CapabilityStateDataType::INTEGER,
+                min: 0,
+                max: 60000, // ppb
+                unit: 'ppb',
             ),
 
-            self::OCCUPANCY => new StateConstraints(
-                dataType: CapabilityStateDataType::STRING,
-                allowedValues: ['occupied', 'unoccupied'],
+            self::PM25 => new CapabilityStateConstraints(
+                dataType: CapabilityStateDataType::INTEGER,
+                min: 0,
+                max: 1000, // µg/m³
+                unit: 'µg/m³',
             ),
 
-            self::CONTACT => new StateConstraints(
-                dataType: CapabilityStateDataType::STRING,
-                allowedValues: ['open', 'closed'],
+            self::PM10 => new CapabilityStateConstraints(
+                dataType: CapabilityStateDataType::INTEGER,
+                min: 0,
+                max: 2000, // µg/m³
+                unit: 'µg/m³',
             ),
 
+            self::ILLUMINANCE => new CapabilityStateConstraints(
+                dataType: CapabilityStateDataType::INTEGER,
+                min: 0,
+                max: 100000, // lux
+                unit: 'lux',
+            ),
+
+            self::UV_INDEX => new CapabilityStateConstraints(
+                dataType: CapabilityStateDataType::INTEGER,
+                min: 0,
+                max: 15,
+            ),
+
+            self::NOISE_LEVEL => new CapabilityStateConstraints(
+                dataType: CapabilityStateDataType::INTEGER,
+                min: 0,
+                max: 140, // dB
+                unit: 'dB',
+            ),
+
+            self::MOTION,
             self::VIBRATION,
             self::WATER_LEAK,
             self::SMOKE,
             self::GLASS_BREAK,
-            self::TAMPER => new StateConstraints(
+            self::TAMPER => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['detected', 'clear'],
             ),
 
-            self::LOCK_STATE => new StateConstraints(
+            self::OCCUPANCY => new CapabilityStateConstraints(
+                dataType: CapabilityStateDataType::STRING,
+                allowedValues: ['occupied', 'unoccupied'],
+            ),
+
+            self::CONTACT => new CapabilityStateConstraints(
+                dataType: CapabilityStateDataType::STRING,
+                allowedValues: ['open', 'closed'],
+            ),
+
+            self::LOCK_STATE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['locked', 'unlocked', 'jammed', 'unknown'],
             ),
 
-            self::DOOR_STATE => new StateConstraints(
+            self::DOOR_STATE,
+            self::WINDOW_COVERING_STATE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['open', 'closed', 'opening', 'closing', 'stopped', 'unknown'],
             ),
 
-            self::ALARM_STATE => new StateConstraints(
+            self::ALARM_STATE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['disarmed', 'armed_away', 'armed_home', 'armed_night', 'triggered'],
             ),
 
-            self::SECURITY_SYSTEM_STATE => new StateConstraints(
+            self::SECURITY_SYSTEM_STATE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['armed', 'disarmed', 'triggered', 'arming', 'disarming'],
             ),
 
-            // ==========================================
-            // CAMÉRA
-            // ==========================================
-
-            self::CAMERA_STATE => new StateConstraints(
+            self::CAMERA_STATE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['streaming', 'recording', 'idle', 'unavailable'],
             ),
 
-            self::PAN_POSITION => new StateConstraints(
+            self::PAN_POSITION => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: -180,
                 max: 180,
                 unit: '°',
             ),
 
-            self::TILT_POSITION => new StateConstraints(
+            self::TILT_POSITION,
+            self::TILT_ANGLE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: -90,
                 max: 90,
                 unit: '°',
             ),
 
-            self::ZOOM_LEVEL => new StateConstraints(
+            self::ZOOM_LEVEL => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: 1,
                 max: 10,
             ),
 
-            // ==========================================
-            // CLIMAT - THERMOSTAT
-            // ==========================================
-
             self::THERMOSTAT_MODE,
-            self::HVAC_MODE => new StateConstraints(
+            self::HVAC_MODE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['off', 'heat', 'cool', 'auto', 'dry', 'fan_only', 'emergency_heat'],
             ),
@@ -1675,7 +1622,7 @@ enum CapabilityState: string
             self::HEATING_SETPOINT,
             self::COOLING_SETPOINT,
             self::TARGET_TEMPERATURE,
-            self::CURRENT_TEMPERATURE => new StateConstraints(
+            self::CURRENT_TEMPERATURE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::FLOAT,
                 min: 5,   // 5°C min
                 max: 35,  // 35°C max
@@ -1683,103 +1630,33 @@ enum CapabilityState: string
                 precision: 1,
             ),
 
-            self::THERMOSTAT_OPERATING_STATE => new StateConstraints(
+            self::THERMOSTAT_OPERATING_STATE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['idle', 'heating', 'cooling', 'fan_only', 'pending_heat', 'pending_cool'],
             ),
 
-            self::FAN_MODE => new StateConstraints(
+            self::FAN_MODE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['auto', 'on', 'off', 'low', 'medium', 'high', 'circulate'],
             ),
 
-            self::FAN_STATE => new StateConstraints(
-                dataType: CapabilityStateDataType::STRING,
-                allowedValues: ['on', 'off'],
-            ),
-
-            self::FAN_SPEED => new StateConstraints(
+            self::FAN_SPEED => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['off', 'low', 'medium', 'high', 'auto'],
             ),
 
-            self::FAN_SPEED_PERCENT => new StateConstraints(
-                dataType: CapabilityStateDataType::INTEGER,
-                min: 0,
-                max: 100,
-                unit: '%',
-            ),
-
-            self::OSCILLATION => new StateConstraints(
-                dataType: CapabilityStateDataType::STRING,
-                allowedValues: ['on', 'off'],
-            ),
-
-            // ==========================================
-            // CLIMAT - HUMIDITÉ
-            // ==========================================
-
-            self::HUMIDITY_SETPOINT,
-            self::TARGET_HUMIDITY,
-            self::CURRENT_HUMIDITY => new StateConstraints(
-                dataType: CapabilityStateDataType::FLOAT,
-                min: 0,
-                max: 100,
-                unit: '%',
-                precision: 1,
-            ),
-
-            self::HUMIDIFIER_STATE,
-            self::DEHUMIDIFIER_STATE,
-            self::PURIFIER_STATE => new StateConstraints(
-                dataType: CapabilityStateDataType::STRING,
-                allowedValues: ['on', 'off'],
-            ),
-
-            self::PURIFIER_MODE => new StateConstraints(
+            self::PURIFIER_MODE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['auto', 'sleep', 'low', 'medium', 'high', 'turbo'],
             ),
 
-            self::FILTER_LIFE_REMAINING => new StateConstraints(
-                dataType: CapabilityStateDataType::INTEGER,
-                min: 0,
-                max: 100,
-                unit: '%',
-            ),
-
-            // ==========================================
-            // COUVERTURES / VOLETS
-            // ==========================================
-
-            self::WINDOW_COVERING_STATE => new StateConstraints(
-                dataType: CapabilityStateDataType::STRING,
-                allowedValues: ['open', 'closed', 'opening', 'closing', 'stopped', 'unknown'],
-            ),
-
-            self::POSITION,
-            self::TILT,
-            self::VALVE_POSITION => new StateConstraints(
-                dataType: CapabilityStateDataType::INTEGER,
-                min: 0,
-                max: 100,
-                unit: '%',
-            ),
-
-            self::TILT_ANGLE => new StateConstraints(
-                dataType: CapabilityStateDataType::INTEGER,
-                min: -90,
-                max: 90,
-                unit: '°',
-            ),
-
-            self::VALVE_STATE => new StateConstraints(
+            self::VALVE_STATE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['open', 'closed', 'opening', 'closing'],
             ),
 
             self::FLOW_RATE,
-            self::WATER_FLOW => new StateConstraints(
+            self::WATER_FLOW => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::FLOAT,
                 min: 0,
                 max: 1000, // L/min
@@ -1787,124 +1664,76 @@ enum CapabilityState: string
                 precision: 2,
             ),
 
-            // ==========================================
-            // AUDIO / VIDÉO
-            // ==========================================
-
-            self::VOLUME,
-            self::VOLUME_LEVEL => new StateConstraints(
-                dataType: CapabilityStateDataType::INTEGER,
-                min: 0,
-                max: 100,
-                unit: '%',
-            ),
-
-            self::MUTE_STATE => new StateConstraints(
+            self::MUTE_STATE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['muted', 'unmuted'],
             ),
 
-            self::PLAYBACK_STATE => new StateConstraints(
+            self::PLAYBACK_STATE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['playing', 'paused', 'stopped', 'buffering'],
             ),
 
             self::MEDIA_POSITION,
-            self::MEDIA_DURATION => new StateConstraints(
+            self::MEDIA_DURATION => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: 0,
                 max: null, // Pas de max
                 unit: 's',
             ),
 
-            self::MEDIA_PROGRESS => new StateConstraints(
-                dataType: CapabilityStateDataType::INTEGER,
-                min: 0,
-                max: 100,
-                unit: '%',
-            ),
-
-            self::REPEAT_MODE => new StateConstraints(
+            self::REPEAT_MODE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['off', 'one', 'all'],
             ),
 
-            self::SHUFFLE_MODE => new StateConstraints(
-                dataType: CapabilityStateDataType::STRING,
-                allowedValues: ['on', 'off'],
-            ),
-
-            // ==========================================
-            // BOUTONS
-            // ==========================================
-
-            self::BUTTON_STATE => new StateConstraints(
+            self::BUTTON_STATE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['single', 'double', 'triple', 'long', 'release', 'hold'],
             ),
 
-            self::ROTATION => new StateConstraints(
+            self::ROTATION => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['left', 'right'],
             ),
 
-            self::ROTATION_ANGLE => new StateConstraints(
+            self::ROTATION_ANGLE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: -360,
                 max: 360,
                 unit: '°',
             ),
 
-            self::INDICATOR_STATE => new StateConstraints(
-                dataType: CapabilityStateDataType::STRING,
-                allowedValues: ['on', 'off'],
-            ),
-
-            // ==========================================
-            // MESURE / RÉSEAU
-            // ==========================================
-
             self::SIGNAL_STRENGTH,
-            self::RSSI => new StateConstraints(
+            self::RSSI => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: -120, // dBm
                 max: 0,
                 unit: 'dBm',
             ),
 
-            self::LINK_QUALITY => new StateConstraints(
+            self::LINK_QUALITY => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: 0,
                 max: 255,
             ),
 
-            self::NETWORK_STATUS => new StateConstraints(
+            self::NETWORK_STATUS => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['online', 'offline', 'connecting'],
             ),
 
-            // ==========================================
-            // VACUUM
-            // ==========================================
-
-            self::VACUUM_STATE => new StateConstraints(
+            self::VACUUM_STATE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['cleaning', 'paused', 'returning', 'docked', 'idle', 'error'],
             ),
 
-            self::VACUUM_FAN_SPEED => new StateConstraints(
+            self::VACUUM_FAN_SPEED => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['silent', 'low', 'medium', 'high', 'max', 'turbo'],
             ),
 
-            self::VACUUM_BATTERY => new StateConstraints(
-                dataType: CapabilityStateDataType::INTEGER,
-                min: 0,
-                max: 100,
-                unit: '%',
-            ),
-
-            self::CLEANED_AREA => new StateConstraints(
+            self::CLEANED_AREA => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::FLOAT,
                 min: 0,
                 max: null,
@@ -1912,39 +1741,27 @@ enum CapabilityState: string
                 precision: 1,
             ),
 
-            self::CLEANING_TIME => new StateConstraints(
+            self::CLEANING_TIME => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: 0,
                 max: null,
                 unit: 'min',
             ),
 
-            // ==========================================
-            // JARDIN
-            // ==========================================
-
-            self::SPRINKLER_STATE => new StateConstraints(
+            self::SPRINKLER_STATE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['watering', 'idle', 'scheduled'],
             ),
 
             self::WATERING_DURATION,
-            self::REMAINING_TIME => new StateConstraints(
+            self::REMAINING_TIME => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: 0,
                 max: 1440, // 24h max
                 unit: 'min',
             ),
 
-            self::SOIL_MOISTURE => new StateConstraints(
-                dataType: CapabilityStateDataType::FLOAT,
-                min: 0,
-                max: 100,
-                unit: '%',
-                precision: 1,
-            ),
-
-            self::SOIL_TEMPERATURE => new StateConstraints(
+            self::SOIL_TEMPERATURE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::FLOAT,
                 min: -10,
                 max: 50,
@@ -1952,90 +1769,59 @@ enum CapabilityState: string
                 precision: 1,
             ),
 
-            // ==========================================
-            // VIRTUELS - TEMPS
-            // ==========================================
-
-            self::CURRENT_TIME => new StateConstraints(
+            self::CURRENT_TIME => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 pattern: '/^\d{2}:\d{2}:\d{2}$/', // HH:mm:ss
             ),
 
-            self::CURRENT_DATE => new StateConstraints(
+            self::CURRENT_DATE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 pattern: '/^\d{4}-\d{2}-\d{2}$/', // YYYY-MM-DD
             ),
 
-            self::DAY_OF_WEEK => new StateConstraints(
+            self::DAY_OF_WEEK => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
             ),
 
-            self::WEEK_NUMBER => new StateConstraints(
+            self::WEEK_NUMBER => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: 1,
                 max: 53,
             ),
 
-            // ==========================================
-            // VIRTUELS - COMPTEUR & TIMER
-            // ==========================================
-
-            self::COUNTER_VALUE => new StateConstraints(
+            self::COUNTER_VALUE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: 0,
                 max: null,
             ),
 
-            self::TIMER_STATE => new StateConstraints(
+            self::TIMER_STATE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['running', 'stopped', 'paused'],
             ),
 
             self::TIMER_REMAINING,
             self::TIMER_ELAPSED,
-            self::TIMER_DURATION => new StateConstraints(
+            self::TIMER_DURATION, self::UPTIME => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: 0,
                 max: null,
                 unit: 's',
             ),
 
-            // ==========================================
-            // SYSTÈME
-            // ==========================================
-
-            self::UPDATE_PROGRESS,
-            self::MEMORY_USAGE => new StateConstraints(
-                dataType: CapabilityStateDataType::INTEGER,
-                min: 0,
-                max: 100,
-                unit: '%',
-            ),
-
-            self::UPTIME => new StateConstraints(
-                dataType: CapabilityStateDataType::INTEGER,
-                min: 0,
-                max: null,
-                unit: 's',
-            ),
-
-            self::HEALTH_STATUS => new StateConstraints(
+            self::HEALTH_STATUS => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
                 allowedValues: ['healthy', 'warning', 'error', 'critical'],
             ),
 
-            self::DEVICE_TEMPERATURE => new StateConstraints(
+            self::DEVICE_TEMPERATURE => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::FLOAT,
                 min: 0,
                 max: 100,
                 unit: '°C',
                 precision: 1,
             ),
-
-            // ==========================================
-            // DATETIME
-            // ==========================================
 
             self::LAST_MOTION,
             self::LAST_OCCUPIED,
@@ -2046,13 +1832,9 @@ enum CapabilityState: string
             self::LAST_BUTTON_EVENT,
             self::LAST_WEBHOOK_TRIGGER,
             self::LAST_SEEN,
-            self::CURRENT_DATETIME => new StateConstraints(
+            self::CURRENT_DATETIME => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::DATETIME,
             ),
-
-            // ==========================================
-            // STRING SANS CONTRAINTE
-            // ==========================================
 
             self::MEDIA_TITLE,
             self::MEDIA_ARTIST,
@@ -2070,29 +1852,13 @@ enum CapabilityState: string
             self::WEBHOOK_RESPONSE,
             self::SCRIPT_OUTPUT,
             self::INPUT_SOURCE,
-            self::INDICATOR_COLOR => new StateConstraints(
+            self::INDICATOR_COLOR => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::STRING,
             ),
 
-            // ==========================================
-            // OBJECT (RGB, HSV, XY)
-            // ==========================================
-
-            self::COLOR_RGB => new StateConstraints(
+            self::COLOR_RGB, self::COLOR_HSV, self::COLOR_XY => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::OBJECT,
             ),
-
-            self::COLOR_HSV => new StateConstraints(
-                dataType: CapabilityStateDataType::OBJECT,
-            ),
-
-            self::COLOR_XY => new StateConstraints(
-                dataType: CapabilityStateDataType::OBJECT,
-            ),
-
-            // ==========================================
-            // INTEGER SANS CONTRAINTE SPÉCIFIQUE
-            // ==========================================
 
             self::CHANNEL,
             self::BUTTON_NUMBER,
@@ -2105,16 +1871,12 @@ enum CapabilityState: string
             self::TOTAL_WATER_USED,
             self::DAYLIGHT_DURATION,
             self::APPARENT_POWER,
-            self::REACTIVE_POWER => new StateConstraints(
+            self::REACTIVE_POWER => new CapabilityStateConstraints(
                 dataType: CapabilityStateDataType::INTEGER,
                 min: 0,
             ),
 
-            // ==========================================
-            // AUTRES
-            // ==========================================
-
-            default => new StateConstraints(
+            default => new CapabilityStateConstraints(
                 dataType: $this->getDataType(),
             ),
         };

@@ -16,22 +16,24 @@ use Symfony\Component\Security\Core\User\UserInterface;
 final readonly class SecurityUser implements JWTUserInterface, PasswordAuthenticatedUserInterface, EquatableInterface
 {
     public function __construct(
-        public UserId $id,
-        public Email $email,
+        public string $id,
+        public string $email,
         public ?string $password,
         public array $roles,
-        public int $status,
+        public string $status,
+        public string $type,
     ) {
     }
 
     public static function create(User $user): self
     {
         return new self(
-            $user->id,
-            $user->email,
+            $user->id->toString(),
+            $user->email->value,
             (string) $user->password,
             $user->roles->toArray(),
-            $user->status->value
+            $user->status->value,
+            $user->type->value,
         );
     }
 
@@ -43,17 +45,19 @@ final readonly class SecurityUser implements JWTUserInterface, PasswordAuthentic
     /**
      * @param mixed $username
      * @param array<string, string> $payload
+     * @return JWTUserInterface|SecurityUser
      */
     public static function createFromPayload(
         mixed $username,
         array $payload
     ): JWTUserInterface|SecurityUser {
         return new self(
-            new UserId($payload['id']),
-            new Email($payload['email']),
+            $payload['id'],
+            $payload['email'],
             null,
             $payload['roles'],
             $payload['status'],
+            $payload['type'],
         );
     }
 
@@ -73,9 +77,6 @@ final readonly class SecurityUser implements JWTUserInterface, PasswordAuthentic
 
     public function getUserIdentifier(): string
     {
-        /** @var non-empty-string $email */
-        $email = $this->email->value;
-
-        return $email;
+        return $this->email;
     }
 }

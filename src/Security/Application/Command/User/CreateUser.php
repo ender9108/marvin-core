@@ -21,7 +21,6 @@ final readonly class CreateUser implements SyncCommandInterface
         public Roles $roles,
         public Locale $locale,
         public Theme $theme,
-        public UserType $type,
         public Timezone $timezone,
         public string $password,
     ) {

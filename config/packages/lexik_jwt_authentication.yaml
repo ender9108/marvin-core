@@ -7,3 +7,6 @@ lexik_jwt_authentication:
         check_path: /api/login_check
         username_path: email
         password_path: security.credentials.password
+    blocklist_token:
+        enabled: true
+        cache: cache.app

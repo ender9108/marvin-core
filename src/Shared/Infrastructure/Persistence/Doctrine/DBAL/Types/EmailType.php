@@ -2,12 +2,12 @@
 
 namespace Marvin\Shared\Infrastructure\Persistence\Doctrine\DBAL\Types;
 
-use Override;
-use Throwable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Marvin\Shared\Domain\ValueObject\Email;
+use Override;
+use Throwable;
 
 final class EmailType extends Type
 {
