@@ -6,9 +6,10 @@ enum ContainerType: string
 {
     case PROTOCOL = 'protocol';
     case DATABASE = 'database';
-    case BROKER = 'broker';
+    case WORKER = 'worker';
     case MONITORING = 'monitoring';
     case MAILER = 'mailer';
+    case APPLICATION = 'application';
 
     public function isProtocol(): bool
     {
@@ -20,9 +21,9 @@ enum ContainerType: string
         return $this === self::DATABASE;
     }
 
-    public function isBroker(): bool
+    public function isWorker(): bool
     {
-        return $this === self::BROKER;
+        return $this === self::WORKER;
     }
 
     public function isMonitoring(): bool
@@ -33,5 +34,10 @@ enum ContainerType: string
     public function isMailer(): bool
     {
         return $this === self::MAILER;
+    }
+
+    public function isApplication(): bool
+    {
+        return $this === self::APPLICATION;
     }
 }

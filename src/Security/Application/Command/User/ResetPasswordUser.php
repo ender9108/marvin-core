@@ -2,9 +2,9 @@
 
 namespace Marvin\Security\Application\Command\User;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandInterface;
+use EnderLab\DddCqrsBundle\Application\Command\CommandInterface;
 
-final readonly class ResetPasswordUser implements SyncCommandInterface
+final readonly class ResetPasswordUser implements CommandInterface
 {
     public function __construct(
         public string $token,

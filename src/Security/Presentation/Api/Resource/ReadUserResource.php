@@ -18,6 +18,7 @@ use Marvin\Security\Presentation\Api\Dto\Input\ChangeEmailUserDto;
 use Marvin\Security\Presentation\Api\Dto\Input\ChangePasswordUserDto;
 use Marvin\Security\Presentation\Api\Dto\Input\CreateUserDto;
 use Marvin\Security\Presentation\Api\Dto\Input\RequestResetPasswordUserDto;
+use Marvin\Security\Presentation\Api\Dto\Input\ResetPasswordUserDto;
 use Marvin\Security\Presentation\Api\Dto\Input\UpdateProfileUserDto;
 use Marvin\Security\Presentation\Api\State\Processor\ChangeEmailUserProcessor;
 use Marvin\Security\Presentation\Api\State\Processor\ChangePasswordUserProcessor;
@@ -27,6 +28,7 @@ use Marvin\Security\Presentation\Api\State\Processor\DisableUserProcessor;
 use Marvin\Security\Presentation\Api\State\Processor\EnableUserProcessor;
 use Marvin\Security\Presentation\Api\State\Processor\LockUserProcessor;
 use Marvin\Security\Presentation\Api\State\Processor\RequestResetPasswordUserProcessor;
+use Marvin\Security\Presentation\Api\State\Processor\ResetPasswordUserProcessor;
 use Marvin\Security\Presentation\Api\State\Processor\UpdateProfileUserProcessor;
 use Marvin\Shared\Infrastructure\Framework\Symfony\MapperTransformer\EnumTransformer;
 use Symfony\Component\ObjectMapper\Attribute\Map;
@@ -56,6 +58,12 @@ use Symfony\Component\ObjectMapper\Attribute\Map;
             security: 'is_granted("ROLE_ADMIN") or object.id == user.id',
             input: RequestResetPasswordUserDto::class,
             processor: RequestResetPasswordUserProcessor::class,
+        ),
+        new Post(
+            uriTemplate: '/users/{id}/reset-password',
+            security: 'is_granted("ROLE_ADMIN") or object.id == user.id',
+            input: ResetPasswordUserDto::class,
+            processor: ResetPasswordUserProcessor::class,
         ),
         new Patch(
             uriTemplate: '/users/{id}/change-email',

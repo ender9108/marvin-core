@@ -7,12 +7,11 @@ use ApiPlatform\State\ProcessorInterface;
 use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use Exception;
-use Marvin\Security\Application\Command\User\RequestResetPasswordUser;
+use Marvin\Security\Application\Command\User\ResetPasswordUser;
 use Marvin\Security\Presentation\Api\Dto\Input\RequestResetPasswordUserDto;
 use Marvin\Security\Presentation\Api\Resource\ReadUserResource;
-use Marvin\Shared\Domain\ValueObject\Email;
 
-final readonly class RequestResetPasswordUserProcessor implements ProcessorInterface
+final readonly class ResetPasswordUserProcessor implements ProcessorInterface
 {
     public function __construct(
         private CommandBusInterface $syncCommandBus,
@@ -27,8 +26,9 @@ final readonly class RequestResetPasswordUserProcessor implements ProcessorInter
     {
         Assert::isInstanceOf($data, RequestResetPasswordUserDto::class);
 
-        $this->syncCommandBus->dispatch(new RequestResetPasswordUser(
-            new Email($data->email),
+        $this->syncCommandBus->dispatch(new ResetPasswordUser(
+            $data->token,
+            $data->password,
         ));
 
         return $context['previous_data'];
