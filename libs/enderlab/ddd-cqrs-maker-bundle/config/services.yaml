@@ -35,6 +35,6 @@ services:
     #    arguments:
     #        $projectDir: '%kernel.project_dir%'
     
-    #EnderLab\DddCqrsMakerBundle\Maker\MakeValueObjectCommand:
-    #    arguments:
-    #        $projectDir: '%kernel.project_dir%'
+    EnderLab\DddCqrsMakerBundle\Maker\MakeValueObjectCommand:
+        arguments:
+            $projectDir: '%kernel.project_dir%'

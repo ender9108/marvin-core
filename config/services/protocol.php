@@ -23,21 +23,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
     ;
 
-    // ACL Service Interfaces
-    $services
-        ->alias(
-            'Marvin\\Protocol\\Application\\Service\\Acl\\DeviceQueryServiceInterface',
-            'Marvin\\Protocol\\Infrastructure\\Service\\Acl\\DeviceQueryService'
-        )
-    ;
-
-    $services
-        ->alias(
-            'Marvin\\Protocol\\Application\\Service\\Acl\\SecretQueryServiceInterface',
-            'Marvin\\Protocol\\Infrastructure\\Service\\Acl\\SecretQueryService'
-        )
-    ;
-
     // Repository Interface
     $services
         ->alias(

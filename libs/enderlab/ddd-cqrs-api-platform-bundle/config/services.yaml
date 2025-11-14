@@ -1,6 +1,6 @@
 parameters:
     ddd_cqrs_api_platform_cache_timeout: 3600
-    
+
 services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.

@@ -16,7 +16,6 @@ return [
     Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
     Zenstruck\Foundry\ZenstruckFoundryBundle::class => ['dev' => true, 'test' => true],
     EnderLab\DddCqrsBundle\DddCqrsBundle::class => ['all' => true],
-    EnderLab\DddCqrsApiPlatformBundle\DddCqrsApiPlatformBundle::class => ['all' => true],
     EnderLab\MarvinManagerBundle\MarvinManagerBundle::class => ['all' => true],
     EnderLab\DddCqrsMakerBundle\DddCqrsMakerBundle::class => ['dev' => true],
     EnderLab\ToolsBundle\ToolsBundle::class => ['all' => true],
@@ -24,5 +23,6 @@ return [
     Zenstruck\Messenger\Test\ZenstruckMessengerTestBundle::class => ['test' => true],
     Zenstruck\Mailer\Test\ZenstruckMailerTestBundle::class => ['dev' => true, 'test' => true],
     ApiPlatform\Symfony\Bundle\ApiPlatformBundle::class => ['all' => true],
+    EnderLab\DddCqrsApiPlatformBundle\DddCqrsApiPlatformBundle::class => ['all' => true],
     Symfonycasts\MicroMapper\SymfonycastsMicroMapperBundle::class => ['all' => true],
 ];

@@ -28,6 +28,11 @@ class MakeFixtureCommand extends AbstractMaker
         return 'make:fixture';
     }
 
+    public static function getCommandDescription(): string
+    {
+        return 'Make new fixture';
+    }
+
     public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $command

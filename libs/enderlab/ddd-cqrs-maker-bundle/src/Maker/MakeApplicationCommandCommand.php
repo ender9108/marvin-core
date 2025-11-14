@@ -24,6 +24,11 @@ class MakeApplicationCommandCommand extends AbstractMaker
         $this->filesystem = new Filesystem();
     }
 
+    public static function getCommandDescription(): string
+    {
+        return 'Make application command';
+    }
+
     public static function getCommandName(): string
     {
         return 'make:application-command';

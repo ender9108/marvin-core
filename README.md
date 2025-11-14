@@ -9,7 +9,8 @@
 
 ## 📋 Description
 
-Marvin est un système de gestion domotique moderne et évolutif, conçu avec une architecture clean (DDD/CQRS) et supportant les principaux protocoles domotiques du marché.
+Marvin est un système de gestion domotique moderne et évolutif, conçu avec une architecture clean (DDD/CQRS) et supportant 
+les principaux protocoles domotiques du marché.
 
 ### 🎯 Objectifs
 
@@ -20,9 +21,9 @@ Marvin est un système de gestion domotique moderne et évolutif, conçu avec un
 
 ## 🚀 Fonctionnalités
 
-- ✅ **Multi-protocoles** : Zigbee (via zigbee2mqtt), WiFi, Matter*, Thread*, Z-Wave*
+- ✅ **Multi-protocoles** : Zigbee (via zigbee2mqtt), Network (Api Rest, Json rpc, Websocket), Matter*, Thread*, Z-Wave*
 - ✅ **Architecture moderne** : DDD, CQRS, Event Sourcing
-- ✅ **API robuste** : API Platform 4.2 + Symfony 7.3
+- ✅ **API robuste** : API Platform 4.2 + Symfony 7.4
 - ✅ **Messaging asynchrone** : PostgreSQL pour la communication inter-services
 - ✅ **Base de données optimisée** : TimescaleDB pour les séries temporelles
 - ✅ **Supervision** : Supervisord pour la gestion des processus
@@ -31,7 +32,7 @@ Marvin est un système de gestion domotique moderne et évolutif, conçu avec un
 
 ## 🛠️ Stack Technique
 
-- **Backend** : PHP 8.4, Symfony 7.3
+- **Backend** : PHP 8.4, Symfony 7.4
 - **API** : API Platform 4.2
 - **Message Broker** : PostgreSQL
 - **Base de données** : PostgreSQL + TimescaleDB

@@ -1,9 +1,20 @@
 <?php
+/**
+ * Marvin Core - DDD-based home automation system
+ *
+ * @package   Marvin\Core
+ * @author    Alexandre Berthelot <alexandreberthelot9108@gmail.com>
+ * @copyright 2024-present Alexandre Berthelot
+ * @license   AGPL-3.0 License
+ * @link      https://github.com/ender9108/marvin-core
+ */
+
+declare(strict_types=1);
 
 namespace Marvin\Shared\Presentation\Exception\Service;
 
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
-use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
+use EnderLab\DddCqrsBundle\Domain\Exception\Interfaces\TranslatableExceptionInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +26,6 @@ final readonly class ExceptionMessageManager
     private const string ERROR_LIST_URL = 'https://github.com/ender9108/marvin-core/blob/main/docs/error_code/error_code.md';
 
     public function __construct(
-        private ParameterBagInterface $parameters,
         private TranslatorInterface $translator,
     ) {
     }

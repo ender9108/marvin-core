@@ -20,7 +20,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ;
 
     // ACL Service Interfaces (Device → Protocol)
-    $services
+    /*$services
         ->alias(
             'Marvin\\Device\\Application\\Service\\Acl\\ProtocolQueryServiceInterface',
             'Marvin\\Device\\Infrastructure\\Framework\\Symfony\\Service\\Acl\\ProtocolQueryService'
@@ -28,6 +28,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->alias(
             'Marvin\\Device\\Application\\Service\\Acl\\ProtocolCapabilityServiceInterface',
             'Marvin\\Device\\Infrastructure\\Framework\\Symfony\\Service\\Acl\\ProtocolCapabilityService'
+        )
+    ;*/
+    $services
+        ->alias(
+            'Marvin\\Shared\\Application\\Service\\Acl\\DeviceQueryServiceInterface',
+            'Marvin\\Device\\Infrastructure\\Framework\\Symfony\\Service\\Acl\\DeviceQueryService'
         )
     ;
 

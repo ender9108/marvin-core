@@ -28,6 +28,11 @@ class MakeEventHandlerCommand extends AbstractMaker
         return 'make:event-handler';
     }
 
+    public static function getCommandDescription(): string
+    {
+        return 'Make new event handler';
+    }
+
     public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $command

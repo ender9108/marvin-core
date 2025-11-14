@@ -56,6 +56,11 @@ class MakeBoundedContextCommand extends AbstractMaker
         return 'make:bounded-context';
     }
 
+    public static function getCommandDescription(): string
+    {
+        return 'Make new bounded context structure';
+    }
+
     public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $command

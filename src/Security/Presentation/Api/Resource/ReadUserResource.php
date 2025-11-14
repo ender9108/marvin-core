@@ -1,4 +1,15 @@
 <?php
+/**
+ * Marvin Core - DDD-based home automation system
+ *
+ * @package   Marvin\Core
+ * @author    Alexandre Berthelot <alexandreberthelot9108@gmail.com>
+ * @copyright 2024-present Alexandre Berthelot
+ * @license   AGPL-3.0 License
+ * @link      https://github.com/ender9108/marvin-core
+ */
+
+declare(strict_types=1);
 
 namespace Marvin\Security\Presentation\Api\Resource;
 
@@ -12,6 +23,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use DateTimeInterface;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\Framework\ApiPlatform\State\Provider\EntityToApiStateProvider;
+use Marvin\Location\Presentation\Api\Resource\ReadZoneResource;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Infrastructure\Framework\Symfony\MapperTransformer\RolesTransformer;
 use Marvin\Security\Presentation\Api\Dto\Input\ChangeEmailUserDto;
@@ -105,7 +117,7 @@ use Symfony\Component\ObjectMapper\Attribute\Map;
     ],
     routePrefix: '/security',
     provider: EntityToApiStateProvider::class,
-    stateOptions: new Options(entityClass: User::class),
+    stateOptions: new Options(entityClass: User::class)
 )]
 final class ReadUserResource
 {

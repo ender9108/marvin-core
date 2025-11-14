@@ -9,5 +9,7 @@ api_platform:
             rfc_7807_compliant_errors: true
             standard_put: true
             event_listeners_backward_compatibility_layer: false
+        normalization_context:
+            skip_null_values: false
     use_symfony_listeners: true
     show_webby: false

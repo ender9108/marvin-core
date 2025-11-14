@@ -1,13 +1,26 @@
 <?php
+/**
+ * Marvin Core - DDD-based home automation system
+ *
+ * @package   Marvin\Core
+ * @author    Alexandre Berthelot <alexandreberthelot9108@gmail.com>
+ * @copyright 2024-present Alexandre Berthelot
+ * @license   AGPL-3.0 License
+ * @link      https://github.com/ender9108/marvin-core
+ */
+
+declare(strict_types=1);
 
 namespace Marvin\Location\Domain\Exception;
 
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
-use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
+use EnderLab\DddCqrsBundle\Domain\Exception\Interfaces\TranslatableExceptionInterface;
+use Marvin\Shared\Domain\Exception\NotFoundInterface;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Override;
+use Symfony\Component\HttpFoundation\Response;
 
-final class ZoneNotFound extends DomainException implements TranslatableExceptionInterface
+final class ZoneNotFound extends DomainException implements TranslatableExceptionInterface, NotFoundInterface
 {
     public function __construct(
         string $message,
@@ -46,5 +59,10 @@ final class ZoneNotFound extends DomainException implements TranslatableExceptio
     public function translationDomain(): string
     {
         return 'location';
+    }
+
+    public function getStatusCode(): int
+    {
+        return Response::HTTP_NOT_FOUND;
     }
 }

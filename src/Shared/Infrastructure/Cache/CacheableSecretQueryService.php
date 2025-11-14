@@ -1,9 +1,20 @@
 <?php
+/**
+ * Marvin Core - DDD-based home automation system
+ *
+ * @package   Marvin\Core
+ * @author    Alexandre Berthelot <alexandreberthelot9108@gmail.com>
+ * @copyright 2024-present Alexandre Berthelot
+ * @license   AGPL-3.0 License
+ * @link      https://github.com/ender9108/marvin-core
+ */
+
+declare(strict_types=1);
 
 namespace Marvin\Shared\Infrastructure\Cache;
 
-use Marvin\Shared\Application\Acl\SecretInfo;
-use Marvin\Shared\Application\Acl\SecretQueryServiceInterface;
+use Marvin\Shared\Application\Service\Acl\Dto\SecretDto;
+use Marvin\Shared\Application\Service\Acl\SecretQueryServiceInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
@@ -44,7 +55,7 @@ final readonly class CacheableSecretQueryService implements SecretQueryServiceIn
         return $value;
     }
 
-    public function getSecretInfo(string $key): SecretInfo
+    public function getSecretInfo(string $key): SecretDto
     {
         return $this->decorated->getSecretInfo($key);
     }

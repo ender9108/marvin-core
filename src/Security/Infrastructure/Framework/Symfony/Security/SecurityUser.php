@@ -1,4 +1,15 @@
 <?php
+/**
+ * Marvin Core - DDD-based home automation system
+ *
+ * @package   Marvin\Core
+ * @author    Alexandre Berthelot <alexandreberthelot9108@gmail.com>
+ * @copyright 2024-present Alexandre Berthelot
+ * @license   AGPL-3.0 License
+ * @link      https://github.com/ender9108/marvin-core
+ */
+
+declare(strict_types=1);
 
 namespace Marvin\Security\Infrastructure\Framework\Symfony\Security;
 
@@ -20,6 +31,11 @@ final readonly class SecurityUser implements JWTUserInterface, PasswordAuthentic
         public array $roles,
         public string $status,
         public string $type,
+        public ?string $locale = null,
+        public ?string $timezone = null,
+        public ?string $theme = null,
+        public ?string $firstname = null,
+        public ?string $lastname = null,
     ) {
     }
 
@@ -32,6 +48,11 @@ final readonly class SecurityUser implements JWTUserInterface, PasswordAuthentic
             $user->roles->toArray(),
             $user->status->value,
             $user->type->value,
+            $user->locale->value,
+            $user->timezone->value,
+            $user->theme->value,
+            $user->firstname->value,
+            $user->lastname->value,
         );
     }
 
@@ -56,6 +77,11 @@ final readonly class SecurityUser implements JWTUserInterface, PasswordAuthentic
             $payload['roles'],
             $payload['status'],
             $payload['type'],
+            $payload['locale'],
+            $payload['timezone'],
+            $payload['theme'],
+            $payload['firstname'],
+            $payload['lastname'],
         );
     }
 
@@ -76,5 +102,30 @@ final readonly class SecurityUser implements JWTUserInterface, PasswordAuthentic
     public function getUserIdentifier(): string
     {
         return $this->email;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    public function getTimezone(): string
+    {
+        return $this->timezone;
+    }
+
+    public function getTheme(): string
+    {
+        return $this->theme;
+    }
+
+    public function getFullname(): string
+    {
+        return $this->firstname.' '.$this->lastname;
     }
 }

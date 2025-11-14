@@ -1,17 +1,19 @@
 <?php
 namespace EnderLab\DddCqrsBundle\Domain\Exception;
 
+use EnderLab\DddCqrsApiPlatformBundle\Domain\Exception\UnprocessableInterface;
+use EnderLab\DddCqrsBundle\Domain\Exception\Interfaces\TranslatableExceptionInterface;
 use Override;
 
-final class InvalidArgument extends DomainException implements TranslatableExceptionInterface
+class InvalidArgument extends DomainException implements TranslatableExceptionInterface, UnprocessableInterface
 {
     public function __construct(
-        private readonly string $translationId,
-        private readonly array $parameters = [],
+        string $translationId,
+        array $parameters = [],
         ?string $code = null,
     ) {
-        parent::__construct($translationId);
-        $this->internalCode = $code ?? self::UNKNOWN_ERROR_CODE;
+        parent::__construct($translationId, $code);
+        $this->translationParams = $parameters;
     }
 
     #[Override]
@@ -23,7 +25,7 @@ final class InvalidArgument extends DomainException implements TranslatableExcep
     #[Override]
     public function translationParameters(): array
     {
-        return $this->parameters;
+        return $this->translationParams;
     }
 
     #[Override]

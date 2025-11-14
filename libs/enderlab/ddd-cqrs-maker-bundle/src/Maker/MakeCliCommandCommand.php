@@ -28,6 +28,11 @@ class MakeCliCommandCommand extends AbstractMaker
         return 'make:cli-command';
     }
 
+    public static function getCommandDescription(): string
+    {
+        return 'Make new cli command';
+    }
+
     public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $command

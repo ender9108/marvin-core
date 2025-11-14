@@ -1,12 +1,24 @@
 <?php
+/**
+ * Marvin Core - DDD-based home automation system
+ *
+ * @package   Marvin\Core
+ * @author    Alexandre Berthelot <alexandreberthelot9108@gmail.com>
+ * @copyright 2024-present Alexandre Berthelot
+ * @license   AGPL-3.0 License
+ * @link      https://github.com/ender9108/marvin-core
+ */
+
+declare(strict_types=1);
 
 namespace Marvin\Device\Domain\Exception;
 
+use EnderLab\DddCqrsApiPlatformBundle\Domain\Exception\NotFoundInterface;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
-use EnderLab\DddCqrsBundle\Domain\Exception\TranslatableExceptionInterface;
+use EnderLab\DddCqrsBundle\Domain\Exception\Interfaces\TranslatableExceptionInterface;
 use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 
-class DeviceNotFound extends DomainException implements TranslatableExceptionInterface
+class DeviceNotFound extends DomainException implements TranslatableExceptionInterface, NotFoundInterface
 {
     public function __construct(
         string $message,
@@ -18,7 +30,7 @@ class DeviceNotFound extends DomainException implements TranslatableExceptionInt
     public static function withId(DeviceId $id): self
     {
         return new self(
-            sprintf('The device %d is not found', $id->toString()),
+            sprintf('The device %s is not found', $id->toString()),
             $id->toString(),
         );
     }

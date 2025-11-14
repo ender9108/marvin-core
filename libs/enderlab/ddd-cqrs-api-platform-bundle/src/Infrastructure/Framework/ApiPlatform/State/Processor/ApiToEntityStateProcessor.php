@@ -31,7 +31,7 @@ final readonly class ApiToEntityStateProcessor implements ProcessorInterface
     /**
      * @throws \Exception
      */
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ?ApiResourceInterface
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ?object
     {
         $stateOptions = $operation->getStateOptions();
         assert($stateOptions instanceof Options);
@@ -41,7 +41,7 @@ final readonly class ApiToEntityStateProcessor implements ProcessorInterface
 
         if ($operation instanceof Put) {
             $data->id = $context['previous_data']->id;
-            $context['previous_data'] = $this->objectMapper->map($context['previous_data'], $entityClass);
+            $context['previous_data'] = $this->microMapper->map($context['previous_data'], $entityClass);
         }
 
         $entity = $this->objectMapper->map($data, $entityClass);
@@ -59,31 +59,10 @@ final readonly class ApiToEntityStateProcessor implements ProcessorInterface
             return null;
         }
 
-        /*switch (true) {
-            case $operation instanceof Put:
-            case $operation instanceof Patch:
-                if (method_exists($entity, 'update')) {
-                    $entity->update($context['previous_data']);
-                }
-                break;
-            case $operation instanceof DeleteOperationInterface:
-                if (method_exists($entity, 'delete')) {
-                    $entity->delete();
-                }
-
-                $this->removeProcessor->process($entity, $operation, $uriVariables, $context);
-                return null;
-            default:
-        }*/
-
         $this->persistProcessor->process($entity, $operation, $uriVariables, $context);
 
-        /** @var ApiResourceInterface $resource */
-        $resource = $this->objectMapper->map($entity, get_class($data));
-            /*$this->microMapper->map($entity, get_class($data), [
+        return $this->microMapper->map($entity, get_class($data), [
             MicroMapperInterface::MAX_DEPTH => 0
-        ]);*/
-
-        return $resource;
+        ]);
     }
 }

@@ -2,9 +2,12 @@
 
 namespace EnderLab\DddCqrsBundle\Domain\Exception;
 
+use EnderLab\DddCqrsBundle\Domain\Exception\Interfaces\HttpExceptionInterface;
+use EnderLab\DddCqrsBundle\Domain\Exception\Interfaces\TranslatableExceptionInterface;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\Response;
 
-abstract class DomainException extends RuntimeException
+abstract class DomainException extends RuntimeException implements HttpExceptionInterface
 {
     protected const string SEPARATOR = '.';
 
@@ -12,28 +15,31 @@ abstract class DomainException extends RuntimeException
 
     protected string $internalCode = self::UNKNOWN_ERROR_CODE;
 
-    protected ?string $transId = null;
+    protected ?string $translationId = null;
 
-    protected array $transParams = [];
+    protected array $translationParams = [];
 
-    protected ?string $transDomain = null;
+    protected ?string $translationDomain = null;
 
-    public function __construct(string $message, string|int|null $code = null) {
+    public function __construct(
+        string $message,
+        string|int|null $code = 404
+    ) {
         $exceptionCode = 0;
 
-        /*if (
+        if (
             false !== class_implements($this) &&
             in_array(TranslatableExceptionInterface::class, class_implements($this))
         ) {
             /* Format [DOMAIN_NAME(lowercase)].exceptions.[ERROR_CODE(uppercase)].[TRANSLATION_ID(lower_underscore_case)] */
-            /*$translationIdParts = explode(self::SEPARATOR, $message);
+            $translationIdParts = explode(self::SEPARATOR, $this->translationId());
 
             if (count($translationIdParts) >= 4) {
-                $this->transDomain = array_shift($translationIdParts);
+                $this->translationDomain = array_shift($translationIdParts);
                 // drop "exceptions"
                 array_shift($translationIdParts);
                 $this->internalCode = array_shift($translationIdParts);
-                $this->transId = $message;
+                $this->translationId = $message;
             }
         } else {
             if (is_string($code)) {
@@ -43,7 +49,7 @@ abstract class DomainException extends RuntimeException
             if (is_int($code)) {
                 $exceptionCode = $code;
             }
-        }*/
+        }
 
 
         parent::__construct($message, is_int($code) ? $code : $exceptionCode);
@@ -53,5 +59,10 @@ abstract class DomainException extends RuntimeException
     {
         return $this->internalCode;
 
+    }
+
+    public function getStatusCode(): int
+    {
+        return Response::HTTP_INTERNAL_SERVER_ERROR;
     }
 }

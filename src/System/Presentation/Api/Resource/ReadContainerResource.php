@@ -1,4 +1,15 @@
 <?php
+/**
+ * Marvin Core - DDD-based home automation system
+ *
+ * @package   Marvin\Core
+ * @author    Alexandre Berthelot <alexandreberthelot9108@gmail.com>
+ * @copyright 2024-present Alexandre Berthelot
+ * @license   AGPL-3.0 License
+ * @link      https://github.com/ender9108/marvin-core
+ */
+
+declare(strict_types=1);
 
 namespace Marvin\System\Presentation\Api\Resource;
 
@@ -8,9 +19,12 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use DateTimeInterface;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\Framework\ApiPlatform\State\Provider\EntityToApiStateProvider;
 use Marvin\Shared\Infrastructure\Framework\Symfony\MapperTransformer\EnumTransformer;
 use Marvin\System\Domain\Model\Container;
+use Marvin\System\Presentation\Api\Dto\Input\ExecContainerDto;
+use Marvin\System\Presentation\Api\State\Processor\ExecContainerProcessor;
 use Marvin\System\Presentation\Api\State\Processor\RestartContainerProcessor;
 use Marvin\System\Presentation\Api\State\Processor\StartContainerProcessor;
 use Marvin\System\Presentation\Api\State\Processor\StopContainerProcessor;
@@ -36,6 +50,12 @@ use Symfony\Component\ObjectMapper\Attribute\Map;
             uriTemplate: '/containers/{id}/stop',
             security: 'is_granted("ROLE_ADMIN")',
             processor: StopContainerProcessor::class,
+        ),
+        new Post(
+            uriTemplate: '/containers/{id}/exec',
+            security: 'is_granted("ROLE_ADMIN")',
+            input: ExecContainerDto::class,
+            processor: ExecContainerProcessor::class,
         )
     ],
     routePrefix: '/system',
@@ -51,11 +71,9 @@ class ReadContainerResource
     public string $serviceLabel;
 
     #[ApiProperty(writable: false)]
-    #[Map(transform: EnumTransformer::class)]
     public string $type;
 
     #[ApiProperty(writable: false)]
-    #[Map(source: 'status', transform: EnumTransformer::class)]
     public string $uptime;
 
     #[ApiProperty(writable: false)]
@@ -63,4 +81,10 @@ class ReadContainerResource
 
     #[ApiProperty(writable: false)]
     public string $containerLabel;
+
+    #[ApiProperty(writable: false)]
+    public ?DateTimeInterface $lastSyncedAt;
+
+    #[ApiProperty(writable: false)]
+    public DateTimeInterface $createdAt;
 }

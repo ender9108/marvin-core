@@ -40,6 +40,11 @@ class MakeModelCommand extends AbstractMaker
         return 'make:model';
     }
 
+    public static function getCommandDescription(): string
+    {
+        return 'Make new model';
+    }
+
     public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $command

@@ -1,7 +1,7 @@
 <?php
 
-use Marvin\Secret\Infrastructure\Service\Acl\SecretQueryService;
-use Marvin\Shared\Application\Acl\SecretQueryServiceInterface;
+use Marvin\Shared\Application\Service\Acl\SecretQueryServiceInterface as SharedSecretQueryServiceInterface;
+use Marvin\Secret\Infrastructure\Framework\Symfony\Service\Acl\SecretQueryService;
 use Marvin\Shared\Infrastructure\Cache\CacheableSecretQueryService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -25,14 +25,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
     ;
 
+    // ACL
     $services
-        ->set(SecretQueryService::class)
-        ->autowire()
-        ->public(false)
+        ->alias(
+            'Marvin\Shared\Application\Service\Acl\SecretQueryServiceInterface',
+            'Marvin\\Secret\\Infrastructure\\Framework\\Symfony\\Service\\Acl\\SecretQueryService'
+        )
     ;
 
     $services
-        ->set(SecretQueryServiceInterface::class, CacheableSecretQueryService::class)
+        ->set(SharedSecretQueryServiceInterface::class, CacheableSecretQueryService::class)
         ->arg('$decorated', service(SecretQueryService::class))
         ->arg('$cache', service('cache.app'))
         ->public(true)

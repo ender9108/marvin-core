@@ -1,11 +1,20 @@
 <?php
-
+/**
+ * Marvin Core - DDD-based home automation system
+ *
+ * @package   Marvin\Core
+ * @author    Alexandre Berthelot <alexandreberthelot9108@gmail.com>
+ * @copyright 2024-present Alexandre Berthelot
+ * @license   AGPL-3.0 License
+ * @link      https://github.com/ender9108/marvin-core
+ */
 declare(strict_types=1);
 
 namespace Marvin\Protocol\Infrastructure\Service;
 
-use Marvin\Protocol\Application\Service\Acl\SecretQueryServiceInterface;
+use Marvin\Shared\Application\Service\Acl\SecretQueryServiceInterface;
 use Marvin\Protocol\Infrastructure\Protocol\MqttProtocol;
+use RuntimeException;
 
 /**
  * MQTT Publisher Service
@@ -83,16 +92,16 @@ final class MqttPublisher
     private function getMqttProtocol(): MqttProtocol
     {
         if ($this->mqttProtocol === null) {
-            $credentials = $this->secretQueryService->getMqttCredentials();
+            $secrets = $this->secretQueryService->getSecretsByCategory('mqtt');
 
             $this->mqttProtocol = new MqttProtocol(
-                host: $credentials->host,
-                port: $credentials->port,
-                username: $credentials->username,
-                password: $credentials->password,
-                protocolLevel: $credentials->protocolLevel,
-                qos: $credentials->qos,
-                retain: $credentials->retain,
+                host: $secrets['mqtt.host'] ?? throw new RuntimeException('MQTT host not configured'),
+                port: (int) ($secrets['mqtt.port'] ?? 1883),
+                username: $secrets['mqtt.username'] ?? null,
+                password: $secrets['mqtt.password'] ?? null,
+                protocolLevel: (int) ($secrets['mqtt.protocol_level'] ?? 5),
+                qos: (int) ($secrets['mqtt.qos'] ?? 1),
+                retain: (bool) ($secrets['mqtt.retain'] ?? false),
             );
 
             $this->mqttProtocol->connect();

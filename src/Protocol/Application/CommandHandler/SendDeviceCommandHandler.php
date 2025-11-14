@@ -1,11 +1,19 @@
 <?php
-
+/**
+ * Marvin Core - DDD-based home automation system
+ *
+ * @package   Marvin\Core
+ * @author    Alexandre Berthelot <alexandreberthelot9108@gmail.com>
+ * @copyright 2024-present Alexandre Berthelot
+ * @license   AGPL-3.0 License
+ * @link      https://github.com/ender9108/marvin-core
+ */
 declare(strict_types=1);
 
 namespace Marvin\Protocol\Application\CommandHandler;
 
 use Marvin\Protocol\Application\Command\SendDeviceCommand;
-use Marvin\Protocol\Application\Service\Acl\DeviceQueryServiceInterface;
+use Marvin\Shared\Application\Service\Acl\DeviceQueryServiceInterface;
 use Marvin\Protocol\Domain\Model\ProtocolAdapterInterface;
 use Marvin\Protocol\Domain\ValueObject\ExecutionMode;
 use Psr\Log\LoggerInterface;

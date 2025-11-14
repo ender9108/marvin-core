@@ -1,4 +1,15 @@
 <?php
+/**
+ * Marvin Core - DDD-based home automation system
+ *
+ * @package   Marvin\Core
+ * @author    Alexandre Berthelot <alexandreberthelot9108@gmail.com>
+ * @copyright 2024-present Alexandre Berthelot
+ * @license   AGPL-3.0 License
+ * @link      https://github.com/ender9108/marvin-core
+ */
+
+declare(strict_types=1);
 
 namespace Marvin\Shared\Domain;
 
@@ -13,6 +24,7 @@ final class Application
     public const string APP_DEFAULT_LOCALE = 'fr';
     public const array APP_AVAILABLE_THEMES = ['dark', 'light'];
     public const string APP_DEFAULT_THEME = 'dark';
+    public const string APP_DEFAULT_TIMEZONE = 'Europe/Paris';
 
     public const string APP_EMAIL_FROM = 'app-marvin@marvin.fr';
     public const string APP_EMAIL_NAME = 'Marvin';
