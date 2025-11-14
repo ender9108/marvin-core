@@ -25,6 +25,7 @@
 .claude
 CLAUDE.md
 /**/CLAUDE.md
+.mcp.json
 
 !compose.override.yaml
 !compose.prod.yaml
