@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EnderLab\DddCqrsBundle\Infrastructure\Framework\Symfony\Messenger\Bus;
 
 use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
@@ -13,7 +16,6 @@ final readonly class MessengerCommandBus implements CommandBusInterface
         private MessageBusInterface $messageBus
     ) {
     }
-
     /**
      * @throws ExceptionInterface
      */

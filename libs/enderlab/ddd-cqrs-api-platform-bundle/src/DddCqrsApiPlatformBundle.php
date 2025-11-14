@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EnderLab\DddCqrsApiPlatformBundle;
 
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
@@ -19,7 +21,6 @@ class DddCqrsApiPlatformBundle extends AbstractBundle
             ->end()
         ;
     }
-
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $container->import('../config/services.yaml');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EnderLab\DddCqrsApiPlatformBundle\Infrastructure\Framework\ApiPlatform\State\Provider;
 
 use ApiPlatform\Doctrine\Orm\Paginator;
@@ -25,7 +27,6 @@ readonly class ByIdProvider implements ProviderInterface
         private ObjectMapperInterface $objectMapper,
     ) {
     }
-
     /**
      * @throws Exception
      */
@@ -33,16 +34,13 @@ readonly class ByIdProvider implements ProviderInterface
     {
         $entity = $this->itemProvider->provide($operation, $uriVariables, $context);
         $resourceClass = $operation->getClass();
-
         if ($operation instanceof CollectionOperationInterface) {
             $entities = $this->collectionProvider->provide($operation, $uriVariables, $context);
             assert($entities instanceof Paginator);
             $dtos = [];
-
             foreach ($entities as $entity) {
                 $dtos[] = $this->objectMapper->map($entity, $resourceClass);
             }
-
             return new TraversablePaginator(
                 new ArrayIterator($dtos),
                 $entities->getCurrentPage(),
@@ -50,13 +48,9 @@ readonly class ByIdProvider implements ProviderInterface
                 $entities->getTotalItems()
             );
         }
-
-
-
         if (!$entity) {
             return null;
         }
-
         return $this->objectMapper->map($entity, $resourceClass);
     }
 }

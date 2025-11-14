@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EnderLab\DddCqrsBundle\Domain\Exception;
 
 use EnderLab\DddCqrsApiPlatformBundle\Domain\Exception\UnprocessableInterface;
@@ -15,19 +18,16 @@ class InvalidArgument extends DomainException implements TranslatableExceptionIn
         parent::__construct($translationId, $code);
         $this->translationParams = $parameters;
     }
-
     #[Override]
     public function translationId(): string
     {
         return $this->translationId;
     }
-
     #[Override]
     public function translationParameters(): array
     {
         return $this->translationParams;
     }
-
     #[Override]
     public function translationDomain(): string
     {

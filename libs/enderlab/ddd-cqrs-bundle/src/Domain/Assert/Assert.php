@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the webmozart/assert package.
  *
@@ -8,7 +10,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace EnderLab\DddCqrsBundle\Domain\Assert;
 
 use ArrayAccess;
@@ -26,17 +27,9 @@ use SimpleXMLElement;
 use Throwable;
 use Traversable;
 
-/**
- * Efficient assertions to validate the input/output of your methods.
- *
- * @since  1.0
- *
- * @author Bernhard Schussek <bschussek@gmail.com>
- */
 class Assert
 {
     use Mixin;
-
     /**
      * @psalm-pure
      *
@@ -58,7 +51,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -76,7 +68,6 @@ class Assert
         static::string($value, $message);
         static::notEq($value, '', $message);
     }
-
     /**
      * @psalm-pure
      *
@@ -98,7 +89,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -120,7 +110,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -142,7 +131,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -164,7 +152,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -186,7 +173,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -208,7 +194,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -230,7 +215,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -252,7 +236,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -274,7 +257,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -296,7 +278,6 @@ class Assert
                 ['type' => static::typeToString($value), 'expectedType' => $type]
             );
         }
-
         if ($type && $type !== \get_resource_type($value)) {
             static::reportInvalidArgument(
                 $message ?: sprintf('Expected a resource of type %2$s. Got: %s', static::typeToString($value), $type),
@@ -304,7 +285,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -326,7 +306,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -348,7 +327,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -372,7 +350,6 @@ class Assert
             ),
             \E_USER_DEPRECATED
         );
-
         if (!\is_array($value) && !($value instanceof Traversable)) {
             static::reportInvalidArgument(
                 $message ?: sprintf('Expected a traversable. Got: %s', static::typeToString($value)),
@@ -380,7 +357,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -402,7 +378,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -429,7 +404,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -451,7 +425,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -478,7 +451,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -505,7 +477,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -526,13 +497,11 @@ class Assert
                 return;
             }
         }
-
         static::reportInvalidArgument(
             $message ?: sprintf('Expected an instance of any of %2$s. Got: %s', static::typeToString($value), \implode(', ', \array_map(array(static::class, 'valueToString'), $classes))),
             ['type' => static::typeToString($value), 'classes' => \implode(', ', \array_map(array(static::class, 'valueToString'), $classes))]
         );
     }
-
     /**
      * @psalm-pure
      *
@@ -553,7 +522,6 @@ class Assert
     public static function isAOf(object|string $value, string $class, string $message = ''): void
     {
         static::string($class, 'Expected class as a string. Got: %s');
-
         if (!\is_a($value, $class, \is_string($value))) {
             static::reportInvalidArgument(
                 $message ?: sprintf('Expected an instance of this class or to this class among its parents "%2$s". Got: %s', static::valueToString($value), $class),
@@ -561,7 +529,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -583,7 +550,6 @@ class Assert
     public static function isNotA(object|string $value, string $class, string $message = ''): void
     {
         static::string($class, 'Expected class as a string. Got: %s');
-
         if (\is_a($value, $class, \is_string($value))) {
             static::reportInvalidArgument(
                 $message ?: sprintf('Expected an instance of this class or to this class among its parents other than "%2$s". Got: %s', static::valueToString($value), $class),
@@ -591,7 +557,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -609,18 +574,15 @@ class Assert
     {
         foreach ($classes as $class) {
             static::string($class, 'Expected class as a string. Got: %s');
-
             if (\is_a($value, $class, \is_string($value))) {
                 return;
             }
         }
-
         static::reportInvalidArgument(
             $message ?: sprintf('Expected an instance of any of this classes or any of those classes among their parents "%2$s". Got: %s', static::valueToString($value), \implode(', ', $classes)),
             ['value' => static::valueToString($value), 'classes' => \implode(', ', $classes)]
         );
     }
-
     /**
      * @psalm-pure
      *
@@ -642,7 +604,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -664,7 +625,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -686,7 +646,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -708,7 +667,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -730,7 +688,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -752,7 +709,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -774,7 +730,6 @@ class Assert
             );
         }
     }
-
     /**
      * @param mixed  $value
      * @param string $message
@@ -792,7 +747,6 @@ class Assert
             );
         }
     }
-
     /**
      * @param mixed  $value
      * @param string $message
@@ -810,7 +764,6 @@ class Assert
             );
         }
     }
-
     /**
      * @param mixed  $value
      * @param string $message
@@ -828,7 +781,6 @@ class Assert
             );
         }
     }
-
     /**
      * @param mixed  $value
      * @param string $message
@@ -846,7 +798,6 @@ class Assert
             );
         }
     }
-
     /**
      * Does non strict comparisons on the items, so ['3', 3] will not pass the assertion.
      *
@@ -861,17 +812,14 @@ class Assert
     {
         $allValues = \count($values);
         $uniqueValues = \count(\array_unique($values));
-
         if ($allValues !== $uniqueValues) {
             $difference = $allValues - $uniqueValues;
-
             static::reportInvalidArgument(
                 $message ?: sprintf('Expected an array of unique values, but %s of them %s duplicated', $difference, 1 === $difference ? 'is' : 'are'),
                 ['difference' => $difference, 'verb' => 1 === $difference ? 'is' : 'are']
             );
         }
     }
-
     /**
      * @param mixed  $value
      * @param mixed  $expect
@@ -890,7 +838,6 @@ class Assert
             );
         }
     }
-
     /**
      * @param mixed  $value
      * @param mixed  $expect
@@ -909,7 +856,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -930,7 +876,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -951,7 +896,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -972,7 +916,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -993,7 +936,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1014,7 +956,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1035,7 +976,6 @@ class Assert
             );
         }
     }
-
     /**
      * Inclusive range, so Assert::(3, 3, 5) passes.
      *
@@ -1059,7 +999,6 @@ class Assert
             );
         }
     }
-
     /**
      * A more human-readable alias of Assert::inArray().
      *
@@ -1077,7 +1016,6 @@ class Assert
     {
         static::inArray($value, $values, $message);
     }
-
     /**
      * Does strict comparison, so Assert::inArray(3, ['3']) does not pass the assertion.
      *
@@ -1100,7 +1038,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1121,7 +1058,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1142,7 +1078,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1162,7 +1097,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1183,7 +1117,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1204,7 +1137,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1218,16 +1150,13 @@ class Assert
     public static function startsWithLetter(mixed $value, string $message = ''): void
     {
         static::string($value);
-
         $valid = isset($value[0]);
-
         if ($valid) {
             $locale = \setlocale(LC_CTYPE, 0);
             \setlocale(LC_CTYPE, 'C');
             $valid = \ctype_alpha($value[0]);
             \setlocale(LC_CTYPE, $locale);
         }
-
         if (!$valid) {
             static::reportInvalidArgument(
                 $message ?: sprintf('Expected a value to start with a letter. Got: %s', static::valueToString($value)),
@@ -1235,7 +1164,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1256,7 +1184,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1277,7 +1204,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1298,7 +1224,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1319,7 +1244,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1333,7 +1257,6 @@ class Assert
     public static function unicodeLetters($value, $message = '')
     {
         static::string($value);
-
         if (!\preg_match('/^\p{L}+$/u', $value)) {
             static::reportInvalidArgument(
                 $message ?: sprintf('Expected a value to contain only Unicode letters. Got: %s', static::valueToString($value)),
@@ -1341,7 +1264,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1355,12 +1277,10 @@ class Assert
     public static function alpha($value, $message = '')
     {
         static::string($value);
-
         $locale = \setlocale(LC_CTYPE, 0);
         \setlocale(LC_CTYPE, 'C');
         $valid = !\ctype_alpha($value);
         \setlocale(LC_CTYPE, $locale);
-
         if ($valid) {
             static::reportInvalidArgument(
                 $message ?: sprintf('Expected a value to contain only letters. Got: %s', static::valueToString($value)),
@@ -1368,7 +1288,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1382,12 +1301,10 @@ class Assert
     public static function digits($value, $message = '')
     {
         static::string($value);
-
         $locale = \setlocale(LC_CTYPE, 0);
         \setlocale(LC_CTYPE, 'C');
         $valid = !\ctype_digit($value);
         \setlocale(LC_CTYPE, $locale);
-
         if ($valid) {
             static::reportInvalidArgument(
                 $message ?: sprintf('Expected a value to contain digits only. Got: %s', static::valueToString($value)),
@@ -1395,7 +1312,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1409,12 +1325,10 @@ class Assert
     public static function alnum($value, $message = '')
     {
         static::string($value);
-
         $locale = \setlocale(LC_CTYPE, 0);
         \setlocale(LC_CTYPE, 'C');
         $valid = !\ctype_alnum($value);
         \setlocale(LC_CTYPE, $locale);
-
         if ($valid) {
             static::reportInvalidArgument(
                 $message ?: sprintf('Expected a value to contain letters and digits only. Got: %s', static::valueToString($value)),
@@ -1422,7 +1336,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1438,12 +1351,10 @@ class Assert
     public static function lower($value, $message = '')
     {
         static::string($value);
-
         $locale = \setlocale(LC_CTYPE, 0);
         \setlocale(LC_CTYPE, 'C');
         $valid = !\ctype_lower($value);
         \setlocale(LC_CTYPE, $locale);
-
         if ($valid) {
             static::reportInvalidArgument(
                 $message ?: sprintf('Expected a value to contain lowercase characters only. Got: %s', static::valueToString($value)),
@@ -1451,7 +1362,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1467,12 +1377,10 @@ class Assert
     public static function upper($value, $message = '')
     {
         static::string($value);
-
         $locale = \setlocale(LC_CTYPE, 0);
         \setlocale(LC_CTYPE, 'C');
         $valid = !\ctype_upper($value);
         \setlocale(LC_CTYPE, $locale);
-
         if ($valid) {
             static::reportInvalidArgument(
                 $message ?: sprintf('Expected a value to contain uppercase characters only. Got: %s', static::valueToString($value)),
@@ -1480,7 +1388,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1501,7 +1408,6 @@ class Assert
             );
         }
     }
-
     /**
      * Inclusive min.
      *
@@ -1524,7 +1430,6 @@ class Assert
             );
         }
     }
-
     /**
      * Inclusive max.
      *
@@ -1547,7 +1452,6 @@ class Assert
             );
         }
     }
-
     /**
      * Inclusive , so Assert::lengthBetween('asd', 3, 5); passes the assertion.
      *
@@ -1565,7 +1469,6 @@ class Assert
     public static function lengthBetween($value, $min, $max, $message = ''): void
     {
         $length = static::strlen($value);
-
         if ($length < $min || $length > $max) {
             static::reportInvalidArgument(
                 $message ?: sprintf('Expected a value to contain between %2$s and %3$s characters. Got: %s', static::valueToString($value), $min, $max),
@@ -1573,7 +1476,6 @@ class Assert
             );
         }
     }
-
     /**
      * Will also pass if $value is a directory, use Assert::file() instead if you need to be sure it is a file.
      *
@@ -1593,7 +1495,6 @@ class Assert
             );
         }
     }
-
     /**
      * @param mixed  $value
      * @param string $message
@@ -1611,7 +1512,6 @@ class Assert
             );
         }
     }
-
     /**
      * @param mixed  $value
      * @param string $message
@@ -1629,7 +1529,6 @@ class Assert
             );
         }
     }
-
     /**
      * @param string $value
      * @param string $message
@@ -1647,7 +1546,6 @@ class Assert
             );
         }
     }
-
     /**
      * @param string $value
      * @param string $message
@@ -1665,7 +1563,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-assert class-string $value
      *
@@ -1685,7 +1582,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1712,7 +1608,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-assert class-string $value
      *
@@ -1732,7 +1627,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1759,7 +1653,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1782,7 +1675,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1805,7 +1697,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1828,7 +1719,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1851,7 +1741,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1872,7 +1761,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -1893,7 +1781,6 @@ class Assert
             );
         }
     }
-
     /**
      * Checks if a value is a valid array key (int or string).
      *
@@ -1917,7 +1804,6 @@ class Assert
             );
         }
     }
-
     /**
      * Does not check if $array is countable, this can generate a warning on php versions after 7.2.
      *
@@ -1941,7 +1827,6 @@ class Assert
             )
         );
     }
-
     /**
      * Does not check if $array is countable, this can generate a warning on php versions after 7.2.
      *
@@ -1962,7 +1847,6 @@ class Assert
             );
         }
     }
-
     /**
      * Does not check if $array is countable, this can generate a warning on php versions after 7.2.
      *
@@ -1983,7 +1867,6 @@ class Assert
             );
         }
     }
-
     /**
      * Does not check if $array is countable, this can generate a warning on php versions after 7.2.
      *
@@ -1999,7 +1882,6 @@ class Assert
     public static function countBetween($array, $min, $max, $message = '')
     {
         $count = \count($array);
-
         if ($count < $min || $count > $max) {
             static::reportInvalidArgument(
                 $message ?: sprintf('Expected an array to contain between %2$d and %3$d elements. Got: %d', $count, $min, $max),
@@ -2007,7 +1889,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -2028,7 +1909,6 @@ class Assert
                 []
             );
         }
-
         if (\function_exists('array_is_list')) {
             if (!\array_is_list($array)) {
                 static::reportInvalidArgument(
@@ -2036,14 +1916,11 @@ class Assert
                     []
                 );
             }
-
             return;
         }
-
         if (array() === $array) {
             return;
         }
-
         $keys = array_keys($array);
         if (array_keys($keys) !== $keys) {
             static::reportInvalidArgument(
@@ -2052,7 +1929,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -2070,7 +1946,6 @@ class Assert
         static::isList($array, $message);
         static::notEmpty($array, $message);
     }
-
     /**
      * @psalm-pure
      *
@@ -2099,7 +1974,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-pure
      *
@@ -2122,7 +1996,6 @@ class Assert
         static::isMap($array, $message);
         static::notEmpty($array, $message);
     }
-
     /**
      * @psalm-pure
      *
@@ -2136,13 +2009,11 @@ class Assert
     public static function uuid($value, $message = '')
     {
         $value = \str_replace(array('urn:', 'uuid:', '{', '}'), '', $value);
-
         // The nil UUID is special form of UUID that is specified to have all
         // 128 bits set to zero.
         if ('00000000-0000-0000-0000-000000000000' === $value) {
             return;
         }
-
         if (!\preg_match('/^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/D', $value)) {
             static::reportInvalidArgument(
                 $message ?: sprintf('Value %s is not a valid UUID.', static::valueToString($value)),
@@ -2150,7 +2021,6 @@ class Assert
             );
         }
     }
-
     /**
      * @psalm-param class-string<Throwable> $class
      *
@@ -2165,9 +2035,7 @@ class Assert
     public static function throws(Closure $expression, $class = 'Exception', $message = '')
     {
         static::string($class);
-
         $actual = 'none';
-
         try {
             $expression();
         } catch (Exception $e) {
@@ -2181,13 +2049,11 @@ class Assert
                 return;
             }
         }
-
         static::reportInvalidArgument(
             $message ?: sprintf('Expected to throw "%s", got "%s"', $class, $actual),
             ['class' => $class, 'actual' => $actual]
         );
     }
-
     public static function isValidTimezone(string $value, string $message = ''): void
     {
         if (!\in_array($value, DateTimeZone::listIdentifiers(), true)) {
@@ -2198,7 +2064,6 @@ class Assert
             );
         }
     }
-
     /**
      * @throws BadMethodCallException
      */
@@ -2209,28 +2074,20 @@ class Assert
                 $method = \lcfirst(\substr($name, 6));
                 \call_user_func_array(array(static::class, $method), $arguments);
             }
-
             return;
         }
-
         if ('all' === \substr($name, 0, 3)) {
             static::isIterable($arguments[0]);
-
             $method = \lcfirst(\substr($name, 3));
             $args = $arguments;
-
             foreach ($arguments[0] as $entry) {
                 $args[0] = $entry;
-
                 \call_user_func_array(array(static::class, $method), $args);
             }
-
             return;
         }
-
         throw new BadMethodCallException('No such method: '.$name);
     }
-
     /**
      * @param mixed $value
      *
@@ -2241,46 +2098,35 @@ class Assert
         if (null === $value) {
             return 'null';
         }
-
         if (true === $value) {
             return 'true';
         }
-
         if (false === $value) {
             return 'false';
         }
-
         if (\is_array($value)) {
             return 'array';
         }
-
         if (\is_object($value)) {
             if (\method_exists($value, '__toString')) {
                 return \get_class($value).': '.self::valueToString($value->__toString());
             }
-
             if ($value instanceof DateTime || $value instanceof DateTimeImmutable) {
                 return \get_class($value).': '.self::valueToString($value->format('c'));
             }
-
             if (\function_exists('enum_exists') && \enum_exists(\get_class($value))) {
                 return \get_class($value).'::'.$value->name;
             }
-
             return \get_class($value);
         }
-
         if (\is_resource($value)) {
             return 'resource';
         }
-
         if (\is_string($value)) {
             return '"'.$value.'"';
         }
-
         return (string) $value;
     }
-
     /**
      * @psalm-pure
      *
@@ -2292,20 +2138,16 @@ class Assert
     {
         return \is_object($value) ? \get_class($value) : \gettype($value);
     }
-
     protected static function strlen($value)
     {
         if (!\function_exists('mb_detect_encoding')) {
             return \strlen($value);
         }
-
         if (false === $encoding = \mb_detect_encoding($value)) {
             return \strlen($value);
         }
-
         return \mb_strlen($value, $encoding);
     }
-
     /**
      * @param string $message
      *
@@ -2319,7 +2161,6 @@ class Assert
     {
         throw new AssertException($message, $parameters);
     }
-
     private function __construct()
     {
     }

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EnderLab\DddCqrsBundle\Domain\ValueObject;
 
 trait ValueObjectTrait
@@ -8,7 +11,6 @@ trait ValueObjectTrait
         if (is_array($this->value)) {
             return count(array_diff($this->value, $other->value)) === 0;
         }
-
         return $this->value = $other->value;
     }
 }

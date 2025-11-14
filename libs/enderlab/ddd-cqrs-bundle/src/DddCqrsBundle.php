@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EnderLab\DddCqrsBundle;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -12,23 +14,19 @@ class DddCqrsBundle extends AbstractBundle
     {
         $container->import('../config/services.yaml');
     }
-
     public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $autoSetup =
             $builder->hasParameter('is_marvin_core') &&
             true === $builder->getParameter('is_marvin_core')
         ;
-
         $env = $builder->getParameterBag()->get('kernel.environment');
         $isTestEnv = $env === 'test';
-
         if ($isTestEnv) {
             $this->initMessengerTest($builder);
         } else {
             $this->initMessenger($builder, $autoSetup);
         }
-
         $builder->prependExtensionConfig('framework', [
             'messenger' => [
                 'routing' => [
@@ -40,7 +38,6 @@ class DddCqrsBundle extends AbstractBundle
             ]
         ]);
     }
-
     private function initMessenger(ContainerBuilder $builder, bool $autoSetup): void
     {
         $builder->prependExtensionConfig('framework', [
@@ -101,7 +98,6 @@ class DddCqrsBundle extends AbstractBundle
             ]
         ]);
     }
-
     private function initMessengerTest(ContainerBuilder $builder): void
     {
         $builder->prependExtensionConfig('framework', [

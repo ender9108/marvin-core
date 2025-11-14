@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EnderLab\DddCqrsApiPlatformBundle\Infrastructure\Framework\ApiPlatform\Filter;
 
 use ApiPlatform\Doctrine\Common\Filter\OpenApiFilterTrait;
@@ -15,7 +17,6 @@ use ReflectionException;
 final class PartialSearchFilter implements FilterInterface, OpenApiParameterFilterInterface
 {
     use OpenApiFilterTrait;
-
     /**
      * @throws ReflectionException
      */
@@ -23,32 +24,24 @@ final class PartialSearchFilter implements FilterInterface, OpenApiParameterFilt
     {
         $parameter = $context['parameter'];
         $property = $parameter->getProperty();
-
         $reflectionClass = new ReflectionClass($resourceClass);
         $reflectionProperty = $reflectionClass->getProperty($property);
-
         $alias = $queryBuilder->getRootAliases()[0];
-
         if (is_subclass_of($reflectionProperty->getType()->getName(), ValueObjectInterface::class)) {
             $field = $alias.'.'.$property.'.value';
         } else {
             $field = $alias.'.'.$property;
         }
-
         $parameterName = $queryNameGenerator->generateParameterName($property);
         $values = $parameter->getValue();
-
         if (!is_iterable($values)) {
             $queryBuilder->setParameter($parameterName, '%'.strtolower($values).'%');
-
             $queryBuilder->{$context['whereClause'] ?? 'andWhere'}($queryBuilder->expr()->like(
                 'LOWER('.$field.')',
                 ':'.$parameterName
             ));
-
             return;
         }
-
         $likeExpressions = [];
         foreach ($values as $val) {
             $parameterName = $queryNameGenerator->generateParameterName($property);
@@ -58,15 +51,12 @@ final class PartialSearchFilter implements FilterInterface, OpenApiParameterFilt
             );
             $queryBuilder->setParameter($parameterName, '%'.strtolower($val).'%');
         }
-
         $queryBuilder->{$context['whereClause'] ?? 'andWhere'}(
             $queryBuilder->expr()->orX(...$likeExpressions)
         );
     }
-
     public function getDescription(string $resourceClass): array
     {
         return [];
     }
 }
-

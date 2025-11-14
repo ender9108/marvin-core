@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EnderLab\DddCqrsBundle\Infrastructure\Framework\Symfony\Messenger\Bus;
 
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
@@ -13,12 +16,10 @@ final class MessengerSyncCommandBus implements SyncCommandBusInterface
     use HandleTrait {
         HandleTrait::handle as messengerHandle;
     }
-
     public function __construct(MessageBusInterface $commandBus)
     {
         $this->messageBus = $commandBus;
     }
-
     /**
      * @throws Throwable
      */
@@ -31,7 +32,6 @@ final class MessengerSyncCommandBus implements SyncCommandBusInterface
                 /** @var Throwable $e */
                 $e = $e->getPrevious();
             }
-
             throw $e;
         }
     }

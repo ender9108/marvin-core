@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EnderLab\MarvinManagerBundle;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;

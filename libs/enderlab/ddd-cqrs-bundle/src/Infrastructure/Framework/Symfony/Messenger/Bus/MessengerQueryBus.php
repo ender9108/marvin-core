@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EnderLab\DddCqrsBundle\Infrastructure\Framework\Symfony\Messenger\Bus;
 
 use EnderLab\DddCqrsBundle\Application\Query\QueryBusInterface;
@@ -12,12 +15,10 @@ final class MessengerQueryBus implements QueryBusInterface
     use HandleTrait {
         HandleTrait::handle as messengerHandle;
     }
-
     public function __construct(MessageBusInterface $queryBus)
     {
         $this->messageBus = $queryBus;
     }
-
     /**
      * @throws \Throwable
      */
@@ -30,7 +31,6 @@ final class MessengerQueryBus implements QueryBusInterface
                 /** @var \Throwable $e */
                 $e = $e->getPrevious();
             }
-
             throw $e;
         }
     }

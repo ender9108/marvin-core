@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EnderLab\DddCqrsBundle\Infrastructure\Framework\Symfony\Messenger\Bus;
 
 use EnderLab\DddCqrsBundle\Application\Event\DomainEventBusInterface;
@@ -15,7 +18,6 @@ final readonly class MessengerDomainEventBus implements DomainEventBusInterface
         private MessageBusInterface $messageBus
     ) {
     }
-
     /**
      * @throws ExceptionInterface
      */

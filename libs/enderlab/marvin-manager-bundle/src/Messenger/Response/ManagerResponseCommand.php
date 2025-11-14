@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EnderLab\MarvinManagerBundle\Messenger\Response;
 
 use EnderLab\MarvinManagerBundle\Reference\ManagerContainerActionReference;
@@ -37,17 +40,14 @@ final readonly class ManagerResponseCommand implements ManagerResponseCommandInt
         public ?array $metadata = [],
     ) {
     }
-
     public function isSuccess(): bool
     {
         return $this->success;
     }
-
     public function isFailed(): bool
     {
         return !$this->success;
     }
-
     public function hasError(): bool
     {
         return $this->error !== null;

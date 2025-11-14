@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EnderLab\DddCqrsBundle\Domain\Event;
 
 use DateTimeImmutable;
@@ -7,11 +9,9 @@ use DateTimeImmutable;
 abstract readonly class AbstractDomainEvent implements DomainEventInterface
 {
     public DateTimeImmutable $occurredOn;
-
     public function __construct()
     {
         $this->occurredOn = new DateTimeImmutable();
     }
-
     abstract public function toArray(): array;
 }

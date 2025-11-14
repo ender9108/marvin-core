@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EnderLab\DddCqrsApiPlatformBundle\Infrastructure\Framework\ApiPlatform\State\Processor;
 
 use ApiPlatform\Doctrine\Common\State\PersistProcessor;
@@ -27,7 +29,6 @@ final readonly class ApiToEntityStateProcessor implements ProcessorInterface
         private ObjectMapperInterface $objectMapper,
     ) {
     }
-
     /**
      * @throws \Exception
      */
@@ -35,32 +36,24 @@ final readonly class ApiToEntityStateProcessor implements ProcessorInterface
     {
         $stateOptions = $operation->getStateOptions();
         assert($stateOptions instanceof Options);
-
         $entityClass = $stateOptions->getEntityClass();
-        assert($data instanceof ApiResourceInterface);
 
         if ($operation instanceof Put) {
             $data->id = $context['previous_data']->id;
             $context['previous_data'] = $this->microMapper->map($context['previous_data'], $entityClass);
         }
-
         $entity = $this->objectMapper->map($data, $entityClass);
-
         if (!is_object($entity)) {
             throw new RuntimeException('Entity "'.$entityClass.'" is not object');
         }
-
         if ($operation instanceof DeleteOperationInterface) {
             if (method_exists($entity, 'delete')) {
                 $entity->delete();
             }
-
             $this->removeProcessor->process($entity, $operation, $uriVariables, $context);
             return null;
         }
-
         $this->persistProcessor->process($entity, $operation, $uriVariables, $context);
-
         return $this->microMapper->map($entity, get_class($data), [
             MicroMapperInterface::MAX_DEPTH => 0
         ]);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EnderLab\DddCqrsApiPlatformBundle\Infrastructure\Framework\ApiPlatform\Exception\Provider;
 
 use ApiPlatform\Metadata\HttpOperation;
@@ -26,22 +28,17 @@ final readonly class ErrorProvider implements ProviderInterface
         private ParameterBagInterface $parameters
     ) {
     }
-
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
         $request = $context['request'];
         $exception = $request->attributes->get('exception');
-
         if (!$request || !$exception) {
             throw new RuntimeException();
         }
-
         /** @var HttpOperation $operation */
         $status = $operation->getStatus() ?? 500;
-
         $error = Error::createFromException($exception, $status);
         $classImplements = class_implements($exception);
-
         if (
             false !== $classImplements &&
             in_array(TranslatableExceptionInterface::class, $classImplements) &&
@@ -61,10 +58,8 @@ final readonly class ErrorProvider implements ProviderInterface
             );
             $error->setTitle($exception->translationId());
         }
-
         return $error;
     }
-
     private function getStatusCode(object $exception): int
     {
         $statusCode = match (true) {
@@ -72,15 +67,12 @@ final readonly class ErrorProvider implements ProviderInterface
             $exception instanceof UnprocessableInterface => $exception::STATUS_CODE,
             default => null
         };
-
         if (null === $statusCode) {
             if (method_exists($exception, 'getStatusCode')) {
                 return $exception->getStatusCode();
             }
-
             $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
-
         return $statusCode;
     }
 }

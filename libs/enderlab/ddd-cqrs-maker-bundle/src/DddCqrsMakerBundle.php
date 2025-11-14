@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EnderLab\DddCqrsMakerBundle;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;

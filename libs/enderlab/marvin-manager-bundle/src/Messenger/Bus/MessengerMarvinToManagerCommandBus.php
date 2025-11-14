@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EnderLab\MarvinManagerBundle\Messenger\Bus;
 
 use EnderLab\MarvinManagerBundle\Messenger\Request\ManagerRequestCommandInterface;
@@ -15,7 +18,6 @@ final readonly class MessengerMarvinToManagerCommandBus implements MarvinToManag
         private MessageBusInterface $messageBus
     ) {
     }
-
     /**
      * @throws ExceptionInterface
      */
