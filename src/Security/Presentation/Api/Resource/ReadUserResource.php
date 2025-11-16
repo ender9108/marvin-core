@@ -23,9 +23,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use DateTimeInterface;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\Framework\ApiPlatform\State\Provider\EntityToApiStateProvider;
-use Marvin\Location\Presentation\Api\Resource\ReadZoneResource;
 use Marvin\Security\Domain\Model\User;
-use Marvin\Security\Infrastructure\Framework\Symfony\MapperTransformer\RolesTransformer;
 use Marvin\Security\Presentation\Api\Dto\Input\ChangeEmailUserDto;
 use Marvin\Security\Presentation\Api\Dto\Input\ChangePasswordUserDto;
 use Marvin\Security\Presentation\Api\Dto\Input\CreateUserDto;
@@ -42,10 +40,7 @@ use Marvin\Security\Presentation\Api\State\Processor\LockUserProcessor;
 use Marvin\Security\Presentation\Api\State\Processor\RequestResetPasswordUserProcessor;
 use Marvin\Security\Presentation\Api\State\Processor\ResetPasswordUserProcessor;
 use Marvin\Security\Presentation\Api\State\Processor\UpdateProfileUserProcessor;
-use Marvin\Shared\Infrastructure\Framework\Symfony\MapperTransformer\EnumTransformer;
-use Symfony\Component\ObjectMapper\Attribute\Map;
 
-#[Map(source: User::class)]
 #[ApiResource(
     shortName: 'user',
     operations: [
@@ -134,7 +129,6 @@ final class ReadUserResource
     public string $lastname;
 
     #[ApiProperty(writable: false)]
-    #[Map(transform: RolesTransformer::class)]
     public array $roles;
 
     #[ApiProperty(writable: false)]
@@ -147,11 +141,9 @@ final class ReadUserResource
     public string $timezone;
 
     #[ApiProperty(writable: false)]
-    #[Map(transform: EnumTransformer::class)]
     public string $type;
 
     #[ApiProperty(writable: false)]
-    #[Map(transform: EnumTransformer::class)]
     public string $status;
 
     #[ApiProperty(writable: false)]

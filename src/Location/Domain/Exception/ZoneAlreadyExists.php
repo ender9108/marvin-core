@@ -15,6 +15,7 @@ namespace Marvin\Location\Domain\Exception;
 
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\Interfaces\TranslatableExceptionInterface;
+use Marvin\Location\Domain\ValueObject\ZoneName;
 
 final class ZoneAlreadyExists extends DomainException implements TranslatableExceptionInterface
 {
@@ -25,11 +26,11 @@ final class ZoneAlreadyExists extends DomainException implements TranslatableExc
         parent::__construct($message);
     }
 
-    public static function withLabel(string $zoneName): self
+    public static function withLabel(ZoneName $zoneName): self
     {
         return new self(
-            sprintf('Zone with name %s already exists', $zoneName),
-            $zoneName,
+            sprintf('Zone with name %s already exists', $zoneName->value),
+            $zoneName->value,
         );
     }
 

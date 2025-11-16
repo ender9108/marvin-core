@@ -24,34 +24,33 @@ use Marvin\Location\Domain\ValueObject\SurfaceArea;
 use Marvin\Location\Domain\ValueObject\Temperature;
 use Marvin\Location\Domain\ValueObject\ZoneName;
 use Marvin\Location\Domain\ValueObject\ZoneType;
-use Marvin\Location\Presentation\Api\Dto\Input\AddDeviceToZoneDto;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use Exception;
-use Marvin\Location\Application\Command\Zone\AddDeviceToZone;
+use Marvin\Location\Presentation\Api\Dto\Input\CreateZoneDto;
 use Marvin\Location\Presentation\Api\Resource\ReadZoneResource;
-use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
-use Symfony\Component\ObjectMapper\ObjectMapperInterface;
+use Marvin\Shared\Domain\ValueObject\Metadata;
+use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 final readonly class CreateZoneProcessor implements ProcessorInterface
 {
     public function __construct(
-        private ObjectMapperInterface $objectMapper,
+        private MicroMapperInterface $microMapper,
         private SyncCommandBusInterface $syncCommandBus,
     ) {
     }
 
     /**
-     * @param AddDeviceToZoneDto $data
+     * @param CreateZoneDto $data
      * @throws Exception
      */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ReadZoneResource
     {
-        Assert::isInstanceOf($data, AddDeviceToZoneDto::class);
+        Assert::isInstanceOf($data, CreateZoneDto::class);
 
         $model = $this->syncCommandBus->handle(new CreateZone(
-            ZoneName::fromString($data->name),
+            ZoneName::fromString($data->zoneName),
             ZoneType::from($data->type),
             null !== $data->parentZoneId ? new ZoneId($data->parentZoneId) : null,
             null !== $data->surfaceArea ? SurfaceArea::fromFloat($data->surfaceArea) : null,
@@ -61,23 +60,9 @@ final readonly class CreateZoneProcessor implements ProcessorInterface
             null !== $data->targetPowerConsumption ? PowerConsumption::fromWatts($data->targetPowerConsumption) : null,
             $data->icon,
             null !== $data->color ? HexaColor::fromString($data->color) : null,
-            null !== $data->metadata ? $data->metadata : null,
+            null !== $data->metadata ? Metadata::fromArray($data->metadata) : null,
         ));
 
-        /*
-         * public ZoneName $zoneName,
-        public ZoneType $type,
-        public ?ZoneId $parentZoneId = null,
-        public ?SurfaceArea $surfaceArea = null,
-        public ?Orientation $orientation = null,
-        public ?Temperature $targetTemperature = null,
-        public ?Humidity $targetHumidity = null,
-        public ?PowerConsumption $targetPowerConsumption = null,
-        public ?string $icon = null,
-        public ?HexaColor $color = null,
-        public ?Metadata $metadata = null,
-         */
-
-        return $this->objectMapper->map($model, ReadZoneResource::class);
+        return $this->microMapper->map($model, ReadZoneResource::class);
     }
 }

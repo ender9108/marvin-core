@@ -16,8 +16,11 @@ use Marvin\Device\Domain\Model\Device;
 use Marvin\Device\Domain\Repository\DeviceRepositoryInterface;
 use Marvin\Device\Domain\ValueObject\PhysicalAddress;
 use Marvin\Device\Domain\ValueObject\Protocol;
+use Marvin\Shared\Application\Service\Acl\LocationQueryServiceInterface;
 use Marvin\Shared\Domain\Event\Device\DeviceStateChanged;
 use Marvin\Shared\Domain\Event\Location\ZoneDeviceAdded;
+use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
+use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Throwable;
@@ -44,20 +47,11 @@ final readonly class ZoneDeviceAddedHandler
             'zoneId' => $event->zoneId,
         ]);
 
-        try {
+        $device = $this->deviceRepository->byId(DeviceId::fromString($event->deviceId));
 
-
-            /*$this->logger->info('Device states updated successfully', [
-                'deviceId' => $device->id->toString(),
-                'nativeId' => $event->deviceId,
-                'updatedStates' => count($event->states),
-            ]);*/
-        } catch (Throwable $e) {
-            /*$this->logger->error('Error handling DeviceStateChanged event', [
-                'nativeId' => $event->deviceId,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);*/
+        if (false === $device->zoneId->equals(ZoneId::fromString($event->zoneId))) {
+            $device->assignToZone(ZoneId::fromString($event->zoneId));
+            $this->deviceRepository->save($device);
         }
     }
 }

@@ -22,12 +22,12 @@ use Marvin\Security\Application\Command\User\EnableUser;
 use Marvin\Security\Presentation\Api\Dto\Input\UpdateProfileUserDto;
 use Marvin\Security\Presentation\Api\Resource\ReadUserResource;
 use Marvin\Shared\Domain\ValueObject\Identity\UserId;
-use Symfony\Component\ObjectMapper\ObjectMapperInterface;
+use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 final readonly class EnableUserProcessor implements ProcessorInterface
 {
     public function __construct(
-        private ObjectMapperInterface $objectMapper,
+        private MicroMapperInterface $microMapper,
         private SyncCommandBusInterface $syncCommandBus,
     ) {
     }
@@ -44,6 +44,6 @@ final readonly class EnableUserProcessor implements ProcessorInterface
             id: UserId::fromString($uriVariables['id']),
         ));
 
-        return $this->objectMapper->map($model, ReadUserResource::class);
+        return $this->microMapper->map($model, ReadUserResource::class);
     }
 }

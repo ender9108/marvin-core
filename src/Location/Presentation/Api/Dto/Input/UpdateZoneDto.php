@@ -14,31 +14,15 @@ declare(strict_types=1);
 namespace Marvin\Location\Presentation\Api\Dto\Input;
 
 use Marvin\Location\Domain\ValueObject\Orientation;
-use Marvin\Location\Domain\ValueObject\SurfaceArea;
-use Marvin\Location\Domain\ValueObject\ZoneType;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
-use Symfony\Component\Validator\Constraints\Uuid;
 
-final class CreateZoneDto
+final class UpdateZoneDto
 {
-    #[NotBlank]
-    public string $zoneName;
-
-    #[NotBlank]
-    #[Choice(choices: [
-        ZoneType::BUILDING->value,
-        ZoneType::ROOM->value,
-        ZoneType::FLOOR->value,
-        ZoneType::OUTDOOR->value
-    ])]
-    public string $type;
-
-    #[Uuid(versions: Uuid::V7_MONOTONIC)]
     #[NotBlank(allowNull: true)]
-    public ?string $parentZoneId = null;
+    public ?string $zoneName = null;
 
     #[Length(min: 0, max: 10000)]
     public ?float $surfaceArea = null;
@@ -58,11 +42,11 @@ final class CreateZoneDto
 
     public ?float $targetTemperature = null;
 
-    #[Length(min: 0, max: 100)]
-    public ?float $targetHumidity = null;
-
     #[Length(min: 0)]
     public ?float $targetPowerConsumption = null;
+
+    #[Length(min: 0, max: 100)]
+    public ?float $targetHumidity = null;
 
     public ?string $icon = null;
 

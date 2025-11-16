@@ -34,7 +34,7 @@ final readonly class CreateZoneHandler
     ) {
     }
 
-    public function __invoke(CreateZone $command): string
+    public function __invoke(CreateZone $command): Zone
     {
         if ($this->zoneRepository->bySlug($this->slugger->slugify($command->zoneName->value)) !== null) {
             throw ZoneAlreadyExists::withLabel($command->zoneName);
@@ -79,6 +79,6 @@ final readonly class CreateZoneHandler
         $this->zoneRepository->save($zone);
         $this->logger->info('Zone created', ['zoneId' => $zone->id->toString()]);
 
-        return $zone->id->toString();
+        return $zone;
     }
 }

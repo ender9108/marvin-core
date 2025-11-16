@@ -31,7 +31,7 @@ final readonly class MoveZoneHandler
     ) {
     }
 
-    public function __invoke(MoveZone $command): string
+    public function __invoke(MoveZone $command): Zone
     {
         $zone = $this->zoneRepository->byId($command->zoneId);
 
@@ -43,7 +43,6 @@ final readonly class MoveZoneHandler
 
         if ($command->newParentZoneId !== null) {
             try {
-                /** @var Zone $newParentZone */
                 $newParentZone = $this->zoneRepository->byId($command->newParentZoneId);
             } catch (DomainException) {
                 throw ZoneParentNotFound::withId($command->newParentZoneId);
@@ -67,6 +66,6 @@ final readonly class MoveZoneHandler
         $this->zoneRepository->save($zone);
         $this->logger->info('Zone moved', ['zoneId' => $command->zoneId]);
 
-        return $command->zoneId;
+        return $zone;
     }
 }

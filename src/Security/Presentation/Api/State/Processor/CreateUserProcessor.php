@@ -28,12 +28,12 @@ use Marvin\Security\Presentation\Api\Resource\ReadUserResource;
 use Marvin\Shared\Domain\ValueObject\Email;
 use Marvin\Shared\Domain\ValueObject\Locale;
 use Marvin\Shared\Domain\ValueObject\Theme;
-use Symfony\Component\ObjectMapper\ObjectMapperInterface;
+use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 final readonly class CreateUserProcessor implements ProcessorInterface
 {
     public function __construct(
-        private ObjectMapperInterface $objectMapper,
+        private MicroMapperInterface $microMapper,
         private SyncCommandBusInterface $syncCommandBus,
     ) {
     }
@@ -57,6 +57,6 @@ final readonly class CreateUserProcessor implements ProcessorInterface
             $data->password,
         ));
 
-        return $this->objectMapper->map($model, ReadUserResource::class);
+        return $this->microMapper->map($model, ReadUserResource::class);
     }
 }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Marvin\Location\Application\CommandHandler\Zone;
 
 use Marvin\Location\Application\Command\Zone\UpdateZone;
+use Marvin\Location\Domain\Model\Zone;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
 use Marvin\Location\Domain\ValueObject\ZoneName;
 use Marvin\Shared\Domain\Service\SluggerInterface;
@@ -30,13 +31,13 @@ final readonly class UpdateZoneHandler
     ) {
     }
 
-    public function __invoke(UpdateZone $command): string
+    public function __invoke(UpdateZone $command): Zone
     {
         $zone = $this->zoneRepository->byId($command->zoneId);
 
         if ($command->zoneName !== null) {
             $zone->updateName(
-                ZoneName::fromString($command->zoneName),
+                $command->zoneName,
                 $this->slugger
             );
         }
@@ -53,6 +54,6 @@ final readonly class UpdateZoneHandler
         $this->zoneRepository->save($zone);
         $this->logger->info('Zone updated', ['zoneId' => $command->zoneId]);
 
-        return $command->zoneId;
+        return $zone;
     }
 }

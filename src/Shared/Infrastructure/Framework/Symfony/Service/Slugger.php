@@ -25,6 +25,6 @@ final readonly class Slugger implements SluggerInterface
 
     public function slugify(string $string): string
     {
-        return $this->slugger->slug($string);
+        return $this->slugger->slug($string)->toString();
     }
 }

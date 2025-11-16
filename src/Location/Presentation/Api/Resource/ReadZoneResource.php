@@ -16,16 +16,23 @@ namespace Marvin\Location\Presentation\Api\Resource;
 use ApiPlatform\Doctrine\Orm\State\Options;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use Marvin\Location\Presentation\Api\Dto\Input\AddDeviceToZoneDto;
 use DateTimeInterface;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\Framework\ApiPlatform\State\Provider\EntityToApiStateProvider;
 use Marvin\Location\Domain\Model\Zone;
 use Marvin\Location\Presentation\Api\Dto\Input\CreateZoneDto;
+use Marvin\Location\Presentation\Api\Dto\Input\MoveToZoneDto;
+use Marvin\Location\Presentation\Api\Dto\Input\UpdateZoneDto;
 use Marvin\Location\Presentation\Api\State\Processor\AddDeviceToZoneProcessor;
 use Marvin\Location\Presentation\Api\State\Processor\CreateZoneProcessor;
+use Marvin\Location\Presentation\Api\State\Processor\DeleteZoneProcessor;
+use Marvin\Location\Presentation\Api\State\Processor\MoveToZoneProcessor;
+use Marvin\Location\Presentation\Api\State\Processor\UpdateZoneProcessor;
 
 #[ApiResource(
     shortName: 'zone',
@@ -40,6 +47,19 @@ use Marvin\Location\Presentation\Api\State\Processor\CreateZoneProcessor;
             uriTemplate: '/zones/{id}/add-device-to-zone',
             input: AddDeviceToZoneDto::class,
             processor: AddDeviceToZoneProcessor::class
+        ),
+        new Post(
+            uriTemplate: '/zones/{id}/move-to-zone',
+            input: MoveToZoneDto::class,
+            processor: MoveToZoneProcessor::class
+        ),
+        new Patch(
+            input: UpdateZoneDto::class,
+            processor: UpdateZoneProcessor::class
+        ),
+        new Delete(
+            security: 'is_granted("ROLE_ADMIN")',
+            processor: DeleteZoneProcessor::class
         ),
     ],
     routePrefix: '/location',
@@ -65,7 +85,7 @@ class ReadZoneResource
     public ?string $orientation;
 
     #[ApiProperty(writable: false)]
-    public ?string $surfaceArea = null;
+    public ?float $surfaceArea = null;
 
     #[ApiProperty(writable: false)]
     public ?string $icon = null;

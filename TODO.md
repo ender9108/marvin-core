@@ -1,13 +1,15 @@
 ### TODOS
 
+- **Translations**
+    - Mettre en place le nouveau système de traduction des erreurs
+    - Traduction validation sf
+      - Ex: device_validator.fr.yaml
+
 - **Tests**
   - **OK - Test complet contexte Location (100%)**
   - **OK - Test complet contexte Secret (100%)**
   - **OK - Test complet contexte Security (100%)**
   - Test complet contexte System (90%)
-
-- **Translations**
-  - **OK - Mettre en place le nouveau système de traduction des erreurs**
 
 - **Contextes**
   - ENC - Finition contexte System (ajout commande pour composer install et update)
@@ -29,7 +31,7 @@
 - **OK - Contexte Security (PROD, DEV)**
 
 - **Error code**
-- **OK - Passer dans tous les contextes pour vérifier que tous les codes d'erreurs sont en places**
+- Passer dans tous les contextes pour vérifier que tous les codes d'erreurs sont en places
 - Faire le lexique des codes d'erreurs
 
 ### Roadmap

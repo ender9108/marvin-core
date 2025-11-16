@@ -28,12 +28,12 @@ use Marvin\Security\Presentation\Api\Resource\ReadUserResource;
 use Marvin\Shared\Domain\ValueObject\Identity\UserId;
 use Marvin\Shared\Domain\ValueObject\Locale;
 use Marvin\Shared\Domain\ValueObject\Theme;
-use Symfony\Component\ObjectMapper\ObjectMapperInterface;
+use Symfonycasts\MicroMapper\MicroMapperInterface;
 
 final readonly class UpdateProfileUserProcessor implements ProcessorInterface
 {
     public function __construct(
-        private ObjectMapperInterface $objectMapper,
+        private MicroMapperInterface $microMapper,
         private SyncCommandBusInterface $syncCommandBus,
     ) {
     }
@@ -46,7 +46,7 @@ final readonly class UpdateProfileUserProcessor implements ProcessorInterface
     {
         Assert::isInstanceOf($data, UpdateProfileUserDto::class);
 
-        $model = $this->syncCommandBus->handle(new UpdateProfileUser(
+        $user = $this->syncCommandBus->handle(new UpdateProfileUser(
             new UserId($uriVariables['id']),
             null !== $data->firstname ? Firstname::fromString($data->firstname) : null,
             null !== $data->lastname ? Lastname::fromString($data->lastname) : null,
@@ -56,6 +56,6 @@ final readonly class UpdateProfileUserProcessor implements ProcessorInterface
             null !== $data->timezone ? Timezone::fromString($data->timezone) : null,
         ));
 
-        return $this->objectMapper->map($model, ReadUserResource::class);
+        return $this->microMapper->map($user, ReadUserResource::class);
     }
 }
