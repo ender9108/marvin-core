@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -12,18 +13,12 @@ declare(strict_types=1);
 
 namespace Marvin\Device\Application\EventHandler;
 
-use Marvin\Device\Domain\Model\Device;
 use Marvin\Device\Domain\Repository\DeviceRepositoryInterface;
-use Marvin\Device\Domain\ValueObject\PhysicalAddress;
-use Marvin\Device\Domain\ValueObject\Protocol;
-use Marvin\Shared\Application\Service\Acl\LocationQueryServiceInterface;
-use Marvin\Shared\Domain\Event\Device\DeviceStateChanged;
 use Marvin\Shared\Domain\Event\Location\ZoneDeviceAdded;
 use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Throwable;
 
 /**
  * DeviceStateChangedHandler - Event Handler

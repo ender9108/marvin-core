@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -23,7 +24,8 @@ use Symfonycasts\MicroMapper\MicroMapperInterface;
 #[AsMapper(from: Zone::class, to: ReadZoneResource::class)]
 final readonly class ZoneEntityToResource implements MapperInterface
 {
-    public function __construct(private MicroMapperInterface $microMapper) {
+    public function __construct(private MicroMapperInterface $microMapper)
+    {
     }
 
     public function load(object $from, string $toClass, array $context): object

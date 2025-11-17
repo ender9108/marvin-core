@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -13,7 +14,7 @@ declare(strict_types=1);
 
 namespace Marvin\Security\Presentation\Cli;
 
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
+use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
 use Exception;
 use Marvin\Security\Application\Command\User\ResetPasswordUser;
 use Marvin\Shared\Presentation\Exception\Service\ExceptionMessageManager;
@@ -29,7 +30,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final readonly class ResetPasswordUserCommand
 {
     public function __construct(
-        private SyncCommandBusInterface $commandBus,
+        private CommandBusInterface $commandBus,
         private ExceptionMessageManager $exceptionMessageManager,
     ) {
     }
@@ -42,7 +43,7 @@ final readonly class ResetPasswordUserCommand
         string $newPassword,
     ): int {
         try {
-            $this->commandBus->handle(new ResetPasswordUser(
+            $this->commandBus->dispatch(new ResetPasswordUser(
                 $token,
                 $newPassword
             ));

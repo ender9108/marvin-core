@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -15,6 +16,9 @@ namespace Marvin\Location\Presentation\Api\State\Processor;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
+use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
+use Exception;
 use Marvin\Location\Application\Command\Zone\CreateZone;
 use Marvin\Location\Domain\ValueObject\HexaColor;
 use Marvin\Location\Domain\ValueObject\Humidity;
@@ -24,9 +28,6 @@ use Marvin\Location\Domain\ValueObject\SurfaceArea;
 use Marvin\Location\Domain\ValueObject\Temperature;
 use Marvin\Location\Domain\ValueObject\ZoneName;
 use Marvin\Location\Domain\ValueObject\ZoneType;
-use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
-use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
-use Exception;
 use Marvin\Location\Presentation\Api\Dto\Input\CreateZoneDto;
 use Marvin\Location\Presentation\Api\Resource\ReadZoneResource;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;

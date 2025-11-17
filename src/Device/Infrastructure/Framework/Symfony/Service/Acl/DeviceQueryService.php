@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -18,7 +19,6 @@ use Marvin\Shared\Application\Service\Acl\DeviceQueryServiceInterface;
 use Marvin\Shared\Application\Service\Acl\Dto\DeviceDto;
 use Marvin\Shared\Domain\ValueObject\Identity\DeviceId;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 use Throwable;
 
 /**

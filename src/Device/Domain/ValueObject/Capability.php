@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -22,7 +23,7 @@ use EnderLab\ToolsBundle\Service\EnumToArrayTrait;
  * Représente toutes les capabilities qu'un device peut supporter.
  * Une capability définit ce qu'un device peut faire ou mesurer.
  *
- * Total : 145 capabilities
+ * Total : 150 capabilities
  */
 enum Capability: string
 {
@@ -179,7 +180,17 @@ enum Capability: string
     case LOCATION = 'location';
 
     // ==========================================
-    // NETTOYAGE (3) - NOUVEAU
+    // BRIDGE / COORDINATEUR (5)
+    // ==========================================
+
+    case COORDINATOR_INFO = 'coordinator_info'; // Informations coordinateur (IEEE, type, firmware)
+    case NETWORK_TOPOLOGY = 'network_topology'; // Topologie réseau, devices count
+    case PERMIT_JOIN = 'permit_join'; // Autoriser/interdire l'appairage de nouveaux devices
+    case BRIDGE_STATE = 'bridge_state'; // État du bridge (online/offline/connecting)
+    case FIRMWARE_VERSION = 'firmware_version'; // Version firmware du coordinateur
+
+    // ==========================================
+    // NETTOYAGE (3)
     // ==========================================
 
     case VACUUM_CONTROL = 'vacuum_control';
@@ -187,7 +198,7 @@ enum Capability: string
     case VACUUM_ZONE = 'vacuum_zone'; // Nettoyage de zones spécifiques
 
     // ==========================================
-    // JARDIN / IRRIGATION (3) - NOUVEAU
+    // JARDIN / IRRIGATION (3)
     // ==========================================
 
     case SPRINKLER = 'sprinkler';
@@ -281,7 +292,8 @@ enum Capability: string
 
             self::CONFIGURATION, self::UPDATE, self::IDENTIFY,
             self::HEALTH_CHECK, self::DIAGNOSTICS, self::TIME_SYNC,
-            self::LOCATION
+            self::LOCATION, self::COORDINATOR_INFO, self::NETWORK_TOPOLOGY,
+            self::PERMIT_JOIN, self::BRIDGE_STATE, self::FIRMWARE_VERSION
             => CapabilityCategory::SYSTEM,
 
             self::THERMOSTAT, self::RGBW_LIGHT, self::ENVIRONMENTAL_SENSOR,
@@ -338,10 +350,14 @@ enum Capability: string
             self::SUNSET_TIME,
             self::IS_DAY,
             self::MEDIA_CONTENT,
-            self::MEDIA_IMAGE
+            self::MEDIA_IMAGE,
+            self::COORDINATOR_INFO,
+            self::NETWORK_TOPOLOGY,
+            self::BRIDGE_STATE,
+            self::FIRMWARE_VERSION
             => true,
 
-            // Tous les autres sont contrôlables
+            // Tous les autres sont contrôlables (notamment PERMIT_JOIN)
             default => false,
         };
     }

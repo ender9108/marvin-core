@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -15,5 +16,4 @@ namespace Marvin\Shared\Domain\Exception;
 
 interface NotFoundInterface
 {
-
 }

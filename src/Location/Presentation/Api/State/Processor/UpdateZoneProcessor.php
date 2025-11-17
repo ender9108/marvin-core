@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -18,7 +19,6 @@ use ApiPlatform\State\ProcessorInterface;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use Exception;
-use Marvin\Location\Application\Command\Zone\DeleteZone;
 use Marvin\Location\Application\Command\Zone\UpdateZone;
 use Marvin\Location\Domain\ValueObject\HexaColor;
 use Marvin\Location\Domain\ValueObject\Humidity;
@@ -55,7 +55,7 @@ final readonly class UpdateZoneProcessor implements ProcessorInterface
                 null !== $data->targetTemperature ? Temperature::fromCelsius($data->targetTemperature) : null,
                 null !== $data->targetHumidity ? Humidity::fromPercentage($data->targetHumidity) : null,
                 null !== $data->targetPowerConsumption ? PowerConsumption::fromWatts($data->targetPowerConsumption) : null,
-                null !== $data->icon ? $data->icon : null,
+                $data->icon ?? null,
                 null !== $data->color ? HexaColor::fromString($data->color) : null,
                 null !== $data->metadata ? Metadata::fromArray($data->metadata) : null,
             )

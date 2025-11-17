@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -17,5 +18,4 @@ class ExecContainerDto
 {
     public string $command;
     public array $args = [];
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -61,6 +62,7 @@ final class ZoneParentNotFound extends DomainException implements TranslatableEx
         return 'location';
     }
 
+    #[Override]
     public function getStatusCode(): int
     {
         return Response::HTTP_NOT_FOUND;

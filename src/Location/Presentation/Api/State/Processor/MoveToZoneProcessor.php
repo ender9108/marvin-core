@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -18,10 +19,7 @@ use ApiPlatform\State\ProcessorInterface;
 use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use Exception;
-use Marvin\Location\Application\Command\Zone\DeleteZone;
 use Marvin\Location\Application\Command\Zone\MoveZone;
-use Marvin\Location\Presentation\Api\Dto\Input\AddDeviceToZoneDto;
-use Marvin\Location\Presentation\Api\Dto\Input\CreateZoneDto;
 use Marvin\Location\Presentation\Api\Dto\Input\MoveToZoneDto;
 use Marvin\Shared\Domain\ValueObject\Identity\ZoneId;
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -16,6 +17,7 @@ namespace Marvin\Security\Domain\Exception;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\Interfaces\TranslatableExceptionInterface;
 use Marvin\Shared\Domain\Exception\NotFoundInterface;
+use Override;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ModelNotFound extends DomainException implements TranslatableExceptionInterface, NotFoundInterface
@@ -44,6 +46,7 @@ final class ModelNotFound extends DomainException implements TranslatableExcepti
         return 'security';
     }
 
+    #[Override]
     public function getStatusCode(): int
     {
         return Response::HTTP_NOT_FOUND;

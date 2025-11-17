@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -12,12 +13,12 @@ declare(strict_types=1);
 
 namespace Marvin\Protocol\Infrastructure\Listener;
 
-use function Swoole\Coroutine\run;
 use EnderLab\DddCqrsBundle\Application\Event\DomainEventBusInterface;
 use Marvin\Protocol\Domain\Model\ProtocolAdapterInterface;
 use Marvin\Protocol\Infrastructure\Protocol\MqttProtocol;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
+use function Swoole\Coroutine\run;
 
 /**
  * MQTT Device State Listener

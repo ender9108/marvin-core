@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -12,8 +13,8 @@ declare(strict_types=1);
 
 namespace Marvin\Device\Domain\Specification;
 
-use InvalidArgumentException;
 use DateTimeInterface;
+use InvalidArgumentException;
 use Marvin\Device\Domain\ValueObject\CapabilityStateDataType;
 
 /**

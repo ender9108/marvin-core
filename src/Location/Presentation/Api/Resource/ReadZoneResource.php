@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -21,10 +22,10 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use Marvin\Location\Presentation\Api\Dto\Input\AddDeviceToZoneDto;
 use DateTimeInterface;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\Framework\ApiPlatform\State\Provider\EntityToApiStateProvider;
 use Marvin\Location\Domain\Model\Zone;
+use Marvin\Location\Presentation\Api\Dto\Input\AddDeviceToZoneDto;
 use Marvin\Location\Presentation\Api\Dto\Input\CreateZoneDto;
 use Marvin\Location\Presentation\Api\Dto\Input\MoveToZoneDto;
 use Marvin\Location\Presentation\Api\Dto\Input\UpdateZoneDto;
@@ -82,7 +83,7 @@ class ReadZoneResource
     public string $type;
 
     #[ApiProperty(writable: false)]
-    public ?string $orientation;
+    public ?string $orientation = null;
 
     #[ApiProperty(writable: false)]
     public ?float $surfaceArea = null;

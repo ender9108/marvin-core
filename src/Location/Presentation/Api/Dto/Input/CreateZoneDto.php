@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -14,7 +15,6 @@ declare(strict_types=1);
 namespace Marvin\Location\Presentation\Api\Dto\Input;
 
 use Marvin\Location\Domain\ValueObject\Orientation;
-use Marvin\Location\Domain\ValueObject\SurfaceArea;
 use Marvin\Location\Domain\ValueObject\ZoneType;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Length;

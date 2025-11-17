@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -13,9 +14,9 @@ declare(strict_types=1);
 namespace Marvin\Protocol\Application\CommandHandler;
 
 use Marvin\Protocol\Application\Command\SendDeviceCommand;
-use Marvin\Shared\Application\Service\Acl\DeviceQueryServiceInterface;
 use Marvin\Protocol\Domain\Model\ProtocolAdapterInterface;
 use Marvin\Protocol\Domain\ValueObject\ExecutionMode;
+use Marvin\Shared\Application\Service\Acl\DeviceQueryServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;

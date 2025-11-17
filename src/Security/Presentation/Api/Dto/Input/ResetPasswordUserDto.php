@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -13,7 +14,6 @@ declare(strict_types=1);
 
 namespace Marvin\Security\Presentation\Api\Dto\Input;
 
-use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\PasswordStrength;
 

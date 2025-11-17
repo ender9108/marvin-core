@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -21,10 +22,11 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use DateTimeInterface;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\Framework\ApiPlatform\State\Provider\EntityToApiStateProvider;
-use Marvin\Shared\Infrastructure\Framework\Symfony\MapperTransformer\EnumTransformer;
 use Marvin\System\Domain\Model\Container;
 use Marvin\System\Presentation\Api\Dto\Input\ExecContainerDto;
+use Marvin\System\Presentation\Api\State\Processor\BuildContainerProcessor;
 use Marvin\System\Presentation\Api\State\Processor\ExecContainerProcessor;
+use Marvin\System\Presentation\Api\State\Processor\RestartAllContainerProcessor;
 use Marvin\System\Presentation\Api\State\Processor\RestartContainerProcessor;
 use Marvin\System\Presentation\Api\State\Processor\StartContainerProcessor;
 use Marvin\System\Presentation\Api\State\Processor\StopContainerProcessor;
@@ -47,9 +49,19 @@ use Symfony\Component\ObjectMapper\Attribute\Map;
             processor: RestartContainerProcessor::class,
         ),
         new Post(
+            uriTemplate: '/containers/{id}/restart-all',
+            security: 'is_granted("ROLE_ADMIN")',
+            processor: RestartAllContainerProcessor::class,
+        ),
+        new Post(
             uriTemplate: '/containers/{id}/stop',
             security: 'is_granted("ROLE_ADMIN")',
             processor: StopContainerProcessor::class,
+        ),
+        new Post(
+            uriTemplate: '/containers/{id}/build',
+            security: 'is_granted("ROLE_ADMIN")',
+            processor: BuildContainerProcessor::class,
         ),
         new Post(
             uriTemplate: '/containers/{id}/exec',
@@ -83,7 +95,7 @@ class ReadContainerResource
     public string $containerLabel;
 
     #[ApiProperty(writable: false)]
-    public ?DateTimeInterface $lastSyncedAt;
+    public ?DateTimeInterface $lastSyncedAt = null;
 
     #[ApiProperty(writable: false)]
     public DateTimeInterface $createdAt;

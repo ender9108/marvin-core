@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -16,7 +17,6 @@ namespace Marvin\Location\Application\CommandHandler\Zone;
 use Marvin\Location\Application\Command\Zone\UpdateZone;
 use Marvin\Location\Domain\Model\Zone;
 use Marvin\Location\Domain\Repository\ZoneRepositoryInterface;
-use Marvin\Location\Domain\ValueObject\ZoneName;
 use Marvin\Shared\Domain\Service\SluggerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;

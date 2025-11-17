@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -15,7 +16,6 @@ namespace Marvin\Protocol\Domain\Exception;
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\Interfaces\TranslatableExceptionInterface;
 use Marvin\Shared\Domain\Exception\NotFoundInterface;
-use RuntimeException;
 
 final class AdapterNotFoundException extends DomainException implements TranslatableExceptionInterface, NotFoundInterface
 {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -20,7 +21,6 @@ use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use Exception;
 use Marvin\Shared\Domain\ValueObject\Identity\CorrelationId;
 use Marvin\System\Application\Command\Container\RestartContainer;
-use Marvin\System\Application\Command\Container\StartContainer;
 use Marvin\System\Domain\ValueObject\Identity\ContainerId;
 use Marvin\System\Presentation\Api\Resource\ReadContainerResource;
 

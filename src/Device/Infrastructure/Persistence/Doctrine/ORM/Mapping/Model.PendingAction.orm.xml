@@ -19,7 +19,7 @@
         <field name="correlationId" type="correlation_id" nullable="true" />
 
         <!-- Status -->
-        <field name="status" nullable="false" enum-type="Marvin\Device\Domain\ValueObject\PendingActionStatus" />
+        <field name="status" type="string" nullable="false" />
 
         <!-- Action details -->
         <field name="capability" type="string" length="100" nullable="false" />

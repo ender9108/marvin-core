@@ -17,7 +17,7 @@
         </many-to-one>
 
         <!-- Capability enum -->
-        <field name="capability" enum-type="Marvin\Device\Domain\ValueObject\Capability" />
+        <field name="capability" type="string" />
         <field name="stateName" length="128" />
         <!-- Current value (stored as JSON to handle mixed types) -->
         <field name="currentValue" type="json" nullable="true" />

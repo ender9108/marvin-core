@@ -18,19 +18,19 @@
         <embedded name="metadata" class="Marvin\Shared\Domain\ValueObject\Metadata" />
 
         <!-- Device type and status -->
-        <field name="deviceType" nullable="false" enum-type="Marvin\Device\Domain\ValueObject\DeviceType" />
-        <field name="status" nullable="false" enum-type="Marvin\Device\Domain\ValueObject\DeviceStatus" />
+        <field name="deviceType" nullable="false" length="32" enum-type="Marvin\Device\Domain\ValueObject\DeviceType" />
+        <field name="status" nullable="false" length="32" enum-type="Marvin\Device\Domain\ValueObject\DeviceStatus" />
 
         <!-- Physical device properties -->
-        <field name="protocol" nullable="true" enum-type="Marvin\Device\Domain\ValueObject\Protocol" />
+        <field name="protocol" nullable="true" length="32" enum-type="Marvin\Device\Domain\ValueObject\Protocol" />
         <field name="protocolId" type="protocol_id" nullable="true" />
         <embedded name="physicalAddress" class="Marvin\Device\Domain\ValueObject\PhysicalAddress" />
         <embedded name="technicalName" class="Marvin\Device\Domain\ValueObject\TechnicalName" />
 
         <!-- Composite device properties -->
-        <field name="compositeType" nullable="true" enum-type="Marvin\Device\Domain\ValueObject\CompositeType" />
-        <field name="compositeStrategy" nullable="true" enum-type="Marvin\Device\Domain\ValueObject\CompositeStrategy" />
-        <field name="executionStrategy" nullable="true" enum-type="Marvin\Device\Domain\ValueObject\ExecutionStrategy" />
+        <field name="compositeType" length="16" nullable="true" enum-type="Marvin\Device\Domain\ValueObject\CompositeType" />
+        <field name="compositeStrategy" length="32" nullable="true" enum-type="Marvin\Device\Domain\ValueObject\CompositeStrategy" />
+        <field name="executionStrategy" length="32" nullable="true" enum-type="Marvin\Device\Domain\ValueObject\ExecutionStrategy" />
         <field name="childDeviceIds" type="json" nullable="true" />
         <embedded name="nativeGroupInfo" class="Marvin\Device\Domain\ValueObject\NativeGroupInfo" />
         <field name="nativeSubGroups" type="json" nullable="true" />

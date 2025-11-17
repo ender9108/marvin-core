@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -17,7 +18,6 @@ use Marvin\Security\Domain\Exception\UserNotFound;
 use Marvin\Security\Domain\ValueObject\UserStatus;
 use Marvin\Security\Domain\ValueObject\UserType;
 use Override;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 

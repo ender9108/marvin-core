@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -19,7 +20,6 @@ use EnderLab\DddCqrsBundle\Application\Command\SyncCommandBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use Exception;
 use Marvin\Secret\Application\Command\StoreSecret;
-use Marvin\Secret\Application\Command\UpdateSecret;
 use Marvin\Secret\Domain\ValueObject\SecretCategory;
 use Marvin\Secret\Domain\ValueObject\SecretKey;
 use Marvin\Secret\Domain\ValueObject\SecretScope;

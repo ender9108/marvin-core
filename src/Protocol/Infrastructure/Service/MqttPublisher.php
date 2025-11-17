@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -12,8 +13,8 @@ declare(strict_types=1);
 
 namespace Marvin\Protocol\Infrastructure\Service;
 
-use Marvin\Shared\Application\Service\Acl\SecretQueryServiceInterface;
 use Marvin\Protocol\Infrastructure\Protocol\MqttProtocol;
+use Marvin\Shared\Application\Service\Acl\SecretQueryServiceInterface;
 use RuntimeException;
 
 /**

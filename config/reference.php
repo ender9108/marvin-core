@@ -918,6 +918,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     },
  * }
  * @psalm-type DoctrineMigrationsConfig = array{
+ *     enable_service_migrations?: bool, // Whether to enable fetching migrations from the service container. // Default: false
  *     migrations_paths?: array<string, scalar|null>,
  *     services?: array<string, scalar|null>,
  *     factories?: array<string, scalar|null>,

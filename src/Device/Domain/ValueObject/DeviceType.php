@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -48,4 +49,30 @@ enum DeviceType: string
      * Exemples : Météo, lever/coucher du soleil, API REST externe
      */
     case VIRTUAL = 'virtual';
+
+    /**
+     * BRIDGE - Coordinateur / Bridge / Border Router
+     * Device infrastructure qui gère le réseau du protocole
+     * Exemples : Coordinateur Zigbee, Contrôleur Z-Wave, Border Router Thread
+     */
+    case BRIDGE = 'bridge';
+
+    /**
+     * Indique si le device est un bridge/coordinateur
+     */
+    public function isBridge(): bool
+    {
+        return $this === self::BRIDGE;
+    }
+
+    /**
+     * Indique si le device est physique
+     */
+    public function isPhysical(): bool
+    {
+        return match ($this) {
+            self::ACTUATOR, self::SENSOR => true,
+            self::COMPOSITE, self::VIRTUAL, self::BRIDGE => false,
+        };
+    }
 }

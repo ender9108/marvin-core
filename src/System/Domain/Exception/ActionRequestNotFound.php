@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -78,6 +79,7 @@ final class ActionRequestNotFound extends DomainException implements Translatabl
         return 'system';
     }
 
+    #[Override]
     public function getStatusCode(): int
     {
         return Response::HTTP_NOT_FOUND;

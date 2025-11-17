@@ -26,9 +26,12 @@ use DateTimeInterface;
 use EnderLab\DddCqrsApiPlatformBundle\Infrastructure\Framework\ApiPlatform\State\Provider\EntityToApiStateProvider;
 use Marvin\Secret\Domain\Model\Secret;
 use Marvin\Secret\Presentation\Api\Dto\CreateSecretDto;
+use Marvin\Secret\Presentation\Api\Dto\RotateSecretDto;
 use Marvin\Secret\Presentation\Api\Dto\UpdateSecretDto;
 use Marvin\Secret\Presentation\Api\State\Processor\CreateSecretProcessor;
 use Marvin\Secret\Presentation\Api\State\Processor\DeleteSecretProcessor;
+use Marvin\Secret\Presentation\Api\State\Processor\RotateSecretProcessor;
+use Marvin\Secret\Presentation\Api\State\Processor\RotateSecretsProcessor;
 use Marvin\Secret\Presentation\Api\State\Processor\UpdateSecretProcessor;
 
 #[ApiResource(
@@ -40,6 +43,17 @@ use Marvin\Secret\Presentation\Api\State\Processor\UpdateSecretProcessor;
             security: 'is_granted("ROLE_ADMIN")',
             input: CreateSecretDto::class,
             processor: CreateSecretProcessor::class
+        ),
+        new Post(
+            uriTemplate: '/secrets/rotate',
+            security: 'is_granted("ROLE_ADMIN")',
+            input: RotateSecretDto::class,
+            processor: RotateSecretProcessor::class
+        ),
+        new Post(
+            uriTemplate: '/secrets/rotate-all',
+            security: 'is_granted("ROLE_ADMIN")',
+            processor: RotateSecretsProcessor::class
         ),
         new Patch(
             security: 'is_granted("ROLE_ADMIN")',

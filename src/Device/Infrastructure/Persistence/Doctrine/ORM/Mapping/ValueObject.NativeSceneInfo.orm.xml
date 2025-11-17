@@ -6,7 +6,7 @@
 >
     <embeddable name="Marvin\Device\Domain\ValueObject\NativeSceneInfo">
         <field name="nativeSceneId" type="string" length="100" nullable="true" />
-        <field name="protocolId" type="string" length="100" nullable="true" />
+        <field name="protocolId" type="uuid" nullable="true" />
         <field name="friendlyName" type="string" length="255" nullable="true" />
         <field name="groupId" type="string" length="100" nullable="true" />
         <field name="metadata" type="json" nullable="true" />

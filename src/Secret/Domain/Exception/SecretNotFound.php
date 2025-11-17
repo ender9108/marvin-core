@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -17,6 +18,7 @@ use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\Interfaces\TranslatableExceptionInterface;
 use Marvin\Secret\Domain\ValueObject\Identity\SecretId;
 use Marvin\Secret\Domain\ValueObject\SecretKey;
+use Override;
 use Symfony\Component\HttpFoundation\Response;
 
 final class SecretNotFound extends DomainException implements TranslatableExceptionInterface
@@ -73,6 +75,7 @@ final class SecretNotFound extends DomainException implements TranslatableExcept
         return 'secret';
     }
 
+    #[Override]
     public function getStatusCode(): int
     {
         return Response::HTTP_NOT_FOUND;

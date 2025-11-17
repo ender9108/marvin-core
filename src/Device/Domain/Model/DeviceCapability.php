@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Marvin Core - DDD-based home automation system
  *
@@ -12,14 +13,14 @@ declare(strict_types=1);
 
 namespace Marvin\Device\Domain\Model;
 
-use InvalidArgumentException;
-use ValueError;
-use Throwable;
 use DateTimeImmutable;
+use InvalidArgumentException;
 use Marvin\Device\Domain\ValueObject\Capability;
 use Marvin\Device\Domain\ValueObject\CapabilityState;
 use Marvin\Device\Domain\ValueObject\Identity\DeviceCapabilityId;
 use Marvin\Shared\Domain\ValueObject\Metadata;
+use Throwable;
+use ValueError;
 
 /**
  * DeviceCapability - Entity représentant une capability d'un device
