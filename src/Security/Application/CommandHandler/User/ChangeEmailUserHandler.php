@@ -17,6 +17,7 @@ namespace Marvin\Security\Application\CommandHandler\User;
 use Marvin\Security\Application\Command\User\ChangeEmailUser;
 use Marvin\Security\Domain\Model\User;
 use Marvin\Security\Domain\Repository\UserRepositoryInterface;
+use Marvin\Security\Domain\Service\UniqueEmailVerifierInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
@@ -24,12 +25,16 @@ final readonly class ChangeEmailUserHandler
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,
+        private UniqueEmailVerifierInterface $uniqueEmailVerifier
     ) {
     }
 
     public function __invoke(ChangeEmailUser $command): User
     {
         $user = $this->userRepository->byId($command->id);
+
+        $this->uniqueEmailVerifier->verify($command->email);
+
         $user->changeEmail($command->email);
 
         $this->userRepository->save($user);

@@ -16,6 +16,7 @@ namespace Marvin\Security\Domain\Exception;
 
 use EnderLab\DddCqrsBundle\Domain\Exception\DomainException;
 use EnderLab\DddCqrsBundle\Domain\Exception\Interfaces\TranslatableExceptionInterface;
+use Marvin\Shared\Domain\ValueObject\Email;
 
 class EmailAlreadyUsed extends DomainException implements TranslatableExceptionInterface
 {
@@ -26,11 +27,11 @@ class EmailAlreadyUsed extends DomainException implements TranslatableExceptionI
         parent::__construct($message);
     }
 
-    public static function withEmail(string $email): self
+    public static function withEmail(Email $email): self
     {
         return new self(
-            sprintf('Email "%s" already used', $email),
-            $email
+            sprintf('Email "%s" already used', $email->value),
+            $email->value
         );
     }
 
