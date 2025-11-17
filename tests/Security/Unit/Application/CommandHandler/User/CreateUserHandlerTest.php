@@ -72,7 +72,7 @@ final class CreateUserHandlerTest extends TestCase
         $this->passwordHasher
             ->expects($this->once())
             ->method('hash')
-            ->with('SecurePassword123!')
+            ->with($this->isInstanceOf(User::class), 'SecurePassword123!')
             ->willReturn('hashed_password');
 
         $this->userRepository

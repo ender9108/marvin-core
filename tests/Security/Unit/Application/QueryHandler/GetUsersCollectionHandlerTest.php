@@ -64,7 +64,7 @@ final class GetUsersCollectionHandlerTest extends TestCase
         $this->userRepository
             ->expects($this->once())
             ->method('collection')
-            ->with([], [], 0, 20)
+            ->with([], [], 1, 20)
             ->willReturn($mockPaginator);
 
         $result = ($this->handler)($query);

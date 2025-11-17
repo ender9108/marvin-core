@@ -72,6 +72,14 @@ final class ChangePasswordUserHandlerTest extends TestCase
             Theme::fromString('light')
         );
 
+        // Set initial password using a mock hasher to avoid calling the real hash method
+        $initialPasswordHasher = $this->createMock(PasswordHasherInterface::class);
+        $initialPasswordHasher
+            ->method('hash')
+            ->with($user, 'OldPassword123!')
+            ->willReturn('hashed_old_password');
+        $user->definePassword('OldPassword123!', $initialPasswordHasher);
+
         $this->userRepository
             ->expects($this->once())
             ->method('byId')
@@ -81,12 +89,13 @@ final class ChangePasswordUserHandlerTest extends TestCase
         $this->passwordHasher
             ->expects($this->once())
             ->method('verify')
+            ->with($user, 'OldPassword123!')
             ->willReturn(true);
 
         $this->passwordHasher
             ->expects($this->once())
             ->method('hash')
-            ->with('NewPassword456!')
+            ->with($user, 'NewPassword456!')
             ->willReturn('hashed_new_password');
 
         $this->userRepository
@@ -140,6 +149,14 @@ final class ChangePasswordUserHandlerTest extends TestCase
             Theme::fromString('light')
         );
 
+        // Set initial password using a mock hasher to avoid calling the real hash method
+        $initialPasswordHasher = $this->createMock(PasswordHasherInterface::class);
+        $initialPasswordHasher
+            ->method('hash')
+            ->with($user, 'CorrectPassword123!')
+            ->willReturn('hashed_correct_password');
+        $user->definePassword('CorrectPassword123!', $initialPasswordHasher);
+
         $this->userRepository
             ->expects($this->once())
             ->method('byId')
@@ -149,6 +166,7 @@ final class ChangePasswordUserHandlerTest extends TestCase
         $this->passwordHasher
             ->expects($this->once())
             ->method('verify')
+            ->with($user, 'WrongPassword!')
             ->willReturn(false);
 
         $this->expectException(InvalidCurrentPassword::class);
