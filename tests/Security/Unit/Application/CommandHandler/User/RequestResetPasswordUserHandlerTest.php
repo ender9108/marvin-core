@@ -109,7 +109,7 @@ final class RequestResetPasswordUserHandlerTest extends TestCase
             ->expects($this->once())
             ->method('byEmail')
             ->with($email)
-            ->willReturn(null);
+            ->willThrowException(UserNotFound::withEmail($email));
 
         $this->expectException(UserNotFound::class);
 

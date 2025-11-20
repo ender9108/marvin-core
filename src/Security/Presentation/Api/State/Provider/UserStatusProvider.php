@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * Marvin Core - DDD-based home automation system
+ *
+ * @package   Marvin\Core
+ * @author    Alexandre Berthelot <alexandreberthelot9108@gmail.com>
+ * @copyright 2024-present Alexandre Berthelot
+ * @license   AGPL-3.0 License
+ * @link      https://github.com/ender9108/marvin-core
+ */
+
+declare(strict_types=1);
+
+namespace Marvin\Security\Presentation\Api\State\Provider;
+
+use ApiPlatform\Metadata\CollectionOperationInterface;
+use ApiPlatform\Metadata\Operation;
+use ApiPlatform\State\ProviderInterface;
+use Marvin\Security\Domain\ValueObject\UserStatus;
+use Marvin\Security\Presentation\Api\Resource\ReadUserStatusResource;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+final readonly class UserStatusProvider implements ProviderInterface
+{
+    public function __construct(
+        private TranslatorInterface $translator,
+    ) {
+    }
+
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    {
+        $statuses = UserStatus::translations();
+
+
+        if ($operation instanceof CollectionOperationInterface) {
+            array_walk(
+                $statuses,
+                fn(string $value, string $key) => $this->translator->trans($value, [], 'security')
+            );
+
+            $results = [];
+
+            foreach ($statuses as $reference => $label) {
+                $resource = new ReadUserStatusResource();
+                $resource->reference = $reference;
+                $resource->label = $label;
+
+                $results[] = $resource;
+            }
+
+            return $results;
+        }
+
+
+    }
+}

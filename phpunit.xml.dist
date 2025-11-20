@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.0/phpunit.xsd"
-         bootstrap="tests/bootstrap.php"
-         colors="true">
-    <php>
-        <ini name="display_errors" value="1" />
-        <ini name="error_reporting" value="-1" />
-        <server name="APP_ENV" value="test" force="true" />
-        <server name="SHELL_VERBOSITY" value="-1" />
-        <server name="BROWSER_ALWAYS_START_WEBSERVER" value="1"/>
-        <env name="KERNEL_CLASS" value="Marvin\Shared\Infrastructure\Framework\Symfony\Kernel" />
-    </php>
-
-    <testsuites>
-        <testsuite name="Project Test Suite">
-            <directory>tests</directory>
-        </testsuite>
-    </testsuites>
-
-    <source restrictDeprecations="false">
-        <include>
-            <directory suffix=".php">src</directory>
-        </include>
-    </source>
-
-    <extensions>
-        <bootstrap class="Zenstruck\Browser\Test\BrowserExtension" />
-    </extensions>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.4/phpunit.xsd" bootstrap="tests/bootstrap.php" colors="true">
+  <php>
+    <ini name="display_errors" value="1"/>
+    <ini name="error_reporting" value="-1"/>
+    <server name="APP_ENV" value="test" force="true"/>
+    <server name="SHELL_VERBOSITY" value="-1"/>
+    <server name="BROWSER_ALWAYS_START_WEBSERVER" value="1"/>
+    <env name="KERNEL_CLASS" value="Marvin\Shared\Infrastructure\Framework\Symfony\Kernel"/>
+  </php>
+  <testsuites>
+    <testsuite name="Project Test Suite">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
+  <source>
+    <include>
+      <directory suffix=".php">src</directory>
+    </include>
+  </source>
+  <extensions>
+    <bootstrap class="Zenstruck\Browser\Test\BrowserExtension"/>
+  </extensions>
 </phpunit>

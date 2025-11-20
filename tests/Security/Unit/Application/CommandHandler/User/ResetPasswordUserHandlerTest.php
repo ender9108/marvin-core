@@ -51,8 +51,8 @@ final class ResetPasswordUserHandlerTest extends TestCase
         $this->passwordHasher = $this->createMock(PasswordHasherInterface::class);
 
         $this->handler = new ResetPasswordUserHandler(
-            $this->userRepository,
             $this->requestResetPasswordRepository,
+            $this->userRepository,
             $this->passwordHasher
         );
     }
@@ -82,14 +82,14 @@ final class ResetPasswordUserHandlerTest extends TestCase
 
         $this->requestResetPasswordRepository
             ->expects($this->once())
-            ->method('findByToken')
+            ->method('byToken')
             ->with($token)
             ->willReturn($request);
 
         $this->passwordHasher
             ->expects($this->once())
             ->method('hash')
-            ->with($newPassword)
+            ->with($this->isInstanceOf(User::class), $newPassword)
             ->willReturn('hashed_new_password');
 
         $this->userRepository
@@ -102,9 +102,7 @@ final class ResetPasswordUserHandlerTest extends TestCase
             ->method('save')
             ->with($request);
 
-        $result = ($this->handler)($command);
-
-        $this->assertInstanceOf(User::class, $result);
+        ($this->handler)($command);
     }
 
     public function testThrowsExceptionWhenTokenNotFound(): void
@@ -114,15 +112,19 @@ final class ResetPasswordUserHandlerTest extends TestCase
 
         $this->requestResetPasswordRepository
             ->expects($this->once())
-            ->method('findByToken')
+            ->method('byToken')
             ->with($token)
-            ->willReturn(null);
+            ->willThrowException(RequestResetPasswordNotFound::withToken($token));
 
         $this->expectException(RequestResetPasswordNotFound::class);
 
         ($this->handler)($command);
     }
 
+    /**
+     * @throws \DateMalformedStringException
+     * @throws \ReflectionException
+     */
     public function testThrowsExceptionWhenTokenIsExpired(): void
     {
         $token = 'expired_token';
@@ -140,12 +142,27 @@ final class ResetPasswordUserHandlerTest extends TestCase
             Theme::fromString('light')
         );
 
-        // Create a request with expired date (2 hours ago)
-        $request = new RequestResetPassword($token, $user, new DateTimeImmutable('-2 hours'));
+        // Create a request and use reflection to set expired date
+        $request = new RequestResetPassword($token, $user);
+
+        // Use reflection to set an expired date (bypassing ExpiresAt validation)
+        $reflection = new \ReflectionClass($request);
+        $property = $reflection->getProperty('expiresAt');
+        $property->setAccessible(true);
+
+        // Create expired ExpiresAt by using reflection on it too
+        $expiredDate = new DateTimeImmutable('-2 hours');
+        $expiresAtReflection = new \ReflectionClass(\Marvin\Security\Domain\ValueObject\ExpiresAt::class);
+        $expiresAt = $expiresAtReflection->newInstanceWithoutConstructor();
+        $valueProperty = $expiresAtReflection->getProperty('value');
+        $valueProperty->setAccessible(true);
+        $valueProperty->setValue($expiresAt, $expiredDate);
+
+        $property->setValue($request, $expiresAt);
 
         $this->requestResetPasswordRepository
             ->expects($this->once())
-            ->method('findByToken')
+            ->method('byToken')
             ->with($token)
             ->willReturn($request);
 
@@ -177,7 +194,7 @@ final class ResetPasswordUserHandlerTest extends TestCase
 
         $this->requestResetPasswordRepository
             ->expects($this->once())
-            ->method('findByToken')
+            ->method('byToken')
             ->with($token)
             ->willReturn($request);
 

@@ -81,12 +81,10 @@ final class DeleteUserHandlerTest extends TestCase
 
         $this->userRepository
             ->expects($this->once())
-            ->method('save')
+            ->method('remove')
             ->with($user);
 
         ($this->handler)($command);
-
-        $this->assertEquals(UserStatus::DELETED, $user->status);
     }
 
     public function testThrowsExceptionWhenUserNotFound(): void

@@ -20,7 +20,7 @@ use EnderLab\DddCqrsBundle\Application\Command\CommandBusInterface;
 use EnderLab\DddCqrsBundle\Domain\Assert\Assert;
 use Exception;
 use Marvin\Security\Application\Command\User\ResetPasswordUser;
-use Marvin\Security\Presentation\Api\Dto\Input\RequestResetPasswordUserDto;
+use Marvin\Security\Presentation\Api\Dto\Input\ResetPasswordUserDto;
 use Marvin\Security\Presentation\Api\Resource\ReadUserResource;
 
 final readonly class ResetPasswordUserProcessor implements ProcessorInterface
@@ -31,12 +31,12 @@ final readonly class ResetPasswordUserProcessor implements ProcessorInterface
     }
 
     /**
-     * @param RequestResetPasswordUserDto $data
+     * @param ResetPasswordUserDto $data
      * @throws Exception
      */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ReadUserResource
     {
-        Assert::isInstanceOf($data, RequestResetPasswordUserDto::class);
+        Assert::isInstanceOf($data, ResetPasswordUserDto::class);
 
         $this->syncCommandBus->dispatch(new ResetPasswordUser(
             $data->token,

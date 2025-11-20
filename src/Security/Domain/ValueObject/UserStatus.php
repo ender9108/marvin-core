@@ -66,4 +66,14 @@ enum UserStatus: string
     {
         return self::TO_DELETE;
     }
+
+    public static function translations(): array
+    {
+        return [
+            self::DISABLED->value => 'security.user.status.disabled',
+            self::ENABLED->value => 'security.user.status.enabled',
+            self::LOCKED->value => 'security.user.status.locked',
+            self::TO_DELETE->value => 'security.user.status.to_delete',
+        ];
+    }
 }

@@ -24,4 +24,12 @@ enum UserType: string
 
     case APP = 'app';
     case CLI = 'cli';
+
+    public static function translations(): array
+    {
+        return [
+            self::APP->value => 'security.user.type.app',
+            self::CLI->value => 'security.user.type.cli',
+        ];
+    }
 }

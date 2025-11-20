@@ -56,7 +56,6 @@ security:
             locked: Bloqué
             to_delete: A supprimer
         type:
-            application: Application
-            system: Système
+            app: Application
             cli: Console
             

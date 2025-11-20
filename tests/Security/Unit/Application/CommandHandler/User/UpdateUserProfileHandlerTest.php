@@ -52,8 +52,8 @@ final class UpdateUserProfileHandlerTest extends TestCase
             Firstname::fromString('Jane'),
             Lastname::fromString('Smith'),
             Roles::admin(),
-            Locale::fromString('fr'),
             Theme::fromString('dark'),
+            Locale::fromString('fr'),
             Timezone::fromString('Europe/Paris')
         );
 

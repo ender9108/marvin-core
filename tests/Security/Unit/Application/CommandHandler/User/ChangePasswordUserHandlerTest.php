@@ -71,6 +71,7 @@ final class ChangePasswordUserHandlerTest extends TestCase
             Locale::fromString('en'),
             Theme::fromString('light')
         );
+        $user->definePassword('OldPassword123!', $this->passwordHasher);
 
         $this->userRepository
             ->expects($this->once())
@@ -81,12 +82,13 @@ final class ChangePasswordUserHandlerTest extends TestCase
         $this->passwordHasher
             ->expects($this->once())
             ->method('verify')
+            ->with($this->isInstanceOf(User::class), 'OldPassword123!')
             ->willReturn(true);
 
         $this->passwordHasher
             ->expects($this->once())
             ->method('hash')
-            ->with('NewPassword456!')
+            ->with($this->isInstanceOf(User::class), 'NewPassword456!')
             ->willReturn('hashed_new_password');
 
         $this->userRepository
@@ -140,6 +142,8 @@ final class ChangePasswordUserHandlerTest extends TestCase
             Theme::fromString('light')
         );
 
+        $user->definePassword('CorrectPassword!', $this->passwordHasher);
+
         $this->userRepository
             ->expects($this->once())
             ->method('byId')
@@ -149,6 +153,7 @@ final class ChangePasswordUserHandlerTest extends TestCase
         $this->passwordHasher
             ->expects($this->once())
             ->method('verify')
+            ->with($this->isInstanceOf(User::class), 'WrongPassword!')
             ->willReturn(false);
 
         $this->expectException(InvalidCurrentPassword::class);

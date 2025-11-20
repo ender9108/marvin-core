@@ -38,7 +38,7 @@ final readonly class ResetPasswordUserHandler
         $now = new DateTimeImmutable();
         $request = $this->resetPasswordRepository->byToken($command->token);
 
-        if ($now > $request->expiresAt) {
+        if ($now > $request->expiresAt->value) {
             throw RequestResetPasswordExpired::withToken($command->token);
         }
 
