@@ -34,9 +34,7 @@ final readonly class ChangeEmailUserHandler
         $user = $this->userRepository->byId($command->id);
 
         $this->uniqueEmailVerifier->verify($command->email);
-
         $user->changeEmail($command->email);
-
         $this->userRepository->save($user);
 
         return $user;
